@@ -104,8 +104,8 @@ class PlatformConfig {
           : const Duration(milliseconds: 300),
       'enableHapticFeedback': platformInfo.supportsHaptics,
       'enableAnalytics': true,
-      'crashReportingEnabled': !kDebugMode,
-      'performanceMonitoringEnabled': !kDebugMode,
+      'crashReportingEnabled': true,
+      'performanceMonitoringEnabled': true,
     };
   }
 
@@ -122,7 +122,7 @@ class PlatformConfig {
           ? const Duration(hours: 24)
           : const Duration(hours: 8),
       'enableSecureStorage': !platformInfo.isWeb,
-      'allowScreenshots': kDebugMode,
+      'allowScreenshots': false,
       'enableNetworkSecurity': true,
     };
   }
@@ -165,9 +165,9 @@ class PlatformConfig {
       'enableExportData': true,
       'enableImportData': true,
       'enableDataSharing': true,
-      'enableCrashReporting': !kDebugMode,
-      'enableAnalytics': !kDebugMode,
-      'enablePerformanceMonitoring': !kDebugMode,
+      'enableCrashReporting': true,
+      'enableAnalytics': true,
+      'enablePerformanceMonitoring': true,
       'enableDeepLinking': true,
       'enableUniversalLinks': platformInfo.platform == TargetPlatform.iOS,
       'enableAppLinks': platformInfo.platform == TargetPlatform.android,
@@ -189,19 +189,15 @@ class PlatformConfig {
     final platformInfo = _platformService.platformInfo;
 
     return {
-      'enableCodePush': platformInfo.isMobile && !kDebugMode,
-      'enableMinification': !kDebugMode,
-      'enableObfuscation': !kDebugMode && platformInfo.isMobile,
-      'enableR8':
-          platformInfo.platform == TargetPlatform.android && !kDebugMode,
-      'enableBitcode':
-          platformInfo.platform == TargetPlatform.iOS && !kDebugMode,
-      'enableSplitApk':
-          platformInfo.platform == TargetPlatform.android && !kDebugMode,
-      'enableAppBundle':
-          platformInfo.platform == TargetPlatform.android && !kDebugMode,
-      'enableTreeShaking': !kDebugMode,
-      'enableDeferredComponents': platformInfo.isWeb && !kDebugMode,
+      'enableCodePush': platformInfo.isMobile,
+      'enableMinification': true,
+      'enableObfuscation': platformInfo.isMobile,
+      'enableR8': platformInfo.platform == TargetPlatform.android,
+      'enableBitcode': platformInfo.platform == TargetPlatform.iOS,
+      'enableSplitApk': platformInfo.platform == TargetPlatform.android,
+      'enableAppBundle': platformInfo.platform == TargetPlatform.android,
+      'enableTreeShaking': true,
+      'enableDeferredComponents': platformInfo.isWeb,
       'targetSdkVersion': platformInfo.platform == TargetPlatform.android
           ? 34
           : null,
@@ -211,23 +207,6 @@ class PlatformConfig {
       'deploymentTarget': platformInfo.platform == TargetPlatform.iOS
           ? '12.0'
           : null,
-    };
-  }
-
-  /// Get development/debug configuration
-  Map<String, dynamic> getDebugConfig() {
-    return {
-      'enableDebugMode': kDebugMode,
-      'enableProfiling': kProfileMode,
-      'enableLogging': true,
-      'logLevel': kDebugMode ? 'debug' : 'info',
-      'enableDevTools': kDebugMode,
-      'enableHotReload': kDebugMode,
-      'enableAssertions': kDebugMode,
-      'enableInspector': kDebugMode,
-      'enablePerformanceOverlay': false,
-      'showCheckerboardRasterCacheImages': false,
-      'showCheckerboardOffscreenLayers': false,
     };
   }
 
@@ -245,7 +224,6 @@ class PlatformConfig {
         'ui': getUIConfig(),
         'features': getFeatureFlags(),
         'build': getBuildConfig(),
-        'debug': getDebugConfig(),
       };
 
       AppLogger.system('✅ Platform Configuration initialized');
@@ -348,17 +326,10 @@ class PlatformConfig {
   }
 
   String _getBaseApiUrl() {
-    if (kDebugMode) {
-      return const String.fromEnvironment(
-        'API_URL_DEBUG',
-        defaultValue: 'http://localhost:3000/api',
-      );
-    } else {
-      return const String.fromEnvironment(
-        'API_URL_PROD',
-        defaultValue: 'https://api.flowai.com',
-      );
-    }
+    return const String.fromEnvironment(
+      'API_URL_PROD',
+      defaultValue: 'https://api.flowai.com',
+    );
   }
 }
 
@@ -475,15 +446,12 @@ class PlatformPermissions {
       permissions.addAll([
         'NSCameraUsageDescription',
         'NSPhotoLibraryUsageDescription',
-        'NSLocationWhenInUseUsageDescription',
-        'NSLocationAlwaysAndWhenInUseUsageDescription',
         'NSContactsUsageDescription',
         'NSCalendarsUsageDescription',
         'NSRemindersUsageDescription',
         'NSFaceIDUsageDescription',
         'NSAppleMusicUsageDescription',
         'NSHealthShareUsageDescription',
-        'NSHealthUpdateUsageDescription',
       ]);
     }
 
@@ -553,16 +521,16 @@ class PlatformBuildConfig {
     final platformInfo = _platformService.platformInfo;
 
     return {
-      'enableShrinking': !kDebugMode,
-      'enableMinification': !kDebugMode,
-      'enableOptimization': !kDebugMode,
-      'enableTreeShaking': !kDebugMode,
-      'enableDeadCodeElimination': !kDebugMode,
-      'enableCodeSplitting': platformInfo.isWeb && !kDebugMode,
+      'enableShrinking': true,
+      'enableMinification': true,
+      'enableOptimization': true,
+      'enableTreeShaking': true,
+      'enableDeadCodeElimination': true,
+      'enableCodeSplitting': platformInfo.isWeb,
       'enableLazyLoading': platformInfo.isWeb,
-      'enablePrecompilation': !kDebugMode,
-      'enableAOT': !kDebugMode && !platformInfo.isWeb,
-      'enableJIT': kDebugMode || platformInfo.isWeb,
+      'enablePrecompilation': true,
+      'enableAOT': !platformInfo.isWeb,
+      'enableJIT': platformInfo.isWeb,
     };
   }
 }

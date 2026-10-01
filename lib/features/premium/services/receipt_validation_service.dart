@@ -27,11 +27,23 @@ class ReceiptValidationService {
 
   String? get authenticatedUserId => _auth.currentUser?.uid;
 
-  bool isAuthenticatedUser(String userId) {
+  bool get hasDurableMonetizationIdentity {
+    final user = _auth.currentUser;
+    final uid = user?.uid.trim();
+
+    return user != null && !user.isAnonymous && uid != null && uid.isNotEmpty;
+  }
+
+  bool canOwnMonetizationFor(String userId) {
     final normalizedUserId = userId.trim();
 
     return normalizedUserId.isNotEmpty &&
+        hasDurableMonetizationIdentity &&
         authenticatedUserId == normalizedUserId;
+  }
+
+  bool isAuthenticatedUser(String userId) {
+    return canOwnMonetizationFor(userId);
   }
 
   bool get canValidateAppleReceipts => _hasSecureServiceBaseUrl;
@@ -109,32 +121,84 @@ class ReceiptValidationService {
     }
   }
 
-  Future<bool> verifySubscriptionActive({
+  Future<SubscriptionStatusProjection?> fetchSubscriptionStatus({
     required String subscriptionId,
   }) async {
     final normalizedId = subscriptionId.trim();
 
     if (normalizedId.isEmpty) {
-      return false;
+      return const SubscriptionStatusProjection(active: false);
     }
 
     final uri = _routeUri(<String>['v1', 'subscriptions', normalizedId]);
 
     if (uri == null) {
-      return false;
+      return null;
     }
 
     try {
       final response = await _getAuthenticated(uri);
 
       if (response == null || response.statusCode != 200) {
-        return false;
+        return null;
       }
 
-      return _decodeObject(response.body)?['active'] == true;
+      final decoded = _decodeObject(response.body);
+      final active = decoded?['active'];
+
+      if (active is! bool) {
+        return null;
+      }
+
+      if (!active) {
+        return const SubscriptionStatusProjection(active: false);
+      }
+
+      final expirationDate = _parseDate(decoded?['expirationDate']);
+
+      final productId = decoded?['productId'] is String
+          ? (decoded!['productId'] as String).trim()
+          : null;
+
+      final transactionId = decoded?['transactionId'] is String
+          ? (decoded!['transactionId'] as String).trim()
+          : null;
+
+      final originalTransactionId = decoded?['originalTransactionId'] is String
+          ? (decoded!['originalTransactionId'] as String).trim()
+          : null;
+
+      if (expirationDate == null ||
+          !expirationDate.isAfter(DateTime.now()) ||
+          productId == null ||
+          productId.isEmpty ||
+          transactionId == null ||
+          transactionId.isEmpty ||
+          originalTransactionId == null ||
+          originalTransactionId.isEmpty) {
+        return null;
+      }
+
+      return SubscriptionStatusProjection(
+        active: true,
+        expirationDate: expirationDate,
+        productId: productId,
+        transactionId: transactionId,
+        originalTransactionId: originalTransactionId,
+      );
     } catch (_) {
-      return false;
+      return null;
     }
+  }
+
+  Future<bool?> verifySubscriptionActive({
+    required String subscriptionId,
+  }) async {
+    final projection = await fetchSubscriptionStatus(
+      subscriptionId: subscriptionId,
+    );
+
+    return projection?.active;
   }
 
   Uri? _routeUri(List<String> routeSegments) {
@@ -251,22 +315,33 @@ class ReceiptValidationService {
     final originalTransactionId = data['originalTransactionId'] is String
         ? (data['originalTransactionId'] as String).trim()
         : null;
+
+    final productId = data['productId'] is String
+        ? (data['productId'] as String).trim()
+        : null;
     final backendError = data['error'];
+    final lifecycleStatus = ReceiptLifecycleStatus.fromBackendValue(
+      data['lifecycleStatus'],
+    );
 
     final responseGrantsEntitlement =
         data['valid'] == true &&
+        lifecycleStatus?.grantsEntitlement == true &&
         expirationDate != null &&
-        expirationDate.isAfter(DateTime.now()) &&
         transactionId != null &&
         transactionId.isNotEmpty &&
         originalTransactionId != null &&
-        originalTransactionId.isNotEmpty;
+        originalTransactionId.isNotEmpty &&
+        productId != null &&
+        productId.isNotEmpty;
 
     return ReceiptValidationResult(
       isValid: responseGrantsEntitlement,
       expirationDate: expirationDate,
+      lifecycleStatus: lifecycleStatus,
       transactionId: transactionId,
       originalTransactionId: originalTransactionId,
+      productId: productId,
       errorMessage: responseGrantsEntitlement
           ? null
           : backendError is String && backendError.trim().isNotEmpty
@@ -302,18 +377,70 @@ class ReceiptValidationService {
   }
 }
 
+class SubscriptionStatusProjection {
+  final bool active;
+  final DateTime? expirationDate;
+  final String? productId;
+  final String? transactionId;
+  final String? originalTransactionId;
+
+  const SubscriptionStatusProjection({
+    required this.active,
+    this.expirationDate,
+    this.productId,
+    this.transactionId,
+    this.originalTransactionId,
+  });
+}
+
+enum ReceiptLifecycleStatus {
+  active,
+  gracePeriod,
+  paidThroughCancellation;
+
+  static ReceiptLifecycleStatus? fromBackendValue(dynamic value) {
+    if (value is! String) {
+      return null;
+    }
+
+    switch (value.trim()) {
+      case 'active':
+        return ReceiptLifecycleStatus.active;
+      case 'grace_period':
+        return ReceiptLifecycleStatus.gracePeriod;
+      case 'paid_through_cancellation':
+        return ReceiptLifecycleStatus.paidThroughCancellation;
+      default:
+        return null;
+    }
+  }
+
+  bool get grantsEntitlement {
+    switch (this) {
+      case ReceiptLifecycleStatus.active:
+      case ReceiptLifecycleStatus.gracePeriod:
+      case ReceiptLifecycleStatus.paidThroughCancellation:
+        return true;
+    }
+  }
+}
+
 class ReceiptValidationResult {
   final bool isValid;
   final DateTime? expirationDate;
+  final ReceiptLifecycleStatus? lifecycleStatus;
   final String? transactionId;
   final String? originalTransactionId;
+  final String? productId;
   final String? errorMessage;
 
   const ReceiptValidationResult({
     required this.isValid,
     this.expirationDate,
+    this.lifecycleStatus,
     this.transactionId,
     this.originalTransactionId,
+    this.productId,
     this.errorMessage,
   });
 

@@ -63,7 +63,7 @@ class ConsumerIntelligenceEngine {
     if (!_isInitialized) await initialize();
 
     try {
-      AppLogger.analytics('🧠 Generating wellness insights for user: $userId');
+      AppLogger.analytics('🧠 Generating wellness insights');
 
       // Get user's feelings data
       final feelingsTracker = DailyFeelingsTracker.instance;

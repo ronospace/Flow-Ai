@@ -73,12 +73,8 @@ class ZyraShellController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void adjustChatHeight(
-    double delta,
-    double screenHeight,
-  ) {
-    final updatedHeight =
-        (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
+  void adjustChatHeight(double delta, double screenHeight) {
+    final updatedHeight = (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
 
     if (updatedHeight == chatHeight) return;
 
@@ -88,9 +84,9 @@ class ZyraShellController extends ChangeNotifier {
   }
 
   void restoreDialogState() {
-    quickRepliesCollapsed = false;
-    isKeyboardVisible = false;
+    if (!quickRepliesCollapsed) return;
 
+    quickRepliesCollapsed = false;
     notifyListeners();
   }
 }

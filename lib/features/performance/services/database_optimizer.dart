@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/performance_models.dart';
 
@@ -25,7 +24,6 @@ class DatabaseOptimizer {
 
   Future<void> initialize({DatabaseOptimizationConfig? config}) async {
     _config = config ?? const DatabaseOptimizationConfig();
-    debugPrint('✅ Database Optimizer initialized');
   }
 
   // === DATABASE OPTIMIZATION ===
@@ -62,11 +60,8 @@ class DatabaseOptimizer {
         await _setupPerformanceMonitoring(database, dbName);
       }
 
-      debugPrint('✅ Database $dbName optimized successfully');
-
       return database;
     } catch (e) {
-      debugPrint('❌ Failed to optimize database $dbName: $e');
       rethrow;
     }
   }
@@ -102,10 +97,7 @@ class DatabaseOptimizer {
         'PRAGMA synchronous = NORMAL',
       ); // Faster than FULL with WAL
       await database.execute('PRAGMA wal_autocheckpoint = 1000');
-      debugPrint('✅ WAL mode enabled');
-    } catch (e) {
-      debugPrint('⚠️ Failed to enable WAL: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _enableCompression(Database database) async {
@@ -113,10 +105,7 @@ class DatabaseOptimizer {
       // Enable page compression (if supported)
       await database.execute('PRAGMA page_size = 4096');
       await database.execute('PRAGMA auto_vacuum = INCREMENTAL');
-      debugPrint('✅ Compression optimizations applied');
-    } catch (e) {
-      debugPrint('⚠️ Failed to apply compression: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _optimizeIndexes(Database database) async {
@@ -133,11 +122,7 @@ class DatabaseOptimizer {
 
       // Analyze tables for query planner
       await database.execute('ANALYZE');
-
-      debugPrint('✅ Indexes optimized');
-    } catch (e) {
-      debugPrint('⚠️ Failed to optimize indexes: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _createOptimalIndexes(
@@ -174,14 +159,8 @@ class DatabaseOptimizer {
         await database.execute(indexSql);
       }
 
-      if (indexesToCreate.isNotEmpty) {
-        debugPrint(
-          '✅ Created ${indexesToCreate.length} indexes for $tableName',
-        );
-      }
-    } catch (e) {
-      debugPrint('⚠️ Failed to create indexes for $tableName: $e');
-    }
+      if (indexesToCreate.isNotEmpty) {}
+    } catch (e) {}
   }
 
   bool _shouldCreateIndex(String columnName, String columnType) {
@@ -285,16 +264,11 @@ class DatabaseOptimizer {
         await database.execute('PRAGMA incremental_vacuum');
 
         stopwatch.stop();
-        debugPrint(
-          '✅ Vacuum completed for $databaseName in ${stopwatch.elapsedMilliseconds}ms',
-        );
 
         // Update metrics
         await _updateDatabaseMetrics(database, databaseName);
       }
-    } catch (e) {
-      debugPrint('⚠️ Vacuum failed for $databaseName: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _setupPerformanceMonitoring(
@@ -334,9 +308,7 @@ class DatabaseOptimizer {
       );
 
       _databaseMetrics[databaseName] = metrics;
-    } catch (e) {
-      debugPrint('⚠️ Failed to update database metrics for $databaseName: $e');
-    }
+    } catch (e) {}
   }
 
   Future<Map<String, dynamic>> _getDatabaseSizeInfo(Database database) async {
@@ -380,7 +352,6 @@ class DatabaseOptimizer {
 
       return totalRows;
     } catch (e) {
-      debugPrint('⚠️ Failed to get total row count: $e');
       return 0;
     }
   }
@@ -400,9 +371,7 @@ class DatabaseOptimizer {
         );
         rowCounts[tableName] = result.first['count'] as int;
       }
-    } catch (e) {
-      debugPrint('⚠️ Failed to get table row counts: $e');
-    }
+    } catch (e) {}
 
     return rowCounts;
   }
@@ -449,7 +418,6 @@ class DatabaseOptimizer {
       return result;
     } catch (e) {
       stopwatch.stop();
-      debugPrint('❌ Query failed (${stopwatch.elapsedMilliseconds}ms): $sql');
       rethrow;
     }
   }
@@ -472,7 +440,6 @@ class DatabaseOptimizer {
       return result;
     } catch (e) {
       stopwatch.stop();
-      debugPrint('❌ Update failed (${stopwatch.elapsedMilliseconds}ms): $sql');
       rethrow;
     }
   }
@@ -502,9 +469,6 @@ class DatabaseOptimizer {
       return result;
     } catch (e) {
       stopwatch.stop();
-      debugPrint(
-        '❌ Insert failed (${stopwatch.elapsedMilliseconds}ms) into $table',
-      );
       rethrow;
     }
   }
@@ -524,7 +488,6 @@ class DatabaseOptimizer {
     // Log slow queries
     if (executionTime > 1000) {
       // > 1 second
-      debugPrint('🐌 Slow query detected: ${executionTime}ms');
     }
   }
 
@@ -538,7 +501,6 @@ class DatabaseOptimizer {
     try {
       return await database.rawQuery('EXPLAIN QUERY PLAN $sql', arguments);
     } catch (e) {
-      debugPrint('⚠️ Failed to explain query: $e');
       return [];
     }
   }
@@ -569,8 +531,6 @@ class DatabaseOptimizer {
 
   Future<void> rebuildIndexes(Database database, [String? databaseName]) async {
     try {
-      final dbName = databaseName ?? 'default';
-
       // Get all indexes
       final indexes = await database.rawQuery(
         "SELECT name FROM sqlite_master WHERE type='index' AND name NOT LIKE 'sqlite_%'",
@@ -580,11 +540,7 @@ class DatabaseOptimizer {
         final indexName = index['name'] as String;
         await database.execute('REINDEX $indexName');
       }
-
-      debugPrint('✅ Rebuilt ${indexes.length} indexes for $dbName');
-    } catch (e) {
-      debugPrint('⚠️ Failed to rebuild indexes: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> analyzeDatabase(
@@ -593,10 +549,7 @@ class DatabaseOptimizer {
   ]) async {
     try {
       await database.execute('ANALYZE');
-      debugPrint('✅ Database analysis completed');
-    } catch (e) {
-      debugPrint('⚠️ Database analysis failed: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> checkIntegrity(Database database, [String? databaseName]) async {
@@ -605,13 +558,8 @@ class DatabaseOptimizer {
       final status = result.first.values.first as String;
 
       if (status == 'ok') {
-        debugPrint('✅ Database integrity check passed');
-      } else {
-        debugPrint('⚠️ Database integrity issues found: $status');
-      }
-    } catch (e) {
-      debugPrint('❌ Integrity check failed: $e');
-    }
+      } else {}
+    } catch (e) {}
   }
 
   // === STATISTICS AND REPORTING ===

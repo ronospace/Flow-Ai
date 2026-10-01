@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
+import '../../../core/widgets/app_header_components.dart';
 
 class QrJoinScreen extends StatefulWidget {
   const QrJoinScreen({super.key});
@@ -59,9 +60,12 @@ class _QrJoinScreenState extends State<QrJoinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+        leading: AppBackButton(
           onPressed: () => Navigator.of(context).maybePop(),
+          color:
+              Theme.of(context).appBarTheme.iconTheme?.color ??
+              Theme.of(context).colorScheme.onSurface,
+          iconSize: 24,
         ),
         title: const Text("Scan Partner QR"),
       ),

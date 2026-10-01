@@ -1085,25 +1085,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get unlockPremiumAiInsights => 'Déverrouillez les Analyses IA Premium';
 
   @override
-  String get watchAdToUnlockInsights =>
-      'Regardez une publicité pour débloquer des analyses avancées';
-
-  @override
   String get free => 'GRATUIT';
-
-  @override
-  String get watchAdUnlockInsights => 'Regarder Pub et Débloquer Analyses';
-
-  @override
-  String get getAdditionalPremiumInsights =>
-      'Obtenez 3 analyses premium supplémentaires';
-
-  @override
-  String get unlockAdvancedHealthRecommendations =>
-      'Déverrouillez des recommandations de santé avancées';
-
-  @override
-  String get premiumInsightsUnlocked => 'Analyses premium déverrouillées ! 🎉';
 
   @override
   String day(int day) {

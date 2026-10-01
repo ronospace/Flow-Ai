@@ -125,5 +125,32 @@ void main() {
       expect(identity.displayName, 'New');
       expect(identity.greetingName, 'New');
     });
+
+    test('uses Apple family name as the explicit greeting', () {
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: 'apple-uid',
+        email: 'relay@privaterelay.appleid.com',
+        displayName: 'Geoffrey Rono',
+        preferredGreetingName: 'Rono',
+        existingUserId: '',
+        existingDisplayName: '',
+      );
+
+      expect(identity.displayName, 'Geoffrey Rono');
+      expect(identity.greetingName, 'Rono');
+    });
+
+    test('does not reuse another account greeting', () {
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: 'new-uid',
+        email: 'opaque@example.com',
+        displayName: null,
+        existingUserId: 'old-uid',
+        existingDisplayName: 'Previous Person',
+        existingGreetingName: 'Previous',
+      );
+
+      expect(identity.greetingName, isEmpty);
+    });
   });
 }

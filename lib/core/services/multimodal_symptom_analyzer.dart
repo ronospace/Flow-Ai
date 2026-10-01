@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/user_profile.dart';
 
 /// Blueprint Implementation: Multimodal Symptom Analysis
@@ -36,8 +35,6 @@ class MultimodalSymptomAnalyzer {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-
-    debugPrint('🧠 Initializing Multimodal Symptom Analyzer...');
 
     // Initialize text analysis model
     _textAnalysisModel = {
@@ -90,7 +87,6 @@ class MultimodalSymptomAnalyzer {
     _initializeSymptomPatterns();
 
     _isInitialized = true;
-    debugPrint('✅ Multimodal Symptom Analyzer initialized successfully');
   }
 
   /// Blueprint Feature: Text-based symptom logging with NLP
@@ -101,10 +97,6 @@ class MultimodalSymptomAnalyzer {
     Map<String, dynamic>? context,
   }) async {
     if (!_isInitialized) await initialize();
-
-    debugPrint(
-      '📝 Analyzing text input: ${textInput.substring(0, math.min(50, textInput.length))}...',
-    );
 
     // Natural Language Processing
     final nlpResults = await _processNaturalLanguage(textInput);
@@ -160,8 +152,6 @@ class MultimodalSymptomAnalyzer {
   }) async {
     if (!_isInitialized) await initialize();
 
-    debugPrint('🎤 Analyzing voice input from audio file...');
-
     // Speech to text conversion
     final speechToTextResult = await _convertSpeechToText(audioFile);
 
@@ -208,8 +198,6 @@ class MultimodalSymptomAnalyzer {
     Map<String, dynamic>? context,
   }) async {
     if (!_isInitialized) await initialize();
-
-    debugPrint('📸 Analyzing image input for ${analysisType.toString()}...');
 
     // Image preprocessing
     final preprocessedImage = await _preprocessImage(imageFile);
@@ -280,10 +268,6 @@ class MultimodalSymptomAnalyzer {
     String? userJournalEntry,
   }) async {
     if (!_isInitialized) await initialize();
-
-    debugPrint(
-      '📓 Generating smart journal summary for ${date.toIso8601String().split('T')[0]}...',
-    );
 
     // Combine all analyses for the day
     final combinedAnalysis = _combineMultimodalAnalyses(dailyAnalyses);

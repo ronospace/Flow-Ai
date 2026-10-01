@@ -18,9 +18,9 @@ enum SubscriptionTier {
       case SubscriptionTier.basic:
         return 'Unlimited exports, custom reports, enhanced tracking';
       case SubscriptionTier.premium:
-        return 'Advanced AI, healthcare integration, biometric sync, priority support';
+        return 'Cycle and wellness AI insights, advanced analytics, and data export';
       case SubscriptionTier.ultimate:
-        return 'All premium features plus advanced analytics, multi-user profiles';
+        return 'Advanced analytics and expanded wellness insights';
     }
   }
 }

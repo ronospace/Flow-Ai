@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 
 /// Advanced ML-based Pattern Recognition Service
@@ -17,7 +16,6 @@ class MLPatternRecognitionService {
     if (_isInitialized) return;
     // In production, this would load TensorFlow Lite models
     _isInitialized = true;
-    debugPrint('🤖 ML Pattern Recognition Service initialized');
   }
 
   /// Detect anomalies in cycle patterns using statistical analysis

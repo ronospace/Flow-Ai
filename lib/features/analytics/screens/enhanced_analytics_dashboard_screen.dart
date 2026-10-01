@@ -12,6 +12,7 @@ import '../../../core/services/notification_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_header_components.dart';
 import '../../../generated/app_localizations.dart';
+import '../../premium/widgets/premium_upgrade_prompt.dart';
 
 class EnhancedAnalyticsDashboardScreen extends StatefulWidget {
   const EnhancedAnalyticsDashboardScreen({super.key});
@@ -580,6 +581,17 @@ class _EnhancedAnalyticsDashboardScreenState
   Future<void> _exportData(ExportFormat format) async {
     if (!mounted) return;
 
+    if (format == ExportFormat.pdf || format == ExportFormat.csv) {
+      final allowed = await checkPremiumAccess(
+        context,
+        featureTitle: 'Premium Export',
+        featureDescription:
+            'PDF and CSV analytics exports are available with Flow Ai Premium.',
+        feature: 'data_export',
+      );
+      if (!allowed || !mounted) return;
+    }
+
     final messenger = ScaffoldMessenger.maybeOf(context);
     messenger?.showSnackBar(
       SnackBar(
@@ -636,6 +648,15 @@ class _EnhancedAnalyticsDashboardScreenState
 
   Future<void> _shareData() async {
     if (!mounted) return;
+
+    final allowed = await checkPremiumAccess(
+      context,
+      featureTitle: 'Premium Export',
+      featureDescription:
+          'Sharing the generated PDF analytics report requires Flow Ai Premium.',
+      feature: 'data_export',
+    );
+    if (!allowed || !mounted) return;
 
     final messenger = ScaffoldMessenger.maybeOf(context);
     messenger?.showSnackBar(

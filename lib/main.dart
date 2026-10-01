@@ -1,4 +1,5 @@
 import 'package:flow_ai/core/routing/app_router.dart';
+import 'package:flow_ai/core/routing/runtime_navigation_telemetry.dart';
 import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
 import 'package:flow_ai/core/deeplinks/pending_deep_link_service.dart';
 import 'features/partner/services/partner_service.dart';
@@ -7,7 +8,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/app_localizations.dart';
 // import 'core/services/firebase_service.dart'; // Temporarily disabled for iOS build
 import 'core/utils/app_logger.dart';
+import 'core/error/error_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -25,7 +26,6 @@ import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/admob_service.dart' as admob;
 import 'core/services/navigation_service.dart';
-import 'core/services/ai_conversation_memory.dart';
 import 'core/services/offline_service.dart';
 import 'core/services/app_state_service.dart';
 import 'core/services/memory_manager.dart';
@@ -91,15 +91,8 @@ void _configureActiveAccountScope() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _configureActiveAccountScope();
-  // Configure Flutter for production performance
-  if (kReleaseMode) {
-    // Disable debug banner and optimize for production
-    debugPrint =
-        (
-          String? message, {
-          int? wrapWidth,
-        }) {}; // Disable debug prints in release
-  }
+  // Install the authoritative application error boundary before runApp.
+  await ErrorHandler.instance.initialize();
 
   // Initialize only critical services synchronously
   runApp(const FlowAIApp());
@@ -165,7 +158,6 @@ Future<void> _initializeNonCriticalServices() async {
       _initializeMemoryManager(),
       _initializeAdMob(),
       _initializeAI(),
-      _initializeAIMemory(),
       _initializeFuturisticServices(),
     ], eagerError: false);
   }); // Don't fail all services if one fails
@@ -185,7 +177,6 @@ Future<void> _initializeAdMob() async {
 
     final adMobService = admob.AdMobService();
     adMobService.loadInterstitialAd();
-    adMobService.loadRewardedAd();
     AppLogger.success('AdMob initialized with verified consent');
   } catch (e) {
     AppLogger.warning('AdMob initialization failed: $e');
@@ -216,16 +207,6 @@ Future<void> _initializeNavigation() async {
     AppLogger.navigation('Navigation Service initialized');
   } catch (e) {
     AppLogger.warning('Navigation Service initialization failed: $e');
-  }
-}
-
-// Auth is now initialized by AppStateService
-Future<void> _initializeAIMemory() async {
-  try {
-    await AIConversationMemory().initialize();
-    AppLogger.ai('AI Conversation Memory initialized');
-  } catch (e) {
-    AppLogger.warning('AI Conversation Memory initialization failed: $e');
   }
 }
 
@@ -325,6 +306,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
   @override
   void initState() {
     super.initState();
+    RuntimeNavigationTelemetry.instance.attach(AppRouter.router);
     settingsProvider = SettingsProvider();
     progressiveDisclosureService = ProgressiveDisclosureService();
     _initializeSettings();
@@ -387,6 +369,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
   @override
   void dispose() {
     _linkSub?.cancel();
+    RuntimeNavigationTelemetry.instance.detach();
     super.dispose();
   }
 
@@ -431,8 +414,8 @@ class _FlowAIAppState extends State<FlowAIApp> {
           if (platformInfo.platform == TargetPlatform.iOS &&
               platformInfo.isMobile) {
             return CupertinoApp.router(
-              title: 'Flow Ai',
               debugShowCheckedModeBanner: false,
+              title: 'Flow Ai',
               scrollBehavior: AppScrollBehavior(),
               theme: CupertinoThemeData(
                 brightness: isDark ? Brightness.dark : Brightness.light,
@@ -442,6 +425,15 @@ class _FlowAIAppState extends State<FlowAIApp> {
                     : AppTheme.lightBackground,
               ),
               locale: settings.locale,
+              builder: (context, child) {
+                final brightness = CupertinoTheme.of(context).brightness;
+                return Theme(
+                  data: brightness == Brightness.dark
+                      ? AppTheme.iosMaterialDarkTheme
+                      : AppTheme.iosMaterialTheme,
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
               routerConfig: AppRouter.router,
               // Internationalization support
               localizationsDelegates: const [
@@ -477,8 +469,9 @@ class _FlowAIAppState extends State<FlowAIApp> {
           } else {
             // Use MaterialApp for Android, web, and desktop platforms
             return MaterialApp.router(
-              title: 'Flow Ai',
               debugShowCheckedModeBanner: false,
+              title: 'Flow Ai',
+              scrollBehavior: AppScrollBehavior(),
               theme: AppTheme.lightTheme.copyWith(
                 scaffoldBackgroundColor: AppTheme.lightBackground,
               ),

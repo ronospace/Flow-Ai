@@ -38,11 +38,11 @@ git push
 
 **Problem**: Reviewer couldn't sign in with the credentials
 
-**Solution**: Updated demo account password from `REDACTED_DEMO_PW!` to `REDACTED_DEMO_PW!`
+**Solution**: Updated demo account password from `<REDACTED>` to `<REDACTED>`
 
 **New Demo Credentials for App Store Connect:**
 - **Username**: `demo@flowai.app`
-- **Password**: `REDACTED_DEMO_PW!`
+- **Password**: `<REDACTED>`
 
 **Alternative Demo Credentials (if the above doesn't work):**
 - **Username**: `ronos.ai@icloud.com`  
@@ -77,13 +77,13 @@ Choose one hosting method and get a public URL. Example:
 - Update credentials:
   ```
   Username: demo@flowai.app
-  Password: REDACTED_DEMO_PW!
+  Password: <REDACTED>
   ```
 - **Add a note for reviewers**:
   ```
   DEMO ACCOUNT NOTES:
   - Email: demo@flowai.app
-  - Password: REDACTED_DEMO_PW!
+  - Password: <REDACTED>
   - This demo account is automatically created when the app first launches
   - If sign-in fails, please restart the app to trigger account creation
   - Alternatively, use backup account: ronos.ai@icloud.com / [password]
@@ -132,7 +132,7 @@ Thank you for your feedback. We have addressed both issues:
 2. **Demo Account Credentials** - FIXED ✅
    Updated demo account details:
    - Email: demo@flowai.app
-   - Password: REDACTED_DEMO_PW!
+   - Password: <REDACTED>
    
    IMPORTANT: This demo account is auto-created on first app launch. If you encounter a "No account found" error, please:
    - Close and restart the app to trigger account creation
@@ -233,7 +233,7 @@ git push
 
 **Option 1**: Create a Firebase-backed account
 - Sign up through the app yourself with `demo@flowai.app`
-- Set password to `REDACTED_DEMO_PW!`
+- Set password to `<REDACTED>`
 - This ensures the account exists in both local and cloud storage
 
 **Option 2**: Provide your personal account

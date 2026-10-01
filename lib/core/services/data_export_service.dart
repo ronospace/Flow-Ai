@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import '../database/database_service.dart';
+import '../identity/active_account_scope.dart';
+import '../../features/premium/models/subscription_models.dart';
+import '../../features/premium/services/subscription_service.dart';
 
 /// Export format types
 enum ExportFormat { pdf, csv, json }
@@ -57,22 +59,68 @@ class DataExportService {
 
   final DatabaseService _database = DatabaseService();
 
+  bool _requiresPremium(ExportFormat format) =>
+      format == ExportFormat.pdf || format == ExportFormat.csv;
+
+  Future<String> _requirePremiumExportAccess() async {
+    final userId = await ActiveAccountScope.instance.requireUserId();
+    final subscription = SubscriptionService();
+
+    final allowed =
+        subscription.canOwnMonetizationFor(userId) &&
+        subscription.isPremium &&
+        subscription.canAccessFeature(PremiumFeature.dataExport);
+
+    if (!allowed) {
+      throw StateError('Premium is required for PDF and CSV exports.');
+    }
+
+    return userId;
+  }
+
+  Future<void> _revalidatePremiumExportAccess(String expectedUserId) async {
+    await ActiveAccountScope.instance.requireOwnership(expectedUserId);
+
+    final subscription = SubscriptionService();
+    final allowed =
+        subscription.canOwnMonetizationFor(expectedUserId) &&
+        subscription.isPremium &&
+        subscription.canAccessFeature(PremiumFeature.dataExport);
+
+    if (!allowed) {
+      throw StateError('Premium export access changed during export.');
+    }
+  }
+
+  Future<void> _deleteGeneratedFileIfPresent(String? filePath) async {
+    if (filePath == null || filePath.trim().isEmpty) return;
+
+    final file = File(filePath);
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
+
   /// Export data in specified format
   Future<String?> exportData({
     required ExportFormat format,
     required ExportDateRange dateRange,
     bool includeCharts = true,
   }) async {
-    try {
-      debugPrint('📤 Exporting data as ${format.name}...');
-      debugPrint(
-        '   Date range: ${dateRange.startDate} to ${dateRange.endDate}',
-      );
+    String? filePath;
+    String? premiumOwner;
 
-      // Fetch all data for the date range
+    try {
+      if (_requiresPremium(format)) {
+        premiumOwner = await _requirePremiumExportAccess();
+      }
+
       final data = await _fetchDataForRange(dateRange);
 
-      String? filePath;
+      if (premiumOwner != null) {
+        await _revalidatePremiumExportAccess(premiumOwner);
+      }
+
       switch (format) {
         case ExportFormat.pdf:
           filePath = await _exportAsPDF(data, dateRange, includeCharts);
@@ -85,14 +133,17 @@ class DataExportService {
           break;
       }
 
-      if (filePath != null) {
-        debugPrint('✅ Export successful: $filePath');
+      if (premiumOwner != null) {
+        try {
+          await _revalidatePremiumExportAccess(premiumOwner);
+        } catch (_) {
+          await _deleteGeneratedFileIfPresent(filePath);
+          rethrow;
+        }
       }
 
       return filePath;
-    } catch (e, stackTrace) {
-      debugPrint('❌ Export failed: $e');
-      debugPrint('Stack trace: $stackTrace');
+    } catch (_) {
       return null;
     }
   }
@@ -166,7 +217,6 @@ class DataExportService {
 
       return filePath;
     } catch (e) {
-      debugPrint('❌ PDF export failed: $e');
       return null;
     }
   }
@@ -378,7 +428,6 @@ class DataExportService {
 
       return filePath;
     } catch (e) {
-      debugPrint('❌ CSV export failed: $e');
       return null;
     }
   }
@@ -415,7 +464,6 @@ class DataExportService {
 
       return filePath;
     } catch (e) {
-      debugPrint('❌ JSON export failed: $e');
       return null;
     }
   }
@@ -423,7 +471,6 @@ class DataExportService {
   /// Share exported file
   Future<void> shareExportedFile(String filePath) async {
     try {
-      debugPrint('📤 Sharing file: $filePath');
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(filePath)],
@@ -431,10 +478,7 @@ class DataExportService {
           text: 'My Flow Ai health data export',
         ),
       );
-      debugPrint('✅ File shared successfully');
-    } catch (e) {
-      debugPrint('❌ Sharing failed: $e');
-    }
+    } catch (e) {}
   }
 
   /// Delete exported file
@@ -443,10 +487,7 @@ class DataExportService {
       final file = File(filePath);
       if (await file.exists()) {
         await file.delete();
-        debugPrint('✅ Exported file deleted: $filePath');
       }
-    } catch (e) {
-      debugPrint('❌ Failed to delete file: $e');
-    }
+    } catch (e) {}
   }
 }

@@ -293,8 +293,7 @@
   "light": "Clair",
   "dark": "Sombre",
   "system": "Système",
-  
-  "trackingScreenTitle": "Suivi",
+  "trackingScreenTitle": "Écran de Suivi",
   "flowTab": "Flux",
   "symptomsTab": "Symptômes",
   "moodTab": "Humeur",
@@ -354,12 +353,7 @@
   "spotting": "Spotting",
   "flow": "Flux",
   "unlockPremiumAiInsights": "Déverrouillez les Analyses IA Premium",
-  "watchAdToUnlockInsights": "Regardez une publicité pour débloquer des analyses avancées",
   "free": "GRATUIT",
-  "watchAdUnlockInsights": "Regarder Pub et Débloquer Analyses",
-  "getAdditionalPremiumInsights": "Obtenez 3 analyses premium supplémentaires",
-  "unlockAdvancedHealthRecommendations": "Déverrouillez des recommandations de santé avancées",
-  "premiumInsightsUnlocked": "Analyses premium déverrouillées ! 🎉",
   "day": "Jour {day}",
   "confidencePercentage": "{percentage}% de confiance",
   "quickActions": "Actions Rapides",
@@ -484,7 +478,6 @@
   "focusOnHealthImprovement": "Concentrez-vous sur l'amélioration de la santé",
   "calendarTitle": "Calendrier",
   "todayButton": "Aujourd'hui",
-  
   "aiGreeting": "Salut {userName}! 👋 Je suis votre assistant IA Flow Ai. Je suis là pour vous aider à comprendre votre cycle, fournir des analyses de santé personnalisées et répondre à toutes vos questions sur le bien-être reproductif. Comment puis-je vous aider aujourd'hui ?",
   "aiPeriodResponse1": "Je peux vous aider à suivre votre cycle menstruel ! 🩸 Quand vos dernières règles ont-elles commencé ? Vous pouvez l'enregistrer dans la section Suivi des Règles, et je vous aiderai à prédire votre prochain cycle.",
   "aiPeriodResponse2": "Comprendre vos schémas menstruels est essentiel pour la santé reproductive. Le cycle moyen dure 21-35 jours. Avez-vous remarqué des changements dans votre cycle récemment ?",
@@ -534,7 +527,6 @@
   "aiQuickSuggestion6": "Comprendre mon cycle",
   "aiQuickSuggestion7": "Règles irrégulières",
   "aiQuickSuggestion8": "Gérer les crampes",
-  
   "healthDashboardMatrix": "Matrice du Tableau de Bord Santé",
   "realTimeBiometricAnalysis": "Analyse biométrique en temps réel",
   "predictiveAnalyticsCenter": "Centre d'Analyses Prédictives",
@@ -776,21 +768,6 @@
   "@languageChangedTo": {
     "description": "Language change confirmation message"
   },
-  "trackingScreenTitle": "Écran de Suivi",
-  "flowTab": "Flux",
-  "symptomsTab": "Symptômes",
-  "moodTab": "Humeur",
-  "painTab": "Douleur",
-  "notesTab": "Notes",
-  "overview": "Vue d'ensemble",
-  "metrics": "Métriques",
-  "sync": "Synchroniser",
-  "biometricDashboard": "Tableau de Bord Biométrique",
-  "aiPrediction": "Prédiction IA",
-  "currentCycle": "Cycle Actuel",
-  "noActiveCycle": "Aucun cycle actif",
-  "startTracking": "Commencer le suivi",
-  
   "faqAndKnowledgeBase": "FAQ et Base de Connaissances",
   "findAnswersToCommonQuestions": "Trouvez des réponses aux questions courantes",
   "searchFAQs": "Rechercher FAQ...",
@@ -807,7 +784,5 @@
   "useFloatingChatInInsights": "Pour l'instant, utilisez le chat flottant dans l'écran d'analyses",
   "goToAIChat": "Aller au Chat IA",
   "faqAndHelp": "FAQ et Aide",
-  "getAnswers": "Obtenir des réponses",
-  "smartActionCommandCenter": "Centre de Commande d'Action Intelligente",
-  "quickAccessToEssentialFeatures": "Accès rapide aux fonctionnalités essentielles"
+  "getAnswers": "Obtenir des réponses"
 }

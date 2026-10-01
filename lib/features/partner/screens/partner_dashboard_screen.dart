@@ -171,10 +171,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           : const Color(0xFFF6EDEF),
       title: Text(
         partnerService.hasPartner ? 'Partner Connection' : 'Partner 🫂 Connect',
-        style: theme.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w700,
-          color: theme.colorScheme.onSurface,
-        ),
+        style: AppPageTypography.title(context),
       ),
       centerTitle: true,
       leading: IconButton(
@@ -278,7 +275,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                   width: 8,
@@ -289,14 +287,23 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                Text(
-                                  partnership.id.isNotEmpty
-                                      ? 'Partner Sync Active'
-                                      : 'No Partner Connected',
-                                  style: TextStyle(
-                                    color: AppTheme.warningOrange,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      partnership.id.isNotEmpty
+                                          ? 'Partner Sync Active'
+                                          : 'No Partner Connected',
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: AppTheme.warningOrange,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

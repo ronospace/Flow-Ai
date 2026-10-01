@@ -115,17 +115,19 @@ class _PressableAvatarState extends State<PressableAvatar>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.white.withOpacity(0.55),
-                          const Color(0xFFF3E8FF).withOpacity(0.35),
+                          Colors.white.withValues(alpha: 0.55),
+                          const Color(0xFFF3E8FF).withValues(alpha: 0.35),
                         ],
                       ),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.45),
+                        color: Colors.white.withValues(alpha: 0.45),
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFC850F2).withOpacity(0.16),
+                          color: const Color(
+                            0xFFC850F2,
+                          ).withValues(alpha: 0.16),
                           blurRadius: 14,
                           offset: const Offset(0, 6),
                         ),

@@ -8,10 +8,13 @@ class FlowIntensityPicker extends StatefulWidget {
   final FlowIntensity selectedIntensity;
   final Function(FlowIntensity) onIntensitySelected;
 
+  final double? maxGridHeight;
   const FlowIntensityPicker({
     super.key,
     required this.selectedIntensity,
     required this.onIntensitySelected,
+
+    this.maxGridHeight,
   });
 
   @override
@@ -27,7 +30,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         title: localizations.flowIntensityNone,
         subtitle: localizations.flowIntensityNoneSubtitle,
         emoji: '✨',
-        color: AppTheme.lightGrey,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
         description: localizations.flowIntensityNoneDescription,
         medicalInfo: localizations.flowIntensityNoneMedicalInfo,
         products: [],
@@ -120,19 +123,63 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildResponsiveOptionGrid(intensityOptions),
+        _buildResponsiveOptionGrid(
+          intensityOptions,
+          maxHeight: widget.maxGridHeight,
+        ),
 
-        if (widget.selectedIntensity != FlowIntensity.none)
+        if (widget.selectedIntensity != FlowIntensity.none) ...[
           Container(
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: _buildAIInsightsPanel(selectedOption),
           ),
+          const SizedBox(height: 12),
+          Container(
+            key: const ValueKey('flow-contextual-feedback'),
+            width: double.infinity,
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.accentMint.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppTheme.accentMint.withValues(alpha: 0.1),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.lightbulb_outline,
+                  color: AppTheme.accentMint,
+                  size: 20,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    _getContextualFlowFeedback(selectedOption.intensity),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.8),
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
 
-  Widget _buildResponsiveOptionGrid(List<FlowIntensityOption> options) {
+  Widget _buildResponsiveOptionGrid(
+    List<FlowIntensityOption> options, {
+    double? maxHeight,
+  }) {
     return LayoutBuilder(
       builder: (context, constraints) {
         const gridPadding = 12.0;
@@ -210,7 +257,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           );
         }
 
-        return Padding(
+        final naturalGrid = Padding(
           key: ValueKey('flow-grid-columns-$columnCount'),
           padding: const EdgeInsets.all(gridPadding),
           child: Column(
@@ -220,6 +267,19 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 rows[index],
               ],
             ],
+          ),
+        );
+
+        if (maxHeight == null || !maxHeight.isFinite || maxHeight <= 0) {
+          return naturalGrid;
+        }
+
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.topCenter,
+            child: SizedBox(width: constraints.maxWidth, child: naturalGrid),
           ),
         );
       },
@@ -414,10 +474,8 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: isSelected ? null : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isSelected
-              ? option.color
-              : AppTheme.lightGrey.withValues(alpha: 0.5),
-          width: isSelected ? 3 : 1,
+          color: AppTheme.lightGrey.withValues(alpha: 0.5),
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
@@ -429,105 +487,150 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Icon Container - Simplified
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: option.color.withValues(alpha: isSelected ? 0.2 : 0.1),
-                borderRadius: BorderRadius.circular(16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (isSelected)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: option.color, width: 3),
+                  ),
+                ),
               ),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon Container - Simplified
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: option.color.withValues(
+                      alpha: isSelected ? 0.2 : 0.1,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Text(
+                      option.emoji,
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Natural-height title.
+                Text(
+                  option.title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: isSelected
+                        ? option.color
+                        : theme.colorScheme.onSurface,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: 2),
+
+                // Natural-height subtitle.
+                Text(
+                  option.subtitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                // Medical indicator for heavy flows
+                if (option.intensity == FlowIntensity.heavy ||
+                    option.intensity == FlowIntensity.veryHeavy) ...[
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: option.color.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.health_and_safety,
+                          size: 10,
+                          color: option.color,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          AppLocalizations.of(context).monitor,
+                          style: TextStyle(
+                            color: option.color,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+          if (isSelected)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 8,
               child: Center(
-                child: Text(
-                  option.emoji,
-                  style: TextStyle(fontSize: isSelected ? 28 : 24),
+                child: Container(
+                  width: 24,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: option.color,
+                    borderRadius: BorderRadius.circular(1.5),
+                  ),
                 ),
               ),
             ),
-
-            const SizedBox(height: 8),
-
-            // Natural-height title.
-            Text(
-              option.title,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                color: isSelected ? option.color : theme.colorScheme.onSurface,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            const SizedBox(height: 2),
-
-            // Natural-height subtitle.
-            Text(
-              option.subtitle,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontSize: 10,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            // Medical indicator for heavy flows
-            if (option.intensity == FlowIntensity.heavy ||
-                option.intensity == FlowIntensity.veryHeavy) ...[
-              const SizedBox(height: 4),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: option.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.health_and_safety,
-                      size: 10,
-                      color: option.color,
-                    ),
-                    const SizedBox(width: 2),
-                    Text(
-                      AppLocalizations.of(context).monitor,
-                      style: TextStyle(
-                        color: option.color,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-
-            const SizedBox(height: 8),
-
-            // Selection indicator
-            if (isSelected)
-              Container(
-                width: 24,
-                height: 3,
-                decoration: BoxDecoration(
-                  color: option.color,
-                  borderRadius: BorderRadius.circular(1.5),
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
+  }
+
+  String _getContextualFlowFeedback(FlowIntensity intensity) {
+    switch (intensity) {
+      case FlowIntensity.none:
+        return 'Start tracking to get personalized insights';
+      case FlowIntensity.spotting:
+        return 'Light spotting is normal at the beginning or end of your cycle.';
+      case FlowIntensity.light:
+        return 'Light flow - stay hydrated and rest as needed.';
+      case FlowIntensity.medium:
+        return 'Normal flow pattern - you\'re doing great!';
+      case FlowIntensity.heavy:
+        return 'Heavy flow - monitor iron intake and rest.';
+      case FlowIntensity.veryHeavy:
+        return 'Very heavy flow - consider tracking for your doctor.';
+    }
   }
 
   String _getAIInsight(FlowIntensityOption option) {

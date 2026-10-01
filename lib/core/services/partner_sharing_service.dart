@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import '../models/cycle_data.dart';
 import '../models/daily_tracking_data.dart';
@@ -20,9 +19,6 @@ class PartnerSharingService {
 
   PartnerSharingService() {
     _initializeEncryption();
-    debugPrint(
-      '⚠️ PartnerSharingService: Firebase disabled, sharing features unavailable',
-    );
   }
 
   void _initializeEncryption() {
@@ -38,9 +34,6 @@ class PartnerSharingService {
     required String invitationMessage,
     DateTime? expiresAt,
   }) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
@@ -49,9 +42,6 @@ class PartnerSharingService {
   Future<SharedConnection> acceptSharingInvitation(
     String invitationCode,
   ) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
@@ -61,18 +51,12 @@ class PartnerSharingService {
     String invitationCode,
     String reason,
   ) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
   }
 
   Future<List<SharedConnection>> getSharedConnections() async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     return []; // Return empty list instead of throwing
   }
 
@@ -82,18 +66,12 @@ class PartnerSharingService {
     List<String> trackingDataIds, {
     String? note,
   }) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
   }
 
   Future<SharedData> getSharedData(String connectionId) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
@@ -103,18 +81,12 @@ class PartnerSharingService {
     String connectionId,
     SharingPermissions newPermissions,
   ) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
   }
 
   Future<void> revokeSharing(String connectionId, String reason) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Partner sharing is disabled in this build. Firebase authentication required.',
     );
@@ -126,9 +98,6 @@ class PartnerSharingService {
     required String medicalContext,
     DateTime? expiresAt,
   }) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Emergency sharing is disabled in this build. Firebase authentication required.',
     );
@@ -138,9 +107,6 @@ class PartnerSharingService {
     String shareId,
     String accessCode,
   ) async {
-    debugPrint(
-      '⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)',
-    );
     throw Exception(
       'Emergency sharing is disabled in this build. Firebase authentication required.',
     );
@@ -149,8 +115,6 @@ class PartnerSharingService {
   // Local backup functionality that doesn't require Firebase
   Future<void> createLocalDataExport() async {
     try {
-      debugPrint('📤 Creating local data export...');
-
       final exportData = {
         'cycles': _databaseService.getAllCycles(),
         'tracking': _databaseService.getAllTrackingData(),
@@ -164,10 +128,7 @@ class PartnerSharingService {
         'local_data_export',
         jsonEncode(encryptedExport),
       );
-
-      debugPrint('✅ Local data export created successfully');
     } catch (e) {
-      debugPrint('❌ Error creating local data export: $e');
       rethrow;
     }
   }
@@ -180,7 +141,6 @@ class PartnerSharingService {
       final encryptedExport = jsonDecode(exportString);
       return _decryptData(encryptedExport);
     } catch (e) {
-      debugPrint('❌ Error retrieving local data export: $e');
       return null;
     }
   }

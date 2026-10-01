@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
 import '../models/subscription.dart';
 import '../models/subscription_plan.dart';
 import '../models/premium_feature.dart';
 
-/// Subscription Analytics Service
-/// Tracks subscription events, conversions, and feature usage
+/// Legacy subscription analytics compatibility surface.
+///
+/// This class does not own telemetry transport, persistence, user identity,
+/// transaction identity, timers, or network delivery. Production telemetry
+/// ownership belongs exclusively to ProductionAnalyticsService.
 class SubscriptionAnalyticsService {
-  // TODO: Replace with your actual analytics service (Firebase, Mixpanel, Amplitude, etc.)
-
   /// Track when user views the paywall
   static Future<void> trackPaywallViewed({
     String? source, // e.g., 'settings', 'feature_gate', 'onboarding'
@@ -80,9 +80,6 @@ class SubscriptionAnalyticsService {
       parameters: {
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
-        'transaction_id': transactionId,
-        if (originalTransactionId != null)
-          'original_transaction_id': originalTransactionId,
         'timestamp': DateTime.now().toIso8601String(),
       },
     );
@@ -338,7 +335,6 @@ class SubscriptionAnalyticsService {
     await _logEvent(
       'user_ltv_updated',
       parameters: {
-        'user_id': userId,
         'total_revenue': totalRevenue,
         'subscription_months': subscriptionMonths,
         'average_revenue_per_month': subscriptionMonths > 0
@@ -390,50 +386,13 @@ class SubscriptionAnalyticsService {
     String eventName, {
     Map<String, dynamic>? parameters,
   }) async {
-    try {
-      debugPrint('📊 Analytics Event: $eventName');
-      if (parameters != null) {
-        debugPrint('   Parameters: $parameters');
-      }
-
-      // TODO: Implement your analytics service
-      // Examples:
-
-      // Firebase Analytics:
-      // await FirebaseAnalytics.instance.logEvent(
-      //   name: eventName,
-      //   parameters: parameters,
-      // );
-
-      // Mixpanel:
-      // await Mixpanel.track(eventName, properties: parameters);
-
-      // Amplitude:
-      // Amplitude.getInstance().logEvent(eventName, eventProperties: parameters);
-
-      // Custom Analytics:
-      // await YourAnalyticsService.trackEvent(eventName, parameters);
-    } catch (e) {
-      debugPrint('❌ Analytics error: $e');
-    }
+    // Intentionally no-op. This compatibility surface is not a telemetry
+    // transport owner. Production analytics flows through
+    // ProductionAnalyticsService only.
   }
 
-  /// Set user property for segmentation
+  /// Legacy compatibility no-op.
   static Future<void> _setUserProperty(String key, dynamic value) async {
-    try {
-      debugPrint('👤 User Property: $key = $value');
-
-      // TODO: Implement your analytics service
-      // Firebase Analytics:
-      // await FirebaseAnalytics.instance.setUserProperty(
-      //   name: key,
-      //   value: value.toString(),
-      // );
-
-      // Mixpanel:
-      // await Mixpanel.getPeople().set(key, value);
-    } catch (e) {
-      debugPrint('❌ User property error: $e');
-    }
+    // Intentionally no-op. User properties are not transported here.
   }
 }

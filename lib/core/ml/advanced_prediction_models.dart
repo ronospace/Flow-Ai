@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../models/daily_tracking_data.dart';
@@ -18,15 +17,12 @@ class AdvancedPredictionModels {
   /// Initialize the ML models (simplified)
   Future<void> initialize() async {
     try {
-      debugPrint('🤖 Initializing Advanced ML Prediction Models...');
 
       // Simulate initialization delay
       await Future.delayed(const Duration(milliseconds: 500));
 
       _isInitialized = true;
-      debugPrint('✅ Advanced ML Models initialized successfully');
     } catch (e) {
-      debugPrint('❌ Failed to initialize ML models: $e');
       rethrow;
     }
   }
@@ -193,9 +189,6 @@ class AdvancedPredictionModels {
 
   /// Process user feedback (simplified)
   Future<void> processFeedback(SimpleMLFeedback feedback) async {
-    debugPrint(
-      '📝 Processing ML feedback: ${feedback.type} - ${feedback.wasAccurate}',
-    );
     // In a real implementation, this would update model weights
   }
 

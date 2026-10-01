@@ -44,7 +44,10 @@ void main() {
         expect(source, contains("context.push('/premium/paywall')"));
         expect(source, contains('localizations.unlockPremiumAiInsights'));
         expect(source, contains('_showPremiumInsightsPaywall'));
-        expect(source, contains('onPremiumTap: _showPremiumInsightsPaywall'));
+        expect(
+          source,
+          matches(RegExp(r'onPremiumTap:\s*_showPremiumInsightsPaywall')),
+        );
       },
     );
   });

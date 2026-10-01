@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/personalization.dart';
 import '../models/user_profile.dart';
 import '../services/hyper_personalization_service.dart';
@@ -54,9 +53,6 @@ Future<PersonalizationExampleResult> demoPersonalization() async {
     scheduledAt: DateTime.now().add(const Duration(minutes: 1)),
   );
 
-  debugPrint(
-    'Generated ${reminders.length} reminders and a phase notification',
-  );
 
   return PersonalizationExampleResult(
     reminders: reminders,

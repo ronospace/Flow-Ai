@@ -60,8 +60,13 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOutQuart,
           transform: Matrix4.identity()
-            ..scale(_isHovered ? 1.02 : 1.0)
-            ..translate(0.0, _isHovered ? -4.0 : 0.0),
+            ..scaleByDouble(
+              _isHovered ? 1.02 : 1.0,
+              _isHovered ? 1.02 : 1.0,
+              _isHovered ? 1.02 : 1.0,
+              1.0,
+            )
+            ..translateByDouble(0.0, _isHovered ? -4.0 : 0.0, 0.0, 1.0),
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(

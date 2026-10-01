@@ -2,7 +2,7 @@
 
 ## ✅ **SOLUTION IMPLEMENTED**
 
-The authentication issue has been **FIXED**! Your app will now auto-create the demo account (`ronos.ai@icloud.com` / `REDACTED_DEMO_PW`) on **every device** that runs the app, including Apple reviewers' test devices.
+The authentication issue has been **FIXED**! Your app will now auto-create the demo account (`ronos.ai@icloud.com` / `<REDACTED>`) on **every device** that runs the app, including Apple reviewers' test devices.
 
 ---
 
@@ -29,7 +29,7 @@ flutter run -d "iPhone 15 Pro"
 
 # Test login with demo credentials:
 # Email: ronos.ai@icloud.com
-# Password: REDACTED_DEMO_PW
+# Password: <REDACTED>
 ```
 
 ### Step 2: Build for App Store (10 minutes)
@@ -56,14 +56,14 @@ Thank you for your feedback regarding the demo account access issue.
 
 ISSUE RESOLVED:
 ✅ The authentication system has been fixed
-✅ Demo account (ronos.ai@icloud.com / REDACTED_DEMO_PW) now works on any device
+✅ Demo account (ronos.ai@icloud.com / <REDACTED>) now works on any device
 ✅ Account is auto-created with sample data to demonstrate app features
 
 TESTING INSTRUCTIONS:
 1. Launch the updated app
 2. Tap "Sign In"
 3. Email: ronos.ai@icloud.com
-4. Password: REDACTED_DEMO_PW
+4. Password: <REDACTED>
 5. You now have full access to all features
 
 The account includes sample cycle data, mood tracking, and AI insights to showcase the app's capabilities.
@@ -83,7 +83,7 @@ Best regards,
 2. **LocalUserService initializes** and checks for demo account
 3. **If demo account doesn't exist**, it's automatically created with:
    - Email: `ronos.ai@icloud.com`
-   - Password: `REDACTED_DEMO_PW`
+   - Password: `<REDACTED>`
    - Display Name: "Demo User for App Review"
    - **Sample cycle data** (28-day cycle, last period 15 days ago)
    - **Sample symptoms and notes** to show functionality
@@ -136,7 +136,7 @@ Before submitting to App Store:
 
 - [ ] **Clean build completed** (`flutter clean && flutter pub get`)
 - [ ] **App launches** without errors on iOS simulator
-- [ ] **Demo login works** (ronos.ai@icloud.com / REDACTED_DEMO_PW)
+- [ ] **Demo login works** (ronos.ai@icloud.com / <REDACTED>)
 - [ ] **User sees sample data** (notes, cycle info, symptoms)
 - [ ] **All main features accessible** after login
 - [ ] **No crashes or freezes** during navigation

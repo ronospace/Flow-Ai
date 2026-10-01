@@ -13,7 +13,7 @@ void main() {
       invoke: (name, data) async {
         callableName = name;
         callableData = data;
-        return {'ok': true, 'deletedDocuments': 7};
+        return {'ok': true, 'identityDeleted': true, 'deletedDocuments': 7};
       },
     );
 
@@ -70,4 +70,28 @@ void main() {
     expect(source, isNot(contains('ensureCloudIdentity')));
     expect(source, isNot(contains('signInAnonymously')));
   });
+  test(
+    'rejects response when Firebase identity deletion is unconfirmed',
+    () async {
+      final gateway = CloudDataDeletionGateway(
+        currentUserId: () => 'firebase-user-123',
+        invoke: (name, data) async => {
+          'ok': true,
+          'identityDeleted': false,
+          'deletedDocuments': 7,
+        },
+      );
+
+      await expectLater(
+        gateway.deleteCurrentUserCloudData(),
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            'Firebase identity deletion could not be confirmed.',
+          ),
+        ),
+      );
+    },
+  );
 }

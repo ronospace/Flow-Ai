@@ -2247,41 +2247,11 @@ abstract class AppLocalizations {
   /// **'Unlock Premium AI Insights'**
   String get unlockPremiumAiInsights;
 
-  /// Subtitle for premium insights unlock widget
-  ///
-  /// In en, this message translates to:
-  /// **'Watch an ad to unlock advanced insights'**
-  String get watchAdToUnlockInsights;
-
   /// Free label for premium unlock widget
   ///
   /// In en, this message translates to:
   /// **'FREE'**
   String get free;
-
-  /// Button text for watching ad to unlock insights
-  ///
-  /// In en, this message translates to:
-  /// **'Watch Ad & Unlock Insights'**
-  String get watchAdUnlockInsights;
-
-  /// Benefit text for premium insights unlock
-  ///
-  /// In en, this message translates to:
-  /// **'Get 3 additional premium insights'**
-  String get getAdditionalPremiumInsights;
-
-  /// Benefit text for advanced health recommendations
-  ///
-  /// In en, this message translates to:
-  /// **'Unlock advanced health recommendations'**
-  String get unlockAdvancedHealthRecommendations;
-
-  /// Success message when premium insights are unlocked
-  ///
-  /// In en, this message translates to:
-  /// **'Premium insights unlocked! 🎉'**
-  String get premiumInsightsUnlocked;
 
   /// Day number in cycle
   ///

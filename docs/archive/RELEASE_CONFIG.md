@@ -15,7 +15,7 @@
 ## Demo Account Credentials
 
 **Email:** `demo@flowai.app`  
-**Password:** `REDACTED_DEMO_PW!`
+**Password:** `<REDACTED>`
 
 This demo account should be used for:
 - Testing authentication flows

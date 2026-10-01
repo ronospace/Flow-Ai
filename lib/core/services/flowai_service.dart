@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 /// Service class for Flow Ai integration
@@ -42,9 +41,7 @@ class FlowAIService {
       }
 
       _isInitialized = true;
-      debugPrint('✅ Flow Ai service initialized successfully');
     } catch (e) {
-      debugPrint('❌ Flow Ai initialization failed: $e');
       throw FlowAIException('Failed to initialize Flow Ai service: $e');
     }
   }
@@ -144,7 +141,6 @@ class FlowAIService {
 
       return response.statusCode == 200;
     } catch (e) {
-      debugPrint('Health check failed: $e');
       return false;
     }
   }

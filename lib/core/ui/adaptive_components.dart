@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../services/platform_service.dart';
+import '../layout/app_layout_metrics.dart';
 
 /// Adaptive UI components that automatically adjust to platform conventions
 class AdaptiveComponents {
@@ -770,22 +771,18 @@ class AdaptiveActionSheetAction<T> {
 
 /// Responsive breakpoints for adaptive layouts
 class ResponsiveBreakpoints {
-  static const double mobile = 600;
-  static const double tablet = 900;
-  static const double desktop = 1200;
+  static const double mobile = AppLayoutMetrics.mobileBreakpoint;
+  static const double tablet = AppLayoutMetrics.tabletBreakpoint;
+  static const double desktop = AppLayoutMetrics.desktopBreakpoint;
 
-  static bool isMobile(BuildContext context) {
-    return MediaQuery.of(context).size.width < mobile;
-  }
+  static bool isMobile(BuildContext context) =>
+      AppLayoutMetrics.isMobile(context);
 
-  static bool isTablet(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    return width >= mobile && width < desktop;
-  }
+  static bool isTablet(BuildContext context) =>
+      AppLayoutMetrics.isTablet(context);
 
-  static bool isDesktop(BuildContext context) {
-    return MediaQuery.of(context).size.width >= desktop;
-  }
+  static bool isDesktop(BuildContext context) =>
+      AppLayoutMetrics.isDesktop(context);
 }
 
 /// Responsive widget builder

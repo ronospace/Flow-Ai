@@ -50,7 +50,6 @@ class SubscriptionPlan {
   }
 
   static SubscriptionPlan _createPremiumPlan(SubscriptionBillingCycle cycle) {
-    final isYearly = cycle == SubscriptionBillingCycle.yearly;
     return SubscriptionPlan(
       id: 'premium_${cycle.name}',
       name: 'Premium',
@@ -58,19 +57,14 @@ class SubscriptionPlan {
       billingCycle: cycle,
       features: [
         'Everything in Basic',
-        'Advanced AI predictions',
+        'Cycle & wellness AI insights',
         'Unlimited exports',
         'Custom health reports',
-        'Healthcare integration',
-        'Priority support',
-        'Biometric data sync',
-        'Ad-free experience',
       ],
     );
   }
 
   static SubscriptionPlan _createUltimatePlan(SubscriptionBillingCycle cycle) {
-    final isYearly = cycle == SubscriptionBillingCycle.yearly;
     return SubscriptionPlan(
       id: 'ultimate_${cycle.name}',
       name: 'Ultimate',
@@ -78,13 +72,12 @@ class SubscriptionPlan {
       billingCycle: cycle,
       features: [
         'Everything in Premium',
-        'Multi-user profiles (up to 5)',
+
         'Advanced analytics dashboard',
-        'Predictive health modeling',
-        'Export to healthcare providers',
-        'White-glove support',
+        'Advanced trend and pattern insights',
+        'Flexible PDF and CSV data export',
+
         'Early access to new features',
-        'Lifetime data storage',
       ],
     );
   }

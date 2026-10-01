@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flow_ai/core/identity/active_account_scope.dart';
 import 'package:flow_ai/features/partner/services/partner_service.dart';
 
 void main() {
@@ -10,16 +11,19 @@ void main() {
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
+      ActiveAccountScope.instance.configure(() async => null);
       service = PartnerService();
     });
 
-    test('createPartnerInvitation completes', () async {
-      final result = await service.createPartnerInvitation(
-        personalMessage: 'Hello',
-      );
-
-      expect(result, isNotNull);
-    });
+    test(
+      'createPartnerInvitation fails closed without active identity',
+      () async {
+        await expectLater(
+          service.createPartnerInvitation(personalMessage: 'Hello'),
+          throwsA(isA<StateError>()),
+        );
+      },
+    );
 
     test('sendPartnerInvitation resets loading state', () async {
       await service.sendPartnerInvitation(

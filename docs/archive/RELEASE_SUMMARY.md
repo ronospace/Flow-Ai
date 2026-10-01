@@ -105,7 +105,7 @@ flutter build ipa --release
 
 ## ✅ Features Verified
 
-- ✅ Demo account working (demo@flowai.app / REDACTED_DEMO_PW!)
+- ✅ Demo account working (demo@flowai.app / <REDACTED>)
 - ✅ Authentication flow functional
 - ✅ Cycle tracking operational
 - ✅ AI insights generating with citations
@@ -153,7 +153,7 @@ flutter build ipa --release
    
    Demo Account:
    Email: demo@flowai.app
-   Password: REDACTED_DEMO_PW!
+   Password: <REDACTED>
    ```
 
 ---

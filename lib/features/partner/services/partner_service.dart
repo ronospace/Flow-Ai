@@ -1,25 +1,23 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+
+import '../../../core/services/auth_service.dart';
 import 'local_partner_service.dart';
 import 'partner_invite_actions.dart';
 import '../models/partner_service_models.dart';
 export '../models/partner_service_models.dart';
 
-/// Partner service - Uses local storage for partner features
-/// Works offline without Firebase
+/// Partner service coordinating local partner state with authenticated cloud
+/// invitation publication, delivery, and acceptance.
 class PartnerService extends ChangeNotifier {
   static final PartnerService _instance = PartnerService._internal();
   factory PartnerService() => _instance;
-  PartnerService._internal() {
-    debugPrint('✅ PartnerService: Using local partner service');
-  }
+  PartnerService._internal() {}
 
   final LocalPartnerService _localService = LocalPartnerService();
   late final PartnerInviteActions _inviteActions = PartnerInviteActions(
     _localService,
   );
-  final bool _firebaseAvailable = false;
-
   Partnership? _currentPartnership;
   List<PartnerMessage> _messages = [];
   List<PartnerCareAction> _careActions = [];
@@ -36,7 +34,7 @@ class PartnerService extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasPartner => _currentPartnership != null;
-  bool get isFirebaseAvailable => _firebaseAvailable;
+  bool get isFirebaseAvailable => AuthService().isFirebaseAvailable;
 
   /// Initialize the partner service
   Future<void> initialize() async {
@@ -46,7 +44,6 @@ class PartnerService extends ChangeNotifier {
       await _loadPartnership();
       await _loadMessages();
       await _loadCareActions();
-      debugPrint('✅ PartnerService initialized');
     } catch (e) {
       _setError('Failed to initialize: $e');
     } finally {
@@ -54,12 +51,53 @@ class PartnerService extends ChangeNotifier {
     }
   }
 
-  /// Load partnership for current user
+  /// Load partnership for current user.
+  ///
+  /// Cloud is authoritative when reachable. Local storage remains a cache for
+  /// offline continuity and local partner sub-features.
   Future<void> _loadPartnership() async {
     try {
+      final cloudPartnership = await _inviteActions.fetchCurrentPartnership();
+
+      if (cloudPartnership != null) {
+        final resolvedPartnership = Partnership(
+          id: cloudPartnership['id'],
+          primaryUserId: cloudPartnership['userId1'],
+          partnerUserId: cloudPartnership['userId2'],
+          primaryUserName:
+              cloudPartnership['customName1'] ?? cloudPartnership['userId1'],
+          partnerUserName:
+              cloudPartnership['customName2'] ?? cloudPartnership['userId2'],
+          primaryUserEmail: null,
+          partnerUserEmail: null,
+          createdAt: DateTime.parse(cloudPartnership['establishedAt']),
+          lastActiveAt: cloudPartnership['lastActiveAt'] != null
+              ? DateTime.parse(cloudPartnership['lastActiveAt'])
+              : DateTime.parse(cloudPartnership['establishedAt']),
+          sharingSettings: const PartnerSharingSettings(),
+        );
+
+        // Authenticated cloud state is authoritative. Publish it first so a
+        // secondary local-cache failure can never hide a valid partnership.
+        _currentPartnership = resolvedPartnership;
+        notifyListeners();
+
+        try {
+          await _localService.cacheCloudPartnership(cloudPartnership);
+        } catch (_) {
+          // Local persistence is offline continuity only, never cloud truth.
+        }
+
+        return;
+      }
+    } catch (_) {
+      // Cloud failure must not destroy a previously verified local cache.
+    }
+
+    try {
       final partnership = await _localService.getCurrentPartnership();
+
       if (partnership != null) {
-        // Convert model Partnership to service Partnership
         _currentPartnership = Partnership(
           id: partnership.id,
           primaryUserId: partnership.userId1,
@@ -79,11 +117,10 @@ class PartnerService extends ChangeNotifier {
             sendNotifications: partnership.privacySettings.allowNotifications,
           ),
         );
+
         notifyListeners();
       }
-    } catch (e) {
-      debugPrint('Error loading partnership: $e');
-    }
+    } catch (_) {}
   }
 
   /// Load messages for current partnership
@@ -94,9 +131,7 @@ class PartnerService extends ChangeNotifier {
       final messages = await _localService.getMessages(_currentPartnership!.id);
       _messages = messages;
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading messages: $e');
-    }
+    } catch (e) {}
   }
 
   /// Load care actions for current partnership
@@ -109,9 +144,7 @@ class PartnerService extends ChangeNotifier {
       );
       _careActions = actions;
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading care actions: $e');
-    }
+    } catch (e) {}
   }
 
   /// Create invitation without sending email (QR / link flow)
@@ -143,39 +176,41 @@ class PartnerService extends ChangeNotifier {
 
   /// Accept partner invitation
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
-    debugPrint('SERVICE_TRACE instance=$hashCode code=$invitationCode');
     _setLoading(true);
     try {
-      final partnershipData = await _localService.acceptPartnerInvitation(
+      final partnershipData = await _inviteActions.acceptInvitation(
         invitationCode,
       );
 
-      if (partnershipData != null) {
-        _currentPartnership = Partnership(
-          id: partnershipData['id'],
-          primaryUserId: partnershipData['userId1'],
-          partnerUserId: partnershipData['userId2'],
-          primaryUserName:
-              partnershipData['customName1'] ?? partnershipData['userId1'],
-          partnerUserName:
-              partnershipData['customName2'] ?? partnershipData['userId2'],
-          primaryUserEmail: null,
-          partnerUserEmail: null,
-          createdAt: DateTime.parse(partnershipData['establishedAt']),
-          lastActiveAt: partnershipData['lastActiveAt'] != null
-              ? DateTime.parse(partnershipData['lastActiveAt'])
-              : DateTime.parse(partnershipData['establishedAt']),
-          sharingSettings: const PartnerSharingSettings(),
-        );
-        await _loadMessages();
-        await _loadCareActions();
-        notifyListeners();
-        debugPrint('✅ Partnership accepted');
-        return _currentPartnership;
+      _currentPartnership = Partnership(
+        id: partnershipData['id'],
+        primaryUserId: partnershipData['userId1'],
+        partnerUserId: partnershipData['userId2'],
+        primaryUserName:
+            partnershipData['customName1'] ?? partnershipData['userId1'],
+        partnerUserName:
+            partnershipData['customName2'] ?? partnershipData['userId2'],
+        primaryUserEmail: null,
+        partnerUserEmail: null,
+        createdAt: DateTime.parse(partnershipData['establishedAt']),
+        lastActiveAt: partnershipData['lastActiveAt'] != null
+            ? DateTime.parse(partnershipData['lastActiveAt'])
+            : DateTime.parse(partnershipData['establishedAt']),
+        sharingSettings: const PartnerSharingSettings(),
+      );
+
+      // Publish authenticated backend truth before secondary local persistence.
+      notifyListeners();
+
+      try {
+        await _localService.cacheCloudPartnership(partnershipData);
+      } catch (_) {
+        // Cache failure must not invalidate an accepted cloud partnership.
       }
 
-      _setError('Failed to accept invitation');
-      return null;
+      await _loadMessages();
+      await _loadCareActions();
+      return _currentPartnership;
     } catch (e) {
       _setError('Failed to accept invitation: $e');
       return null;
@@ -263,7 +298,6 @@ class PartnerService extends ChangeNotifier {
         newSettings,
       );
       await _loadPartnership();
-      debugPrint('✅ Sharing settings updated');
     } catch (e) {
       _setError('Failed to update settings: $e');
     }
@@ -272,7 +306,6 @@ class PartnerService extends ChangeNotifier {
   /// Generate AI insights for partner
   Future<void> generatePartnerInsights() async {
     // TODO: Implement AI insights generation based on shared data
-    debugPrint('🔄 Generating partner insights...');
     // For now, just reload data
     await _loadPartnership();
     await _loadMessages();
@@ -290,7 +323,6 @@ class PartnerService extends ChangeNotifier {
       _careActions.clear();
       _insights.clear();
       notifyListeners();
-      debugPrint('✅ Partnership disconnected');
     } catch (e) {
       _setError('Failed to disconnect: $e');
     }
@@ -298,17 +330,20 @@ class PartnerService extends ChangeNotifier {
 
   /// Get partner feature status
   Future<Map<String, dynamic>> getPartnerFeatureStatus() async {
+    final firebaseAvailable = AuthService().isFirebaseAvailable;
+
     return {
-      'firebaseAvailable': _firebaseAvailable,
-      'partnerFeaturesEnabled': true, // Local service is enabled
+      'firebaseAvailable': firebaseAvailable,
+      'partnerFeaturesEnabled': firebaseAvailable,
       'hasActivePartnership': hasPartner,
-      'message': 'Partner features available via local storage',
+      'message': firebaseAvailable
+          ? 'Partner invitation services are available.'
+          : 'Partner invitation services are temporarily unavailable.',
     };
   }
 
-  /// Check if partner features are available
-  bool get arePartnerFeaturesAvailable =>
-      true; // Local service is always available
+  /// Check whether authenticated partner invitation services are available.
+  bool get arePartnerFeaturesAvailable => AuthService().isFirebaseAvailable;
 
   /// Get local partner data
   Map<String, dynamic> getLocalPartnerData() {
@@ -334,7 +369,6 @@ class PartnerService extends ChangeNotifier {
 
   @override
   void dispose() {
-    debugPrint('🔄 PartnerService: Disposing service');
     super.dispose();
   }
 }

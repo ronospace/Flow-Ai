@@ -3,7 +3,7 @@
 ## Issue
 App Store rejection due to demo account login failure:
 - Email: `ronos.ai@icloud.com`
-- Password: `REDACTED_DEMO_PW`
+- Password: `<REDACTED>`
 - Error: "No account found with this email"
 
 ## Root Cause
@@ -19,7 +19,7 @@ The app automatically creates a demo account on first launch. To ensure it works
 
 **Update App Store Connect with these credentials:**
 - **Email**: `demo@flowai.app`  
-- **Password**: `REDACTED_DEMO_PW!`
+- **Password**: `<REDACTED>`
 - **Notes**: "Demo account is automatically created on first app launch. If login fails, tap 'Sign Up' to create a new account with any email."
 
 ### Option 2: Guest/Demo Mode Button
@@ -29,7 +29,7 @@ Add a "Try Demo Mode" button that bypasses authentication and shows sample data.
 Since Firebase is disabled and using local auth, reviewers can sign up with ANY email address (no verification needed).
 
 **Update instructions for reviewers:**
-"You can sign up with any email address (e.g., `reviewer@test.com` with password `REDACTED_DEMO_PW!`). No email verification is required for the demo version."
+"You can sign up with any email address (e.g., `reviewer@test.com` with password `<REDACTED>`). No email verification is required for the demo version."
 
 ## Immediate Fix Implementation
 
@@ -45,10 +45,10 @@ const demoEmail = 'ronos.ai@icloud.com';
 const demoEmail = 'demo@flowai.app';
 
 // Change line 330 from:
-password: 'REDACTED_DEMO_PW',
+password: '<REDACTED>',
 
 // To:
-password: 'REDACTED_DEMO_PW!',
+password: '<REDACTED>',
 ```
 
 ### Step 2: Add Demo Account Reset Feature
@@ -58,7 +58,7 @@ Add a "Reset Demo Account" button in settings for reviewers.
 1. Go to App Store Connect → Your App → TestFlight / App Store
 2. Update demo account credentials:
    - Username: `demo@flowai.app`
-   - Password: `REDACTED_DEMO_PW!`
+   - Password: `<REDACTED>`
 3. Add note: "Demo account is auto-created. You can also sign up with any email if needed."
 
 ## Testing Steps
@@ -76,14 +76,14 @@ flutter run -d [device-id]
 
 # Test demo login immediately after first launch
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 ```
 
 ### Test Sign Up Flow:
 ```bash
 # Try signing up with new account
 Email: reviewer@test.com  
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 Display Name: Test Reviewer
 
 # Should work without email verification
@@ -101,7 +101,7 @@ Thank you for your feedback regarding the demo account. We have resolved the aut
 
 **Updated Demo Account Credentials:**
 - Email: demo@flowai.app
-- Password: REDACTED_DEMO_PW!
+- Password: <REDACTED>
 
 The demo account is automatically created when the app is first launched. If you experience any issues:
 
@@ -136,7 +136,7 @@ git add -A
 git commit -m "Fix App Store demo account credentials
 
 - Update demo email to demo@flowai.app
-- Update demo password to REDACTED_DEMO_PW!  
+- Update demo password to <REDACTED>
 - Improve demo account creation robustness
 - Add clearer instructions for App Store reviewers"
 

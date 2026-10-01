@@ -6,130 +6,258 @@
     <meta name="description" content="Flow Ai Privacy Policy - How we protect your menstrual health data">
     <title>Flow Ai - Privacy Policy</title>
     <style>
+        :root {
+            --rose: #f45b8d;
+            --rose-deep: #d93f76;
+            --rose-soft: #fff0f5;
+            --ink: #202124;
+            --muted: #667085;
+            --line: #ece7ea;
+            --surface: #ffffff;
+            --page: #faf7f9;
+            --shadow: 0 18px 60px rgba(40, 25, 33, 0.08);
+        }
+
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 0%, rgba(244, 91, 141, 0.10), transparent 28rem),
+                linear-gradient(180deg, #fff 0%, var(--page) 100%);
         }
 
         .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: min(880px, calc(100% - 32px));
+            margin: 36px auto;
+            padding: clamp(28px, 5vw, 56px);
+            background: var(--surface);
+            border: 1px solid rgba(32, 33, 36, 0.06);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
         }
 
-        h1 {
-            color: #E91E63;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            border-bottom: 3px solid #E91E63;
-            padding-bottom: 15px;
+        .privacy-title {
+            margin: 0 0 16px;
+            color: var(--ink);
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            white-space: nowrap;
+            line-height: 1.08;
+        }
+
+        .privacy-brand {
+            font-size: clamp(1.65rem, 4vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .privacy-separator {
+            font-size: clamp(1.3rem, 2.8vw, 1.5rem);
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .privacy-document {
+            font-size: clamp(1.4rem, 3.2vw, 1.7rem);
+            font-weight: 750;
+            letter-spacing: -0.025em;
         }
 
         h2 {
-            color: #1976D2;
-            font-size: 1.8em;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #E3F2FD;
-            padding-bottom: 10px;
+            margin: 42px 0 14px;
+            padding-top: 6px;
+            color: var(--ink);
+            font-size: clamp(1.35rem, 3vw, 1.65rem);
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            font-weight: 750;
         }
 
         h3 {
-            color: #424242;
-            font-size: 1.3em;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            margin: 24px 0 8px;
+            color: var(--ink);
+            font-size: 1.08rem;
+            line-height: 1.35;
+            font-weight: 700;
         }
 
-        p, li {
-            margin-bottom: 12px;
-            line-height: 1.7;
+        p {
+            margin: 10px 0 18px;
+            color: #3d4148;
         }
 
-        ul, ol {
-            margin-left: 30px;
-            margin-bottom: 15px;
+        ul,
+        ol {
+            margin: 12px 0 22px;
+            padding-left: 1.35rem;
         }
 
-        code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.9em;
+        li {
+            margin: 8px 0;
+            padding-left: 4px;
         }
 
         strong {
-            color: #1976D2;
-        }
-
-        .last-updated {
-            color: #666;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
-
-        .highlight {
-            background: #FFF3E0;
-            padding: 15px;
-            border-left: 4px solid #FF9800;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        .contact {
-            background: #E3F2FD;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
+            color: var(--ink);
+            font-weight: 700;
         }
 
         a {
-            color: #E91E63;
+            color: var(--rose-deep);
             text-decoration: none;
+            font-weight: 600;
+            overflow-wrap: anywhere;
         }
 
-        a:hover {
+        a:hover,
+        a:focus-visible {
             text-decoration: underline;
         }
 
-        hr {
-            border: none;
-            border-top: 1px solid #e0e0e0;
-            margin: 30px 0;
+        .last-updated {
+            display: inline-flex;
+            margin: 0 0 16px;
+            padding: 7px 11px;
+            color: var(--muted);
+            background: var(--rose-soft);
+            border-radius: 999px;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
+        .highlight,
+        .contact {
+            margin-top: 28px;
+            padding: 22px;
+            background: linear-gradient(
+                135deg,
+                rgba(244, 91, 141, 0.08),
+                rgba(244, 91, 141, 0.025)
+            );
+            border: 1px solid rgba(244, 91, 141, 0.16);
+            border-radius: 18px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            margin: 38px 0;
+            background: var(--line);
+        }
+
+        .flow-footer {
+            width: min(880px, calc(100% - 32px));
+            margin: 0 auto 36px;
+            padding: 20px 24px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .flow-footer strong {
+            color: var(--ink);
+        }
+
+        @media (max-width: 640px) {
             .container {
-                padding: 20px;
+                width: calc(100% - 20px);
+                margin: 10px auto 24px;
+                padding: 28px 22px 34px;
+                border-radius: 22px;
             }
 
-            h1 {
-                font-size: 2em;
+            body {
+                font-size: 15.5px;
+                line-height: 1.65;
+            }
+
+            .privacy-title {
+                gap: 7px;
+            }
+
+            .privacy-brand {
+                font-size: 1.8rem;
+                line-height: 1.05;
+            }
+
+            .privacy-separator {
+                font-size: 1.35rem;
+            }
+
+            .privacy-document {
+                font-size: 1.46rem;
+                line-height: 1.08;
+            }
+
+            .last-updated {
+                font-size: 0.95rem;
             }
 
             h2 {
-                font-size: 1.5em;
+                margin-top: 34px;
+                font-size: 1.35rem;
+            }
+
+            h3 {
+                font-size: 1.05rem;
+            }
+
+            .flow-footer {
+                width: calc(100% - 20px);
+                margin-bottom: 24px;
+                padding: 14px;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #f5f4f5;
+                --muted: #aaa3a7;
+                --line: #3a3438;
+                --surface: #1d1b1d;
+                --page: #151416;
+                --rose-soft: rgba(244, 91, 141, 0.12);
+                --shadow: none;
+            }
+
+            body {
+                color: var(--ink);
+                background:
+                    radial-gradient(circle at 12% 0%, rgba(244, 91, 141, 0.10), transparent 28rem),
+                    var(--page);
+            }
+
+            p {
+                color: #d3cfd1;
+            }
+
+            .container {
+                border-color: rgba(255, 255, 255, 0.07);
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌸 Flow Ai - Privacy Policy</h1>
-        <p class="last-updated"><strong>Last Updated:</strong> November 1, 2024</p>
+        <h1 class="privacy-title">
+            <span class="privacy-brand">🌸 Flow Ai</span>
+            <span class="privacy-separator">-</span>
+            <span class="privacy-document">Privacy Policy</span>
+        </h1>
+        <p class="last-updated"><strong>Last Updated:</strong> September 25, 2026</p>
 
         <h2>Introduction</h2>
         <p>Flow Ai ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our menstrual cycle tracking application.</p>
@@ -186,12 +314,11 @@
             <li>You control access via device biometric authentication (Face ID, Touch ID, Fingerprint)</li>
         </ul>
 
-        <h3>Cloud Backup (Optional)</h3>
+        <h3>Backup</h3>
         <ul>
-            <li>If enabled, cloud data location depends on the configured Firebase project resources</li>
-            <li>Firebase services may process data in configured service locations</li>
-            <li>All cloud data is encrypted both in transit (TLS) and at rest</li>
-            <li>Access to service data is restricted to authorized operational purposes</li>
+            <li>Current backup support is device-local only</li>
+            <li>Flow Ai does not currently provide cross-device cloud backup through the backup service</li>
+            <li>Local backup data remains scoped to the authenticated account on the device</li>
         </ul>
 
         <h3>HealthKit Integration</h3>
@@ -230,7 +357,7 @@
             <li><strong>Delete</strong>: Permanently delete your account and all associated data</li>
             <li><strong>Rectify</strong>: Correct any inaccurate information</li>
             <li><strong>Portability</strong>: Transfer your data to another service</li>
-            <li><strong>Withdraw Consent</strong>: Disable cloud sync, HealthKit access, or analytics at any time</li>
+            <li><strong>Withdraw Consent</strong>: Revoke HealthKit access or change available privacy controls at any time</li>
         </ul>
 
         <h3>How to Exercise Your Rights:</h3>
@@ -253,7 +380,7 @@
 
         <h3>Services We Use:</h3>
         <ul>
-            <li><strong>Firebase (Google)</strong>: Authentication, cloud storage (EU servers) - <a href="https://firebase.google.com/support/privacy" target="_blank">Privacy Policy</a></li>
+            <li><strong>Firebase (Google)</strong>: Authentication and configured backend services - <a href="https://firebase.google.com/support/privacy" target="_blank">Privacy Policy</a></li>
             <li><strong>Apple HealthKit</strong>: Biometric data integration (iOS only) - <a href="https://www.apple.com/legal/privacy/" target="_blank">Privacy Policy</a></li>
             <li><strong>Google AdMob</strong>: Non-personalized ads (no health data shared) - <a href="https://support.google.com/admob/answer/6128543" target="_blank">Privacy Policy</a></li>
         </ul>
@@ -285,7 +412,7 @@
         <ul>
             <li>Privacy requests are handled according to applicable data-protection laws</li>
             <li>✅ <strong>CCPA</strong> (California Consumer Privacy Act)</li>
-            <li>Flow AI is a consumer wellness application and does not claim HIPAA-covered-entity status</li>
+            <li>Flow Ai is a consumer wellness application and does not claim HIPAA-covered-entity status</li>
             <li>✅ <strong>Apple App Store Review Guidelines</strong> (Section 5.1 Privacy)</li>
             <li>✅ <strong>Google Play Developer Policy</strong> (User Data)</li>
         </ul>
@@ -293,7 +420,7 @@
         <h2>Your Consent</h2>
         <p>By using Flow Ai, you consent to this Privacy Policy. You can withdraw consent at any time by:</p>
         <ol>
-            <li>Disabling cloud sync in Settings</li>
+            <li>Changing available privacy controls in Settings</li>
             <li>Revoking HealthKit permissions in iOS Settings → Privacy → Health</li>
             <li>Deleting your account in Settings → Account & Security → Delete Account</li>
         </ol>
@@ -315,5 +442,10 @@
             <p>Flow Ai is designed with privacy at its core. Your menstrual health data is <strong>your data</strong>—we're just here to help you understand it better.</p>
         </div>
     </div>
+    <footer class="flow-footer">
+        <strong>ZyraFlow GmbH™</strong><br>
+        © 2026 ZyraFlow GmbH™ All rights reserved.
+    </footer>
+
 </body>
 </html>

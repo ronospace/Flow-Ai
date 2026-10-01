@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flow_ai/core/ui/app_upcoming_feature_status.dart';
 import 'package:flow_ai/features/cycle/widgets/premium_feature_preview_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +27,7 @@ Future<void> pumpPair(WidgetTester tester, {required double scale}) async {
                     icon: Icons.auto_awesome,
                     color: Colors.purple,
                     estimatedDate: 'Q2 2026',
+                    availability: AppFeatureAvailability.comingSoon,
                     onTap: () {},
                   ),
                 ),

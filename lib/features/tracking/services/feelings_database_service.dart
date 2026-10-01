@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -45,9 +44,7 @@ class FeelingsDatabaseService {
       );
 
       _isInitialized = true;
-      debugPrint('📊 Feelings database initialized successfully');
     } catch (e) {
-      debugPrint('❌ Failed to initialize feelings database: $e');
       throw DatabaseException('Failed to initialize feelings database: $e');
     }
   }
@@ -113,8 +110,6 @@ class FeelingsDatabaseService {
         expires_at TEXT
       )
     ''');
-
-    debugPrint('📊 Database tables created successfully');
   }
 
   /// Upgrade database schema
@@ -123,11 +118,6 @@ class FeelingsDatabaseService {
     int oldVersion,
     int newVersion,
   ) async {
-    debugPrint(
-      '🔄 Upgrading feelings database from version '
-      '$oldVersion to $newVersion',
-    );
-
     if (oldVersion < 2) {
       await db.transaction((txn) async {
         final legacyEntriesTable = '${_entriesTable}_v1';
@@ -253,10 +243,7 @@ id TEXT PRIMARY KEY,
         'created_at': now,
         'updated_at': now,
       }, conflictAlgorithm: ConflictAlgorithm.replace);
-
-      debugPrint('💾 Saved feelings entry for ${entry.date}');
     } catch (e) {
-      debugPrint('❌ Failed to save feelings entry: $e');
       throw DatabaseException('Failed to save entry: $e');
     }
   }
@@ -282,7 +269,6 @@ id TEXT PRIMARY KEY,
 
       return _mapToFeelingsEntry(results.first);
     } catch (e) {
-      debugPrint('❌ Failed to get entry for date $date: $e');
       return null;
     }
   }
@@ -310,7 +296,6 @@ id TEXT PRIMARY KEY,
 
       return results.map(_mapToFeelingsEntry).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get entries in range: $e');
       return [];
     }
   }
@@ -336,7 +321,6 @@ id TEXT PRIMARY KEY,
 
       return results.map(_mapToFeelingsEntry).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get recent entries: $e');
       return [];
     }
   }
@@ -357,7 +341,6 @@ id TEXT PRIMARY KEY,
 
       return result > 0;
     } catch (e) {
-      debugPrint('❌ Failed to delete entry: $e');
       return false;
     }
   }
@@ -377,7 +360,6 @@ id TEXT PRIMARY KEY,
 
       return result.first['count'] as int;
     } catch (e) {
-      debugPrint('❌ Failed to get entry count: $e');
       return 0;
     }
   }
@@ -403,7 +385,6 @@ id TEXT PRIMARY KEY,
         'created_at': DateTime.now().toIso8601String(),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      debugPrint('❌ Failed to save trend: $e');
       throw DatabaseException('Failed to save trend: $e');
     }
   }
@@ -429,7 +410,6 @@ id TEXT PRIMARY KEY,
 
       return results.map(_mapToTrendAnalysis).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get recent trends: $e');
       return [];
     }
   }
@@ -457,7 +437,6 @@ id TEXT PRIMARY KEY,
         'expires_at': insight.expiresAt?.toIso8601String(),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      debugPrint('❌ Failed to save insight: $e');
       throw DatabaseException('Failed to save insight: $e');
     }
   }
@@ -485,7 +464,6 @@ id TEXT PRIMARY KEY,
 
       return results.map(_mapToFeelingsInsight).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get active insights: $e');
       return [];
     }
   }
@@ -505,9 +483,7 @@ id TEXT PRIMARY KEY,
         where: 'user_id = ? AND expires_at IS NOT NULL AND expires_at < ?',
         whereArgs: [activeUserId, now],
       );
-    } catch (e) {
-      debugPrint('❌ Failed to cleanup expired insights: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get database statistics
@@ -555,7 +531,6 @@ id TEXT PRIMARY KEY,
         ),
       };
     } catch (e) {
-      debugPrint('❌ Failed to get database stats: $e');
       return {};
     }
   }
@@ -695,7 +670,6 @@ id TEXT PRIMARY KEY,
         'version': _databaseVersion,
       };
     } catch (e) {
-      debugPrint('❌ Failed to export data: $e');
       throw DatabaseException('Failed to export data: $e');
     }
   }

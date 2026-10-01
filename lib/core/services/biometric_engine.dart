@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/biometric_data.dart';
 import '../utils/collection_extensions.dart';
@@ -27,7 +26,6 @@ class BiometricEngine {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('📊 Initializing Biometric Engine (Week 3)...');
 
     // Heart Rate Analysis Model
     _heartRateModel = {
@@ -172,7 +170,6 @@ class BiometricEngine {
     };
 
     _isInitialized = true;
-    debugPrint('✅ Biometric Engine initialized with wearable integration');
   }
 
   /// Process heart rate data and extract cycle-relevant insights

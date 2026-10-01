@@ -269,7 +269,6 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
   }) {
     return GestureDetector(
       onTap: () {
-        debugPrint('🎯 Button tapped: $title');
         HapticFeedback.mediumImpact();
         onTap();
       },
@@ -290,7 +289,6 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  debugPrint('🎯 InkWell tapped: $title');
                   HapticFeedback.mediumImpact();
                   onTap();
                 },

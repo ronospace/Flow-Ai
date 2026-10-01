@@ -5,6 +5,8 @@ import '../../../core/services/real_cycle_service.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../../core/services/performance_optimizer.dart';
 
+import '../../../core/identity/active_account_scope.dart';
+
 class CycleProvider extends ChangeNotifier {
   RealCycleService? _realCycleService;
 
@@ -20,7 +22,6 @@ class CycleProvider extends ChangeNotifier {
     try {
       _realCycleService = RealCycleService(DatabaseService());
     } catch (e) {
-      debugPrint('CycleProvider initialization failed');
       // Continue without the service - UI will show fallback content
     }
   }
@@ -33,11 +34,12 @@ class CycleProvider extends ChangeNotifier {
   CycleInsights? get insights => _insights;
   RealCycleData? get cycleData => _cycleData;
 
-  double get averageCycleLength {
-    return _insights?.averageCycleLength ?? 28.0;
+  double? get averageCycleLength {
+    return _insights?.averageCycleLength;
   }
 
   Future<void> loadCycles() async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
     _isLoading = true;
     notifyListeners();
 
@@ -46,14 +48,14 @@ class CycleProvider extends ChangeNotifier {
       if (_realCycleService != null) {
         final cycleData = await PerformanceOptimizer.instance
             .getOrCompute<RealCycleData>(
-              key: 'cycle_data',
+              key: 'cycle_data_$activeUserId',
               compute: () => _realCycleService!.getRealCycleData(),
               cacheDuration: const Duration(minutes: 10),
             );
 
         final insights = await PerformanceOptimizer.instance
             .getOrCompute<CycleInsights>(
-              key: 'cycle_insights',
+              key: 'cycle_insights_$activeUserId',
               compute: () => _realCycleService!.getCycleInsights(),
               cacheDuration: const Duration(minutes: 10),
             );
@@ -65,7 +67,6 @@ class CycleProvider extends ChangeNotifier {
         _insights = null;
       }
     } catch (e) {
-      debugPrint('Error loading cycle data');
       // Set default empty data on error
       _cycleData = null;
       _insights = null;
@@ -87,9 +88,7 @@ class CycleProvider extends ChangeNotifier {
           lastUpdated: DateTime.now(),
         );
         notifyListeners();
-      } catch (e) {
-        debugPrint('Error refreshing predictions: $e');
-      }
+      } catch (e) {}
     }
   }
 
@@ -100,7 +99,6 @@ class CycleProvider extends ChangeNotifier {
     String? notes,
   }) async {
     if (_realCycleService == null) {
-      debugPrint('CycleService not available');
       return;
     }
 
@@ -118,7 +116,6 @@ class CycleProvider extends ChangeNotifier {
 
   Future<void> endCurrentCycle(DateTime endDate) async {
     if (_realCycleService == null) {
-      debugPrint('CycleService not available');
       return;
     }
 
@@ -135,6 +132,5 @@ class CycleProvider extends ChangeNotifier {
     _insights = null;
     _isLoading = false;
     notifyListeners();
-    debugPrint('✅ CycleProvider: All user data cleared');
   }
 }

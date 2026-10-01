@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../models/personalization.dart';
@@ -17,11 +16,6 @@ class LifestyleAICoach {
   bool get isInitialized => _isInitialized;
 
   // AI Coach Models for different lifestyle aspects
-  late Map<String, dynamic> _sleepOptimizationModel;
-  late Map<String, dynamic> _nutritionCoachModel;
-  late Map<String, dynamic> _stressManagementModel;
-  late Map<String, dynamic> _exerciseCoachModel;
-  late Map<String, dynamic> _wearableIntegrationModel;
 
   // Cycle phase-specific recommendations
   late Map<String, Map<String, dynamic>> _phaseSpecificGuidance;
@@ -31,66 +25,50 @@ class LifestyleAICoach {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('🏃‍♀️ Initializing Lifestyle & Behavior AI Coach...');
-
     // Sleep Optimization Model
-    _sleepOptimizationModel = {
-      'hormonal_sleep_patterns': _initializeHormonalSleepPatterns(),
-      'sleep_quality_factors': _initializeSleepQualityFactors(),
-      'circadian_rhythm_optimization': _initializeCircadianOptimization(),
-      'sleep_hygiene_recommendations': _initializeSleepHygieneRecs(),
-      'menstrual_phase_sleep_needs': _initializePhaseSleepNeeds(),
-    };
+    _initializeHormonalSleepPatterns();
+    _initializeSleepQualityFactors();
+    _initializeCircadianOptimization();
+    _initializeSleepHygieneRecs();
+    _initializePhaseSleepNeeds();
 
     // Nutrition Coach Model
-    _nutritionCoachModel = {
-      'hormonal_nutrition_needs': _initializeHormonalNutrition(),
-      'micronutrient_cycling': _initializeMicronutrientCycling(),
-      'anti_inflammatory_foods': _initializeAntiInflammatoryFoods(),
-      'blood_sugar_management': _initializeBloodSugarManagement(),
-      'hydration_optimization': _initializeHydrationGuidance(),
-      'supplement_recommendations': _initializeSupplementGuidance(),
-    };
+    _initializeHormonalNutrition();
+    _initializeMicronutrientCycling();
+    _initializeAntiInflammatoryFoods();
+    _initializeBloodSugarManagement();
+    _initializeHydrationGuidance();
+    _initializeSupplementGuidance();
 
     // Stress Management Model
-    _stressManagementModel = {
-      'stress_detection_algorithms': _initializeStressDetection(),
-      'cortisol_management_techniques': _initializeCortisolManagement(),
-      'phase_specific_stress_relief': _initializePhaseStressRelief(),
-      'breathing_exercises': _initializeBreathingExercises(),
-      'mindfulness_practices': _initializeMindfulnessPractices(),
-      'stress_resilience_building': _initializeResilienceBuilding(),
-    };
+    _initializeStressDetection();
+    _initializeCortisolManagement();
+    _initializePhaseStressRelief();
+    _initializeBreathingExercises();
+    _initializeMindfulnessPractices();
+    _initializeResilienceBuilding();
 
     // Exercise Coach Model
-    _exerciseCoachModel = {
-      'cycle_synced_workouts': _initializeCycleSyncedWorkouts(),
-      'hormonal_phase_exercises': _initializeHormonalPhaseExercises(),
-      'recovery_optimization': _initializeRecoveryOptimization(),
-      'strength_training_cycles': _initializeStrengthCycles(),
-      'cardio_optimization': _initializeCardioOptimization(),
-      'flexibility_and_mobility': _initializeFlexibilityPrograms(),
-    };
+    _initializeCycleSyncedWorkouts();
+    _initializeHormonalPhaseExercises();
+    _initializeRecoveryOptimization();
+    _initializeStrengthCycles();
+    _initializeCardioOptimization();
+    _initializeFlexibilityPrograms();
 
     // Wearable Integration Model
-    _wearableIntegrationModel = {
-      'apple_health_integration': _initializeAppleHealthIntegration(),
-      'fitbit_integration': _initializeFitbitIntegration(),
-      'oura_ring_integration': _initializeOuraIntegration(),
-      'data_fusion_algorithms': _initializeDataFusionAlgorithms(),
-      'real_time_coaching': _initializeRealTimeCoaching(),
-    };
+    _initializeAppleHealthIntegration();
+    _initializeFitbitIntegration();
+    _initializeOuraIntegration();
+    _initializeDataFusionAlgorithms();
+    _initializeRealTimeCoaching();
 
     // Initialize phase-specific guidance
     _initializePhaseSpecificGuidance();
 
     // Touch models so analyzer sees them used
-    debugPrint(
-      'Models ready: sleep=${_sleepOptimizationModel.length}, nutrition=${_nutritionCoachModel.length}, stress=${_stressManagementModel.length}, exercise=${_exerciseCoachModel.length}, wearable=${_wearableIntegrationModel.length}',
-    );
 
     _isInitialized = true;
-    debugPrint('✅ Lifestyle & Behavior AI Coach initialized successfully');
   }
 
   /// Generate comprehensive lifestyle coaching recommendations
@@ -103,10 +81,6 @@ class LifestyleAICoach {
     List<String>? userGoals,
   }) async {
     if (!_isInitialized) await initialize();
-
-    debugPrint(
-      '🎯 Generating personalized lifestyle coaching recommendations...',
-    );
 
     // Sleep optimization recommendations
     final sleepRecommendations = await _generateSleepRecommendations(
@@ -195,10 +169,6 @@ class LifestyleAICoach {
     Map<String, dynamic>? wearableData,
     UserProfile userProfile,
   ) async {
-    debugPrint(
-      '😴 Generating sleep recommendations for $currentPhase phase...',
-    );
-
     // Analyze current sleep patterns from wearable data
     final sleepAnalysis = _analyzeSleepPatterns(wearableData, cycles);
 
@@ -252,10 +222,6 @@ class LifestyleAICoach {
     UserProfile userProfile,
     Map<String, dynamic>? lifestyleData,
   ) async {
-    debugPrint(
-      '🥗 Generating nutrition recommendations for $currentPhase phase...',
-    );
-
     // Phase-specific nutritional needs
     final phaseNutrition = _hormonalPhaseNutrition[currentPhase] ?? [];
 
@@ -313,10 +279,6 @@ class LifestyleAICoach {
     Map<String, dynamic>? wearableData,
     Map<String, dynamic>? lifestyleData,
   ) async {
-    debugPrint(
-      '🧘‍♀️ Generating stress management plan for $currentPhase phase...',
-    );
-
     // Analyze current stress levels
     final stressAnalysis = _analyzeStressLevels(wearableData, cycles);
 
@@ -369,8 +331,6 @@ class LifestyleAICoach {
     Map<String, dynamic>? wearableData,
     List<String>? userGoals,
   ) async {
-    debugPrint('💪 Generating exercise plan for $currentPhase phase...');
-
     // Phase-specific exercise recommendations
     final phaseWorkouts = _phaseBasedWorkouts[currentPhase] ?? {};
 
@@ -420,8 +380,6 @@ class LifestyleAICoach {
     if (wearableData == null) {
       return WearableInsights.noData();
     }
-
-    debugPrint('📱 Analyzing wearable data for personalized insights...');
 
     // Heart rate variability analysis
     final hrvAnalysis = _analyzeHeartRateVariability(

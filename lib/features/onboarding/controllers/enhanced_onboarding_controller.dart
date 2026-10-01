@@ -77,9 +77,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
           averagePeriodLength: periodLength,
         );
       }
-    } catch (e) {
-      debugPrint('Error loading existing data: $e');
-    }
+    } catch (e) {}
   }
 
   /// Move to the next step
@@ -255,28 +253,6 @@ class EnhancedOnboardingController extends ChangeNotifier {
   }
 
   /// Save privacy preferences
-  Future<void> savePrivacyPreferences(OnboardingData privacyData) async {
-    _setLoading(true);
-    try {
-      _data = privacyData;
-
-      // Save privacy preferences
-      await _preferencesService.setShareDataForResearch(
-        privacyData.shareDataForResearch,
-      );
-      await _preferencesService.setEnableAIInsights(
-        privacyData.enableAIInsights,
-      );
-
-      _clearError();
-      nextStep();
-    } catch (e) {
-      _setError('Failed to save privacy preferences: $e');
-    } finally {
-      _setLoading(false);
-    }
-  }
-
   /// Complete the onboarding process
   Future<void> completeOnboarding() async {
     _setLoading(true);
@@ -321,9 +297,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
           _getTrackingGoalsFromHealthGoals(),
         );
       }
-    } catch (e) {
-      debugPrint('Error initializing user tracking data: $e');
-    }
+    } catch (e) {}
   }
 
   /// Convert health goals to tracking goals list
@@ -363,9 +337,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
         body: 'Ready to start your personalized health journey?',
         scheduledDate: DateTime.now().add(const Duration(hours: 2)),
       );
-    } catch (e) {
-      debugPrint('Error scheduling welcome notification: $e');
-    }
+    } catch (e) {}
   }
 
   /// Skip onboarding (sets minimal defaults)
@@ -377,8 +349,6 @@ class EnhancedOnboardingController extends ChangeNotifier {
         averageCycleLength: 28,
         averagePeriodLength: 5,
         isFirstTimeTracking: true,
-        enableAIInsights: true,
-        shareDataForResearch: false,
       );
 
       // Save basic preferences
@@ -420,7 +390,6 @@ class EnhancedOnboardingController extends ChangeNotifier {
       final isAuthenticated = await AuthService().isAuthenticated;
       return !isCompleted && isAuthenticated;
     } catch (e) {
-      debugPrint('Error checking onboarding requirement: $e');
       return true; // Default to requiring onboarding if there's an error
     }
   }

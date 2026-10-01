@@ -81,15 +81,13 @@ class PerformanceAnalyticsDashboard {
     if (useCache && _analyticsCache.containsKey(cacheKey)) {
       final cached = _analyticsCache[cacheKey]!;
       if (DateTime.now().difference(cached.timestamp).inMinutes < 15) {
-        AppLogger.analytics('📊 Using cached dashboard data for $userId');
+        AppLogger.analytics('📊 Using cached dashboard data');
         return cached.data;
       }
     }
 
     try {
-      AppLogger.analytics(
-        '📊 Generating dashboard for user: $userId (${period.name})',
-      );
+      AppLogger.analytics('📊 Generating dashboard (${period.name})');
 
       // Get feelings data
       final feelingsTracker = DailyFeelingsTracker.instance;

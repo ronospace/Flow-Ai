@@ -624,8 +624,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _handleBiometricLogin() async {
-    debugPrint("BIO: tap biometric button");
-
     await _authService.initialize();
     final biometricName = Theme.of(context).platform == TargetPlatform.iOS
         ? 'Face ID'
@@ -681,16 +679,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
     try {
       if (!mounted) return;
-      debugPrint("BIO: calling auth service");
       final result = await _authService.authenticateWithBiometrics();
-      debugPrint(
-        "BIO: result success=${result.isSuccess} error=${result.error}",
-      );
 
       if (!mounted) return;
 
       if (result.isSuccess) {
-        debugPrint('BIO: success branch');
         AppLockService().markUnlocked();
         HapticFeedback.lightImpact();
         // suppressed biometric banner
@@ -702,14 +695,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           await _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
-          debugPrint(
-            '✅ User settings synced successfully after biometric authentication',
-          );
-        } catch (syncError) {
-          debugPrint(
-            '⚠️ Warning: Could not sync user settings after biometric auth: $syncError',
-          );
-        }
+        } catch (syncError) {}
 
         Future.delayed(const Duration(milliseconds: 500));
 
@@ -839,12 +825,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Force an immediate sync to capture fresh auth data
         await _settingsProvider.forceUserDataSync();
         if (!mounted) return;
-        debugPrint('✅ User settings synced successfully after authentication');
-      } catch (syncError) {
-        debugPrint(
-          '⚠️ Warning: Could not sync user settings after auth: $syncError',
-        );
-      }
+      } catch (syncError) {}
 
       // Navigate to main app
       Future.delayed(const Duration(milliseconds: 1000));
@@ -854,7 +835,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _router.go(pending ?? '/home');
       PendingDeepLinkService.clearPendingRoute();
     } catch (e) {
-      debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
       _showErrorMessage(_formatAuthError(errorMessage, isLogin: _isLogin));
     } finally {
@@ -887,10 +867,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         try {
           // _settingsProvider captured above
           await _settingsProvider.forceUserDataSync();
-          debugPrint('✅ User settings synced after Google sign-in');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
-        }
+        } catch (syncError) {}
 
         Future.delayed(const Duration(milliseconds: 500));
 
@@ -907,7 +884,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         );
       }
     } catch (e) {
-      debugPrint('Google sign-in error: $e');
       _setFormError('We could not complete Google sign-in. Please try again.');
     } finally {
       if (mounted) {
@@ -919,9 +895,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _handleAppleSignIn() async {
-    debugPrint('APPLE: tap handler entered');
     if (_isLoading) {
-      debugPrint('APPLE: ignored because _isLoading=true');
       return;
     }
 
@@ -934,9 +908,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       // Perform Apple Sign-In
       final result = await _authService.signInWithApple();
-      debugPrint(
-        'APPLE: result isSuccess=${result.isSuccess} error=${result.error}',
-      );
 
       if (!mounted) return;
 
@@ -949,10 +920,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           await _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
-          debugPrint('✅ User settings synced after Apple sign-in');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
-        }
+        } catch (syncError) {}
 
         Future.delayed(const Duration(milliseconds: 500));
 
@@ -965,11 +933,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           PendingDeepLinkService.clearPendingRoute();
         }
       } else {
-        debugPrint('APPLE: failure branch showing error');
         _showErrorMessage(result.error ?? 'Apple sign-in failed');
       }
     } catch (e) {
-      debugPrint('Apple sign-in error: $e');
       _showErrorMessage(
         'We could not complete Apple sign-in. Please try again.',
       );

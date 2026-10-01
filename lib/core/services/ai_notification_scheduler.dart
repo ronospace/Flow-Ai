@@ -25,7 +25,6 @@ class AINotificationScheduler {
     _prefs = await SharedPreferences.getInstance();
     await _loadOptimalWindows();
     _isInitialized = true;
-    debugPrint('🤖 AI Notification Scheduler initialized');
   }
 
   /// Record user engagement with a notification
@@ -180,9 +179,6 @@ class AINotificationScheduler {
     );
 
     _saveOptimalWindows();
-    debugPrint(
-      '🧠 Updated optimal window for $notificationType: ${optimalHour}:${optimalMinute.toString().padLeft(2, '0')} (confidence: ${(confidence * 100).toStringAsFixed(1)}%)',
-    );
   }
 
   double _calculateVariance(List<int> values) {
@@ -213,7 +209,6 @@ class AINotificationScheduler {
           final window = OptimalTimeWindow.fromJson(jsonString);
           _optimalWindows[notificationType] = window;
         } catch (e) {
-          debugPrint('Error loading optimal window: $e');
         }
       }
     }

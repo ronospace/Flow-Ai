@@ -24,7 +24,7 @@ Added a prominent "Demo Account Info" button to both auth screens that automatic
 **Behavior**:
 - When tapped, immediately switches to login mode
 - Fills email: `demo@flowai.app`
-- Fills password: `REDACTED_DEMO_PW!`
+- Fills password: `<REDACTED>`
 - Shows info message: "Demo credentials loaded. Signing in..."
 - Automatically signs in after 800ms delay (for visual feedback)
 - Syncs user settings
@@ -75,7 +75,7 @@ Navigate to /home
 
 ### Demo Credentials
 - **Email**: `demo@flowai.app`
-- **Password**: `REDACTED_DEMO_PW!`
+- **Password**: `<REDACTED>`
 
 These credentials are hardcoded in:
 - `lib/features/auth/screens/auth_screen.dart` (line ~953)

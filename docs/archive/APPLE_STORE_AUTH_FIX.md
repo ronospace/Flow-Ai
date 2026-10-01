@@ -87,7 +87,7 @@ try {
 # Test account creation:
 await AuthService().signUpWithEmail(
   email: 'ronos.ai@icloud.com',
-  password: 'REDACTED_DEMO_PW',
+  password: '<REDACTED>',
   displayName: 'Demo User',
 );
 ```
@@ -125,7 +125,7 @@ class LocalUserService {
       // Create demo account
       await createUser(
         email: demoEmail,
-        password: 'REDACTED_DEMO_PW',
+        password: '<REDACTED>',
         displayName: 'Demo User for App Review',
         username: 'demo_user',
       );
@@ -195,7 +195,7 @@ flutter pub add supabase_flutter
 # 1. Update LocalUserService with demo account creation
 # 2. Test locally
 flutter run
-# Login with: ronos.ai@icloud.com / REDACTED_DEMO_PW
+# Login with: ronos.ai@icloud.com / <REDACTED>
 
 # 3. Build and test
 flutter build ios --release
@@ -229,14 +229,14 @@ Thank you for your feedback regarding the demo account access issue.
 
 ISSUE RESOLVED: 
 - We have fixed the authentication system to properly handle demo accounts
-- The demo account (ronos.ai@icloud.com / REDACTED_DEMO_PW) is now accessible from any device
+- The demo account (ronos.ai@icloud.com / <REDACTED>) is now accessible from any device
 - Authentication is now using cloud-based storage instead of local device storage
 
 TESTING INSTRUCTIONS:
 1. Launch the app
 2. Tap "Sign In" 
 3. Enter: ronos.ai@icloud.com
-4. Password: REDACTED_DEMO_PW
+4. Password: <REDACTED>
 5. You should now have full access to all app features
 
 We have tested this on multiple devices and the demo account now works consistently.

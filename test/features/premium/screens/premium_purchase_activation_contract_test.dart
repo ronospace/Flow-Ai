@@ -16,11 +16,14 @@ void main() {
     expect(
       paywall,
       contains(
-        'App-store checkout opened. Premium activates after secure verification.',
+        'Purchase request sent to your store. Premium activates after secure verification.',
       ),
     );
 
-    expect(service, contains('await _validatePurchase(purchaseDetails)'));
+    expect(
+      service,
+      contains('await _validatePurchase(purchaseDetails, userId)'),
+    );
     expect(
       service,
       contains('if (validationResult?.grantsActiveEntitlement == true)'),

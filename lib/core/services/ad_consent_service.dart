@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AdConsentService {
+import 'production_analytics_service.dart';
+
+class AdConsentService extends ChangeNotifier {
   AdConsentService._();
 
   static final AdConsentService instance = AdConsentService._();
@@ -14,6 +16,18 @@ class AdConsentService {
 
   bool get canRequestAds => _canRequestAds;
   bool get privacyOptionsRequired => _privacyOptionsRequired;
+
+  void _setCanRequestAds(bool value) {
+    if (_canRequestAds == value) return;
+    _canRequestAds = value;
+    notifyListeners();
+    unawaited(
+      ProductionAnalyticsService().trackConsentLifecycle(
+        'can_request_ads_changed',
+        canRequestAds: value,
+      ),
+    );
+  }
 
   Future<bool> gatherConsent() {
     return _activeRequest ??= _gatherConsentOnce().whenComplete(() {
@@ -30,37 +44,75 @@ class AdConsentService {
         if (!completer.isCompleted) completer.complete(true);
       },
       (error) {
-        if (kDebugMode) {
-          debugPrint('Ad consent information error: $error');
-        }
+        unawaited(
+          ProductionAnalyticsService().trackConsentLifecycle(
+            'consent_info_update',
+            result: 'failed',
+          ),
+        );
         if (!completer.isCompleted) completer.complete(false);
       },
     );
 
-    final updated = await completer.future.timeout(
+    // Do not authorize ad requests from potentially stale prior-session
+    // consent state. Complete the current launch consent-info refresh and any
+    // required form before resolving whether ads may be requested.
+    await _finishConsentRefresh(completer.future);
+    return _canRequestAds;
+  }
+
+  Future<void> _finishConsentRefresh(Future<bool> updateFuture) async {
+    final updated = await updateFuture.timeout(
       const Duration(seconds: 20),
       onTimeout: () => false,
     );
 
-    if (updated) {
-      await ConsentForm.loadAndShowConsentFormIfRequired((error) {
-        if (error != null && kDebugMode) {
-          debugPrint('Ad consent form error: $error');
-        }
-      });
+    if (!updated) {
+      // A failed or timed-out consent-info refresh is not authoritative for
+      // this launch. Never reuse prior-session eligibility.
+      _setCanRequestAds(false);
+      await refreshPrivacyOptionsRequirement();
+      return;
     }
 
-    try {
-      _canRequestAds = await ConsentInformation.instance.canRequestAds();
-    } catch (error) {
-      _canRequestAds = false;
-      if (kDebugMode) {
-        debugPrint('Unable to verify ad consent: $error');
+    final formCompletion = Completer<bool>();
+
+    await ConsentForm.loadAndShowConsentFormIfRequired((error) {
+      unawaited(
+        ProductionAnalyticsService().trackConsentLifecycle(
+          'consent_form',
+          result: error == null ? 'completed' : 'failed',
+        ),
+      );
+
+      if (!formCompletion.isCompleted) {
+        formCompletion.complete(error == null);
       }
+    });
+
+    final formCompleted = await formCompletion.future.timeout(
+      const Duration(seconds: 20),
+      onTimeout: () => false,
+    );
+
+    if (!formCompleted) {
+      // A required consent form that fails or times out cannot authorize ads.
+      _setCanRequestAds(false);
+      await refreshPrivacyOptionsRequirement();
+      return;
     }
 
+    await refreshCanRequestAds();
     await refreshPrivacyOptionsRequirement();
-    return _canRequestAds;
+  }
+
+  Future<void> refreshCanRequestAds() async {
+    try {
+      final next = await ConsentInformation.instance.canRequestAds();
+      _setCanRequestAds(next);
+    } catch (error) {
+      _setCanRequestAds(false);
+    }
   }
 
   Future<void> refreshPrivacyOptionsRequirement() async {
@@ -71,19 +123,17 @@ class AdConsentService {
           status == PrivacyOptionsRequirementStatus.required;
     } catch (error) {
       _privacyOptionsRequired = false;
-      if (kDebugMode) {
-        debugPrint('Unable to verify ad privacy options: $error');
-      }
     }
   }
 
   Future<FormError?> showPrivacyOptions() async {
-    FormError? result;
-
+    _setCanRequestAds(false);
+    final completion = Completer<FormError?>();
     await ConsentForm.showPrivacyOptionsForm((error) {
-      result = error;
+      if (!completion.isCompleted) completion.complete(error);
     });
-
+    final result = await completion.future;
+    await refreshCanRequestAds();
     await refreshPrivacyOptionsRequirement();
     return result;
   }

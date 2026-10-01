@@ -1,7 +1,6 @@
 // Firebase service temporarily disabled - Firebase packages not included in dependencies
 // This file is kept for future reference when Firebase is re-enabled
 
-import 'package:flutter/foundation.dart';
 
 /// Firebase service for managing authentication and cloud sync
 /// Temporarily disabled - Firebase packages not included in dependencies
@@ -21,18 +20,14 @@ class FirebaseService {
   /// Initialize Firebase
   Future<void> initialize() async {
     if (_initialized) {
-      debugPrint('✅ Firebase service disabled');
       return;
     }
 
-    debugPrint('⚠️ Firebase service is currently disabled');
-    debugPrint('   Firebase packages are not included in dependencies');
     _initialized = false;
   }
 
   /// Sign in anonymously
   Future<Map<String, dynamic>?> signInAnonymously() async {
-    debugPrint('⚠️ Firebase service is disabled');
     return null;
   }
 
@@ -41,7 +36,6 @@ class FirebaseService {
     String email,
     String password,
   ) async {
-    debugPrint('⚠️ Firebase service is disabled');
     return null;
   }
 
@@ -50,30 +44,24 @@ class FirebaseService {
     String email,
     String password,
   ) async {
-    debugPrint('⚠️ Firebase service is disabled');
     return null;
   }
 
   /// Sign out
-  Future<void> signOut() async {
-    debugPrint('⚠️ Firebase service is disabled');
-  }
+  Future<void> signOut() async {}
 
   /// Save data to Firestore
   Future<void> saveData(
     String collection,
     String documentId,
     Map<String, dynamic> data,
-  ) async {
-    debugPrint('⚠️ Firebase service is disabled');
-  }
+  ) async {}
 
   /// Get data from Firestore
   Future<Map<String, dynamic>?> getData(
     String collection,
     String documentId,
   ) async {
-    debugPrint('⚠️ Firebase service is disabled');
     return null;
   }
 
@@ -82,14 +70,10 @@ class FirebaseService {
     String collection,
     String documentId,
     Map<String, dynamic> data,
-  ) async {
-    debugPrint('⚠️ Firebase service is disabled');
-  }
+  ) async {}
 
   /// Delete data from Firestore
-  Future<void> deleteData(String collection, String documentId) async {
-    debugPrint('⚠️ Firebase service is disabled');
-  }
+  Future<void> deleteData(String collection, String documentId) async {}
 
   /// Query data from Firestore
   Future<List<Map<String, dynamic>>> queryData(
@@ -97,7 +81,6 @@ class FirebaseService {
     String? field,
     dynamic value,
   }) async {
-    debugPrint('⚠️ Firebase service is disabled');
     return [];
   }
 }

@@ -35,16 +35,16 @@ void main() {
       );
     });
 
-    test('all advertised Premium benefits remain present', () {
+    test('only supported Premium benefits remain present', () {
       for (final label in <String>[
         'Unlimited AI Insights',
         'Advanced Analytics',
         'Export Your Data',
-        'Ad-Free Experience',
-        'Priority Support',
       ]) {
         expect(source, contains(label), reason: 'Missing benefit: $label');
       }
+      expect(source, isNot(contains('Ad-Free Experience')));
+      expect(source, isNot(contains('Priority Support')));
     });
   });
 }

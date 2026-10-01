@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -20,8 +19,6 @@ class LocalUserService {
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-
-    debugPrint('✅ LocalUserService initialized');
   }
 
   /// Create a new user account locally with clean slate data isolation
@@ -77,13 +74,8 @@ class LocalUserService {
       // Clear any existing cycle data for complete data isolation
       await _clearUserCycleData(userId);
 
-      debugPrint('✅ Local user created successfully: ${userData.email}');
-      debugPrint(
-        '✅ Local user profile saved: ${userData.displayName} (${userData.email})',
-      );
       return LocalAuthResult.success(userData);
     } catch (e) {
-      debugPrint('❌ Local user creation failed: $e');
       return LocalAuthResult.failure('Failed to create user: ${e.toString()}');
     }
   }
@@ -120,13 +112,8 @@ class LocalUserService {
       await _setCurrentUser(updatedUser);
       await _createUserSession(updatedUser);
 
-      debugPrint('✅ Local user signed in successfully: ${updatedUser.email}');
-      debugPrint(
-        '✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData.notes.length} notes, cycle data: ${updatedUser.profileData.lastPeriodDate != null}',
-      );
       return LocalAuthResult.success(updatedUser);
     } catch (e) {
-      debugPrint('❌ Local user sign in failed: $e');
       return LocalAuthResult.failure('Sign in failed: ${e.toString()}');
     }
   }
@@ -142,7 +129,6 @@ class LocalUserService {
       final userData = Map<String, dynamic>.from(json.decode(userJson));
       return LocalUser.fromJson(userData);
     } catch (e) {
-      debugPrint('Error parsing current user: $e');
       return null;
     }
   }
@@ -168,7 +154,6 @@ class LocalUserService {
     if (_prefs != null) {
       await _prefs!.remove(_currentUserKey);
       await _prefs!.remove(_userSessionKey);
-      debugPrint('✅ Local user signed out');
     }
   }
 
@@ -182,10 +167,8 @@ class LocalUserService {
       await _updateUser(user);
       await _setCurrentUser(user);
 
-      debugPrint('✅ User profile updated: ${user.email}');
       return LocalAuthResult.success(user);
     } catch (e) {
-      debugPrint('❌ Profile update failed: $e');
       return LocalAuthResult.failure(
         'Failed to update profile: ${e.toString()}',
       );
@@ -209,7 +192,6 @@ class LocalUserService {
       }
       return null;
     } catch (e) {
-      debugPrint('Error searching for user: $e');
       return null;
     }
   }
@@ -230,7 +212,6 @@ class LocalUserService {
           )
           .toList();
     } catch (e) {
-      debugPrint('Error getting all users: $e');
       return [];
     }
   }
@@ -307,17 +288,12 @@ class LocalUserService {
     for (final key in keysToRemove) {
       await _prefs!.remove(key);
     }
-
-    debugPrint(
-      '✅ Cleared cycle data and AI conversation data for new user: $userId',
-    );
   }
 
   /// Mark onboarding as completed for the current user
   Future<void> setOnboardingCompleted(bool completed) async {
     if (_prefs != null) {
       await _prefs!.setBool('onboarding_complete', completed);
-      debugPrint('✅ Onboarding completion status set to $completed');
     }
   }
 
@@ -338,11 +314,22 @@ class LocalUserService {
     return await userExists(email);
   }
 
-  /// Get user by ID (compatibility method)
+  /// Get user by ID for legacy-account compatibility.
   Future<UserProfile?> getUser(String userId) async {
-    // For compatibility with UserService, convert LocalUser to UserProfile
-    // This is a temporary adapter method
-    return null; // TODO: Implement proper conversion if needed
+    final users = await getAllUsers();
+    final localUser = users.where((item) => item.uid == userId).firstOrNull;
+    if (localUser == null) return null;
+
+    return UserProfile(
+      id: localUser.uid,
+      displayName: localUser.displayName,
+      healthConcerns: const [],
+      preferences: const {},
+      personalizedBaselines: const {},
+      adaptationHistory: const [],
+      createdAt: localUser.createdAt,
+      updatedAt: localUser.lastUpdated,
+    );
   }
 
   /// Permanently delete a local user and all user-scoped local data.
@@ -371,7 +358,6 @@ class LocalUserService {
 
       return true;
     } catch (error) {
-      debugPrint('❌ Failed to delete user: $error');
       return false;
     }
   }
@@ -380,7 +366,6 @@ class LocalUserService {
   Future<void> saveUser(UserProfile user) async {
     // This is a compatibility method for UserService
     // In practice, we'd need to convert UserProfile to LocalUser
-    debugPrint('⚠️ saveUser called but not implemented for UserProfile');
   }
 }
 

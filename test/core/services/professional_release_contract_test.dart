@@ -20,7 +20,9 @@ void main() {
 
     expect(source, contains("'FLOW_AI_ENABLE_ADS'"));
     expect(source, contains('static bool get canLoadAds'));
-    expect(source, contains('_consentAllowsAds'));
+    expect(source, contains('AdConsentService.instance.canRequestAds'));
+    expect(source, contains('_adsSuppressedByEntitlement'));
+    expect(source, isNot(contains('_consentAllowsAds')));
     expect(source, contains('_mobileAdsInitialized'));
 
     expect(source, isNot(contains('USE_TEST_ADS')));

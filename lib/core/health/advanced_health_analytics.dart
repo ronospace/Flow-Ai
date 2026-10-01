@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../biometrics/advanced_biometric_engine.dart';
@@ -42,7 +41,6 @@ class AdvancedHealthAnalytics {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    debugPrint('🔬 Initializing Advanced Health Analytics...');
 
     // Initialize core analytics components
     await _initializeAnalyticsComponents();
@@ -54,13 +52,9 @@ class AdvancedHealthAnalytics {
     await _setupHealthMonitoring();
 
     _initialized = true;
-    debugPrint(
-      '✅ Advanced Health Analytics initialized with comprehensive analysis capabilities',
-    );
   }
 
   Future<void> _initializeAnalyticsComponents() async {
-    debugPrint('🧮 Initializing analytics components...');
 
     _healthScoringEngine = HealthScoringEngine();
     _fertilityAnalyzer = FertilityAnalyzer();
@@ -109,9 +103,6 @@ class AdvancedHealthAnalytics {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint(
-      '📊 Generating comprehensive health report for user ${user.id}...',
-    );
 
     // Gather multi-dimensional health data
     final healthData = await _gatherHealthData(
@@ -243,7 +234,6 @@ class AdvancedHealthAnalytics {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('⚡ Performing quick health assessment...');
 
     // Generate quick health snapshot
     final quickScores = await _healthScoringEngine.calculateQuickScores(
@@ -347,7 +337,6 @@ class AdvancedHealthAnalytics {
         );
         healthData['predictions'] = _predictionResultToMap(predictions);
       } catch (e) {
-        debugPrint('Warning: Could not fetch prediction data: $e');
         healthData['predictions'] = <String, dynamic>{};
       }
     }
@@ -362,7 +351,6 @@ class AdvancedHealthAnalytics {
         );
         healthData['emotional'] = _emotionalReportToMap(emotionalReport);
       } catch (e) {
-        debugPrint('Warning: Could not fetch emotional data: $e');
         healthData['emotional'] = <String, dynamic>{};
       }
     }
@@ -632,7 +620,6 @@ class AdvancedHealthAnalytics {
   Future<void> _generateHealthInsights() async {
     // Generate periodic health insights for all users
     // This would typically iterate through active users and generate insights
-    debugPrint('🔍 Generating health insights...');
   }
 
   void dispose() {
@@ -645,7 +632,6 @@ class AdvancedHealthAnalytics {
 
 class HealthScoringEngine {
   Future<void> initialize() async {
-    debugPrint('🏥 Initializing health scoring engine...');
   }
 
   Future<Map<String, double>> calculateHealthScores(
@@ -922,7 +908,6 @@ class HealthScoringEngine {
 
 class FertilityAnalyzer {
   Future<void> initialize() async {
-    debugPrint('👶 Initializing fertility analyzer...');
   }
 
   Future<FertilityAnalysisResult> analyzeFertility(
@@ -1136,7 +1121,6 @@ class FertilityAnalyzer {
 
 class ConditionDetector {
   Future<void> initialize() async {
-    debugPrint('🔍 Initializing condition detector...');
   }
 
   Future<ConditionScreeningResult> screenForConditions(
@@ -1416,7 +1400,6 @@ class ConditionDetector {
 
 class SupplementRecommender {
   Future<void> initialize() async {
-    debugPrint('💊 Initializing supplement recommender...');
   }
 
   Future<List<SupplementRecommendation>> generateRecommendations(
@@ -1702,7 +1685,6 @@ class SupplementRecommender {
 
 class RiskAssessment {
   Future<void> initialize() async {
-    debugPrint('⚠️ Initializing risk assessment...');
   }
 
   Future<RiskAssessmentResult> assessRisks(
@@ -1993,7 +1975,6 @@ class RiskAssessment {
 
 class PersonalizationEngine {
   Future<void> initialize() async {
-    debugPrint('🎯 Initializing personalization engine...');
   }
 
   Future<PersonalizationInsights> generateInsights(
@@ -2187,7 +2168,6 @@ class PersonalizationEngine {
 
 class TrendAnalyzer {
   Future<void> initialize() async {
-    debugPrint('📈 Initializing trend analyzer...');
   }
 
   Future<TrendAnalysisResult> analyzeTrends(

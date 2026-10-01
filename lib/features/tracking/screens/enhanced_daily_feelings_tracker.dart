@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -5,6 +7,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../services/feelings_database_service.dart';
 import '../services/feelings_analytics_service.dart';
+import '../../../core/ui/app_segmented_selector.dart';
+import '../../../core/ui/app_geometry.dart';
 
 /// Enhanced daily feelings tracker with advanced analytics and insights
 class EnhancedDailyFeelingsTracker extends StatefulWidget {
@@ -45,6 +49,7 @@ class _EnhancedDailyFeelingsTrackerState
   bool _isLoading = true;
   bool _isSaving = false;
   bool _hasUnsavedChanges = false;
+  bool _notesEditCommitted = true;
 
   @override
   void initState() {
@@ -86,7 +91,6 @@ class _EnhancedDailyFeelingsTrackerState
       await _loadExistingEntry();
       _animationController.forward();
     } catch (e) {
-      debugPrint('Failed to initialize feelings tracker: $e');
     } finally {
       setState(() => _isLoading = false);
     }
@@ -107,6 +111,7 @@ class _EnhancedDailyFeelingsTrackerState
         _notesController.text = entry.notes;
         _overallWellbeing = entry.overallWellbeing;
         _hasUnsavedChanges = false;
+        _notesEditCommitted = true;
       });
     } else {
       _initializeEmptyEntry();
@@ -125,6 +130,7 @@ class _EnhancedDailyFeelingsTrackerState
       _notesController.clear();
       _overallWellbeing = null;
       _hasUnsavedChanges = false;
+      _notesEditCommitted = true;
     });
   }
 
@@ -158,13 +164,9 @@ class _EnhancedDailyFeelingsTrackerState
       setState(() {
         _currentEntry = entry;
         _hasUnsavedChanges = false;
+        _notesEditCommitted = true;
       });
-
-      if (mounted) {
-        AdaptiveMessages.showSuccess(context, 'Feelings saved successfully');
-      }
     } catch (e) {
-      debugPrint('Failed to save entry: $e');
       if (mounted) {
         AdaptiveMessages.showError(context, 'Failed to save feelings');
       }
@@ -208,7 +210,7 @@ class _EnhancedDailyFeelingsTrackerState
             // Historical Trends
             _buildHistoricalTrends(theme),
 
-            const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
+            const SliverPadding(padding: EdgeInsets.only(bottom: 24)),
           ],
         ],
       ),
@@ -225,18 +227,16 @@ class _EnhancedDailyFeelingsTrackerState
       floating: false,
       pinned: true,
       backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        onPressed: () => Navigator.of(context).maybePop(),
+        icon: const Icon(Icons.chevron_left, color: Colors.white, size: 32),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                AppTheme.secondaryBlue,
-                AppTheme.primaryPurple,
-                AppTheme.primaryRose,
-              ],
-            ),
+          decoration: BoxDecoration(
+            gradient: AppTheme.featureHeaderGradient(theme.brightness),
           ),
           child: SafeArea(
             child: Padding(
@@ -254,10 +254,8 @@ class _EnhancedDailyFeelingsTrackerState
                           color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        child: const Icon(
-                          Icons.sentiment_very_satisfied,
-                          color: Colors.white,
-                          size: 28,
+                        child: const Center(
+                          child: Text('😊', style: TextStyle(fontSize: 28)),
                         ),
                       ).animate().scale(delay: 200.ms),
                       const SizedBox(width: 16),
@@ -333,7 +331,7 @@ class _EnhancedDailyFeelingsTrackerState
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
             border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
@@ -391,7 +389,7 @@ class _EnhancedDailyFeelingsTrackerState
   Widget _buildOverallWellbeingSection(ThemeData theme) {
     final scheme = theme.colorScheme;
     final recordedValue = _overallWellbeing;
-    final sliderValue = recordedValue ?? 5.0;
+    final sliderValue = recordedValue;
     final wellbeingColor = recordedValue == null
         ? scheme.onSurfaceVariant
         : _getWellbeingColor(recordedValue);
@@ -413,7 +411,7 @@ class _EnhancedDailyFeelingsTrackerState
                       wellbeingColor.withValues(alpha: 0.08),
                     ],
                   ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
             border: Border.all(
               color: recordedValue == null
                   ? scheme.outline.withValues(alpha: 0.35)
@@ -467,18 +465,28 @@ class _EnhancedDailyFeelingsTrackerState
                       ? SliderComponentShape.noThumb
                       : const RoundSliderThumbShape(enabledThumbRadius: 12),
                 ),
-                child: Slider(
-                  value: sliderValue,
-                  min: 1,
-                  max: 10,
-                  divisions: 9,
-                  onChanged: (value) {
-                    setState(() {
-                      _overallWellbeing = value;
-                      _hasUnsavedChanges = true;
-                    });
-                  },
-                ),
+                child: recordedValue == null
+                    ? _buildUnrecordedScale(
+                        color: wellbeingColor,
+                        onSelected: (value) {
+                          setState(() {
+                            _overallWellbeing = value;
+                            _hasUnsavedChanges = true;
+                          });
+                        },
+                      )
+                    : Slider(
+                        value: sliderValue!,
+                        min: 1,
+                        max: 10,
+                        divisions: 9,
+                        onChanged: (value) {
+                          setState(() {
+                            _overallWellbeing = value;
+                            _hasUnsavedChanges = true;
+                          });
+                        },
+                      ),
               ),
               const SizedBox(height: 8),
               Row(
@@ -493,7 +501,7 @@ class _EnhancedDailyFeelingsTrackerState
                   Flexible(
                     child: Text(
                       recordedValue == null
-                          ? 'Tap or drag to record'
+                          ? 'Tap a number to record'
                           : _getWellbeingDescription(recordedValue),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -518,45 +526,31 @@ class _EnhancedDailyFeelingsTrackerState
     );
   }
 
+  void _moveFeelingsTab(int delta) {
+    final nextIndex = (_tabController.index + delta).clamp(
+      0,
+      _tabController.length - 1,
+    );
+
+    if (nextIndex == _tabController.index) return;
+    _tabController.animateTo(nextIndex);
+  }
+
   /// Build categories tabs
   Widget _buildCategoriesTabs(ThemeData theme) {
-    final scheme = theme.colorScheme;
-
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 52),
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: scheme.outline.withValues(alpha: 0.35)),
-          ),
-          child: TabBar(
-            controller: _tabController,
-            indicatorSize: TabBarIndicatorSize.tab,
-            dividerColor: Colors.transparent,
-            indicator: BoxDecoration(
-              color: AppTheme.primaryPurple,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            labelColor: scheme.onPrimary,
-            unselectedLabelColor: scheme.onSurfaceVariant,
-            labelStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-            tabs: const [
-              Tab(text: 'Mood'),
-              Tab(text: 'Energy'),
-              Tab(text: 'Symptoms'),
-              Tab(text: 'Tags'),
-            ],
-          ),
+        child: AnimatedBuilder(
+          animation: _tabController,
+          builder: (context, _) {
+            return AppSegmentedSelector(
+              labels: const ['Mood', 'Energy', 'Symptoms', '+Tag(s)'],
+              emphasizedIndices: const {3},
+              selectedIndex: _tabController.index,
+              onSelected: _tabController.animateTo,
+            );
+          },
         ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2),
       ),
     );
@@ -565,29 +559,38 @@ class _EnhancedDailyFeelingsTrackerState
   /// Build feelings content
   Widget _buildFeelingsContent(ThemeData theme) {
     return SliverToBoxAdapter(
-      child: AnimatedBuilder(
-        animation: _tabController,
-        builder: (context, _) {
-          final index = _tabController.index;
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragEnd: (details) {
+          final velocity = details.primaryVelocity ?? 0;
+          if (velocity.abs() < 120) return;
 
-          final Widget activeSection = switch (index) {
-            0 => _buildMoodSection(theme),
-            1 => _buildEnergySection(theme),
-            2 => _buildSymptomsSection(theme),
-            3 => _buildTagsSection(theme),
-            _ => _buildMoodSection(theme),
-          };
-
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 220),
-            switchInCurve: Curves.easeOut,
-            switchOutCurve: Curves.easeIn,
-            child: KeyedSubtree(
-              key: ValueKey<int>(index),
-              child: activeSection,
-            ),
-          );
+          _moveFeelingsTab(velocity < 0 ? 1 : -1);
         },
+        child: AnimatedBuilder(
+          animation: _tabController,
+          builder: (context, _) {
+            final index = _tabController.index;
+
+            final Widget activeSection = switch (index) {
+              0 => _buildMoodSection(theme),
+              1 => _buildEnergySection(theme),
+              2 => _buildSymptomsSection(theme),
+              3 => _buildTagsSection(theme),
+              _ => _buildMoodSection(theme),
+            };
+
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              child: KeyedSubtree(
+                key: ValueKey<int>(index),
+                child: activeSection,
+              ),
+            );
+          },
+        ),
       ).animate().fadeIn(delay: 800.ms),
     );
   }
@@ -614,14 +617,14 @@ class _EnhancedDailyFeelingsTrackerState
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final recordedValue = _moodScores[category];
-    final sliderValue = recordedValue ?? 5.0;
+    final sliderValue = recordedValue;
     final color = _getMoodCategoryColor(category);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
         border: Border.all(
           color: recordedValue == null
               ? scheme.outline.withValues(alpha: 0.35)
@@ -678,22 +681,32 @@ class _EnhancedDailyFeelingsTrackerState
                   ? SliderComponentShape.noThumb
                   : const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
-            child: Slider(
-              value: sliderValue,
-              min: 1,
-              max: 10,
-              divisions: 9,
-              onChanged: (newValue) {
-                setState(() {
-                  _moodScores[category] = newValue;
-                  _hasUnsavedChanges = true;
-                });
-              },
-            ),
+            child: recordedValue == null
+                ? _buildUnrecordedScale(
+                    color: color,
+                    onSelected: (newValue) {
+                      setState(() {
+                        _moodScores[category] = newValue;
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  )
+                : Slider(
+                    value: sliderValue!,
+                    min: 1,
+                    max: 10,
+                    divisions: 9,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _moodScores[category] = newValue;
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  ),
           ),
           if (recordedValue == null)
             Text(
-              'Tap or drag to record',
+              'Tap a number to record',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
@@ -725,14 +738,14 @@ class _EnhancedDailyFeelingsTrackerState
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final recordedValue = _energyLevels[type];
-    final sliderValue = recordedValue ?? 5.0;
+    final sliderValue = recordedValue;
     final color = _getEnergyTypeColor(type);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
         border: Border.all(
           color: recordedValue == null
               ? scheme.outline.withValues(alpha: 0.35)
@@ -789,28 +802,70 @@ class _EnhancedDailyFeelingsTrackerState
                   ? SliderComponentShape.noThumb
                   : const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
-            child: Slider(
-              value: sliderValue,
-              min: 1,
-              max: 10,
-              divisions: 9,
-              onChanged: (newValue) {
-                setState(() {
-                  _energyLevels[type] = newValue;
-                  _hasUnsavedChanges = true;
-                });
-              },
-            ),
+            child: recordedValue == null
+                ? _buildUnrecordedScale(
+                    color: color,
+                    onSelected: (newValue) {
+                      setState(() {
+                        _energyLevels[type] = newValue;
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  )
+                : Slider(
+                    value: sliderValue!,
+                    min: 1,
+                    max: 10,
+                    divisions: 9,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _energyLevels[type] = newValue;
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  ),
           ),
           if (recordedValue == null)
             Text(
-              'Tap or drag to record',
+              'Tap a number to record',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
             ),
         ],
       ),
+    );
+  }
+
+  /// Truthful 1–10 input shown only when no value has been recorded yet.
+  ///
+  /// Nothing is preselected, so the UI never represents an invented midpoint
+  /// as the user's wellbeing, mood, or energy observation.
+  Widget _buildUnrecordedScale({
+    required Color color,
+    required ValueChanged<double> onSelected,
+  }) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: List.generate(10, (index) {
+        final value = index + 1;
+
+        return ChoiceChip(
+          label: Text('$value'),
+          selected: false,
+          showCheckmark: false,
+          side: BorderSide(color: scheme.outline.withValues(alpha: 0.45)),
+          labelStyle: theme.textTheme.bodySmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+          ),
+          onSelected: (_) => onSelected(value.toDouble()),
+        );
+      }),
     );
   }
 
@@ -844,7 +899,7 @@ class _EnhancedDailyFeelingsTrackerState
                 color: isSelected
                     ? AppTheme.primaryRose.withValues(alpha: 0.16)
                     : theme.cardColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
                 border: Border.all(
                   color: isSelected
                       ? AppTheme.primaryRose
@@ -1075,7 +1130,7 @@ class _EnhancedDailyFeelingsTrackerState
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
             border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
@@ -1110,6 +1165,7 @@ class _EnhancedDailyFeelingsTrackerState
               TextField(
                 controller: _notesController,
                 maxLines: 4,
+                textInputAction: TextInputAction.done,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurface,
                 ),
@@ -1141,7 +1197,14 @@ class _EnhancedDailyFeelingsTrackerState
                   setState(() {
                     _notes = value;
                     _hasUnsavedChanges = true;
+                    _notesEditCommitted = false;
                   });
+                },
+                onSubmitted: (_) {
+                  setState(() {
+                    _notesEditCommitted = true;
+                  });
+                  FocusScope.of(context).unfocus();
                 },
               ),
             ],
@@ -1162,7 +1225,7 @@ class _EnhancedDailyFeelingsTrackerState
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
             border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
@@ -1265,36 +1328,97 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build save button
   Widget _buildSaveButton() {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final enabled = _hasUnsavedChanges && !_isSaving;
+    final isDark = theme.brightness == Brightness.dark;
 
-    return AnimatedScale(
-      scale: _hasUnsavedChanges ? 1.0 : 0.8,
-      duration: const Duration(milliseconds: 200),
-      child: FloatingActionButton.extended(
-        onPressed: enabled ? _saveEntry : null,
-        backgroundColor: enabled
-            ? AppTheme.primaryPurple
-            : scheme.surfaceContainerHighest,
-        foregroundColor: enabled ? scheme.onPrimary : scheme.onSurfaceVariant,
-        icon: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: _isSaving
-              ? SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: scheme.onPrimary,
-                  ),
-                )
-              : const Icon(Icons.save),
+    if (!_hasUnsavedChanges || !_notesEditCommitted) {
+      return const SizedBox.shrink();
+    }
+
+    final radius = BorderRadius.circular(28);
+    final glassColor = isDark
+        ? Colors.white.withValues(alpha: 0.10)
+        : Colors.white.withValues(alpha: 0.64);
+    final borderColor = isDark
+        ? Colors.white.withValues(alpha: 0.20)
+        : Colors.white.withValues(alpha: 0.78);
+
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: _isSaving ? 'Saving feelings' : 'Save feelings',
+      child: ClipRRect(
+        borderRadius: radius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: enabled ? _saveEntry : null,
+              borderRadius: radius,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                curve: Curves.easeOutCubic,
+                height: 56,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: glassColor,
+                  borderRadius: radius,
+                  border: Border.all(color: borderColor),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.24 : 0.10,
+                      ),
+                      blurRadius: 24,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 140),
+                      child: _isSaving
+                          ? SizedBox(
+                              key: const ValueKey('daily-feelings-saving'),
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: scheme.onSurface,
+                              ),
+                            )
+                          : Icon(
+                              Icons.check_rounded,
+                              key: const ValueKey('daily-feelings-save-ready'),
+                              size: 21,
+                              color: scheme.onSurface,
+                            ),
+                    ),
+                    const SizedBox(width: 10),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 140),
+                      child: Text(
+                        _isSaving ? 'Saving…' : 'Save',
+                        key: ValueKey(_isSaving),
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: scheme.onSurface,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
-        label: Text(
-          _isSaving ? 'Saving...' : 'Save',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ).animate().scale(delay: 1600.ms),
+      ),
     );
   }
 

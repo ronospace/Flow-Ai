@@ -14,7 +14,7 @@
 
 ### For Google Play Review Team
 **Email**: `demo@flowai.app`  
-**Password**: `REDACTED_DEMO_PW!`
+**Password**: `<REDACTED>`
 
 ### Account Details
 - **Display Name**: Demo User for App Review
@@ -33,7 +33,7 @@ The demo account contains:
 If the demo account doesn't work:
 1. Tap "Sign Up" on the login screen
 2. Create a new account with ANY email (e.g., `reviewer@test.com`)
-3. Use any password (minimum 8 characters, e.g., `REDACTED_DEMO_PW!`)
+3. Use any password (minimum 8 characters, e.g., `<REDACTED>`)
 4. No email verification required - instant access
 
 **Note**: The app uses local authentication for testing, so any email address will work for account creation.
@@ -375,7 +375,7 @@ We are committed to providing a safe, accurate, and valuable health tool for wom
 
 If you have any questions or need additional information:
 - **Email**: ronos.ai@icloud.com
-- **Demo Account**: demo@flowai.app / REDACTED_DEMO_PW!
+- **Demo Account**: demo@flowai.app / <REDACTED>
 - **Response Time**: Within 24 hours
 
 Thank you for reviewing Flow Ai. We look forward to bringing this innovative health tool to Google Play users.

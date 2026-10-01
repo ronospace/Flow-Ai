@@ -55,7 +55,10 @@ void main() {
   test('unrelated account actions remain for separate truth audit', () {
     expect(account, contains("title: 'Deactivate Account'"));
     expect(account, contains("title: 'Delete Account'"));
-    expect(account, contains('void _showDeactivateAccountDialog()'));
+    expect(
+      account,
+      contains('Future<void> _showDeactivateAccountDialog() async'),
+    );
     expect(account, contains('Future<void> _performAccountDeletion() async'));
   });
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/user_profile.dart';
 import '../models/personalization.dart';
 
@@ -17,10 +16,8 @@ class HyperPersonalizationService {
 
   Future<void> initialize() async {
     if (_initialized) return;
-    debugPrint('✨ Initializing Hyper-Personalization Service...');
     // Placeholder: load tone dictionaries, localization packs, and user defaults
     _initialized = true;
-    debugPrint('✅ Hyper-Personalization Service initialized');
   }
 
   // Tone adaptation: adjusts message style to target language and tone profile

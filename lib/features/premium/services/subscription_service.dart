@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'receipt_validation_service.dart';
 import '../constants/store_product_ids.dart';
 import '../models/subscription_models.dart';
+import '../../../core/services/app_runtime_metadata_service.dart';
+
+enum _BackendSubscriptionResolution { active, notActive, unknownPreserved }
 
 class SubscriptionService {
   static final SubscriptionService _instance = SubscriptionService._internal();
@@ -17,8 +19,16 @@ class SubscriptionService {
   final InAppPurchase _iap = InAppPurchase.instance;
   final ReceiptValidationService _receiptValidationService =
       ReceiptValidationService();
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
   Completer<bool>? _restoreCompleter;
+
+  // Serializes the short authoritative checkout-launch window only.
+  // Purchase completion remains owned by the app-store purchase stream.
+  bool _purchaseLaunchInFlight = false;
+  String? _lastReceiptValidationError;
+
+  String? _activeUserId;
+  int _identityGeneration = 0;
 
   static const Duration _restoreTimeout = Duration(seconds: 15);
 
@@ -40,7 +50,23 @@ class SubscriptionService {
   UserSubscription? get currentSubscription => _currentSubscription;
   Stream<UserSubscription> get entitlementChanges =>
       _entitlementController.stream;
-  bool get isPremium => _currentSubscription?.isPremium ?? false;
+  bool get isPremium =>
+      hasDurableMonetizationIdentity &&
+      _currentSubscription?.userId == _activeUserId &&
+      (_currentSubscription?.isPremium ?? false);
+
+  bool canOwnMonetizationFor(String userId) {
+    return _receiptValidationService.canOwnMonetizationFor(userId);
+  }
+
+  String? get lastReceiptValidationError => _lastReceiptValidationError;
+
+  bool get hasDurableMonetizationIdentity {
+    final userId = _activeUserId;
+
+    return userId != null &&
+        _receiptValidationService.canOwnMonetizationFor(userId);
+  }
 
   bool get _isPurchaseValidationConfigured {
     if (Platform.isIOS) {
@@ -54,57 +80,106 @@ class SubscriptionService {
     return false;
   }
 
-  /// Initialize the service
+  /// Initialize the service for one authoritative account.
   Future<void> initialize(String userId) async {
-    if (kDebugMode) {
-      print('🔐 Initializing SubscriptionService for user: $userId');
+    final normalizedUserId = userId.trim();
+    _lastReceiptValidationError = null;
+
+    if (normalizedUserId.isEmpty) {
+      throw ArgumentError.value(userId, 'userId', 'User ID cannot be empty');
     }
 
-    // Check if IAP is available
-    _isAvailable = await _iap.isAvailable();
+    // Invalidate all callbacks belonging to the previous account first.
+    final generation = ++_identityGeneration;
+    _activeUserId = normalizedUserId;
 
-    if (!_isAvailable) {
-      if (kDebugMode) {
-        print('⚠️ In-app purchases not available');
-      }
-      _currentSubscription = UserSubscription.free(userId);
+    final previousRestore = _restoreCompleter;
+    _restoreCompleter = null;
+
+    if (previousRestore != null && !previousRestore.isCompleted) {
+      previousRestore.complete(false);
+    }
+
+    final previousPurchaseSubscription = _subscription;
+    _subscription = null;
+
+    // Fail closed immediately. Never expose the previous account's Premium.
+    _currentSubscription = UserSubscription.free(normalizedUserId);
+
+    await previousPurchaseSubscription?.cancel();
+
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
       return;
     }
 
-    // Listen to purchase updates
+    final available = await _iap.isAvailable();
+
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
+      return;
+    }
+
+    _isAvailable = available;
+
+    if (!_isAvailable) {
+      return;
+    }
+
     _subscription = _iap.purchaseStream.listen(
-      (purchaseDetails) => unawaited(_onPurchaseUpdate(purchaseDetails)),
-      onDone: () {
-        final restoreCompleter = _restoreCompleter;
-        if (restoreCompleter != null && !restoreCompleter.isCompleted) {
-          restoreCompleter.complete(false);
-        }
-        unawaited(_subscription.cancel());
+      (purchaseDetails) {
+        unawaited(
+          _onPurchaseUpdate(purchaseDetails, normalizedUserId, generation),
+        );
       },
-      onError: (error) {
-        final restoreCompleter = _restoreCompleter;
-        if (restoreCompleter != null && !restoreCompleter.isCompleted) {
-          restoreCompleter.complete(false);
+      onDone: () {
+        if (!_isActiveIdentity(normalizedUserId, generation)) {
+          return;
         }
 
-        if (kDebugMode) {
-          print('❌ Purchase stream error: $error');
+        final completer = _restoreCompleter;
+        if (completer != null && !completer.isCompleted) {
+          completer.complete(false);
+        }
+      },
+      onError: (Object error) {
+        if (!_isActiveIdentity(normalizedUserId, generation)) {
+          return;
+        }
+
+        final completer = _restoreCompleter;
+        if (completer != null && !completer.isCompleted) {
+          completer.complete(false);
         }
       },
     );
 
-    // Load products
     await _loadProducts();
 
-    // Load only backend-verified entitlement state before restore.
-    await _loadBackendVerifiedSubscription(userId);
-
-    // Restore is explicitly user-initiated. Store callbacks are
-    // asynchronous and must not block subscription catalog initialization.
-
-    if (kDebugMode) {
-      print('✅ SubscriptionService initialized');
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
+      return;
     }
+
+    await _loadBackendVerifiedSubscription(normalizedUserId, generation);
+
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
+      return;
+    }
+
+    // Existing store ownership must survive process restarts without relying
+    // on a local Premium flag. If backend state has not already resolved an
+    // active entitlement, silently ask the store for owned purchases. Any
+    // restored purchase still flows through _handlePurchased() and the
+    // authoritative receipt-validation backend before Premium is granted.
+    if (!(_currentSubscription?.isPremium ?? false)) {
+      await _restoreOwnedPurchasesOnStartup(normalizedUserId, generation);
+    }
+
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
+      return;
+    }
+  }
+
+  bool _isActiveIdentity(String userId, int generation) {
+    return _activeUserId == userId && _identityGeneration == generation;
   }
 
   /// Load available products from store
@@ -115,31 +190,11 @@ class SubscriptionService {
       final response = await _iap.queryProductDetails(_productIds);
 
       if (response.error != null) {
-        if (kDebugMode) {
-          print('❌ Error loading products: ${response.error}');
-        }
         return;
       }
 
-      if (response.notFoundIDs.isNotEmpty) {
-        if (kDebugMode) {
-          print('⚠️ Products not found: ${response.notFoundIDs}');
-        }
-      }
-
       _products = response.productDetails;
-
-      if (kDebugMode) {
-        print('✅ Loaded ${_products.length} products');
-        for (final product in _products) {
-          print('  - ${product.id}: ${product.price}');
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('❌ Exception loading products: $e');
-      }
-    }
+    } catch (e) {}
   }
 
   /// Re-query the app store after an unavailable or empty response.
@@ -148,9 +203,6 @@ class SubscriptionService {
     _products = [];
 
     if (!_isAvailable) {
-      if (kDebugMode) {
-        print('⚠️ In-app purchases are not available during refresh');
-      }
       return;
     }
 
@@ -171,10 +223,9 @@ class SubscriptionService {
       priceString: product.price,
       features: [
         'Unlimited AI insights',
-        'Advanced health condition detection',
+        'Advanced health trends and tracked patterns',
         'Export data to PDF/CSV',
-        'Ad-free experience',
-        'Priority support',
+
         if (isYearly) 'Yearly billing through your app store',
       ],
       isPopular: isYearly,
@@ -188,10 +239,30 @@ class SubscriptionService {
 
   /// Purchase a subscription
   Future<PurchaseResult> purchaseSubscription(String productId) async {
+    final userId = _activeUserId;
+    final generation = _identityGeneration;
+
+    if (userId == null ||
+        !_receiptValidationService.canOwnMonetizationFor(userId)) {
+      return PurchaseResult.failure(
+        'Premium purchases require a secure signed-in account. '
+        'Legacy local and anonymous sessions cannot own store purchases.',
+        PurchaseError.unknown,
+      );
+    }
+
     if (!_isAvailable) {
       return PurchaseResult.failure(
         'Purchases are temporarily unavailable. Please try again.',
         PurchaseError.productNotAvailable,
+      );
+    }
+
+    if (_lastReceiptValidationError == 'receipt_owner_conflict') {
+      return PurchaseResult.failure(
+        'This App Store subscription is linked to a different Flow Ai account. '
+        'Sign in with the Flow Ai account that owns the subscription.',
+        PurchaseError.unknown,
       );
     }
 
@@ -218,58 +289,119 @@ class SubscriptionService {
       );
     }
 
-    try {
-      if (kDebugMode) {
-        print('🛒 Opening app-store checkout for: ${product.id}');
-      }
+    if (!_isActiveIdentity(userId, generation)) {
+      return PurchaseResult.failure(
+        'Your subscription state changed. Please try again.',
+        PurchaseError.unknown,
+      );
+    }
 
-      final purchaseParam = PurchaseParam(productDetails: product);
-      final launched = await _iap.buyNonConsumable(
-        purchaseParam: purchaseParam,
+    final activeRestore = _restoreCompleter;
+
+    if (_purchaseLaunchInFlight ||
+        (activeRestore != null && !activeRestore.isCompleted)) {
+      return PurchaseResult.failure(
+        'Another subscription action is already in progress. Please wait.',
+        PurchaseError.unknown,
+      );
+    }
+
+    _purchaseLaunchInFlight = true;
+
+    try {
+      final backendResolution = await _loadBackendVerifiedSubscription(
+        userId,
+        generation,
       );
 
-      if (!launched) {
+      if (!_isActiveIdentity(userId, generation)) {
         return PurchaseResult.failure(
-          'Your app store could not open the purchase screen. Please try again.',
-          PurchaseError.paymentFailed,
+          'Your subscription state changed. Please try again.',
+          PurchaseError.unknown,
         );
       }
 
-      return PurchaseResult.launched();
-    } catch (error) {
-      if (kDebugMode) {
-        print('❌ Purchase launch error: $error');
+      if (backendResolution == _BackendSubscriptionResolution.active &&
+          _currentSubscription?.userId == userId &&
+          (_currentSubscription?.isPremium ?? false)) {
+        return PurchaseResult.failure(
+          'Premium is already active for this account.',
+          PurchaseError.alreadyPurchased,
+        );
       }
 
-      return PurchaseResult.failure(
-        'We could not start the purchase. Please try again.',
-        PurchaseError.paymentFailed,
-      );
+      try {
+        final purchaseParam = PurchaseParam(productDetails: product);
+
+        debugPrint(
+          '[PREMIUM-CHECKOUT] launch-request '
+          'platform=${Platform.operatingSystem} '
+          'product=$productId',
+        );
+
+        final launched = await _iap.buyNonConsumable(
+          purchaseParam: purchaseParam,
+        );
+
+        debugPrint(
+          '[PREMIUM-CHECKOUT] launch-return '
+          'platform=${Platform.operatingSystem} '
+          'product=$productId '
+          'launched=$launched',
+        );
+
+        if (!launched) {
+          return PurchaseResult.failure(
+            'Your app store could not open the purchase screen. Please try again.',
+            PurchaseError.paymentFailed,
+          );
+        }
+
+        return PurchaseResult.launched();
+      } catch (error) {
+        return PurchaseResult.failure(
+          'We could not start the purchase. Please try again.',
+          PurchaseError.paymentFailed,
+        );
+      }
+    } finally {
+      _purchaseLaunchInFlight = false;
     }
   }
 
   /// Handle purchase updates
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
+    String userId,
+    int generation,
   ) async {
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
     var restoredValidationSucceeded = false;
 
     for (final purchaseDetails in purchaseDetailsList) {
-      if (kDebugMode) {
-        print('📦 Purchase update: ${purchaseDetails.status}');
-      }
+      debugPrint(
+        '[PREMIUM-CHECKOUT] stream-update '
+        'platform=${Platform.operatingSystem} '
+        'product=${purchaseDetails.productID} '
+        'status=${purchaseDetails.status.name} '
+        'pendingComplete=${purchaseDetails.pendingCompletePurchase}',
+      );
 
       switch (purchaseDetails.status) {
         case PurchaseStatus.pending:
           _handlePending(purchaseDetails);
           break;
         case PurchaseStatus.purchased:
-          await _handlePurchased(purchaseDetails);
+          await _handlePurchased(purchaseDetails, userId, generation);
           break;
         case PurchaseStatus.restored:
           restoredValidationSucceeded =
-              await _handlePurchased(purchaseDetails) ||
+              await _handlePurchased(purchaseDetails, userId, generation) ||
               restoredValidationSucceeded;
+
           break;
         case PurchaseStatus.error:
           _handleError(purchaseDetails);
@@ -284,6 +416,10 @@ class SubscriptionService {
       }
     }
 
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
     final restoreCompleter = _restoreCompleter;
 
     if (restoreCompleter != null && !restoreCompleter.isCompleted) {
@@ -292,56 +428,72 @@ class SubscriptionService {
   }
 
   void _handlePending(PurchaseDetails purchaseDetails) {
-    if (kDebugMode) {
-      print('⏳ Purchase pending: ${purchaseDetails.productID}');
-    }
+    debugPrint(
+      '[PREMIUM-CHECKOUT] pending '
+      'product=${purchaseDetails.productID}',
+    );
   }
 
   /// A purchase must pass backend validation before Premium is granted.
-  Future<bool> _handlePurchased(PurchaseDetails purchaseDetails) async {
-    if (kDebugMode) {
-      print('✅ Store purchase received: ${purchaseDetails.productID}');
+  Future<bool> _handlePurchased(
+    PurchaseDetails purchaseDetails,
+    String userId,
+    int generation,
+  ) async {
+    if (!_isActiveIdentity(userId, generation)) {
+      return false;
     }
 
-    final validationResult = await _validatePurchase(purchaseDetails);
+    _lastReceiptValidationError = null;
+    final validationResult = await _validatePurchase(purchaseDetails, userId);
+
+    if (!_isActiveIdentity(userId, generation)) {
+      return false;
+    }
 
     if (validationResult?.grantsActiveEntitlement == true) {
-      await _grantPremiumAccess(purchaseDetails, validationResult!);
+      await _grantPremiumAccess(
+        purchaseDetails,
+        validationResult!,
+        userId,
+        generation,
+      );
       return true;
     }
 
-    if (kDebugMode) {
-      print(
-        '❌ Purchase validation failed: '
-        '${validationResult?.errorMessage ?? 'missing validation result'}',
-      );
-    }
+    final validationError = validationResult?.errorMessage?.trim();
+    _lastReceiptValidationError =
+        validationError == null || validationError.isEmpty
+        ? null
+        : validationError;
 
     return false;
   }
 
   void _handleError(PurchaseDetails purchaseDetails) {
-    if (kDebugMode) {
-      print('❌ Purchase error: ${purchaseDetails.error}');
-    }
+    debugPrint(
+      '[PREMIUM-CHECKOUT] error '
+      'product=${purchaseDetails.productID} '
+      'code=${purchaseDetails.error?.code ?? 'none'}',
+    );
   }
 
   void _handleCanceled(PurchaseDetails purchaseDetails) {
-    if (kDebugMode) {
-      print('🚫 Purchase canceled: ${purchaseDetails.productID}');
-    }
+    debugPrint(
+      '[PREMIUM-CHECKOUT] canceled '
+      'product=${purchaseDetails.productID}',
+    );
   }
 
   /// Validate purchases through Flow AI backend before granting Premium.
   Future<ReceiptValidationResult?> _validatePurchase(
     PurchaseDetails purchaseDetails,
+    String userId,
   ) async {
     final verificationData =
         purchaseDetails.verificationData.serverVerificationData;
-    final userId = _currentSubscription?.userId;
 
-    if (userId == null ||
-        userId.trim().isEmpty ||
+    if (userId.trim().isEmpty ||
         !_receiptValidationService.isAuthenticatedUser(userId)) {
       return const ReceiptValidationResult(
         isValid: false,
@@ -374,12 +526,13 @@ class SubscriptionService {
           );
         }
 
-        final packageInfo = await PackageInfo.fromPlatform();
+        final packageName =
+            await AppRuntimeMetadataService.instance.packageName;
 
         return await _receiptValidationService.validateGooglePlayReceipt(
           purchaseToken: verificationData,
           productId: purchaseDetails.productID,
-          packageName: packageInfo.packageName,
+          packageName: packageName,
         );
       }
 
@@ -399,9 +552,26 @@ class SubscriptionService {
   Future<void> _grantPremiumAccess(
     PurchaseDetails purchaseDetails,
     ReceiptValidationResult validationResult,
+    String userId,
+    int generation,
   ) async {
-    final userId = _currentSubscription?.userId ?? 'unknown';
-    final isYearly = purchaseDetails.productID == yearlyProductId;
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
+    if (!validationResult.grantsActiveEntitlement) {
+      throw StateError('Receipt lifecycle does not grant Premium entitlement');
+    }
+
+    final validatedProductId = validationResult.productId;
+
+    if (validatedProductId == null ||
+        (validatedProductId != monthlyProductId &&
+            validatedProductId != yearlyProductId)) {
+      throw StateError('Validated subscription product is not recognized');
+    }
+
+    final isYearly = validatedProductId == yearlyProductId;
 
     // Entitlement duration must come exclusively from verified store data.
     final purchaseDate = DateTime.fromMillisecondsSinceEpoch(
@@ -414,9 +584,13 @@ class SubscriptionService {
       throw StateError('Verified subscription expiry is not active');
     }
 
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
     _currentSubscription = UserSubscription.premium(
       userId: userId,
-      productId: purchaseDetails.productID,
+      productId: validatedProductId,
       billingPeriod: isYearly ? BillingPeriod.yearly : BillingPeriod.monthly,
       purchaseDate: purchaseDate,
       expiryDate: expiryDate,
@@ -425,22 +599,80 @@ class SubscriptionService {
     );
 
     // Save to persistent storage
-    await _saveSubscription();
+    await _saveSubscription(userId, generation);
+
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
 
     final validatedSubscription = _currentSubscription;
     if (validatedSubscription != null) {
       _entitlementController.add(validatedSubscription);
     }
+  }
 
-    if (kDebugMode) {
-      print('🎉 Premium access granted until: $expiryDate');
+  /// Restore previous purchases for the active account.
+  Future<void> _restoreOwnedPurchasesOnStartup(
+    String userId,
+    int generation,
+  ) async {
+    if (!_isActiveIdentity(userId, generation) || !_isAvailable) {
+      return;
+    }
+
+    // Do not issue a store restore while authoritative checkout launch is
+    // already resolving/opening.
+    if (_purchaseLaunchInFlight) {
+      return;
+    }
+
+    final previousRestore = _restoreCompleter;
+
+    // Never interfere with an explicit user-triggered restore already active.
+    if (previousRestore != null && !previousRestore.isCompleted) {
+      return;
+    }
+
+    final completer = Completer<bool>();
+    _restoreCompleter = completer;
+
+    try {
+      await _iap.restorePurchases();
+
+      await completer.future.timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          return false;
+        },
+      );
+    } catch (error) {
+      // Startup restoration is best-effort and remains fail-closed.
+    } finally {
+      if (identical(_restoreCompleter, completer)) {
+        _restoreCompleter = null;
+      }
     }
   }
 
-  /// Restore previous purchases
   Future<bool> restorePurchases(String userId) async {
+    final normalizedUserId = userId.trim();
+    _lastReceiptValidationError = null;
+    final generation = _identityGeneration;
+
+    if (_purchaseLaunchInFlight) {
+      return false;
+    }
+
+    if (!_isActiveIdentity(normalizedUserId, generation)) {
+      return false;
+    }
+
+    if (!_receiptValidationService.canOwnMonetizationFor(normalizedUserId)) {
+      return false;
+    }
+
     if (!_isAvailable) {
-      _currentSubscription = UserSubscription.free(userId);
+      _currentSubscription = UserSubscription.free(normalizedUserId);
       return false;
     }
 
@@ -453,40 +685,44 @@ class SubscriptionService {
       );
     }
 
-    final previouslyVerifiedPremium = _currentSubscription?.isPremium ?? false;
+    final previouslyVerifiedPremium =
+        _currentSubscription?.userId == normalizedUserId &&
+        (_currentSubscription?.isPremium ?? false);
+
     final completer = Completer<bool>();
     _restoreCompleter = completer;
 
     try {
-      if (kDebugMode) {
-        print('🔄 Requesting app-store purchase restoration');
-      }
-
       await _iap.restorePurchases();
 
       final restored = await completer.future.timeout(
         _restoreTimeout,
-        onTimeout: () => false,
+        onTimeout: () {
+          return false;
+        },
       );
 
+      if (!_isActiveIdentity(normalizedUserId, generation)) {
+        return false;
+      }
+
       final entitlementIsPremium =
-          restored || (_currentSubscription?.isPremium ?? false);
+          restored ||
+          (_currentSubscription?.userId == normalizedUserId &&
+              (_currentSubscription?.isPremium ?? false));
 
       if (!entitlementIsPremium && !previouslyVerifiedPremium) {
-        _currentSubscription = UserSubscription.free(userId);
+        _currentSubscription = UserSubscription.free(normalizedUserId);
       }
 
       return entitlementIsPremium || previouslyVerifiedPremium;
     } catch (error) {
-      if (kDebugMode) {
-        print('❌ Restore request failed: $error');
+      if (_isActiveIdentity(normalizedUserId, generation) &&
+          !previouslyVerifiedPremium) {
+        _currentSubscription = UserSubscription.free(normalizedUserId);
       }
 
-      if (!previouslyVerifiedPremium) {
-        _currentSubscription = UserSubscription.free(userId);
-      }
-
-      return previouslyVerifiedPremium;
+      return false;
     } finally {
       if (identical(_restoreCompleter, completer)) {
         _restoreCompleter = null;
@@ -495,36 +731,55 @@ class SubscriptionService {
   }
 
   /// Save subscription to storage
-  Future<void> _saveSubscription() async {
-    if (_currentSubscription == null) return;
+  Future<void> _saveSubscription(String userId, int generation) async {
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
+    final subscription = _currentSubscription;
+
+    if (subscription == null || subscription.userId != userId) {
+      return;
+    }
 
     final prefs = await SharedPreferences.getInstance();
+
+    if (!_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
     await prefs.setString(
       'user_subscription',
-      jsonEncode(_currentSubscription!.toJson()),
+      jsonEncode(subscription.toJson()),
     );
   }
 
   /// Load persisted subscription state only after backend status verification.
-  Future<bool> _loadBackendVerifiedSubscription(String userId) async {
+  Future<_BackendSubscriptionResolution> _loadBackendVerifiedSubscription(
+    String userId,
+    int generation,
+  ) async {
+    if (!_isActiveIdentity(userId, generation)) {
+      return _BackendSubscriptionResolution.notActive;
+    }
     if (!_receiptValidationService.canValidateSubscriptionStatus ||
         !_receiptValidationService.isAuthenticatedUser(userId)) {
       _currentSubscription = UserSubscription.free(userId);
-      return false;
+      return _BackendSubscriptionResolution.notActive;
     }
 
     final prefs = await SharedPreferences.getInstance();
     final storedSubscription = prefs.getString('user_subscription');
     if (storedSubscription == null || storedSubscription.trim().isEmpty) {
       _currentSubscription = UserSubscription.free(userId);
-      return false;
+      return _BackendSubscriptionResolution.notActive;
     }
 
     try {
       final decoded = jsonDecode(storedSubscription);
       if (decoded is! Map<String, dynamic>) {
         _currentSubscription = UserSubscription.free(userId);
-        return false;
+        return _BackendSubscriptionResolution.notActive;
       }
 
       final candidate = UserSubscription.fromJson(decoded);
@@ -536,46 +791,113 @@ class SubscriptionService {
           subscriptionId == null ||
           subscriptionId.trim().isEmpty) {
         _currentSubscription = UserSubscription.free(userId);
-        return false;
+        return _BackendSubscriptionResolution.notActive;
       }
 
-      final isActive = await _receiptValidationService.verifySubscriptionActive(
-        subscriptionId: subscriptionId,
-      );
+      final backendStatus = await _receiptValidationService
+          .fetchSubscriptionStatus(subscriptionId: subscriptionId);
 
-      _currentSubscription = isActive
-          ? candidate
-          : UserSubscription.free(userId);
-      return isActive;
-    } catch (e) {
-      if (kDebugMode) {
-        print('❌ Failed to load backend-verified subscription: $e');
+      if (!_isActiveIdentity(userId, generation)) {
+        return _BackendSubscriptionResolution.notActive;
       }
+
+      if (backendStatus?.active == true) {
+        final productId = backendStatus!.productId;
+        final expiryDate = backendStatus.expirationDate;
+        final transactionId = backendStatus.transactionId;
+        final originalTransactionId = backendStatus.originalTransactionId;
+
+        if (productId == null ||
+            (productId != monthlyProductId && productId != yearlyProductId) ||
+            expiryDate == null ||
+            !expiryDate.isAfter(DateTime.now()) ||
+            transactionId == null ||
+            transactionId.isEmpty ||
+            originalTransactionId == null ||
+            originalTransactionId.isEmpty) {
+          _currentSubscription = UserSubscription.free(userId);
+          return _BackendSubscriptionResolution.notActive;
+        }
+
+        final isYearly = productId == yearlyProductId;
+
+        _currentSubscription = UserSubscription.premium(
+          userId: userId,
+          productId: productId,
+          billingPeriod: isYearly
+              ? BillingPeriod.yearly
+              : BillingPeriod.monthly,
+          purchaseDate: candidate.purchaseDate,
+          expiryDate: expiryDate,
+          transactionId: transactionId,
+          originalTransactionId: originalTransactionId,
+        );
+
+        await _saveSubscription(userId, generation);
+
+        if (!_isActiveIdentity(userId, generation)) {
+          return _BackendSubscriptionResolution.notActive;
+        }
+
+        final validatedSubscription = _currentSubscription;
+        if (validatedSubscription != null) {
+          _entitlementController.add(validatedSubscription);
+        }
+
+        return _BackendSubscriptionResolution.active;
+      }
+
+      if (backendStatus?.active == false) {
+        _currentSubscription = UserSubscription.free(userId);
+        return _BackendSubscriptionResolution.notActive;
+      }
+
+      // Backend status is temporarily unknown. Preserve only the already
+      // persisted entitlement for this same user while it remains locally
+      // valid and unexpired. Never manufacture or extend Premium access.
+      if (candidate.isPremium) {
+        _currentSubscription = candidate;
+        return _BackendSubscriptionResolution.unknownPreserved;
+      }
+
       _currentSubscription = UserSubscription.free(userId);
-      return false;
+      return _BackendSubscriptionResolution.notActive;
+    } catch (e) {
+      _currentSubscription = UserSubscription.free(userId);
+      return _BackendSubscriptionResolution.notActive;
     }
   }
 
   /// Check if user can access a premium feature
   bool canAccessFeature(PremiumFeature feature) {
-    return _currentSubscription?.canAccessFeature(feature) ?? false;
+    return isPremium &&
+        (_currentSubscription?.canAccessFeature(feature) ?? false);
   }
 
   /// Increment AI insights usage
   Future<void> incrementInsightsUsage() async {
-    if (_currentSubscription == null) return;
+    final userId = _activeUserId;
+    final generation = _identityGeneration;
+    final subscription = _currentSubscription;
 
-    _currentSubscription = _currentSubscription!.copyWith(
-      aiInsightsUsed: _currentSubscription!.aiInsightsUsed + 1,
+    if (userId == null ||
+        subscription == null ||
+        subscription.userId != userId ||
+        !_isActiveIdentity(userId, generation)) {
+      return;
+    }
+
+    _currentSubscription = subscription.copyWith(
+      aiInsightsUsed: subscription.aiInsightsUsed + 1,
     );
 
-    await _saveSubscription();
+    await _saveSubscription(userId, generation);
   }
 
   /// Get remaining free insights
   int getRemainingFreeInsights() {
     if (_currentSubscription == null) return 0;
-    if (_currentSubscription!.hasUnlimitedInsights) return -1; // Unlimited
+    if (canAccessFeature(PremiumFeature.unlimitedInsights)) return -1;
 
     return (_currentSubscription!.aiInsightsLimit -
             _currentSubscription!.aiInsightsUsed)
@@ -584,7 +906,20 @@ class SubscriptionService {
 
   /// Dispose
   void dispose() {
-    _subscription.cancel();
+    _identityGeneration++;
+    _activeUserId = null;
+
+    final restoreCompleter = _restoreCompleter;
+    _restoreCompleter = null;
+
+    if (restoreCompleter != null && !restoreCompleter.isCompleted) {
+      restoreCompleter.complete(false);
+    }
+
+    final subscription = _subscription;
+    _subscription = null;
+    unawaited(subscription?.cancel());
+
     _entitlementController.close();
   }
 }

@@ -93,7 +93,7 @@ Medical Citations (Guideline 1.4.1):
 
 Demo Account:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 All compliance requirements from previous rejection have been addressed.
 ```

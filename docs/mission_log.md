@@ -1,45 +1,724 @@
 <!-- FLOW_AI_CURRENT_RELEASE_STATE_BEGIN -->
 # Flow Ai — Current Release State
 
-> **Authoritative current-state block.**
-> Historical mission entries below intentionally preserve earlier OPEN/ACTIVE states.
-> Automation and release triage must use this block first and must not infer current
-> status from older historical sections.
+> Authoritative current-state block.
+> Historical entries below remain preserved as engineering history.
+> All release triage, automation and future work must use this block first.
+> Do not infer current state from older historical ACTIVE/OPEN entries.
+
+## Permanent operating rules
+
+1. Canonical repository:
+   `/Users/ronos/flow_ai_professional_release_20260701`
+
+2. Canonical branch:
+   `release/central-integration-20260720`
+
+3. Never create or switch Git branches unless explicitly instructed by the owner.
+
+4. `docs/mission_log.md` is the single authoritative mission and release ledger.
+   Do not create parallel mission plans or duplicate release ledgers.
+
+5. Every ACTIVE, BLOCKED, WAITING or newly discovered item must have:
+   - stable numbered mission/sub-mission ID;
+   - evidence-backed status;
+   - progress percentage or clearly marked estimate;
+   - exact blocker where applicable;
+   - exact next gate.
+
+6. Closed missions must leave the active queue and remain only as historical evidence.
+
+7. Deep forensic audit is mandatory before mutation.
+   If evidence is incomplete, contradictory or a command/test fails, broaden the audit.
+   Never guess, assume or silently infer missing facts.
+
+8. Centralize changes at the authoritative owner:
+   engine/service -> provider/state -> consumers.
+
+9. Protect existing repository state:
+   - preserve branch;
+   - preserve HEAD unless the mission explicitly reaches a controlled commit gate;
+   - preserve the staged index;
+   - preserve unrelated staged/unstaged/untracked work;
+   - never use `git add .`;
+   - never use blanket restore/reset/checkout against unrelated work;
+   - never silently clean unrelated files.
+
+10. Important findings, store evidence, physical-device results, regressions,
+    decisions, blockers and next gates must be recorded in this ledger during
+    the same engineering cycle.
+
+11. Production requirements:
+    - no demo/mock/fabricated production behavior;
+    - no synthetic health observations presented as real;
+    - no decorative Premium gating;
+    - Premium must fail closed without authoritative entitlement;
+    - truthful health/access/provenance wording;
+    - zero analyzer issues for release-owned work;
+    - Android + iPhone physical verification when a shared runtime mission requires it.
+
+12. Store compliance is a permanent release gate:
+    - Apple App Store Review Guidelines;
+    - StoreKit / subscription requirements;
+    - Apple Health / privacy requirements;
+    - Google Play Developer Program Policies;
+    - Health Connect minimum-scope requirements;
+    - Play Billing requirements;
+    - Data Safety / privacy declarations.
+    Never use excess permissions, misleading declarations, unsupported medical claims
+    or policy workarounds.
+
+13. Branding:
+    use `Flow Ai` for product-facing text unless an existing literal identifier
+    or historical filename requires another spelling.
 
 ## Current release progress
 
-- General: 71%
-- Monetization: 73%
-- Identity & Cloud: 60%
-- Wellness/Health: 100%
+- General: 99% — release engineering substantially complete; Android submitted-artifact drift and store review remain.
+- Monetization: 100% — Premium purchase/restore/validation, CMP lifecycle and physical ad eligibility/suppression gates are closed.
+- Identity & Cloud: 96% — preserve existing verified state; no new blocker promoted without fresh evidence.
+- Wellness/Health: 100% — CLOSED.
+- Apple Privacy: 100% — CLOSED.
+- FINAL-E2E: 99% EST. — local Android/iOS release artifact chains verified; store-side closure remains open.
+- FINAL RELEASE: 99.5% EST. — local Android+iOS release chains pass; Apple/Google store-side completion remains.
 
-## Current release missions
+## Current active missions — authoritative priority order
 
-- MON-12/15 — Final Release Integrity: 95%
-- MON-13/15 — Android Purchase/Restore: 100% — CLOSED
-- MON-14/15 — iPhone Purchase/Restore: 100% — CLOSED — physical fresh purchase PASS + Restore Purchases PASS
-- MON-15/15 — Final E2E Regression: 65%
+### 1. APPLE-IAP-P0 — App Store review
 
-## Current active / pending work
+Status: 99.5% — ACTIVE / CORRECTED BINARY LOCALLY RELEASE-SAFE / STORE-SIDE CLOSURE OPEN.
 
-1. MON12-OBS1A — 100% — CLOSED — Android physical persistent-navigation telemetry verified.
-2. MON12-BILL1 — 95% — compliant Billing 8 release artifact verified; Play Console deployment/confirmation pending.
-3. MON12-OBS1B — 25% — queued after OBS1A.
-4. Calendar Android dead-space — 30% — deferred until release-critical gates are stable.
+Verified current app-side state:
 
-## Closed items that must not be returned to active status without a new reproducible regression
+- Apple review could not locate Flow Ai Premium Monthly and Yearly in submitted build `2.2.4 (1783342123)`.
+- Permanent reviewer-visible route now exists:
+  `Settings -> Premium -> Flow Ai Premium`.
+- `Flow Ai Premium` opens `/premium`.
+- Monthly product ID remains:
+  `flow_ai_premium_monthly`.
+- Yearly product ID remains:
+  `flow_ai_premium_yearly`.
+- Physical iPhone reviewer correction gate: PASS.
+- Monthly visible: PASS.
+- Yearly visible: PASS.
+- Monthly -> Yearly selected-state interaction: PASS.
+- Start Premium loading feedback: PASS.
+- Restore Purchases reachability: PASS.
+- Purchase, restore, receipt-validation, ownership and entitlement authority were not weakened.
 
-- UX2-F08 — CLOSED — physical iPhone + Android parity verified.
-- MON12-AD6 — CLOSED — Android ads physically verified functional on Home + Insights.
+Current corrected App Store artifact:
 
-## Priority order
+- marketing version: `2.2.4`;
+- build: `1790713306`;
+- bundle ID: `com.flowai.health`;
+- exact IPA:
+  `/tmp/flowai_appstore_export_final/export/flow_ai.ipa`;
+- IPA SHA-256:
+  `daa8b1fb7ea204eaf2b379662c853aacf605445e23e1f2d4cf0d460b84aa8dac`;
+- Apple Distribution signature: PASS;
+- TeamIdentifier: `9FY62NTL53`;
+- App Store provisioning profile: PASS;
+- `get-task-allow=false`: PASS;
+- HealthKit entitlement: PASS;
+- Sign in with Apple entitlement: PASS;
+- root signature: PASS;
+- nested framework signatures: PASS;
+- all embedded Mach-O binaries: arm64 only;
+- all embedded Mach-O binaries: iOS device platform;
+- no simulator-platform load command found;
+- prior `1783342123` Transporter `x86_64` / simulator-platform failure signature is absent from the corrected IPA;
+- privacy manifests present;
+- HealthKit usage descriptions present;
+- forbidden test runtime check: PASS.
 
-P0 — MON12-OBS1A physical Android telemetry closure.
-P1 — MON13 fresh physical Android purchase verification. MON14 is CLOSED/PASS.
-P1 — MON12-BILL1 Play Console deployment/confirmation.
-P2 — MON12-OBS1B.
-P2 — Calendar Android dead-space.
-P3 — MON15 final two-device end-to-end regression.
+Validation state:
+
+- local forensic release gates: PASS;
+- `altool` is available;
+- App Store Connect server validation has NOT run because no local ASC API credentials/API key are configured;
+- this is an authentication/configuration blocker for server validation, not an artifact failure;
+- corrected IPA has NOT been uploaded;
+- corrected build has NOT been attached to App Store version `2.2.4`;
+- submission has NOT been performed.
+
+Store-side gates still open:
+
+1. obtain current App Store Connect authentication or use an authorized upload/validation path;
+2. validate the exact IPA against App Store Connect;
+3. verify current Paid Apps Agreement state before reviewer communication;
+4. verify Monthly and Yearly remain associated with the current submission;
+5. resolve App Description / Standard EULA requirement;
+6. resolve Privacy Policy metadata consistency;
+7. verify the iPad Air 11-inch (M3) reviewer path;
+8. finalize App Review navigation notes and any required screen recording;
+9. upload only the exact validated artifact;
+10. verify processing and attach the corrected build;
+11. only then authorize resubmission.
+
+Do not reply to Apple or resubmit until the corrected release and remaining store-side gates are complete.
+
+### 2. GPLAY-HC-P0.5 — Google Play Health Connect corrected release
+
+Status: 99.5% — SUBMITTED / WAITING GOOGLE REVIEW.
+
+Verified:
+- corrected Production submission uses versionCode `1783342121`;
+- active Health Connect scope is limited to Heart Rate, Body Temperature, Sleep and Menstruation.
+
+Next gate:
+- wait for Google's review outcome;
+- mutate nothing unless Google supplies concrete new evidence.
+
+### 3. FINAL-E2E — final release reconciliation
+
+Status: 99% EST. — ACTIVE / LOCAL RELEASE ARTIFACT CHAINS VERIFIED / STORE-SIDE CLOSURE OPEN.
+
+Verified:
+
+- full Flutter analyzer: zero issues;
+- full test suite: `859/859 PASS`;
+- release contracts: `325/325 PASS`;
+- automated FINAL-E2E gate: PASS;
+- Wellness/Health remains 100% CLOSED;
+- Android Purchase/Restore remains CLOSED;
+- iPhone Purchase/Restore remains CLOSED.
+
+Android final local release chain:
+
+- package: `com.flowai.app`;
+- versionName: `2.2.4`;
+- versionCode: `1790713306`;
+- exact final AAB:
+  `Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab`;
+- AAB SHA-256:
+  `2e003c1b51d37c3d095c90d4b9305ed653f4e94ec299093072a5f74183b40c80`;
+- device-specific APKS SHA-256:
+  `580bd02c33e8e0838e7a9feeeda6ce87280c0197bacd35e5116d56256cd1caca`;
+- expected upload signer:
+  `CN=Flow AI Upload, OU=Mobile Release, O=Flow AI`;
+- signer SHA-256:
+  `f3a9c676a1a800f6df355b49d292e6273a7c8395b56c5d19e8df56e88c7afbd6`;
+- exact APKS installed in place on physical Samsung;
+- installed versionCode `1790713306`: PASS;
+- installed versionName `2.2.4`: PASS;
+- launch: PASS;
+- CMP / UMP final gate: PASS;
+- no Publisher misconfiguration/forms error observed;
+- crash gate: PASS;
+- temporary signing material removed.
+
+Google Play state:
+
+- currently submitted Production artifact remains historical versionCode `1783342121`;
+- corrected final `1790713306` artifact has NOT been uploaded to Play;
+- Google review outcome remains external/open.
+
+iOS final local release chain:
+
+- physical reviewer correction gate: PASS;
+- exact distribution IPA SHA-256:
+  `daa8b1fb7ea204eaf2b379662c853aacf605445e23e1f2d4cf0d460b84aa8dac`;
+- build `1790713306`;
+- Apple Distribution signature: PASS;
+- App Store provisioning profile: PASS;
+- `get-task-allow=false`: PASS;
+- HealthKit entitlement: PASS;
+- all embedded Mach-O binaries arm64/iOS-device only: PASS;
+- prior Transporter architecture/platform defect absent: PASS;
+- App Store Connect server validation still open because local ASC authentication is unavailable;
+- IPA upload/processing/build attachment/resubmission have NOT occurred.
+
+Remaining FINAL-E2E gates:
+
+1. current Apple store-side metadata/IAP/reviewer/iPad gates;
+2. App Store Connect server validation;
+3. exact corrected iOS upload + processing + build attachment;
+4. current Google review/replacement release decision;
+5. final store-state reconciliation.
+
+### FINAL-E2E.A — Android submitted-artifact drift
+
+Status: 99% EST. — EXACT FINAL REPLACEMENT ARTIFACT PHYSICALLY VERIFIED / PLAY REPLACEMENT NOT YET UPLOADED.
+
+Historical submitted Production artifact:
+
+- versionCode: `1783342121`;
+- previous submitted AAB SHA-256:
+  `906b4396a9f8cdac2f19d76d509c51609a32b4eb6fc8794a851d2ffa899157c2`.
+
+Current authoritative replacement:
+
+- file:
+  `Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab`;
+- versionCode: `1790713306`;
+- versionName: `2.2.4`;
+- package: `com.flowai.app`;
+- SHA-256:
+  `2e003c1b51d37c3d095c90d4b9305ed653f4e94ec299093072a5f74183b40c80`;
+- generated device-specific APKS SHA-256:
+  `580bd02c33e8e0838e7a9feeeda6ce87280c0197bacd35e5116d56256cd1caca`;
+- release signer verified;
+- Health Connect minimum-scope contract: PASS;
+- Billing Client 8.0.0: PASS;
+- production receipt endpoint: PASS;
+- CMP / UMP runtime: PASS;
+- physical Samsung install: PASS;
+- launch: PASS;
+- crash gate: PASS.
+
+Decision:
+
+- this final AAB supersedes earlier local replacement candidates for current release authority;
+- do not use the older `aac1c237...` candidate as the current final artifact;
+- no Play upload has occurred for versionCode `1790713306`;
+- preserve exact artifact hash/signature/runtime evidence before any Play mutation.
+
+Next gate:
+
+- reconcile current Google review status and authorize any replacement upload only after the complete release gate remains green.
+
+### 4. FINAL RELEASE
+
+Status: 99.5% EST. — ACTIVE / LOCAL ANDROID + IOS RELEASE CHAINS PASS / STORE-SIDE COMPLETION REMAINS.
+
+Verified local release state:
+
+- Android final patched artifact chain: PASS;
+- Android physical install/launch: PASS;
+- Android CMP / UMP: PASS;
+- Android crash gate: PASS;
+- iPhone reviewer correction physical gate: PASS;
+- iOS App Store distribution IPA: PASS;
+- iOS distribution signing/profile/entitlements: PASS;
+- iOS arm64/device-platform forensic gate: PASS;
+- prior Transporter architecture defect absent: PASS;
+- full tests: `859/859 PASS`;
+- release contracts: `325/325 PASS`;
+- analyzer: zero issues.
+
+Repository integration gate — 2026-10-02:
+
+- explicit release staging: PASS;
+- staged release file count: `419`;
+- intended tracked deletions: `11/11` staged;
+- unstaged release-owned tracked files: `0`;
+- untracked release-owned files: `0`;
+- generated Firebase hosting cache remains intentionally unstaged;
+- final Android AAB remains intentionally untracked;
+- opaque zero-byte diagnostic file remains intentionally untracked;
+- Xcode Cloud generated manifest remains intentionally untracked;
+- index conflict-marker gate: PASS;
+- staged secret-file gate: PASS;
+- final staged-tree hash:
+  `2bf499f48f20b120be4a85013d690eef82901f18`;
+- branch remained:
+  `release/central-integration-20260720`;
+- HEAD remained:
+  `94efbc4a9f5a8472306c833efa7acb0f5bc0462b`.
+
+Hard release policy:
+
+1. build success alone never authorizes submission;
+2. exact artifact identity must pass;
+3. exact artifact signature must pass;
+4. architecture/platform provenance must pass;
+5. physical critical-path verification must pass;
+6. purchase/restore/entitlement gates must pass;
+7. privacy/consent/Health policy gates must pass;
+8. reviewer-required navigation must pass on the shipped binary;
+9. store metadata/product associations must match the shipped binary;
+10. server validation must pass where available;
+11. no unresolved P0/P1 release blocker may remain;
+12. only then may upload/submission be authorized.
+
+Next gate:
+
+- complete Apple store-side validation/metadata/iPad/reviewer gates;
+- reconcile Google review/replacement state;
+- close FINAL-E2E;
+- only then close FINAL RELEASE.
+
+### Permanent invariant — complete action/change recording
+
+Status: PERMANENT.
+
+For every active Flow Ai engineering mission:
+1. record every accepted requirement or clarification;
+2. record every recommended mutation before/when it is applied;
+3. record failed or aborted attempts and why they stopped;
+4. record exact tests, analyzer/build/runtime/device evidence;
+5. record remaining actions and the exact next gate;
+6. never silently drop, renumber away, or forget an unresolved action;
+7. update this canonical ledger during the same engineering cycle.
+
+## Closed items that must not silently return to the active queue
+
+- Wellness/Health — 100% CLOSED
+- MON-13 — Android Purchase/Restore — CLOSED
+- MON-14 — iPhone Purchase/Restore — CLOSED
+- MON-15 — Final E2E Regression — CLOSED
+- UX-5 — centralized confirmation/destructive dialogs — CLOSED
+- UX-6 — global header/back-navigation consistency — CLOSED
+- UX-6.5B — centralized About dialog — CLOSED
+- M5-IDC1-A / CHAT-ISO — CLOSED
+- MON12-TEST1 — CLOSED
+- MON-X-EXPORT1 — CLOSED
+- MON12-AD7 — CLOSED
+- QA-INT1 — CLOSED
+- C10.13L — Android App Links / `/invite/:code` — CLOSED
+- IDENTITY-CLOUD-HARDENING — CLOSED
+- C10.13I.3F — authoritative already-active checkout guard — 100% CLOSED
+
+
+## Immediate execution order
+
+1. `FINAL-E2E` — reconcile exact submitted Apple and Google release state.
+2. `APPLE-IAP-P0` — wait for Apple review outcome; mutate only on concrete Apple evidence.
+3. `GPLAY-HC-P0.5` — wait for Google review outcome; mutate only on concrete Google evidence.
+4. `FINAL RELEASE` — close only after FINAL-E2E and both store outcomes are resolved.
+
+
+
+#### Apple receipt-owner lifecycle — Phase 1 authoritative deletion state — 2026-09-27
+
+Status: IMPLEMENTED LOCALLY / VERIFIED / NOT DEPLOYED.
+
+Root cause retained:
+
+- `premiumReceiptOwners` previously had no explicit post-account-deletion lifecycle state;
+- deleting Firebase Auth identity did not transition durable receipt-chain ownership;
+- UID absence alone is not accepted as ownership-transfer proof.
+
+Phase 1 implementation:
+
+- added centralized `functions/src/receipt_owner_lifecycle.ts`;
+- added retry-enabled Firebase Auth `user.delete` background trigger;
+- trigger executes only after authoritative Firebase Auth deletion event;
+- owner documents are not deleted or manually reassigned;
+- matching canonical owner documents retain `ownerUid` and receive:
+  - `ownerStatus = auth_deleted`;
+  - `deletedOwnerUid = <deleted Firebase UID>`;
+  - authoritative server `deletedAt`;
+  - schema version 2;
+- retries are idempotent for already-marked owner documents;
+- each candidate is transactionally re-read before lifecycle transition;
+- missing/deleted transaction snapshots fail closed without mutation;
+- undefined transaction document data fails closed without mutation;
+- transition occurs only when the current `ownerUid` still equals the deleted Firebase UID;
+- an owner transferred after the initial query is skipped rather than overwritten by a stale deletion-trigger write;
+- the stale query-snapshot + batch-update race is removed;
+- no ownership transfer is enabled by Phase 1.
+
+Security invariants preserved:
+
+- current active-owner 409 behavior remains unchanged;
+- absence of a Firebase UID alone does not authorize transfer;
+- receipt ownership still precedes entitlement persistence;
+- cryptographic store validation remains untouched;
+- StoreKit / purchaseStream / mobile Firebase identity logic is untouched.
+
+Verification:
+
+- Functions lint: PASS;
+- Functions typecheck: PASS;
+- Functions build: PASS;
+- dedicated receipt-owner lifecycle runtime tests: PASS;
+- transactional stale-owner regression contract: PASS;
+- transferred/current-owner mismatch is skipped: PASS;
+- missing/undefined transaction data fails closed: PASS;
+- full Functions test suite: PASS;
+- receipt-service ownership regression suite and smoke: PASS;
+- compiled Firebase Auth trigger metadata proves retry enabled;
+- branch / HEAD / staged tree protection retained.
+
+Deployment:
+
+- NOT DEPLOYED yet.
+- Do not deploy Phase 1 independently until Phase 2 receipt-service transfer CAS is implemented and verified.
+
+Exact next gate:
+
+1. teach receipt-service owner reads to distinguish legacy-active / active / auth-deleted state;
+2. add atomic compare-and-set transfer using owner document `updateTime`;
+3. preserve normal different-active-owner HTTP 409;
+4. prove racing transfer cannot double-claim;
+5. only then evaluate controlled handling of the pre-existing Apple orphan.
+
+
+
+#### Apple receipt-owner lifecycle — Phase 2 atomic deleted-owner transfer — 2026-09-27
+
+Status: IMPLEMENTED LOCALLY / VERIFIED / NOT DEPLOYED.
+
+Implementation:
+
+- receipt-owner reads now use explicit typed lifecycle state;
+- schema-v1 owner documents with no `ownerStatus` remain ACTIVE by default;
+- `ownerStatus = active` remains ACTIVE;
+- only valid `ownerStatus = auth_deleted` with matching `deletedOwnerUid` is transferable;
+- malformed or unknown owner lifecycle state fails closed;
+- transfer authority never depends on Firebase UID absence;
+- deleted-owner transfer uses Firestore `updateTime` compare-and-set;
+- successful transfer writes:
+  - new `ownerUid`;
+  - `ownerStatus = active`;
+  - `ownershipSource = deleted_owner_transfer`;
+  - schema version 2;
+  - `previousOwnerUid`;
+  - retained `deletedOwnerUid`;
+  - `transferredAt`;
+- stale CAS cannot overwrite a winning transfer;
+- same authenticated UID that already won the race is accepted idempotently;
+- another winning UID leaves the loser at HTTP 409 `receipt_owner_conflict`;
+- deleted former identity cannot reclaim the released receipt chain.
+
+Security invariants preserved:
+
+- ACTIVE different owner still returns HTTP 409;
+- cryptographic store verification remains upstream and unchanged;
+- receipt ownership remains before entitlement persistence;
+- legacy ownership migration remains fail closed;
+- no StoreKit / purchaseStream mutation;
+- no UID-existence shortcut;
+- no manual owner overwrite.
+
+Verification:
+
+- receipt-service lint: PASS;
+- receipt-service typecheck: PASS;
+- receipt-service full test suite: PASS;
+- receipt-service smoke: PASS;
+- ownership matrix verifies:
+  - first claim;
+  - same-owner idempotence;
+  - active cross-account conflict;
+  - authoritative deleted-owner transfer;
+  - deleted identity self-reclaim rejection;
+  - CAS race lost to another UID => 409;
+  - CAS race already won by current UID => idempotent success;
+  - entitlement write remains blocked after ownership rejection;
+  - legacy migration behavior;
+  - initial-create race behavior.
+
+Deployment:
+
+- Phase 1 and Phase 2 remain NOT DEPLOYED.
+
+Exact next gate:
+
+1. handle the already-existing Apple owner orphan without manually overwriting ownership;
+2. require narrow, auditable migration authority for the historical `IBvNE2` chain;
+3. prove that mechanism cannot release arbitrary ACTIVE owners;
+4. deploy lifecycle components only after that gate passes;
+5. physically restore on iPhone;
+6. verify Premium Active;
+7. verify unrelated-account replay still returns HTTP 409.
+
+
+### Release-ledger reconciliation closure — 2026-09-27
+
+Status: 100% — CLOSED / AUTHORITATIVE CURRENT STATE RECONCILED.
+
+Verified reconciliation:
+
+- historical OPEN / ACTIVE / percentage entries below remain preserved as chronological engineering history and must not override later closure evidence;
+- `MON12-OBS1A` is CLOSED after physical persistent-navigation telemetry verification;
+- `MON12-OBS1B` is CLOSED after centralized observability verification;
+- `MON-13` Android Purchase/Restore is CLOSED;
+- `MON-14` iPhone Purchase/Restore is CLOSED;
+- `MON-15` Final E2E Regression is CLOSED / 100%;
+- `UX2-F08` is CLOSED after physical iPhone + Android parity verification;
+- `MON12-AD6` is CLOSED after physical Android ad verification;
+- Calendar Android dead-space remains DEFERRED and separately tracked;
+- `MON12-BILL1` source/artifact compliance is CLOSED for exact Production AAB `1783342121`;
+- exact AAB `1783342121` contains Google Play Billing Client `8.0.0`;
+- exact AAB `1783342121` contains only the four approved Health Connect read permissions;
+- MON12-BILL1's only remaining dependency is external Play Console processing / warning refresh;
+- an external store wait is not an unfinished source-engineering mission and must not block the ordered engineering queue;
+- no historical section is deleted or rewritten merely to make old chronology look current.
+
+Current engineering priority after this ledger-integrity closure:
+
+1. Apple receipt-owner lifecycle repair;
+2. Android Premium responsive composition;
+3. AdMob CMP / consent compliance;
+4. Apple subscription review / Premium UX completion.
+
+Mission discipline:
+
+- finish, close, or explicitly name the external blocker for the current mission before moving down the queue;
+- never silently abandon an unresolved mission;
+- never resurrect a closed mission from stale historical text without new reproducible evidence;
+- update this canonical ledger in the same engineering cycle.
+
+
+<!-- FLOW_AI_CURRENT_RELEASE_STATE_END -->
+
+### Permanent invariant — screenshots are qualitative evidence only
+
+Status: PERMANENT.
+
+Screenshots supplied during Flow Ai engineering are visual references only.
+
+Never:
+- derive pixel measurements from screenshots;
+- infer logical device dimensions from screenshot resolution;
+- assume two screenshots represent equivalent devices, density, safe areas,
+  text scaling, orientation or rendering conditions;
+- tune production geometry to one screenshot or one device model.
+
+Use screenshots only to identify qualitative symptoms such as:
+- clipping or truncation;
+- undesirable wrapping;
+- cramped or excessive spacing;
+- weak visual hierarchy;
+- inconsistent platform appearance;
+- missing or incorrect UI state.
+
+All responsive-layout decisions must be grounded in actual runtime/source evidence:
+- `MediaQuery.sizeOf(context)`;
+- logical width and height;
+- `MediaQuery.padding` / `viewPadding`;
+- text scaler;
+- device pixel ratio where genuinely relevant;
+- platform;
+- orientation;
+- source constraints and layout ownership;
+- physical-device runtime verification across representative iOS and Android devices.
+
+Flow Ai must use responsive constraint bands and platform-specific differences
+only where evidence requires them. Never optimize a production layout for one
+specific screenshot, screen resolution, phone model, or assumed viewport.
+
+Accepted iOS geometry must not be altered by Android-specific correction unless
+a separate verified iOS defect requires it.
+
+### Permanent invariant — no blind revert or overwrite
+
+Status: PERMANENT.
+
+Flow Ai production engineering must never use an old commit, backup, generated
+artifact, alternate AI output, or previous working version as justification for
+a blind revert, overwrite, restore, reset, or replacement.
+
+Before changing historically working or release-critical code:
+
+1. capture canonical branch, HEAD, staged tree and exact index hash;
+2. inspect HEAD, staged index and working-tree versions independently;
+3. inspect current callers, dependencies and authoritative ownership;
+4. inspect local Git log, blame, `-S`/`-G` history and relevant historical diffs;
+5. consult GitHub history for known-good checkpoints when the feature previously worked;
+6. determine exactly what changed and whether newer security, account isolation,
+   production validation, legal, health, billing or release hardening depends on it;
+7. define the smallest evidence-backed mutation;
+8. capture exact pre-mutation copies only for files the operation will modify;
+9. run targeted contracts, full relevant tests, analyzer/build and physical/store
+   verification as appropriate;
+10. update this mission ledger with the root cause, evidence, mutation and result.
+
+Forbidden without explicit owner instruction and verified necessity:
+- blanket `git reset`;
+- blanket `git restore`;
+- blanket `git checkout`;
+- `git clean`;
+- `git add .`;
+- overwriting the working tree with an old commit;
+- reverting an entire historical commit merely because one behavior used to work;
+- replacing current source with generated or archived source without a three-way audit.
+
+Rollback rule:
+- rollback is permitted only when a specific mutation performed in the current
+  controlled operation fails a gate;
+- rollback may restore only that operation's explicitly captured pre-images;
+- pre-existing staged, unstaged and untracked work must remain untouched.
+
+Historical commits are evidence for regression analysis, not automatic rollback targets.
+
+### Permanent invariant — mission ledger continuity
+
+Status: PERMANENT.
+
+Flow Ai is a production-grade, multi-mission commercial product. Engineering
+knowledge, release state, decisions and evidence must never exist only in chat.
+
+For every meaningful engineering cycle:
+
+- update `docs/mission_log.md` in the same cycle;
+- preserve stable mission/sub-mission identifiers;
+- record exact evidence, root cause and authoritative ownership;
+- record every implemented change;
+- record analyzer, test, contract, build, backend and physical-device evidence;
+- record store/review/deployment evidence;
+- record current evidence-backed status and progress;
+- record blockers and the exact next gate;
+- record owner-approved UX/product decisions;
+- record deferred and future work explicitly;
+- remove completed missions from the active queue;
+- never reopen a closed mission without a new reproducible regression;
+- never replace evidence with assumptions, estimates or inferred success;
+- never create a parallel mission ledger for the same release.
+
+Repository safety remains mandatory during ledger updates:
+
+- preserve the canonical branch;
+- preserve HEAD unless an explicit controlled commit gate is reached;
+- preserve the staged index and staged tree;
+- preserve unrelated staged, unstaged and untracked work;
+- never use blanket reset/restore/checkout/clean operations;
+- never use `git add .`.
+
+Mission completion requires both product evidence and durable Git-tracked
+documentation. A mission is not considered fully closed if its important
+findings, evidence, blocker or next gate have not been recorded here.
+
+
+### Global invariant — Git-tracked engineering knowledge
+
+Status: PERMANENT
+
+Important Flow Ai engineering knowledge must not exist only in chat.
+
+`docs/mission_log.md` remains the single authoritative durable engineering
+ledger for the active release and future-release backlog.
+
+The following must be recorded in Git during the same engineering cycle in
+which they are discovered, proposed, verified, deferred, blocked or closed:
+
+- release findings and root causes
+- important engineering recommendations and implementation suggestions
+- user-approved product and UX decisions
+- newly discovered defects, risks and external blockers
+- physical Android and iPhone verification results
+- store, review and deployment evidence
+- analyzer, test, contract, build and backend evidence
+- deferred improvements and future-release ideas
+- exact next gates for ACTIVE or BLOCKED missions
+- lessons that affect future implementation or release safety
+
+Rules:
+
+1. Chat-only notes are not authoritative project documentation.
+2. Important work belongs under an existing mission or receives a stable
+   mission/sub-mission identifier.
+3. Suggestions remain suggestions until implemented and verified.
+4. Deferred ideas are explicitly marked DEFERRED and cannot silently enter the
+   current release.
+5. Current-release findings state both evidence and the exact remaining gate.
+6. Completed items leave the active blocker list while historical evidence is
+   preserved.
+7. Never create a parallel mission plan for the same release.
+8. Never invent percentages, closure, test evidence, physical evidence or store
+   status.
+9. Significant scope, priority or product-behavior decisions are documented in
+   Git immediately.
+10. Repository documentation is maintained alongside engineering execution,
+    not reconstructed from chat after the release.
+
+Current-release focus:
+- execute only current release missions until release closure
+- REP-01 / public repository professionalization remains deferred
+- first-run biometric enrollment and biometric recovery UX remain deferred
+  future-release work
 
 ### Global invariant — centralized adaptive cross-platform ownership
 
@@ -90,7 +769,7 @@ Verified:
 - targeted Identity Flutter analyzer reports 0 issues
 
 Remaining:
-- physical AppLock lifecycle verification on Android and iPhone
+- physical AppLock lifecycle verification on Android and iPhone — PASS / CLOSED
 - physical greeting verification using the same authenticated account
 - final account-isolation release sweep
 - controlled physical account-deletion verification using a disposable test account
@@ -592,7 +1271,7 @@ Remaining:
 - controlled physical deletion verification using a disposable test account
 - final account-isolation release sweep
 
-### P0.6A App Lock Lifecycle - IMPLEMENTED / PHYSICAL VERIFICATION PENDING
+### P0.6A App Lock Lifecycle - 100% — PHYSICAL ANDROID + IPHONE VERIFIED / CLOSED
 
 Physical Android testing proved the biometric lock was appearing after
 temporary system flows such as Health Connect.
@@ -615,7 +1294,7 @@ Release correction:
 A future time-based background lock must use an explicitly defined
 product/security policy before enforcement.
 
-Physical Android and iPhone verification remain required.
+Physical Android and iPhone Release verification: PASS.
 
 ## P0.7 Physical Android and iPhone Verification - PENDING
 
@@ -839,6 +1518,13 @@ Historical implementation completed.
 
 Current release revisit:
 - `M1-R` for current deep-link/store compliance if proven relevant
+- C10.13L current-release revisit CLOSED on 2026-09-27:
+  - Play-installed signing certificate verified;
+  - Google Digital Asset Links service recognizes the current Play certificate;
+  - Android domain state reached `verified`;
+  - clean `/invite/AB23CD` App Link opened `com.flowai.app/.MainActivity`;
+  - no GoRouter route exception occurred;
+  - fake test code reached the real invite handler and returned invalid-invitation behavior as expected.
 
 ## M2 Identity and Sign-In Recovery
 
@@ -3136,7 +3822,7 @@ Do not upload or submit this proof artifact. After all remaining product work is
 
 ### Authoritative current progress
 - General: 71%
-- Monetization: 73%
+- Monetization: 86%
 - Identity & Cloud: 60%
 - Wellness/Health: 100%
 
@@ -3175,7 +3861,7 @@ Do not upload or submit this proof artifact. After all remaining product work is
 - Required closure: targeted contracts, analyzer, full release contracts, then physical Android and iPhone restore verification.
 
 13. MON-13 Android purchase/restore — 100% — CLOSED
-14. MON-14 iPhone purchase/restore — RECALCULATION PENDING; physical Restore Purchases PASS; fresh physical purchase gate remains
+14. MON-14 iPhone purchase/restore — 100% — CLOSED; physical fresh purchase PASS + Restore Purchases PASS
 15. MON-15 Final E2E regression — 65%; final frozen-candidate regression remains
 
 ### Verified release-hardening work
@@ -3803,6 +4489,40 @@ Physical finding:
 - Staged index integrity remained unchanged throughout verification.
 - Source/release-artifact side is compliant. Final closure requires uploading the verified current AAB to the appropriate Google Play track and confirming the Play Console warning clears for the new artifact.
 
+
+#### MON12-BILL1 exact submitted-AAB closure evidence — 2026-09-27
+
+Status: SOURCE / ARTIFACT COMPLIANCE CLOSED — EXTERNAL PLAY CONSOLE CONFIRMATION ONLY.
+
+Exact corrected Production Android artifact independently verified:
+
+- artifact: `build/app/outputs/bundle/release/app-release.aab`;
+- SHA-256: `906b4396a9f8cdac2f19d76d509c51609a32b4eb6fc8794a851d2ffa899157c2`;
+- package: `com.flowai.app`;
+- versionName: `2.2.4`;
+- versionCode: `1783342121`;
+- compile SDK: `36`;
+- target SDK: `36`;
+- exact packaged Billing Client: `8.0.0`;
+- exact packaged Health Connect read scope:
+  - `READ_HEART_RATE`;
+  - `READ_BODY_TEMPERATURE`;
+  - `READ_SLEEP`;
+  - `READ_MENSTRUATION`;
+- AAB ZIP integrity: PASS;
+- AAB signature verification: PASS;
+- exact manifest identity was read directly from the AAB with Bundletool 1.18.1 and its full Gradle-resolved transitive classpath;
+- stale Sep-25 Gradle intermediates showing versionCode `1790249370` were explicitly rejected as identity evidence because they post-date this Sep-24 AAB.
+
+Decision:
+
+- Flow Ai Android source/artifact Billing compliance is proven for the exact corrected Production AAB `1783342121`;
+- do not rebuild or mutate Android merely to re-prove Billing;
+- remaining MON12-BILL1 dependency is external only: Play Console must process the submitted Production release and clear/refresh the historical Billing warning;
+- this external wait must not block unrelated engineering work;
+- reopen source/artifact Billing work only if Google supplies concrete contrary evidence.
+
+
 ### MON12-AD6 — Android ad startup delay
 
 **Status:** PHYSICAL FUNCTIONAL GATE PASSED — EXACT TIMING METRIC OPTIONAL/FOLLOW-UP
@@ -4395,3 +5115,3237 @@ Verified on physical Android:
 - The pinned header must not cover plan state, restore results, entitlement truth, or purchase-management controls.
 - Validate on both physical Android and iPhone before release.
 - This is future UX work and must not interrupt the current MON12/MON15 release gates.
+
+### MON12-OBS1B — centralized observability closure
+
+- ProductionAnalyticsService remains the single authoritative analytics owner.
+- Purchase and restore user actions are emitted from SubscriptionProvider.
+- Ad lifecycle telemetry is emitted from AdMobService.
+- Consent lifecycle telemetry is emitted from AdConsentService.
+- Existing entitlement-transition analytics remain authoritative and were not duplicated.
+- Existing release-critical error analytics remain authoritative and were not duplicated.
+- OBS1B payload keys are restricted to non-sensitive operational metadata.
+- No receipt, purchase token, transaction identifier, UID, authentication token, email, phone, address, or password is emitted by the new OBS1B telemetry.
+- Android/iOS share the same semantic telemetry contract; platform SDK differences remain inside existing adapters.
+- Analytics privacy/account-isolation contracts pass.
+- Full Premium test surface passes.
+- Flutter analyzer reports zero issues.
+- HEAD and staged index remained protected.
+- MON12-OBS1B: CLOSED.
+
+
+### UX-3 — Daily Feelings Scroll/Spring — 100% — CLOSED 🔒
+
+- Authoritative UI owner: `lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart`.
+- Root layout defect: terminal `SliverPadding(bottom: 100)` created an excessive persistent bottom gap.
+- Final terminal margin: `24`.
+- Global `AppScrollBehavior` provides `BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())`.
+- `AppScrollBehavior` is wired once to both `CupertinoApp.router` and `MaterialApp.router`.
+- Daily Feelings has no competing local physics, `ScrollConfiguration`, or nested scroll owner.
+- Targeted Daily Feelings regression tests passed.
+- Flutter analyzer reports zero issues.
+- Physical Android verification passed.
+- Physical iPhone verification passed.
+- UX-3 is closed and locked.
+
+
+### UX-4 — Daily Feelings First-Landing Shortcut — FUTURE P1
+
+- Goal: make Daily Feelings immediately discoverable from the Home first-landing experience.
+- Preferred design: prominent state-aware Home card/cell high in the initial viewport.
+- Not recorded today: `Check in now`.
+- Already recorded: show today's state with `View / Update`.
+- Reuse the existing authoritative Daily Feelings route, persistence and state ownership.
+- Do not create a duplicate tracker or parallel daily-feelings data model.
+- Do not force an intrusive modal on every launch.
+- Optional future enhancement: subtle once-per-day emphasis/highlight on the Home card.
+- Preserve accessibility, responsive geometry, dark/light themes, health-data truthfulness and Android/iPhone parity.
+- Must not conflict with critical health alerts, Premium truth, navigation or ad policy.
+- Requires contracts plus physical Android+iPhone verification before closure.
+- Future-release work; not a blocker for the current release.
+
+### MON15-F01 — Premium claim truth reconciliation — CLOSED 🔒
+
+- Release-proven Premium wording restored:
+  - `Explore your health trends and tracked patterns`
+  - `Download reports in PDF or CSV format`
+- No new Premium capability was introduced.
+- Premium claim contract passes.
+- Premium regression remains green.
+
+### MON15-F02 — Flow runtime-height stale contract — CLOSED 🔒
+
+- Failing runtime-height contract was proven to be an untracked worktree-only file.
+- It did not exist in HEAD or the Git index.
+- It was the only repository location asserting the retired `usableRowsHeight` / per-row-height algorithm.
+- Production Flow remains the physically verified whole-grid responsive implementation.
+- `maxGridHeight`, natural-grid ownership and whole-grid `FittedBox(scaleDown)` behavior remain intact.
+- No production Flow mutation was required.
+- The stale untracked contract was removed after preserving its SHA-256 outside the repository.
+
+### Identity / Cloud Action 64A — deep static release audit
+
+- Identity contract suite: 29/29 PASS.
+- Targeted Identity analyzer: 0 issues.
+- AuthService owner count: 1.
+- AppLockService owner count: 1.
+- CloudDataDeletionGateway owner count: 1.
+- ProductionAnalyticsService owner count: 1.
+- Automatic owner/duplicate guard: PASS.
+- AppLock physical Android + iPhone verification: PASS / CLOSED.
+- Remaining Identity physical gates:
+  - same-account greeting parity
+  - final account-isolation release sweep
+  - disposable-account deletion verification
+
+### REP-01 — Public Repository Professionalization — DEFERRED / FUTURE
+
+Scope:
+- audit all ZyraFlow / Flow Ai public repositories
+- standardize professional README structure and branding
+- remove stale, duplicate, experimental, or misleading public documentation
+- verify every public link, store link, badge, screenshot, logo, and product reference
+- standardize repository descriptions, topics, naming, screenshots, and release information
+- ensure public documentation reflects only real production capabilities
+- review contributing, license, security, architecture, setup, and developer documentation where applicable
+- preserve clean visual presentation across desktop and mobile GitHub rendering
+
+Rule:
+- execute only after immediate release blockers are closed
+- perform repository-by-repository evidence-first audits before cleanup
+- never rewrite historical/release evidence blindly
+
+### ID65 — Apple family-name greeting parity — CODE / CONTRACT VERIFIED; PHYSICAL PENDING
+
+Verified production behavior:
+- Sign in with Apple already requests `fullName`.
+- Apple `givenName` and `familyName` remain real provider-supplied identity data.
+- `familyName` is captured as `appleFamilyName`.
+- when Apple actually supplies a non-empty family name, that real value is
+  persisted as `greetingName`
+- the full Apple name remains the canonical profile/display name
+- same-account persisted greeting data may be reused
+- another account's greeting is never reused
+- existing Apple accounts with no provider/saved real name remain generic;
+  Flow Ai does not invent a surname
+- Google and email identity behavior is not intentionally changed by ID65
+- Home consumes the centralized account-scoped resolver; no iOS-only Home
+  presentation fork was introduced
+
+Action 70 verification:
+- targeted Identity regression: 23/23 PASS
+- release-contract suite: 269/269 PASS
+- targeted analyzer: 0 issues
+- full Flutter analyzer: 0 issues
+- staged index and canonical branch safety guards: PASS
+- final source proof confirmed `appleFamilyName`, `preferredGreetingName` and
+  `existingGreetingName` ownership
+
+Remaining release gate:
+- physical iPhone verification using a genuine first-time Sign in with Apple
+  authorization where Apple supplies `familyName`
+- expected evidence: full profile name remains intact and Home greeting uses the
+  real Apple family name
+- ID65 must not be declared physically closed before that evidence exists
+
+### ID65-PHY1 — Physical iPhone Apple family-name verification — ACTIVE
+
+Purpose:
+- close the final physical gate for ID65 Apple greeting identity parity
+
+Already verified before physical testing:
+- Apple Sign-In requests `fullName`
+- production captures real Apple `familyName`
+- a non-empty real family name is persisted as `greetingName`
+- canonical full profile/display name remains intact
+- same-account saved greeting may be reused
+- previous-account greeting cannot leak across account switches
+- targeted Identity tests: 23/23 PASS
+- release contracts: 269/269 PASS
+- full Flutter analyzer: 0 issues
+
+Required physical evidence:
+1. run the current Release source on a physical iPhone
+2. perform a genuinely renewed Apple authorization
+3. Apple must actually provide a family name during that authorization
+4. verify Home greeting uses that real family name
+5. verify profile/display name remains the complete Apple-provided name
+6. verify no previous account identity leaks into the new session
+
+Preferred test path:
+- revoke Flow Ai from the iPhone Apple Account `Sign in with Apple` list
+- re-authorize Flow Ai with Sign in with Apple
+- if Apple does not provide name fields after reauthorization, that session does
+  not qualify as closure evidence; use an Apple account that has not previously
+  authorized Flow Ai
+
+Closure rule:
+- ID65-PHY1 remains ACTIVE until physical screenshots/results prove the
+  expected behavior
+- do not fabricate or manually seed identity data to satisfy this gate
+- physical evidence must be recorded in this ledger immediately after test
+
+### ID65-PHY1-A1 — iPhone Apple-name physical attempt 1 — NOT CLOSED
+
+Physical evidence:
+- physical iPhone reached the Flow Ai Sign in with Apple flow
+- after authentication the Home screen rendered `Good morning!`
+- no greeting name was visible
+- expected Apple-family-name greeting was therefore NOT physically proven
+
+Important classification:
+- this result does not yet prove the Action 70 implementation is defective
+- two unresolved causes remain:
+  1. Apple did not return `givenName` / `familyName` for this authorization
+  2. Apple returned structured name data but the value did not survive the
+     AuthService -> persisted user data -> SettingsProvider -> Home path
+
+Required next gate:
+- audit the entire structured-name ownership and synchronization path
+- verify whether successful Apple authentication triggers Settings identity
+  refresh during the same session
+- verify `_storeUserData` actually persists `greetingName`
+- verify `getUserData()` returns the same-account persisted `greetingName`
+- verify Home receives refreshed SettingsProvider identity after sign-in
+- if static ownership is correct but the Apple credential payload remains
+  unknown, add temporary non-PII runtime evidence that records only whether
+  `givenName` and `familyName` are present; never log actual names
+- do not declare ID65 closed until a real physical family-name greeting is
+  observed or the product requirement is explicitly revised
+
+
+### ID65-A2 — Apple runtime payload proof — ACTIVE
+
+- Action 76 stopped because the expected diagnostic source had not yet been applied.
+- Apple repeat authorization now preserves an existing real same-account greeting.
+- Opt-in `FLOW_AI_ID65_DIAGNOSTICS` logs presence booleans only; no names or tokens.
+- Next gate: physical iPhone Apple authorization and capture of `ID65_APPLE_IDENTITY_FIELDS`.
+
+
+### ID65-DIAG2 — Direct iPhone app-container evidence — ACTIVE
+
+- Flutter Release stdout did not expose the ID65 Dart diagnostic.
+- `flutter logs` and `devicectl --console` are no longer accepted as the evidence path.
+- native iOS console output was visible, proving the device console itself works.
+- next evidence path is direct inspection of the physical iPhone app data container.
+- target: Flow Ai SharedPreferences / persisted `user_data`.
+- if needed, diagnostic booleans will be persisted to a temporary dedicated key and read directly from the app container.
+- no actual Apple name, email, token or identifier will be logged or exported.
+
+
+### ID65-DIAG3 — Native Apple callback trace — ACTIVE
+
+- Initial LLDB attempt resolved the Apple authorization callback breakpoint to one native location.
+- The attempt did not attach to an active Flow Ai process; LLDB returned `Process must be launched`.
+- No Apple credential payload conclusion can be drawn from that attempt.
+- Next gate: launch `com.flowai.health` suspended, isolate a fresh PID, verify LLDB attachment, then trace the native Apple callback.
+
+### ID65-DIAG4 — Presence-only in-app Apple diagnostic — ACTIVE
+- Physical diagnostic uses normal app execution; no LLDB/process attach.
+- Enabled only with `FLOW_AI_ID65_DIAGNOSTICS=true`.
+- Shows only presence/absence for given name, family name, stored greeting and resolved greeting.
+- Temporary diagnostic UI must be removed before release closure.
+
+### AUTH-F01 — Apple + Google only authentication — DEFERRED
+- Future Sign Up and Sign In direction: Apple ID and Google ID only.
+- Provider identity and name capture must remain authoritative and account-scoped.
+- Existing email/password users require migration and recovery audit before legacy authentication UI removal.
+- Settings name editing remains fallback only.
+
+
+### ID65-AUDIT88 — Full static release audit — PASS
+- Apple structured name capture verified.
+- Same-account Apple identity preservation verified.
+- One-time account-scoped missing-name recovery verified.
+- ID65 regression contract passed.
+- authenticated-name contract passed.
+- Premium monetization contract passed.
+- shared-selector accessibility contract passed.
+- identity resolver tests passed.
+- full release-contract suite passed.
+- full Flutter test suite passed.
+- full analyzer passed with zero issues.
+- Android release build passed.
+- iOS Release build passed.
+- Final ID65 gate: physical iPhone recovery/greeting verification.
+- Temporary ID65 diagnostic must be removed after physical proof.
+
+### ID65 — Apple greeting identity parity — CLOSED
+
+Physical Release evidence:
+- Sign in with Apple completed on physical iPhone.
+- No manual name-entry/recovery dialog remained.
+- Home rendered `Good morning, Black!` from same-account persisted identity.
+- Automatic Apple structured-name capture remains enabled when Apple supplies name data.
+- Same-account stored identity remains the fallback when Apple omits name on later authorization.
+- Temporary ID65 diagnostic UI/logging removed before release closure.
+- Release contracts PASS.
+- Full analyzer PASS with zero issues.
+
+Status: CLOSED.
+Reopen only for a reproducible identity/greeting regression.
+
+### MON15-PHY-FINAL — Final two-device smoke — PASS
+- User physically reviewed the final Android and iPhone Release candidates.
+- Home, Track, Daily Feelings, Health, Insights, Premium and Settings were reported working normally.
+- No release-blocking visual/runtime regression was reported.
+- Remaining MON15 gates: final account-isolation/deletion sweep and final artifact/signing integrity lock.
+
+### UX-AUTOSAVE — Selection-driven persistence — DEFERRED / NEXT RELEASE
+Product direction:
+- remove unnecessary Save confirmation UI when a user selection already represents a complete value;
+- Daily Feelings ratings, symptom severity/number selections, Track selections and equivalent single-action controls should persist automatically;
+- multi-field or incomplete forms must not be auto-saved prematurely.
+
+Engineering requirements:
+- deep-audit each authoritative persistence owner before mutation;
+- centralize shared autosave behavior rather than adding screen-specific implementations;
+- debounce rapid changes and make writes idempotent;
+- expose truthful saving/error state and recover cleanly from persistence failure;
+- never fabricate successful persistence;
+- preserve accessibility, haptics, analytics/privacy boundaries and account isolation;
+- require contracts plus physical Android+iPhone verification before closure.
+
+Status: DEFERRED until current release closure.
+
+### MON15 account isolation / deletion — static release gate PASS
+- Deep ownership audit found no production mutation requirement.
+- Account-attributed analytics state is centrally rebound/cleared across authenticated account changes.
+- Subscription ownership remains bound to the active authenticated account/generation.
+- Cloud deletion uses the existing authenticated Firebase identity and secured `deleteMyCloudData` callable.
+- Deletion fails closed when backend success or Firebase identity deletion is not confirmed.
+- Targeted account/deletion/isolation regression suite: PASS.
+- Targeted analyzer across authoritative account/deletion owners: 0 issues.
+- Staged Git tree/index remained protected.
+- Remaining gate: controlled physical deletion using a disposable account, followed by final artifact/signing integrity lock.
+
+### MON15 account deletion physical regression — root cause and Action 113 fix
+
+Status: ACTIVE — ROOT CAUSE FIXED; PHYSICAL CLEAN-RELEASE VERIFICATION PENDING
+
+Root-cause evidence:
+- Android physical confirmation callback reached deletion stages 01 and 02 but never reached stage 03 / AuthService deletion.
+- The confirmation Delete Account control subsequently remained disabled.
+- `AccountManagementScreen` set `_isDeletingAccount = true` before resolving `AuthService`.
+- The screen attempted `Provider.of<AuthService>(context, listen: false)` even though `AuthService` is not registered in the application MultiProvider tree.
+- `AuthService` is an application singleton and established production owners use `AuthService()` directly.
+- The exception occurred before the deletion method's existing try/finally boundary, leaving `_isDeletingAccount` true and preventing subsequent deletion attempts.
+- Therefore the Firebase callable was never reached; backend deletion was not the originating defect.
+
+Action 113:
+- replaced both Account Management `Provider.of<AuthService>` lookups with the authoritative `AuthService()` singleton;
+- dependency resolution now occurs before `_isDeletingAccount` changes to true;
+- added a release regression contract prohibiting reintroduction of an Account Management AuthService Provider dependency and locking dependency-before-delete-state ordering;
+- no backend deletion, receipt, entitlement, or Firebase authorization semantics were weakened.
+
+Required next gate:
+1. build and redeploy the exact clean Android Release;
+2. use a disposable account only;
+3. physically confirm Delete Account becomes actionable;
+4. verify deletion reaches the cloud callable;
+5. verify Firebase identity deletion succeeds;
+6. verify local account data is cleared;
+7. verify app returns to unauthenticated auth flow and remains signed out after relaunch;
+8. then complete MON15 final artifact/signing integrity lock.
+
+### MON15 account deletion — physical production closure
+
+Status: CLOSED / PASS
+
+Final Android physical evidence:
+- exact clean Release candidate rebuilt and redeployed;
+- temporary FLOW_DELETE_STAGE instrumentation absent from release APK;
+- disposable authenticated account successfully completed Delete Account;
+- app logged the user out after deletion;
+- deployed `deleteMyCloudData` callable received and verified the authenticated request;
+- Cloud Run request returned HTTP 200;
+- backend emitted `USER_CLOUD_DATA_DELETED`;
+- backend reported `documentCount=1`;
+- Firebase/cloud deletion path therefore completed successfully;
+- repository branch, HEAD and staged index safety guards remained unchanged.
+
+Root cause:
+- AccountManagementScreen incorrectly depended on `Provider.of<AuthService>` although AuthService is an application singleton and is not registered in the root Provider tree.
+- The failing lookup occurred after `_isDeletingAccount` was set true but before the existing try/finally boundary, leaving the delete action stuck disabled.
+- Account Management now resolves the authoritative `AuthService()` singleton directly and dependency resolution occurs before entering deleting state.
+
+MON15 account-deletion gate is CLOSED.
+Do not reopen without a new reproducible regression.
+
+Next MON15 gate:
+- final frozen AAB + IPA artifact generation;
+- Android signing/certificate verification;
+- iOS archive/export/signing/provisioning verification;
+- SHA-256 lock of final store artifacts.
+
+### MON15 account deletion — CLOSED
+
+Final physical Android evidence:
+- disposable account deletion completed successfully;
+- backend emitted USER_CLOUD_DATA_DELETED;
+- deleted document count: 1;
+- app returned to Login / Sign Up;
+- force-stop + relaunch remained unauthenticated;
+- deleted account session did not resume;
+- repository branch, HEAD and staged index remained protected.
+
+Root cause:
+- AccountManagementScreen used Provider.of<AuthService> although AuthService is an application singleton and is not registered in the root provider tree.
+- The failure occurred after _isDeletingAccount became true and before the existing try/finally path, leaving deletion stuck.
+- Account Management now resolves the authoritative AuthService() singleton.
+
+Status: CLOSED / PASS.
+Do not reopen without a new reproducible regression.
+
+### MON15 — FINAL RELEASE CLOSURE — CLOSED
+
+Status: 100% — CLOSED / PASS
+
+Final closure evidence:
+- final Android and iPhone physical smoke verification passed;
+- Android account deletion regression is resolved and physically verified;
+- disposable Firebase account deletion completed successfully;
+- backend emitted `USER_CLOUD_DATA_DELETED`;
+- backend deletion evidence reported `documentCount=1`;
+- force-stop and relaunch remained on Login / Sign Up with no deleted-session resurrection;
+- final Android App Bundle built successfully;
+- final iOS IPA built successfully;
+- Android/iOS release artifacts contain no temporary `FLOW_DELETE_STAGE` instrumentation;
+- final Android AAB SHA-256:
+  `84930bf2091a23be60dc6f714491ef866518ef36c35f90ccb31ad3ea6c53d254`;
+- final iOS IPA SHA-256:
+  `b3e313a00ae9b22adb56245d4155dc2a052c3e5e3390b15f2f6f60389441c680`;
+- iOS distribution identity:
+  `Apple Distribution: Geoffrey Rono (9FY62NTL53)`;
+- iOS bundle identifier:
+  `com.flowai.health`;
+- release version/build:
+  `2.2.4 / 1783342119`;
+- App Store provisioning uses production distribution with
+  `get-task-allow=false`;
+- provisioning expiry verified through 2027-06-21;
+- branch, HEAD and staged-index integrity remained protected through the final gates.
+
+Account-deletion root cause:
+- `AccountManagementScreen` incorrectly attempted to resolve `AuthService`
+  through Provider although `AuthService` is the application singleton and was
+  not registered in the root Provider tree;
+- `_isDeletingAccount` became true before that failing dependency lookup,
+  causing the confirmation action to remain disabled after the exception;
+- Account Management now uses the authoritative `AuthService()` singleton and
+  resolves dependencies before entering deleting state.
+
+MON15 closure rule:
+- MON15 is complete and must be removed from the active blocker list.
+- Do not reopen MON15 without a new reproducible release regression.
+
+Remaining current-release external gate:
+- `MON12-BILL1` — Google Play approval/deployment confirmation.
+
+### UX-5 — Centralized confirmation and destructive dialog system
+
+Status: ACTIVE — audit complete; centralized implementation pending.
+
+Audit findings:
+- confirmation/destructive dialogs are currently duplicated across feature screens;
+- `AdaptiveMessages` already owns shared confirmation semantics and is the
+  preferred existing owner for centralization;
+- `AdaptiveComponents` and `PlatformService` provide broader adaptive UI
+  facilities and must not become duplicate confirmation owners;
+- Account Management Delete/Deactivate and Settings Sign Out are confirmed
+  migration candidates;
+- complex informational, medical, form-entry, selector and Premium dialogs are
+  explicitly outside this migration unless separately proven compatible.
+
+Design requirements:
+- compact title hierarchy and concise structured supporting copy;
+- consistent icon treatment;
+- centralized normal / warning / destructive action presentation;
+- clear primary and secondary actions;
+- truthful disabled/loading state;
+- minimum accessible touch targets;
+- responsive layout and text scaling;
+- dark/light consistency;
+- Android/iPhone parity without erasing genuine platform semantics;
+- no weakening of destructive confirmation safety.
+
+Current-release governance:
+- MON15 remains CLOSED;
+- MON12-BILL1 remains active pending Google Play approval/deployment;
+- UX-5 must not reopen completed release missions.
+
+### UX-6 — Global header and back-navigation consistency
+
+Status: ACTIVE — DEEP AUDIT IN PROGRESS
+
+Physical findings:
+- Partner Connect title typography is smaller than the established major
+  Home / Calendar-style section title scale.
+- Future Plans and Help Us Improve expose a different back-navigation visual.
+- Similar inconsistencies may exist elsewhere and must be discovered through
+  a repository-wide owner/reachability audit rather than patched from
+  screenshots alone.
+
+Required audit:
+1. inventory every app bar, SliverAppBar, custom header, back button,
+   leading control, title owner and section-header implementation;
+2. map which screens use shared owners versus local duplicated implementations;
+3. establish the authoritative major-screen title typography used by Home /
+   Calendar and compare Partner Connect and all other eligible screens;
+4. inventory `Icons.arrow_back`, `arrow_back_ios`, `chevron_left`,
+   Cupertino navigation/back controls, custom SVG/icons and literal `<` usage;
+5. classify screens by navigation semantics:
+   - main destination;
+   - pushed detail screen;
+   - modal/form;
+   - authentication/onboarding;
+   - platform-specific navigation;
+6. centralize title size/weight and back control at the highest safe shared
+   owner where semantics match;
+7. preserve platform accessibility, hit targets, SafeArea behavior,
+   RTL/directionality, dark/light appearance and navigator semantics;
+8. verify Android + iPhone physically after analyzer/contracts pass.
+
+Requested visual direction:
+- Partner Connect and other eligible major-screen titles should match the
+  established Home / Calendar title scale.
+- Eligible pushed-screen back controls should use the cleaner `<` /
+  chevron-left visual rather than the heavier Material arrow where proven safe.
+- Do not globally replace navigation icons until ownership and platform
+  semantics are proven.
+
+Release governance:
+- UX-5 must close first.
+- MON15 remains CLOSED.
+- MON12-BILL1 remains active pending Google Play approval/deployment.
+
+#### UX-5.13 — final destructive semantics and typography
+
+Status: SOURCE PASS — FINAL PHYSICAL VISUAL VERIFICATION PENDING
+
+Verified implementation:
+- destructive confirmation color now comes from `Theme.colorScheme.error`;
+- Delete Account no longer overrides destructive semantics with brand pink;
+- title typography standardized to 22px / bold;
+- primary confirmation copy standardized to 16px;
+- supporting confirmation copy standardized to 14px;
+- existing 48px minimum action target retained;
+- Deactivate remains warning-toned;
+- Sign Out remains non-destructive.
+
+Release governance:
+- MON15 remains CLOSED.
+- MON12-BILL1 remains active pending Google Play approval/deployment.
+- UX-6 begins only after UX-5 physical closure.
+
+
+#### UX-5.14 — physical two-platform closure
+
+Status: 100% — CLOSED / PASS
+
+Physical evidence:
+- Android Delete confirmation: PASS;
+- Android destructive action uses semantic red;
+- iPhone Delete confirmation: PASS;
+- iPhone destructive action uses semantic red;
+- iPhone Deactivate confirmation remains warning-orange;
+- title, primary copy, supporting copy, spacing and action geometry visually passed;
+- no clipping, overflow or broken action hierarchy observed.
+
+UX-5 is CLOSED.
+Do not reopen without a new reproducible confirmation-dialog regression.
+
+Next active UX mission:
+- UX-6 — Global header and back-navigation consistency.
+
+#### UX-6.1 — Partner Connect title ownership
+
+Status: SOURCE PASS — PHYSICAL VERIFICATION PENDING
+
+Root audit proved:
+- Partner Dashboard already had an approved chevron-like back control using
+  `Icons.arrow_back_ios_new`, size 22, rose; it was intentionally preserved.
+- The inconsistency was title typography ownership, not back navigation.
+- Partner Dashboard previously used local `theme.textTheme.titleLarge`.
+- Home, Calendar and Settings use centralized `AppPageTypography.title(context)`.
+- Partner Dashboard now uses the same centralized page-title owner.
+- Existing `Partner 🫂 Connect` / `Partner Connection` wording was preserved.
+- No Partner back-navigation behavior or visual was changed.
+
+Next UX-6 gate:
+- continue app-wide classification of raw page back controls and header/title
+  overrides before any further navigation mutation.
+
+#### UX-6.2 — page back-navigation consistency
+
+Status: SOURCE + CONTRACT PASS — PHYSICAL VERIFICATION PENDING
+
+Root audit proved:
+- Analytics Dashboard, Scan Partner QR and Help used heavy Material
+  `Icons.arrow_back` page-navigation controls.
+- Future Plans and Help Us Improve relied on framework implicit AppBar /
+  SliverAppBar leading, producing the same heavy Material back visual.
+- Existing Partner Connect, Daily Feelings, AI Coach, FAQ, Notifications,
+  Account Management and Premium controls already used acceptable chevron-like
+  navigation and were intentionally left unchanged.
+- Calendar `chevron_left` is a month-navigation control, not page navigation,
+  and was intentionally excluded.
+
+Implementation:
+- the five proven inconsistent page-navigation surfaces now use
+  `AppBackButton`;
+- Future Plans and Help Us Improve explicitly disable implicit leading;
+- navigation callbacks and existing route semantics were preserved;
+- Partner Connect back control was not changed.
+
+Next gate:
+- physical Android + iPhone visual verification of representative migrated
+  screens before UX-6 closure.
+
+#### UX-6.4 — centralized framework back navigation + runtime app metadata
+
+Status: SOURCE + CONTRACT PASS — PHYSICAL LICENSE VERIFICATION PENDING
+
+Root evidence:
+- Flutter framework LicensePage owns its implicit BackButton rather than a
+  Flow Ai feature screen.
+- The installed Flutter SDK exposes ThemeData.actionIconTheme with
+  ActionIconThemeData.backButtonIconBuilder.
+- AppTheme owns the authoritative Material themes; iOS Material themes derive
+  from the light/dark base themes.
+- stale runtime app identity/version values existed independently in Settings
+  About, ProductionAnalyticsService and DeploymentService.
+- PackageInfo was also being queried directly by premium receipt validation
+  and data export.
+
+Centralization:
+- AppTheme now owns the framework Material back-navigation chevron policy once
+  through ActionIconThemeData; Flutter-owned surfaces such as LicensePage
+  inherit the same clean chevron.
+- AppRuntimeMetadataService is now the single PackageInfo.fromPlatform owner.
+- Settings About, production analytics, deployment metadata, premium receipt
+  package identity and data export consume that runtime owner.
+- hardcoded release versions/build numbers were removed from those runtime
+  consumers.
+- platform-specific package/bundle identity now comes from the installed
+  application package rather than a cross-platform hardcoded identifier.
+
+Next gate:
+- rebuild exact Release candidate on Android + iPhone;
+- physically verify Licenses shows the clean chevron and current 2.2.4
+  application version;
+- then close UX-6 and regenerate/final-lock release AAB + IPA.
+
+#### UX-6 — global header/back-navigation consistency
+
+Status: CLOSED — SOURCE + CONTRACT + ANDROID + IPHONE PHYSICAL PASS
+
+Final physical evidence:
+- Partner Connect retained its approved chevron back control.
+- migrated page-level navigation surfaces use the centralized clean chevron.
+- Flutter-owned Licenses inherits the centralized framework back icon.
+- Licenses displays runtime application version 2.2.4.
+- Android physical Release verification PASS.
+- iPhone physical Release verification PASS.
+- back navigation operated normally with no observed clipping or alignment regression.
+
+Release consequence:
+- production source changed after the previously locked/submitted artifacts.
+- previous AAB/IPA hashes are superseded for source-integrity purposes.
+- exact current artifacts must be regenerated and re-locked before final release closure.
+
+#### UX-6.5 — professional centralized About dialog
+
+Status: SOURCE + CONTRACT PASS — PHYSICAL VERIFICATION PENDING
+
+Root cause:
+- Flutter stock AboutDialog uses a left-weighted identity/content hierarchy.
+- AlertDialog action layout does not provide the balanced equal-width action
+  geometry required for the Flow Ai visual system.
+
+Central implementation:
+- AdaptiveMessages owns the Flow Ai About dialog.
+- AppRuntimeMetadataService remains the single runtime version source.
+- dialog width is constrained consistently.
+- identity, version, legalese and description use one centered visual axis.
+- content uses deliberate vertical rhythm rather than scattered default
+  padding.
+- actions are a two-column equal-width row with identical 48px height and
+  fixed inter-button spacing.
+- View licenses preserves Flutter LicensePage and the centralized back-chevron
+  behavior.
+
+Next gate:
+- Android + iPhone Release physical verification.
+
+#### UX-6.5A — About action geometry correction
+
+Status: SOURCE + CONTRACT PASS — PHYSICAL VERIFICATION PENDING
+
+Evidence:
+- iPhone physical Release exposed a two-line `View licenses` label.
+- exact source audit proved the About action row still used two unweighted
+  Expanded children, giving unequal-length labels identical available width.
+- prior attempted mutation did not apply and rolled back cleanly.
+
+Central correction:
+- AdaptiveMessages remains the sole About action-layout owner.
+- View licenses receives flex 6 and Close flex 5.
+- both actions retain identical 48px height.
+- both labels are explicitly single-line with wrapping disabled.
+- both controls use the same controlled 12px horizontal internal padding.
+- no platform-specific typography or screen-local workaround was introduced.
+
+Next gate:
+- redeploy Android and iPhone Release candidates;
+- verify View licenses remains one line and both actions remain visually
+  balanced on both platforms.
+
+#### UX-6.5B — equal About action geometry
+
+Status: SOURCE + CONTRACT PASS — PHYSICAL VERIFICATION PENDING
+
+Physical finding:
+- the temporary 6/5 action-width correction prevented iPhone wrapping but
+  introduced visible asymmetry on Android.
+
+Final centralized design rule:
+- About actions use equal 50/50 outer widths.
+- both actions retain identical 48px height and identical internal padding.
+- both labels remain single-line.
+- FittedBox with BoxFit.scaleDown handles only genuine label-fit pressure
+  without changing button geometry.
+- Android and iPhone share the same implementation; no platform-specific
+  layout hack is used.
+
+Next gate:
+- physical Android + iPhone verification of equal button widths and
+  single-line View licenses label.
+
+### FUTURE UX — Disclosure chevron consistency
+
+Status: DEFERRED — NEXT RELEASE
+
+Goal:
+- standardize expandable/collapsible affordances across Flow Ai;
+- open / expand / view-more state uses downward chevron (`expand_more`);
+- close / collapse state uses upward chevron (`expand_less`);
+- centralize icon ownership instead of screen-local variants;
+- preserve accessibility labels, minimum touch targets, RTL behavior and
+  Android/iPhone consistency;
+- audit all accordion, expandable-card, disclosure and show/hide surfaces
+  before implementation;
+- verify physically on Android and iPhone before closure.
+
+#### FINAL RELEASE ARTIFACT RE-LOCK — 2.2.4+1783342120
+
+Status: ARTIFACT BUILD + STATIC INTEGRITY PASS
+
+Reason:
+- production source changed after the previous artifact lock due verified
+  UX-5 / UX-6 / UX-6.5 corrections.
+- Google Play version code 1783342119 was already used, therefore the corrected
+  candidate uses the next release build number 1783342120.
+
+Final release identity:
+- marketing version: 2.2.4
+- Android version code: 1783342120
+- iOS build number: 1783342120
+- Android application id: com.flowai.app
+- iOS bundle id: com.flowai.health
+
+Final artifacts:
+- AAB: Flow-Ai-2.2.4-1783342120.aab
+- AAB SHA-256: 25cd406cb5b25819c61b4b63d0cd4e797cefc3a10e00b73d65541b55a6fcf56b
+- IPA: Flow-Ai-2.2.4-1783342120.ipa
+- IPA SHA-256: 306e03eb775b0e7cd59757f21e9fb0a77cf63ca27682f3d761c2289d16472adc
+
+Integrity:
+- final analyzer PASS;
+- full release contracts PASS;
+- Android AAB generated from corrected source;
+- iOS IPA generated from corrected source;
+- iOS bundle version/build verified;
+- iOS code signature verified;
+- production provisioning profile verified with get-task-allow=false;
+- prohibited temporary diagnostic markers absent.
+
+Remaining external gate:
+- Google Play review/deployment confirmation for the production release flow.
+
+#### QA-INT1 — Google Play Internal Testing delivery verification
+
+Status: ACTIVE
+
+Store evidence:
+- corrected release `2.2.4+1783342120` published successfully to Google Play
+  Internal Testing;
+- Play Console accepted the release without a blocking upload/device-support
+  error;
+- Production promotion remains intentionally withheld.
+
+Next gate:
+- install/update Flow Ai through the Google Play Internal Testing distribution
+  path on the physical Android device;
+- verify the Play-delivered package reports version 2.2.4 / code 1783342120;
+- smoke-check launch, Home, Settings/About, Premium entry points and critical
+  navigation;
+- do not promote to Production before this gate passes.
+
+
+### REL-20260922 — Submission and ledger reconciliation
+
+Status: VERIFIED LOCAL ARTIFACTS; STORE EVENTS USER-REPORTED IN CONTINUATION HANDOFF.
+
+- Canonical repo/branch verified; HEAD is `94efbc4a9f5a8472306c833efa7acb0f5bc0462b`.
+- Substantial staged, unstaged and untracked work predates this audit. HEAD alone
+  does not identify the submitted source. Existing index/worktree preserved;
+  this audit changes only this existing ledger. No staging/commit/push,
+  branch operation, reset/restore, build, deployment or store mutation.
+- Source pubspec and Android local version configuration remain
+  `2.2.4+1783342120`. Platform build numbers need not match.
+- Existing closed missions remain closed, including ID65, MON13, MON14,
+  MON15, QA-INT1, UX-5, UX-6/6.5B and Wellness/Health. Historical ACTIVE
+  paragraphs do not override their later closure evidence.
+
+#### MON12-APPLE1 — final Apple submission
+
+- Handoff reports Transporter Delivered `2.2.4 (1783342121)` on 22 September
+  2026 at 14:26, followed by App Store Connect `1 Item Submitted` and
+  `iOS 2.2.4 — Waiting for Review`.
+- Current IPA: `build/ios/ipa/flow_ai.ipa`.
+- SHA-256 independently rechecked:
+  `9f4a3d5cd9588e515ca7483b7e266de6bd3eb79605ec4feaa49c12458439840a`.
+- Packaged plist independently confirms `com.flowai.health`, version `2.2.4`,
+  build `1783342121`, and all three restored usage strings below.
+- Handoff records valid distribution signing, HealthKit and Sign in with Apple
+  entitlements, and `get-task-allow=false`; these signing/entitlement checks
+  were not independently rerun in this Android-focused audit.
+- This IPA supersedes earlier iOS artifact hashes, including build 1783342120.
+- Next gate: authoritative Apple review outcome and live deployment evidence.
+  Do not replace/withdraw absent a concrete release-critical issue.
+
+Transporter history (handoff evidence):
+1. Missing `NSHealthUpdateUsageDescription` caused rejection despite read-oriented
+   application behavior, because the linked HealthKit/API surface was detected.
+2. Restored wording explicitly says Flow Ai does not write Apple Health data.
+3. Subsequent rejection required `NSLocationWhenInUseUsageDescription` and
+   `NSLocationAlwaysAndWhenInUseUsageDescription` for linked SDK/API capability.
+4. Both restored; final IPA delivered successfully.
+
+Lesson: direct application-call searches alone cannot justify purpose-string
+removal. Audit linked SDKs/frameworks, entitlements, packaged binary and Apple's
+actual static validation requirements. Required disclosure does not itself prove
+an application writes health data or requests location at runtime.
+
+Apple Privacy — 100% published per handoff:
+- 18 types: Name, Email Address, Phone Number, Health, Fitness, Coarse Location,
+  Sensitive Info, Customer Support, User ID, Device ID, Purchase History,
+  Product Interaction, Advertising Data, Other Usage Data, Crash Data,
+  Performance Data, Other Diagnostic Data, Other Data Types.
+- Linked summary: Contact Info, Usage Data, Health & Fitness, Identifiers,
+  Purchases, Other Data, Location, User Content, Sensitive Info, Diagnostics.
+- Not-linked summary: Diagnostics.
+- Policy: https://flow-iq-app.web.app/privacy-policy/
+- Preserve declarations; changes require runtime/SDK evidence.
+
+Packaged privacy-manifest findings preserved from handoff:
+- Root: UserDefaults CA92.1; no root collection/tracking declarations.
+- Google Mobile Ads: SystemBootTime 35F9.1, UserDefaults CA92.1, DiskSpace E174.1;
+  diagnostics/location/performance/crash/advertising/product interaction/device
+  declarations; DeviceID linked and tracking true.
+- Firebase Auth: diagnostics + UserID, tracking false; Firestore: diagnostics,
+  tracking false.
+- Google Sign-In: Name, Email, Phone, OtherDataTypes, CoarseLocation, UserID,
+  DeviceID, OtherUsageData; tracking false.
+- Geolocator: no collected data, tracking false.
+- PRIV-F01 — DEFERRED compliance follow-up: compare GMA tracking declarations
+  against actual ATT/consent/runtime behavior before future SDK/privacy changes.
+  No current-release blocker inferred solely from these declarations.
+
+Previous Apple review (historical, separate from 2.2.4):
+- 2.2.3 received Guideline 2.1(b) Information Needed: paid-content users,
+  purchase location, access to prior purchases, non-IAP unlocks, and bundled
+  physical goods/services.
+- Reply: Flow Ai Premium users purchase through Apple IAP/StoreKit, restore is
+  supported, no external-payment digital unlock, no physical goods bundle.
+- Old 2.2.3 submission canceled/developer rejected and old build detached.
+- Dedicated reviewer access and review notes were supplied; credentials are
+  intentionally not duplicated in this ledger update.
+
+#### MON12-ANDROID-DELTA — forensic closure, 22 September 2026
+
+Status: CLOSED WITH EVIDENCE — no material post-AAB Android/shared runtime delta.
+Decision: retain submitted 1783342120. No replacement AAB is justified by the
+later iOS purpose-string changes. No build, withdrawal or resubmission performed.
+
+Artifact proof:
+- `build/app/outputs/bundle/release/Flow-Ai-2.2.4-1783342120.aab`
+- SHA-256 rechecked:
+  `25cd406cb5b25819c61b4b63d0cd4e797cefc3a10e00b73d65541b55a6fcf56b`.
+- ZIP CRC check passes; packaged protobuf manifest confirms `com.flowai.app`,
+  versionName 2.2.4, versionCode 1783342120, min SDK 26, target/compile SDK 36.
+- Current Gradle uses Flutter target/compile defaults; installed Flutter
+  FlutterExtension sets both to 36. Release signing is mandatory/fail-closed.
+- `jarsigner -verify` exits 0, `jar verified`; certificate is
+  `CN=Flow AI Upload, OU=Mobile Release, O=Flow AI`, SHA-256
+  `F3:A9:C6:76:A1:A8:00:F6:DF:35:5B:49:D2:92:E6:27:3A:7C:83:95:B5:6C:5D:19:E8:DF:56:E8:8C:7A:FB:D6`.
+- Verifier also reports self-signed/untrusted-chain, missing timestamp, POSIX
+  attributes and JarInputStream manifest-order warnings. These are recorded,
+  not concealed; archive/signature verification and prior Play acceptance are
+  distinct evidence, not a warning-free claim.
+- Packaged billing.properties confirms Billing 8.0.0.
+- Both shipped libapp.so architectures contain the canonical production receipt
+  URL and no `c7-canary` string.
+
+Source provenance:
+- Retained Android cache `.dart_tool/flutter_build/48572a897eff8bfb623558e66d91da54`
+  has kernel stamp at 02:00 and filecache at 02:10 on 22 September; AAB mtime
+  is 02:11:42 local. Timestamps are supporting evidence, not content proof.
+- Kernel stamp lists 3,584 inputs. Compared all 3,971 filecache records using
+  the installed Flutter `Md5Hash` implementation: 3,970 exact matches, no
+  missing files, only `lib/core/config/platform_config.dart` differs.
+- Standard Python MD5 initially produced false mismatches because this SDK's
+  Md5Hash finalization differs for some lengths. Those preliminary mismatches
+  are not source-delta findings; comparison with the actual SDK owner resolved
+  them. An older September 17 cache was also excluded as the wrong build.
+- Git index version of platform_config has hash
+  `906a74bb299a31ccabb1fa3747a9e06f`, exactly the retained build-input hash.
+  Exact index-to-current diff removes only three iOS purpose-key entries under
+  `TargetPlatform.iOS`; Android branch is unchanged. No production external
+  `PlatformPermissions.getRequiredPermissions` caller was found.
+- Cached arm64/x86_64 AOT outputs exactly match merged native inputs. Stripping
+  scratch copies with installed NDK llvm-strip --strip-unneeded reproduces
+  both AAB libapp.so files byte-for-byte. Existing build artifacts untouched.
+- Shipped arm64 libapp.so SHA-256:
+  `2f2a01e1bafe32b625b78b75e28beffa6bcb2ca98cdcacf235ef77fb3d4ffc78`.
+- Shipped x86_64 libapp.so SHA-256:
+  `57fa4555efc5915af84cf109d7bca06ee494949ddae971c3b583d77999079d15`.
+- Tracked/untracked file mtime sweep finds five files newer than AAB:
+  this ledger (documentation), ios project.pbxproj and Runner/Info.plist
+  (iOS-only), platform_config.dart (iOS branch only), build_config.dart
+  (removed iOS template strings; absent from actual kernel build inputs and
+  no production import/caller found).
+- No later Android native, dependency/asset or backend file found by that sweep.
+  Native/config history is supported by retained manifests/configuration and
+  timestamps; there is no independently signed full source snapshot. Do not
+  represent HEAD alone or timestamps alone as an exact release source archive.
+
+Current verification:
+- `flutter analyze --no-pub`: PASS, No issues found.
+- `flutter test --no-pub --reporter expanded test/release_contracts
+  test/core/config/android_release_signing_policy_test.dart`: 286 PASS, 2 FAIL.
+- Failures are the two iOS Health write-purpose absence expectations documented
+  under MON12-TEST1 below; no Android behavior failure found in this run.
+- Worktree and staged diff whitespace checks pass.
+- No fresh device deployment/purchase/deletion was performed; QA-INT1 and
+  prior physical release evidence remain historical evidence.
+
+#### MON12-TEST1 — stale iOS disclosure contracts
+
+Status: ACTIVE — root cause proven; tests unchanged under documentation-only scope.
+
+- `mission6_ios_health_write_privacy_truth_contract_test.dart` expects no
+  NSHealthUpdateUsageDescription when no direct writer is found.
+- `mission6_biometric_write_capability_truth_contract_test.dart` independently
+  forbids the same key.
+- Both contradict the actual Transporter-required, truthful read-only wording
+  restored in the submitted IPA. Production disclosure must not be removed to
+  satisfy these tests.
+- Next gate: update these existing contracts to preserve required disclosure
+  while independently enforcing read-only runtime behavior; rerun both and the
+  full release-contract suite. This audit intentionally modifies only the ledger.
+- MON12 remains incomplete; old all-green contract evidence is historical.
+
+#### Deferred backlog reconciliation
+
+- UX-AUTOSAVE / UX2-F20, disclosure-chevron consistency, FUTURE-UX login/sign-up
+  redesign and AUTH-F01, REP-01, first-run biometric enrollment/recovery
+  (55/56), Calendar dead-space and existing future UX remain DEFERRED.
+- Next gate for each: current release closure, then audit its existing owner and
+  acceptance criteria before implementation; no automatic expansion into 2.2.4.
+- No manual name-recovery popup is authorized. Preserve automatic provider /
+  same-account stored identity and ID65 closure.
+
+
+### M5-IDC1 — intensive identity/cloud ownership audit — 22 September 2026
+
+Status: ACTIVE. Audit/source evidence and isolated behavioral reproductions only;
+no production source or test file changed. User explicitly requested an intensive
+map of errors, duplicate owners, broken paths and mismatches during continuation.
+
+Scope/evidence:
+- 372 Dart source files inventoried. Rooted local import/export/part directive
+  traversal reaches 217 files from `lib/main.dart`; no missing local directives.
+- This is an import graph, not proof that every symbol or branch executes.
+  Actual route/construction/call chains were followed for findings below.
+- Initial unanchored text scan falsely read localization text as directives;
+  corrected to line-anchored Dart directives before reporting the map.
+- 25 router paths inventoried, with auth, core destinations, Premium, partner,
+  insights/FAQ, feedback and future-plans ownership reviewed at entry points.
+- Snapshot: 318 staged paths, 61 unstaged paths, 52 untracked paths. Existing
+  staged tree remains `dc3b1a90380a8716a89b4a2457c29f58fab50486`.
+- Current full Flutter suite: 741 PASS / 4 FAIL (745 total). Analyzer clean.
+- Functions and receipt-service TypeScript no-emit checks and ESLint pass.
+  No backend build/deployment/live-account mutation was performed.
+
+Authoritative map:
+
+| Surface | Current owner/path | Evidence / boundary |
+| --- | --- | --- |
+| Startup/auth route | main -> AppStateService -> AuthService -> app_router | Shared Email/Google/Apple auth owner; existing LocalUser compatibility remains distinct |
+| Live private-data identity | main configures ActiveAccountScope -> AuthService.getCurrentUser | Rejects absent/sentinel IDs; main excludes anonymous Firebase identity |
+| Provider name/greeting | AuthService -> SettingsProvider -> UserDisplayNameResolver -> Home | Same-account stored fallback; ID65 closed, no manual recovery popup |
+| Cycle/tracking storage | DatabaseService + RealCycleService + FeelingsDatabaseService | Live-account query predicates exist; multi-step async operation boundaries still require scrutiny |
+| Zyra chat | /insights -> InsightsScreen -> FloatingAIChat -> EnhancedAIChatService -> AIConversationMemory | Reachable account-switch defect reproduced below |
+| Conversation backup | AIConversationMemory -> ConversationCloudSync | Local SharedPreferences only; independent cached identity and recursive timer |
+| Sign-out | Settings -> provider clear methods -> AppStateService.resetAppState -> AuthService.signOut | InsightsProvider reset does not reset the chat singleton; memory-clear helper is empty |
+| Account deletion | AccountManagement -> AuthService -> CloudDataDeletionGateway -> deleteMyCloudData | Authenticated backend UID; requires ok + identityDeleted before local erasure; existing physical closure retained |
+| Entitlement | MainShell -> SubscriptionProvider -> SubscriptionService -> ReceiptValidationService -> receipt-service | Durable Firebase identity, account generation and canonical receipt ownership enforced in inspected path |
+| Data export | Settings -> DataExportService -> DatabaseService -> PDF/CSV/JSON | Current execution has no entitlement guard; separately tracked below |
+| Partner | /partner-dashboard -> PartnerService -> LocalPartnerService / PartnerInviteActions | Local identity and local invite creation; email calls server without publication |
+| Telemetry | AuthService -> ProductionAnalyticsService | Central account binding present; not a substitute for chat/partner state reset |
+
+#### M5-IDC1-A — cross-account Zyra chat and memory — P1 CONFIRMED
+
+Root cause and callers:
+- `EnhancedAIChatService.initialize` early-return branch changes `_currentUser`
+  whenever `_isInitialized` is true, without clearing prior `_messages`, rebinding
+  `_conversationMemory`, or invalidating pending response generation.
+- `FloatingAIChat` calls initialize with SettingsProvider's userId and subscribes
+  to the shared singleton message stream. It cancels its subscription on widget
+  dispose but does not clear the service.
+- Settings sign-out clears InsightsProvider's unrelated `_insights` list;
+  AuthService deletes matching preference keys but `_clearMemoryCache` is empty.
+  No auth-boundary chat reset caller was found.
+- `AIConversationMemory` retains its prior user ID if the service returns early.
+- Separately, app startup initializes AIConversationMemory without userId;
+  ConversationCloudSync captures null and ignores all later initialize calls.
+
+Executable reproduction (isolated Flutter process; test-only SharedPreferences
+store; no real account, backend, store or device used):
+1. Execute actual startup `AIConversationMemory.initialize()` without user ID.
+2. Initialize actual chat service for audit account A and send a distinctive
+   health-related text; configured online AI is absent, using the existing
+   unavailable-health-response path, with no network call.
+3. Reinitialize actual chat service for audit account B.
+4. Inspect public messages and memory; write a personalized insight for B.
+5. Observed: A message remains in chat; A message remains in context; B write
+   persists under `ai_personalized_insights_<A>`; backup owner remains null.
+- Characterization assertions: 1/1 reproduced all four observations. This is
+  defect reproduction, not a passing acceptance gate.
+- Existing full regression suite does not catch this scenario.
+- Git blame traces the early-return behavior to April 2026; matching AAB build
+  fingerprints establish that this defect already exists in submitted source.
+
+Release consequence:
+- Android delta closure establishes equivalence only, not absence of latent
+  defects. This new reproducible private-data boundary failure requires prompt
+  release-impact triage. No automatic withdrawal/rebuild/resubmission follows.
+- Do not reopen unrelated closed UI, Health, purchase/restore or deletion gates.
+
+Exact next gate:
+- At existing chat/memory owners, bind to live account and an account generation;
+  clear old state before publishing a new account; reject stale asynchronous
+  callbacks/writes; centralize reset on sign-out/deletion; bind/cancel the backup
+  timer with the same lifecycle and fail closed without an owner.
+- Preserve same-account behavior, real provider identity and existing health
+  unavailable semantics. No new popup or parallel identity owner.
+- Add permanent behavioral regression at the appropriate existing test owner,
+  rerun full tests/analyzer, then physical A -> sign-out -> B and delayed-response
+  account-switch checks on Android and iPhone before closure.
+- This turn remains documentation-only in the canonical repository.
+
+#### M5-IDC1-B — conversation cloud truth / timer ownership — CONFIRMED GAP
+
+- ConversationCloudSync.syncToCloud and restoreFromCloud only write/read local
+  SharedPreferences; no remote API/Firestore call exists in this owner.
+- Logs report cloud success and getSyncStatus reports enabled/synced from local
+  timestamps. No external production consumer of getMemoryStats was found, so
+  a user-visible cloud-status defect is not inferred from logs alone.
+- startAutoSync recursively schedules an uncancelled five-minute delayed task;
+  every AIConversationMemory.initialize invokes it again. No stop/dispose owner.
+- Next gate: reconcile actual persistence guarantees, use truthful local-backup
+  semantics, and make scheduling single-owner/account-bound. Real cross-device
+  sync must not be claimed until an authenticated remote implementation exists.
+
+#### M5-IDC1-C — 100% — CLOSED — TWO-SIDED PARTNERSHIP STATE VERIFIED
+
+**Physical closure evidence — 24 September 2026**
+- Current patched PartnerService source deployed to Samsung SM-N770F and Ronos’s iPhone.
+- Android physical client resolved the authoritative accepted partnership.
+- iPhone physical client resolved the same accepted partnership.
+- Both physical captures show `Partner Sync Active` and connected Partner dashboard surfaces.
+- Previous disconnected Join/Invite state no longer represents the accepted partnership after the cloud-first state-publication correction.
+- M5-IDC1-C functional two-sided synchronization gate is CLOSED.
+- App Check telemetry previously reported `app=MISSING`; this remains separately tracked security hardening and is not claimed as verified.
+
+**Verified evidence**
+- Canonical authenticated ownership enforced for partner invitation creation.
+- Partner invitation publication, sending, and acceptance route through PartnerCloudGateway.
+- Canonical Firebase project: `flowai-demo-project`.
+- Deployed callable functions verified:
+  - `publishPartnerInvite`
+  - `sendPartnerInvite`
+  - `acceptPartnerInvite`
+- All three callables deployed in `us-central1`.
+- Live physical publish request verified with authenticated callable request.
+- Live physical accept request verified with authenticated callable request.
+- Partner targeted regression: 15/15 PASS.
+- Full release-contract suite: 302/302 PASS.
+- Targeted analyzer: 0 issues.
+- Android and iPhone physical devices have both been available during final verification.
+
+**Historical pre-fix blocker evidence**
+- Before the cloud-first correction, the joining device resolved the partnership while the inviter/original device did not.
+- That blocker was subsequently resolved by the authenticated cloud-state publication correction and final two-device physical verification.
+
+- Two physical-device screenshots after deployment show both Android and iPhone still rendering the disconnected Partner Connect / Join Partner experience.
+- Live `getPartnerConnection` callable traffic was observed from the deployed clients with `auth=VALID`.
+- Therefore network/authenticated callable reachability is proven, but authoritative partnership resolution into UI state is not.
+- Physical M5 closure gate FAILED on 24 September 2026.
+
+- Root cause narrowed after physical failure: PartnerService awaited local cache persistence before publishing authenticated cloud partnership state.
+- Any local cache/model conversion exception therefore suppressed valid cloud state and left UI disconnected.
+- Corrected ownership order: authenticated cloud partnership is now published to PartnerService/UI first; local cache is best-effort offline continuity only.
+- Same cloud-first truth ordering applied to invitation acceptance.
+- Re-verification requires exact current source deployed to both physical devices before screenshots.
+- Do not request further screenshots until backend-result handling and PartnerService/UI refresh ownership are traced.
+
+### PARTNER-UX2 — FUTURE — PARTNER CONNECTION EXPERIENCE
+
+**Timing**
+- Execute after current release-critical missions are completed.
+- Do not substitute visual polish for current M5 synchronization closure.
+
+**Scope**
+- Professional redesign/polish of Partner Connection / Partner Connect.
+- Centralize responsive geometry for Android and iPhone.
+- Align card margins, borders, internal padding, spacing, and component widths.
+- Correct wrapped subtitle alignment, including intentional centering of second lines.
+- Harmonize connection status, invite/join, QR/code/manual entry, Cycle Insights, messaging, and Care Actions.
+- Clean up Care Actions visual hierarchy and bottom-navigation clearance.
+- Ensure both inviter and joining experiences communicate identical truthful partnership state.
+- Preserve authoritative backend ownership and entitlement/account boundaries.
+- No mocks, decorative connection states, or local-only fake synchronization.
+- Physical Android + iPhone visual verification required before closure.
+
+
+### REL-DB1 — 100% CLOSED — iOS DATABASE INDEX IDEMPOTENCY
+
+- Final current-source Android + iPhone deployment PASS.
+- Fresh iPhone startup no longer emitted the previous `idx_daily_tracking_user_date already exists` DatabaseException.
+- Legacy v1 rows remain preserved; no database reset or user-data deletion was used.
+- REL-DB1 is CLOSED.
+
+- Root cause proven: SQLite keeps `idx_daily_tracking_user_date` attached to the renamed v1 legacy table; v2 creation then collides with the same global index name.
+- Corrective owner: v1→v2 transaction drops only the archived named index after table preservation/rename, before the new v2 table recreates the canonical index.
+- No user-data reset or legacy-row deletion is permitted.
+
+**Physical evidence**
+- iPhone current-source deployment logged `DatabaseException` because `idx_daily_tracking_user_date` already existed during database open.
+- Root owner and migration/create-index lifecycle must be proven before mutation.
+- Do not delete user data or reset the physical database as a workaround.
+
+### PARTNER-UX2A — ACTIVE — PARTNER DASHBOARD RESPONSIVE OVERFLOW
+
+- First responsive correction removed the physical RenderFlex overflow.
+- Final iPhone light-mode evidence exposed visible `Partner Sync Acti...` truncation.
+- Functional `Partner Sync Active` state remains correct on both devices.
+- Final correction must preserve the full label using constrained responsive scaling, not shortened copy or platform-specific geometry.
+- Physical closure remains OPEN until Android + iPhone both display the full status label without overflow or truncation.
+
+- Root owner proven: the status badge used a minimum-size Row with fixed padding/dot/spacing and unconstrained label inside the center Expanded between both avatars.
+- Central responsive correction constrains the status Row to available width and flexes the single-line label; no Android/iPhone-specific geometry fork.
+
+**Physical evidence**
+- Current Partner dashboard rendered the accepted partnership successfully.
+- Physical/runtime evidence exposed a right-side RenderFlex overflow of 0.933 pixels.
+- Fix must be centralized/responsive and preserve Android+iPhone geometry; no device-specific hardcoded workaround.
+
+### GPLAY-HC-P0 — P0 ACTIVE — GOOGLE PLAY HEALTH CONNECT REJECTION
+
+#### GPLAY-HC-P0.4 — static release verification — PASS
+
+- Google minimum-scope/disclosure contracts pass.
+- Stale Health UI Activity/Steps contract wording was reconciled to Sleep Duration.
+- Full release-contract suite passes.
+- Release merged manifest contains exactly:
+  - READ_HEART_RATE
+  - READ_BODY_TEMPERATURE
+  - READ_SLEEP
+  - READ_MENSTRUATION
+- Google-rejected excessive Health Connect permissions are absent.
+
+Remaining:
+- corrected release AAB with versionCode > 1783342120;
+- packaged AAB permission inspection;
+- physical Android Health verification;
+- Play Console declaration update;
+- resubmission.
+
+#### GPLAY-HC-P0.1 — permission-to-feature mapping — 100% AUDIT PASS
+
+- Android manifest previously requested 11 Health Connect read permissions.
+- Runtime `_androidDataTypes` requested the same broad metric family.
+- Current production Health screen directly exposes:
+  - Heart Rate from `snapshot.heartRate`;
+  - Temperature from `snapshot.bodyTemperature`;
+  - Sleep Duration from `snapshot.sleepHours`.
+- Sleep also has a genuine historical visualization/read owner.
+- Menstruation remains part of the current cycle/reproductive integration and
+  was not identified by Google as excessive.
+- RestingHeartRate, HRV RMSSD, ActiveCaloriesBurned, OxygenSaturation,
+  RespiratoryRate, Hydration and Steps do not have sufficient current
+  production-feature evidence to justify Android Health Connect access.
+- Old/dead model or dashboard capability is not accepted as release permission
+  justification.
+
+#### GPLAY-HC-P0.2 — Android minimum-scope correction — SOURCE ACTIVE
+
+Retained Android Health Connect read permissions:
+- READ_HEART_RATE
+- READ_BODY_TEMPERATURE
+- READ_SLEEP
+- READ_MENSTRUATION
+
+Removed from Android release scope:
+- READ_RESTING_HEART_RATE
+- READ_HEART_RATE_VARIABILITY
+- READ_STEPS
+- READ_ACTIVE_CALORIES_BURNED
+- READ_OXYGEN_SATURATION
+- READ_RESPIRATORY_RATE
+- READ_HYDRATION
+
+Runtime Android HealthDataTypes are correspondingly restricted to:
+- HEART_RATE
+- BODY_TEMPERATURE
+- SLEEP_ASLEEP
+- MENSTRUATION_FLOW
+
+iOS HealthKit scope is intentionally unchanged by this Android Play-policy
+correction.
+
+Next gate:
+- analyzer;
+- minimum-scope and Health contracts;
+- complete release-contract suite;
+- release merged-manifest inspection;
+- physical Android permission verification;
+- corrected AAB with versionCode > 1783342120.
+
+**Store evidence — 24 September 2026**
+- Google Play rejected Flow Ai `com.flowai.app`, version code `1783342120`.
+- Rejection reason 1: `Excessive data access for declared feature`.
+- Google stated the current release appears to request more Health Connect
+  data types than required under Minimum Scope.
+- Permissions specifically identified by Google as apparently unnecessary:
+  - ActiveCaloriesBurned
+  - HeartRateVariabilityRmssd
+  - Hydration
+  - OxygenSaturation
+  - RespiratoryRate
+  - RestingHeartRate
+  - StepsCadence / Steps
+- Rejection reason 2: `Insufficient Information to Determine App
+  Functionality for Health Connect`.
+- Google requested clearer rationale for:
+  - BodyTemperature
+  - HeartRate
+  - HeartRateVariabilityRmssd
+  - Hydration
+  - OxygenSaturation
+  - RespiratoryRate
+  - RestingHeartRate
+  - SleepSession
+  - StepsCadence / Steps
+
+**Mission order**
+1. `GPLAY-HC-P0.1` — map every requested Health Connect permission from
+   manifest -> runtime authorization -> read/query owner -> state/provider ->
+   user-visible feature -> Play declaration.
+2. `GPLAY-HC-P0.2` — remove every permission and runtime type that is not
+   strictly necessary for a current production feature.
+3. `GPLAY-HC-P0.3` — align Play Console declaration, app description and
+   in-app Health wording with only the retained production features.
+4. `GPLAY-HC-P0.4` — analyzer + Health contracts + full release contracts +
+   merged release manifest + packaged AAB + physical Android verification.
+5. `GPLAY-HC-P0.5` — create a replacement Android release with a versionCode
+   greater than `1783342120`, inspect it, then resubmit only after all earlier
+   gates pass.
+
+**Priority / governance**
+- This is the current release P0 and outranks PARTNER-UX2A and other UX work.
+- Do not appeal before source/feature evidence proves an allegedly excessive
+  permission is genuinely essential.
+- Do not retain Health Connect permissions for future or speculative features.
+- Do not reset/remove truthful Health functionality merely to satisfy policy;
+  first prove the actual production dependency.
+- Do not upload/resubmit a replacement AAB until the minimum-scope and
+  declaration gates are green.
+- Apple submission remains independent and must not be altered because of this
+  Android rejection.
+
+
+#### GPLAY-HC-P0.4 — physical Android verification — CLOSED WITH EVIDENCE
+
+Status: 100% CLOSED.
+
+Verified on physical Samsung SM-N770F:
+
+- corrected release build `2.2.4 / 1790249369` installed and launched;
+- Health Connect permission request UI displayed exactly:
+  - Body temperature
+  - Heart rate
+  - Menstruation
+  - Sleep
+- rejected/excessive categories were absent from the physical permission UI;
+- after user approval, Flow Ai returned to the Health screen;
+- Health connection UI displayed `Access Granted`;
+- reversible `Disconnect` action was present;
+- installed package declared exactly:
+  - `android.permission.health.READ_BODY_TEMPERATURE`
+  - `android.permission.health.READ_HEART_RATE`
+  - `android.permission.health.READ_MENSTRUATION`
+  - `android.permission.health.READ_SLEEP`
+- Android Steps historical read is fail-closed before the SDK Steps query;
+- Android authorization/runtime primary scope remains exactly:
+  - `HEART_RATE`
+  - `BODY_TEMPERATURE`
+  - `SLEEP_ASLEEP`
+  - `MENSTRUATION_FLOW`
+- analyzer, targeted Google Health contracts and full release-contract suite passed;
+- no evidence justifies reopening P0.4 absent a concrete regression.
+
+#### GPLAY-HC-P0.5 — declaration evidence and physical lifecycle verification
+
+Status: ACTIVE — Play Console declaration/resubmission remains external.
+
+Current corrected Android release:
+
+- versionName: `2.2.4`
+- versionCode: `1790249369`
+- package: `com.flowai.app`
+- current post-fix AAB:
+  `build/app/outputs/bundle/release/app-release.aab`
+- SHA-256:
+  `106103d6b22e8a816e6212bcb29e699a09b9b1c642b1f29fccccfb55345b2803`
+
+Retained Health Connect read scope:
+
+1. Heart Rate
+   - current Health UI displays the user's heart-rate metric;
+   - declaration rationale:
+     `Flow Ai reads heart rate from Health Connect to display the user's
+     heart-rate metric within the Health section and provide biometric
+     health insights based on the user's connected health data.`
+
+2. Body Temperature
+   - current Health UI displays the user's temperature metric;
+   - declaration rationale:
+     `Flow Ai reads body temperature from Health Connect to display the
+     user's temperature metric within the Health section and incorporate
+     the observation into the app's biometric health view.`
+
+3. Sleep
+   - current Health UI displays Sleep Duration;
+   - genuine historical sleep read/visualization exists;
+   - declaration rationale:
+     `Flow Ai reads sleep data from Health Connect to display Sleep Duration
+     and provide historical sleep visualization and health insights based on
+     the user's recorded sleep data.`
+
+4. Menstruation
+   - current menstrual-cycle/reproductive integration consumes recorded
+     menstrual-flow information;
+   - declaration rationale:
+     `Flow Ai reads menstruation data from Health Connect to integrate
+     recorded menstrual-flow information with the app's menstrual-cycle and
+     reproductive-health tracking features.`
+
+Do not declare/request Android access for:
+
+- Active Calories Burned
+- Heart Rate Variability / HRV RMSSD
+- Hydration
+- Oxygen Saturation
+- Respiratory Rate
+- Resting Heart Rate
+- Steps / Steps Cadence
+
+Those types lack sufficient current production-feature evidence and are outside
+the corrected Android minimum scope.
+
+Remaining P0.5 gates:
+
+1. update the Play Console Health Connect / Health Apps declaration to match
+   only the four retained data types and current user-facing functionality;
+2. verify the Play declaration against the final `1790249369` AAB;
+3. prepare the corrected replacement release;
+4. submit only after the declaration and final artifact identity match;
+5. record Google review outcome in this same mission ledger.
+
+#### ANDROID-PERF-R8 — future Android memory/performance optimization
+
+Status: FUTURE / AUDIT REQUIRED — not a current release blocker.
+
+Play Console recommendation observed for release `1783342120 (2.2.4)`:
+
+- `Improve your app's memory and performance with R8 optimisation`
+- category: Memory usage
+
+Before any implementation:
+
+1. audit current Android release configuration for:
+   - R8/minification ownership;
+   - `minifyEnabled`;
+   - `shrinkResources`;
+   - ProGuard/R8 rules;
+   - Flutter/Gradle release defaults;
+2. prove whether the recommendation reflects an actually disabled optimization
+   path or only a Play advisory;
+3. capture current release APK/AAB size and runtime-memory baseline;
+4. identify reflection, serialization, Firebase, billing, ads, Health Connect,
+   authentication and plugin classes that require keep rules;
+5. enable or tune optimization only from verified findings;
+6. rebuild release AAB;
+7. run analyzer, release contracts, Android build, launch and critical-path
+   physical regression;
+8. verify mapping/symbol artifacts required for production crash diagnostics;
+9. compare artifact size and runtime-memory behavior before/after;
+10. do not trade functional correctness, billing, Health Connect, authentication,
+    analytics or crash diagnosability for size reduction.
+
+No R8 configuration mutation is authorized by this backlog entry alone.
+
+#### GPLAY-HC-P0.5 — final AAB binary verification
+
+Status: PASS.
+
+Final corrected Android AAB:
+- package: `com.flowai.app`
+- versionName: `2.2.4`
+- versionCode: `1790249369`
+- SHA-256: `106103d6b22e8a816e6212bcb29e699a09b9b1c642b1f29fccccfb55345b2803`
+
+Direct base-manifest inspection proved exactly:
+- `READ_HEART_RATE`
+- `READ_BODY_TEMPERATURE`
+- `READ_SLEEP`
+- `READ_MENSTRUATION`
+
+No rejected/excessive Health Connect READ permission appeared in the final AAB manifest.
+
+Remaining:
+- Play Console Health declaration update;
+- replacement release submission;
+- Google review outcome.
+
+#### HEALTH-TRUTH-R1 — legacy Health runtime reachability classification
+
+Status: PASS / CLOSED.
+
+Evidence:
+- `/health` production route constructs `HealthScreen`, not `RealTimeHealthDashboard`.
+- `RealTimeHealthDashboard` has no production importer or constructor.
+- `AIInsightsPanel` is reachable only from the unreachable legacy dashboard.
+- `ConsumerVisualEngine` has no production importers.
+- `AdvancedBiometricEngine` is reachable only through the legacy dashboard / legacy analytics chain.
+- `AdvancedHealthAnalytics` has no verified live production call site.
+- `SmartNotificationSystem` contains an import of `advanced_health_analytics.dart` but no `AdvancedHealthAnalytics` symbol usage.
+- no barrel export, dynamic route, reflection or deferred escape path was found for the legacy Health chain.
+- targeted analyzer completed with zero issues.
+- live Health truth remains owned by `HealthScreen` and its current provider/service path.
+- synthetic/default legacy values therefore have no verified production-user reachability.
+
+Decision:
+- classify `RealTimeHealthDashboard`, its `AIInsightsPanel` path, and `ConsumerVisualEngine` as DEAD / UNREACHABLE from production runtime;
+- classify `AdvancedBiometricEngine` and `AdvancedHealthAnalytics` as legacy-only dependencies of that unreachable chain;
+- preserve current staged work; no destructive retirement in this mission;
+- any future reuse requires a fresh truth/provenance audit before becoming production reachable.
+
+
+#### APPLE-IAP-P0 — App Review rejection reconciliation — 24 September 2026
+
+Status: 92% — ACTIVE.
+
+Evidence:
+- Submission ID: `7ff384a0-53ad-4236-a61f-cf9fe4069d74`.
+- Review date: 22 September 2026.
+- Version reviewed: `2.2.4 (1783342120)`.
+- Guideline: `2.1(b) - Performance - App Completeness`.
+- Apple could not complete review because one or more subscription IAP products were not submitted for review.
+- Monthly: `flow_ai_premium_monthly` / Apple ID `6792891893`.
+- Yearly: `flow_ai_premium_yearly` / Apple ID `6792891894`.
+- Subscription group: `Flow Ai Premium` / ID `22251253`.
+- Premium/IAP forensic gate: 21 tests PASS.
+- Targeted analyzer: 0 issues.
+- Previous WAITING ON APPLE SUPPORT state is superseded.
+
+Next gate:
+1. verify next unused iOS build number;
+2. verify IAP review metadata/screenshots;
+3. submit both IAP products;
+4. build and verify new iOS binary;
+5. upload and associate binary + IAPs;
+6. resubmit;
+7. record Apple review outcome.
+
+#### GPLAY-HC-P0.5 — final submission readiness — 24 September 2026
+
+Status: 99% — LOCAL RELEASE GATES PASS / PLAY CONSOLE ACTION REMAINS.
+
+Verified final artifact:
+- package: `com.flowai.app`
+- versionName: `2.2.4`
+- versionCode: `1790249369`
+- AAB: `build/app/outputs/bundle/release/app-release.aab`
+- SHA-256: `106103d6b22e8a816e6212bcb29e699a09b9b1c642b1f29fccccfb55345b2803`
+
+Verified Android Health Connect scope:
+- `READ_HEART_RATE`
+- `READ_BODY_TEMPERATURE`
+- `READ_SLEEP`
+- `READ_MENSTRUATION`
+
+Rejected/excessive permissions verified absent:
+- Active Calories
+- HRV
+- Hydration
+- Oxygen Saturation
+- Respiratory Rate
+- Resting Heart Rate
+- Steps
+
+Release evidence:
+- source permission exact-four gate: PASS;
+- merged release manifest exact-four: PASS;
+- rejected permission absence gate: PASS;
+- Google Health contracts: 12/12 PASS;
+- targeted analyzer: 0 issues;
+- final submission-readiness gate: PASS;
+- branch / HEAD / tree / staged index protection: PASS.
+
+Current Google policy rechecked on 24 September 2026:
+Health Connect access must remain limited to data types necessary for current
+user-facing Health functionality, and the Play Health Apps declaration must
+accurately describe those uses.
+
+Remaining gate:
+1. update Play Console Health Apps / Health Connect declaration to only the four retained types;
+2. use the verified feature-specific rationales already recorded in this ledger;
+3. associate replacement release `1790249369`;
+4. submit changes for review;
+5. record Google's review outcome here.
+
+No additional Android source or artifact rebuild is required unless source changes.
+
+#### GPLAY-HC-P0.5 — submitted for Google review — 24 September 2026
+
+Status: 99.5% — SUBMITTED / WAITING GOOGLE REVIEW.
+
+User-reported Play Console evidence:
+- corrected Production replacement submitted for review;
+- actual bundle versionCode: `1783342121`;
+- release name shown by Play Console: `1790249369 (2.2.4)`;
+- Health Apps declaration submitted;
+- active Health Connect scope reduced to exactly:
+  - `READ_HEART_RATE`
+  - `READ_BODY_TEMPERATURE`
+  - `READ_SLEEP`
+  - `READ_MENSTRUATION`
+- old Internal Testing track containing rejected `1783342120` was paused before submission;
+- rejected/excessive Health Connect permissions are no longer part of the active submitted scope.
+
+Next gate:
+1. wait for Google review result;
+2. if approved, verify Production publication/live status and close `GPLAY-HC-P0.5`;
+3. if rejected, record Google's exact new policy response before any further mutation.
+
+#### APPLE-IAP-P0 — build 1783342122 signature gate — 24 September 2026
+
+Status: 99% — IPA VERIFIED / READY FOR TRANSPORTER.
+
+Verified artifact:
+- version: `2.2.4`
+- build: `1783342122`
+- bundle: `com.flowai.health`
+- SHA-256: `1e8b00f0aeef441c288ec5898a4dfb3c4fd352dc52896e3c1df82c415949c610`
+
+Signing evidence:
+- `codesign --verify --deep --strict`: PASS
+- Apple Distribution: Geoffrey Rono (`9FY62NTL53`)
+- TeamIdentifier: `9FY62NTL53`
+- HealthKit entitlement: present
+- Sign in with Apple entitlement: present
+- `get-task-allow=false`
+
+App Store Connect:
+- Monthly subscription: Ready for Review
+- Yearly subscription: Ready for Review
+- `Flow Ai Premium` subscription group added to Draft Submission
+
+Next gate:
+1. upload build `1783342122` through Transporter;
+2. confirm Transporter `Delivered`;
+3. wait for App Store Connect processing;
+4. attach build `1783342122` to iOS version `2.2.4`;
+5. ensure app version + subscription group + both subscriptions are in the same review submission;
+6. submit for review;
+7. record Apple review outcome.
+
+#### IDENTITY-CLOUD-HARDENING — FINAL CLOSURE — 25 September 2026
+
+Status: 100% — CLOSED.
+
+Final verified evidence:
+
+- Android Firebase identity matches package `com.flowai.app`.
+- iOS Firebase identity matches bundle `com.flowai.health`.
+- generated `firebase_options.dart` iOS bundle ID is `com.flowai.health`.
+- authenticated account ownership, sign-out isolation, deletion ownership and
+  account-scoped conversation state passed targeted contract verification.
+- false cross-device/cloud-backup claims were removed from the active runtime
+  and authoritative web privacy surface.
+- `/privacy` is explicitly routed to `/privacy.html` ahead of the Firebase
+  catch-all rewrite.
+- current iPhone source build `2.2.4 (1783342122)` was built, signed, installed
+  and launched on physical iPhone.
+- physical iPhone confirmation: app opens normally, correct account is shown,
+  and no forced logout or crash occurs.
+- Android physical launch also passed.
+- final identity/account-isolation contracts: 20/20 PASS.
+- targeted analyzer: 0 issues.
+- branch, HEAD, staged tree and index protection gates passed.
+
+Decision:
+
+- `IDENTITY-CLOUD-HARDENING` is CLOSED.
+- Do not return it to the active queue without a new reproducible regression.
+- App Check enforcement remains intentionally deferred until released clients
+  are proven compatible with enforcement.
+
+#### APPLE-IAP-P0 — Guideline 3.1.2(c) / 2.1(b) repair — 25 September 2026
+
+Status: 98% — SOURCE/TEST/RELEASE GATES PASS; PHYSICAL REVIEW UX + APP STORE CONNECT METADATA REMAIN.
+
+Apple review evidence:
+- Submission ID: `f95673ec-3d28-446e-bc54-ba71ca1795ed`.
+- Reviewed version: `2.2.4 (1783342122)`.
+- Review device: iPad Air 11-inch (M3).
+- Guideline 3.1.2(c): subscription purchase flow lacked functional Privacy Policy and Terms of Use/EULA links.
+- Guideline 2.1(b): reviewer could not locate Monthly and Yearly IAPs.
+
+Verified repair:
+- Premium catalog discovery is no longer blocked by absence of a Flow Ai account.
+- Purchase and restore entitlement ownership remain secure-account-bound and fail closed.
+- Functional Privacy Policy link added to Premium purchase flow:
+  `https://flowai-demo-project.web.app/privacy.html`
+- Functional Apple Standard EULA link added:
+  `https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`
+- subscription duration is shown as `1 month` / `1 year`;
+- localized StoreKit price remains sourced from `product.priceString`;
+- product titles remain sourced from the real store-derived subscription product model;
+- stale Premium layout contract was reconciled to the new compliant legal surface;
+- Premium test suite: 91/91 PASS;
+- full `flutter analyze`: 0 issues;
+- unsigned iOS release compile for `2.2.4 (1783342123)`: PASS;
+- branch, HEAD, staged tree and index protection gates: PASS.
+
+Remaining gates:
+1. physical iPhone review of Monthly/Yearly visibility and legal links;
+2. verify Privacy link opens the real Flow Ai policy;
+3. verify Terms of Use opens Apple Standard EULA;
+4. verify App Store sandbox catalog resolves Monthly and Yearly;
+5. verify App Store Connect Paid Apps Agreement is Active;
+6. add Terms/EULA URL to App Description or EULA metadata;
+7. verify Privacy Policy metadata field;
+8. provide exact App Review navigation instructions;
+9. verify iPad-responsive purchase/legal surface before resubmission;
+10. create and upload final signed App Store artifact only after all above gates pass.
+
+#### C10.13H — Android free-paywall polish
+
+Status: SOURCE / TEST / RELEASE BUILD GATE PASS; PHYSICAL ANDROID VISUAL PROOF PENDING.
+
+Owner-approved UX decisions:
+- free-state Premium subtitle is shortened to `Unlimited Premium access.`;
+- subtitle is explicitly single-line;
+- free-state vertical density compacts earlier on constrained/tall Android layouts;
+- goal is a deliberate, complete first viewport with no visibly truncated footer/legal composition;
+- accepted Premium Active iOS geometry must not be degraded by free-state Android tuning.
+
+Verified evidence:
+- compact subtitle source gate: PASS;
+- one-line subtitle style gate: PASS;
+- Android free-state density compaction gate: PASS;
+- Premium tests: 98/98 PASS;
+- full Flutter analyzer: zero issues;
+- Android release APK built successfully:
+  `build/app/outputs/flutter-apk/app-release.apk`;
+- branch, HEAD, staged tree and exact index remained protected.
+
+Remaining gate:
+1. install this exact release APK on the physical Android device;
+2. capture fresh default free-Premium screenshot;
+3. verify subtitle remains one line;
+4. verify no clipped/truncated bottom composition;
+5. verify plan cards, Start Premium, Restore Purchases and legal controls remain visually clean;
+6. only then close C10.13H.
+
+#### C10.13I — Monthly / Yearly pilot subscription clinical audit
+
+Status: ACTIVE — DEEP AUDIT REQUIRED BEFORE FURTHER SUBSCRIPTION MUTATION.
+
+Commercial/store truth supplied by owner:
+- Apple subscription group: `Flow Ai Premium`;
+- Monthly product: `Flow Ai Premium Monthly`;
+- Yearly product: `Flow Ai Premium Yearly`;
+- App Store Connect currently exposes both subscription products for purchase configuration;
+- storefront-localized pricing remains store-owned and must never be duplicated as hardcoded entitlement logic;
+- Monthly and Yearly are the intended pilot subscription choices;
+- App Store Connect screenshots show both products with `Add for Review`; review association must therefore be verified explicitly rather than assumed.
+
+Audit scope:
+- canonical product IDs and Monthly/Yearly mapping;
+- StoreKit and Google Play catalog truth;
+- localized price/currency ownership;
+- checkout and purchase-stream lifecycle;
+- receipt validation and backend authority;
+- original transaction / subscription-chain ownership;
+- sandbox versus production environment handling;
+- startup entitlement reconciliation;
+- restore behavior;
+- active subscription -> Premium Active UX;
+- Manage Subscription routing;
+- renewal, cancellation, expiry, refund and revocation;
+- cross-account receipt ownership;
+- Premium -> immediate ad suppression;
+- duplicate/legacy monetization owners;
+- App Store review association and metadata;
+- physical iPhone and Android proof.
+
+Release rule:
+- no mock, dummy, demo or local entitlement grant;
+- no purchase success without authoritative validated store/backend entitlement;
+- no hardcoded storefront price used as entitlement truth;
+- do not close C10.13I from static tests alone.
+
+Next gate:
+- run the complete read-only C10.13I clinical subscription audit;
+- classify every discovered blocker before mutation;
+- record the resulting root causes and exact implementation gates here.
+
+#### C10.13I.1 — active subscription authoritative reconciliation
+
+Status: ACTIVE — ROOT CAUSES VERIFIED; IMPLEMENTATION GATE IN PROGRESS.
+
+Verified C10.13I findings:
+- canonical pilot products remain exactly Monthly and Yearly;
+- storefront price/currency must remain store-derived;
+- the original hardcoded-price audit contained an invalid regex and its reported PASS was not valid evidence;
+- same-user `SubscriptionProvider.initialize()` short-circuits without refreshing entitlement;
+- the authenticated backend subscription-status route returns product, expiry and transaction identity, but the client currently collapses that projection to a Boolean;
+- `_loadBackendVerifiedSubscription()` can therefore reinstate stale locally persisted plan/expiry metadata after backend verification;
+- `SubscriptionService.purchaseSubscription()` lacks a final already-active entitlement guard before store checkout;
+- startup store restoration is best-effort and cannot be the sole stale-entitlement reconciliation mechanism;
+- this combination can produce `Unlock Premium` while the App Store account already owns an active subscription and can unnecessarily launch StoreKit checkout.
+
+Required repair:
+1. preserve full authenticated backend subscription projection;
+2. rebuild current entitlement from backend product/expiry/transaction truth;
+3. refresh entitlement when the same signed-in user re-enters Premium;
+4. keep store restore as validated fallback when backend state is inactive/absent;
+5. reject checkout if authoritative Premium is already active;
+6. retain real StoreKit/Play receipt validation and fail-closed account ownership;
+7. verify physically that active Yearly/Monthly ownership opens `Premium Active` without another purchase sheet.
+
+#### C10.13I/J/K — 2026-09-26 incident capture
+
+Status: ACTIVE — OWNER-OBSERVED PHYSICAL / PUBLIC-SURFACE REGRESSIONS.
+
+##### C10.13I — subscription state integrity
+
+New physical evidence:
+- Flow Ai free-state UI displayed `No subscription found to restore.`;
+- on the same Apple sandbox account, StoreKit reported an existing active
+  `Flow Ai Premium Yearly` subscription;
+- StoreKit showed the active Yearly subscription continuing on 26 Sep 2026;
+- Flow Ai therefore did not reconcile store ownership into app entitlement;
+- free purchase UI remained visible even though StoreKit knew an active
+  subscription existed.
+
+Required behavior:
+- validated active store ownership must render `Premium Active`;
+- current plan and authoritative expiry must be shown;
+- `Manage Subscription` must replace purchase CTA behavior;
+- active entitlement must not open a redundant purchase flow;
+- restore/reconciliation must not report `No subscription found` when the
+  authenticated store/backend ownership chain proves an active subscription.
+
+Important rollback evidence:
+- C10.13I.1 attempted an authoritative reconciliation repair;
+- its source-contract test failed because the expected source string did not
+  survive Dart formatting exactly;
+- the guarded command executed
+  `SOURCE_ROLLBACK_AFTER_FAILED_GATE=PASS`;
+- therefore that attempted production mutation is not considered applied or
+  verified and must be re-audited from current source before another patch.
+
+##### C10.13J — Android Terms routing / public legal surface
+
+New physical/public evidence:
+- Android `Terms of Use` opens:
+  `https://flowai-demo-project.web.app/terms.html#/auth/login`;
+- the destination resolves into Flow Ai application authentication UI instead
+  of a static legal Terms page;
+- the page exposes `Authentication not initialized.`;
+- Android Terms must never require app authentication or route into SPA auth.
+
+Required behavior:
+- Android Terms opens a static public HTTPS legal document;
+- no auth state, Firebase login screen, app router, or hash route is involved;
+- iOS continues to use the platform-appropriate Apple EULA path unless a
+  separately approved authoritative Flow Ai Terms document is adopted.
+
+##### C10.13K — public web auth initialization leak
+
+New public-surface evidence:
+- a public legal navigation path can expose the web authentication screen;
+- that screen currently displays `Authentication not initialized.`;
+- legal/public static hosting must be isolated from application auth routing;
+- separately audit whether the web app itself has an auth initialization defect
+  or whether this is only caused by incorrect hosting fallback/rewrite routing.
+
+Priority order:
+1. prove current repository state after C10.13I.1 rollback;
+2. audit subscription reconciliation from store -> backend -> provider -> UI;
+3. audit Firebase Hosting / `terms.html` / rewrite and hash-routing ownership;
+4. fix legal static surface before Apple/Google submission;
+5. repair subscription truth at authoritative owner only;
+6. run contracts, analyzer, backend tests and release builds;
+7. perform physical iPhone + Android subscription and legal verification;
+8. update this ledger with exact evidence before closure.
+
+#### C10.13H.2 / C10.13I.3 — physical regression capture
+
+Status: ACTIVE.
+
+##### C10.13H.2 — Android Premium composition rebalance
+
+New physical evidence:
+- Android free Premium composition is vertically over-compressed;
+- Premium badge/header sits too close to the top edge;
+- user does not approve forcing every Premium element into the first viewport;
+- natural, intentional scrolling is preferred over compressed first-screen packing;
+- Android should visually approach the accepted iOS hierarchy while respecting
+  its own viewport/safe-area constraints;
+- feature cards, plan cards, CTA, restore and legal area need balanced rhythm;
+- iOS accepted Premium geometry remains frozen and must not be changed by the
+  Android correction.
+
+Design requirement:
+- do not shrink the entire Android page simply to expose all footer content;
+- preserve comfortable top breathing room;
+- preserve readable feature and plan cards;
+- permit natural scrolling below the fold;
+- keep legal content reachable and unclipped;
+- Android-specific correction must not regress accepted iOS geometry.
+
+##### C10.13H.2C — current Android runtime reconciliation
+
+Status: RUNTIME / STRUCTURAL GATES PASS; FINAL OWNER VISUAL ACCEPTANCE PENDING.
+
+Verified on physical Samsung SM-N770F:
+- Flow Ai foreground ownership confirmed before UI capture;
+- physical device size: 1080x2400;
+- density: 420 dpi;
+- font scale: 1.1;
+- true-top and true-bottom UIAutomator trees captured from the current installed release;
+- seven body anchors produced scroll displacement of 189–190 physical px;
+- median body displacement: 190 physical px;
+- spread: 1 physical px;
+- body scroll geometry therefore remains coherent within UIAutomator integer-bound quantization;
+- Restore Purchases remains reachable;
+- Privacy Policy and Terms of Use remain reachable at natural maximum scroll;
+- pinned header collapse is independently owned through SliverPersistentHeader shrinkOffset and is not body-scroll displacement;
+- current layout retains BouncingScrollPhysics + AlwaysScrollableScrollPhysics;
+- no Platform.isAndroid / TargetPlatform.android Premium geometry branch exists;
+- Back control is outside this mission and remains untouched.
+
+Root-cause classification:
+- the measured approximately 72.38dp natural scroll budget is not itself a defect;
+- C10.13H.2 explicitly requires natural scrolling rather than compressing every Premium element into the first viewport;
+- no current runtime evidence proves clipping, unreachable legal content, broken scroll ownership, or inconsistent body geometry;
+- therefore no Premium source mutation is justified from the current evidence;
+- preserve the current Premium source geometry unless final physical visual acceptance exposes a new reproducible Android defect.
+
+Remaining gate:
+1. final owner visual acceptance of the current Android free Premium composition;
+2. close C10.13H.2 only after that acceptance;
+3. preserve all frozen iOS Premium geometry unchanged.
+
+
+##### C10.13I.3 — active subscription reconciliation failure
+
+New physical evidence:
+- Apple StoreKit reports an existing active Yearly subscription;
+- Flow Ai can still show the free `Unlock Premium` catalog;
+- Flow Ai can report `No subscription found to restore`;
+- StoreKit subsequently reports `You are currently subscribed to this`;
+- app entitlement state and store ownership are therefore inconsistent.
+
+Required behavior:
+- active validated ownership -> `Premium Active`;
+- authoritative plan and expiry are shown;
+- `Manage Subscription` is shown;
+- purchase CTA is unavailable while entitlement is active;
+- restore must not falsely report no subscription where StoreKit/backend proves
+  an active purchase chain.
+
+Priority:
+1. audit current three-way source ownership;
+2. repair subscription authority;
+3. rebalance Android layout without changing frozen iOS geometry;
+4. physical iPhone + Android verification;
+5. update ledger with evidence before closure.
+
+#### C10.13I.3 — verified authoritative reconciliation root cause
+
+Status: ROOT CAUSE VERIFIED; PRE-MUTATION TYPE AUDIT ACTIVE.
+
+Verified:
+- receipt backend status endpoint already returns active state plus canonical
+  product ID, expiration date, transaction ID and original transaction ID;
+- Flutter receipt client currently reduces that response to `bool?`;
+- `SubscriptionService._loadBackendVerifiedSubscription()` then reuses the
+  locally persisted candidate when backend returns active;
+- this can preserve stale plan/expiry metadata even when backend/store truth
+  changed;
+- `SubscriptionProvider.initialize()` currently returns immediately when the
+  same user is already initialized, preventing re-entry reconciliation;
+- worktree startup store restore already exists and remains receipt-validated;
+  it must be preserved;
+- no repair may overwrite the existing staged/worktree account-isolation and
+  restore hardening.
+
+Required repair surface:
+1. preserve full backend status projection client-side;
+2. rebuild entitlement from backend product/expiry/transaction truth;
+3. refresh same-user entitlement on Premium re-entry;
+4. add a verified active-entitlement checkout guard using the existing
+   PurchaseError contract;
+5. preserve startup restore and all account-generation protections;
+6. add behavioral regression contracts;
+7. physical iPhone and Android proof before closure.
+
+##### C10.13I.3C attempt 1 — safely aborted
+
+Result:
+- production receipt-status mutation was not accepted;
+- exact pre-mutation source matcher returned zero matches;
+- command stopped before the intended production replacement;
+- controlled pre-image rollback executed successfully;
+- no subscription repair is considered applied from this attempt.
+
+Engineering decision:
+- do not weaken the gate or perform broad text replacement;
+- audit HEAD, staged index and worktree method bodies independently;
+- determine exact structural method boundaries;
+- next mutation must use verified boundaries rather than brittle full-method
+  whitespace matching.
+
+##### C10.13I.3C.1 provenance correction
+
+Verified:
+- the previous exact-owner audit aborted because `verifySubscriptionActive()`
+  is absent from HEAD;
+- therefore the Boolean subscription-status client API is not part of the
+  current committed HEAD baseline;
+- receipt client HEAD, staged index and worktree are materially different;
+- status reconciliation must be analyzed as a three-way integration change,
+  not treated as a simple HEAD regression;
+- no production mutation may proceed until the exact introduction layer and
+  current worktree ownership are confirmed.
+
+##### C10.13I.3C.3 attempt — runtime repair rolled back by stale source contract
+
+Result:
+- full backend status projection mutation passed structural owner checks;
+- new projection contract passed 4/4;
+- existing `subscription_validation_policy_test.dart` failed because it
+  asserted the literal implementation string `return active;`;
+- repaired design intentionally delegates Boolean compatibility through
+  authoritative `fetchSubscriptionStatus()` and therefore does not retain that
+  exact implementation string;
+- controlled rollback restored production source after the failed gate;
+- no runtime repair is considered applied from this attempt.
+
+Next gate:
+- audit and correct the stale implementation-string contract without weakening
+  the intended inactive-vs-temporary-failure semantics;
+- rerun its original baseline;
+- then reapply the status-projection mutation and run all monetization gates.
+
+##### C10.13I.3C.5 — authoritative status projection green gate
+
+Status: IMPLEMENTED / AUTOMATED GATES GREEN.
+
+Implemented:
+- replaced Boolean-only backend subscription status consumption with a full
+  `SubscriptionStatusProjection`;
+- authoritative active projection preserves backend product ID, expiration,
+  transaction ID and original transaction ID;
+- explicit inactive status remains distinguishable from temporary backend
+  failure / unknown status;
+- incomplete or expired active metadata fails closed;
+- retained `verifySubscriptionActive()` only as a compatibility wrapper;
+- repaired the previous brittle source-string contract while preserving its
+  actual inactive-vs-unknown policy requirement;
+- preserved Apple validation, Google validation, lifecycle handling,
+  authenticated routing and existing receipt-service hardening.
+
+Next gate:
+- C10.13I.3D: consume `fetchSubscriptionStatus()` directly inside
+  `SubscriptionService._loadBackendVerifiedSubscription()`;
+- reconstruct Premium state from backend truth instead of stale persisted
+  product/expiry metadata;
+- preserve same-user/account-generation isolation and validated startup restore;
+- then add active-entitlement purchase guard and provider refresh.
+
+##### C10.13I.3C.5 attempt — stale assertion precondition changed
+
+Result:
+- production status-owner preconditions remained valid;
+- expected exact stale policy assertion was no longer present in the current
+  worktree test;
+- command aborted before production mutation;
+- controlled rollback completed;
+- no status-projection implementation is considered applied from this attempt.
+
+Decision:
+- inspect current HEAD/index/worktree test state before further mutation;
+- do not force a replacement against an unverified test body.
+
+##### C10.13I.3D.1 — authoritative reconstruction owner audit
+
+Status: AUDIT ACTIVE.
+
+Verified prerequisite:
+- C10.13I.3C full subscription-status projection is present in the current
+  worktree;
+- Boolean compatibility remains delegated to that projection.
+
+Current gate:
+- map the complete `_loadBackendVerifiedSubscription()` owner;
+- identify every location where persisted candidate metadata remains
+  authoritative after backend ACTIVE;
+- determine legitimate purchase-date ownership without fabricating dates;
+- preserve UNKNOWN-backend fail-closed/local-valid fallback semantics;
+- preserve startup restore, account-generation isolation and transaction
+  validation.
+
+C10.13H.2 remains queued:
+- no Android Premium visual correction is considered applied yet;
+- screenshots remain qualitative references only;
+- responsive code changes will be completed before physical Android/iOS
+  verification.
+
+##### C10.13I.3D — authoritative backend reconstruction — CLOSED
+
+Status: CLOSED — AUTOMATED AUTHORITY / CONTRACT / ANALYZER GATES GREEN.
+
+Verified:
+- `SubscriptionService._loadBackendVerifiedSubscription()` consumes
+  `fetchSubscriptionStatus()` directly;
+- backend ACTIVE reconstruction uses authoritative product ID, expiration date,
+  transaction ID and original transaction ID;
+- persisted candidate purchase date is retained only as historical metadata and
+  is not fabricated as entitlement truth;
+- malformed, incomplete or expired ACTIVE metadata fails closed;
+- explicit backend INACTIVE remains distinguishable from temporary UNKNOWN;
+- startup restore and account-generation protections remain preserved;
+- authoritative reconstruction contract passes;
+- subscription-status projection contract passes;
+- authoritative-entitlement, account-isolation, ad-suppression and startup-restore
+  contracts pass;
+- Premium claim-truth drift discovered during the broader gate was forensically
+  traced and the previously verified wording
+  `Explore your health trends and tracked patterns` was restored;
+- relevant analyzer completed with zero issues;
+- branch, HEAD and semantic staged tree remained protected.
+
+Decision:
+- C10.13I.3D is closed;
+- do not reopen it without a reproducible reconstruction defect;
+- physical subscription closure remains owned by the parent C10.13I mission.
+
+Next gate:
+- C10.13I.3E — same-user provider reconciliation.
+
+##### C10.13I.3E — same-user subscription reconciliation — CLOSED
+
+Status: CLOSED — PROVIDER / REGRESSION / ANALYZER GATES GREEN.
+
+Verified:
+- removed the same-user early return from
+  `SubscriptionProvider.initialize()`;
+- Premium re-entry now reaches the authoritative
+  `SubscriptionService.initialize()` reconciliation path;
+- provider initialization generation protection remains intact;
+- previous entitlement listener is cancelled before replacement;
+- no parallel subscription reconciliation owner was introduced;
+- provider copies reconciled service subscription and product state back into UI state;
+- permanent same-user reconciliation contract passes;
+- full Premium service contract surface passes;
+- monetization/subscription release contract surface passes;
+- Premium screen/purchase-activation contract surface passes;
+- targeted analyzer completed with zero issues;
+- `git diff --check` passes;
+- branch, HEAD and semantic staged tree remained protected.
+
+Decision:
+- C10.13I.3E is closed;
+- do not restore the same-user initialization bypass;
+- physical subscription proof remains owned by the parent C10.13I mission.
+
+Next gate:
+- C10.13I.3F — authoritative already-active checkout guard.
+
+### Android Premium responsive composition — physical closure evidence
+- Status: 99% — code/runtime gates complete; final visual acceptance pending.
+- Accepted iOS geometry remains frozen at 844dp viewport with 196dp expanded header.
+- Root cause was traced to the physical top composition band, not badge-local positioning.
+- Production owner now uses the accepted iPhone physical top-band ratio:
+  `(47dp safe top + 196dp header) / 844dp viewport`.
+- Samsung SM-N770F physical RenderBox verification:
+  - safeTop: 32.381dp
+  - headerY: 32.381dp
+  - headerH: 230.855dp
+  - headerBottom: 263.236dp
+  - freeAbove: 31.428dp
+  - freeBelow: 31.428dp
+  - computedMax: 230.855dp
+- Physical Android top-band verification: PASS.
+- Header internal centering: PASS.
+- No Android platform branch introduced.
+- iOS 844dp header result remains exactly 196dp.
+- Subtitle rule remains responsive: iPhone 390dp = 14px; Samsung 411dp = 15px.
+- Temporary measurement probes removed from production source.
+- Next gate: final physical visual acceptance, then mission closure.
+
+### C10.13I.3F — authoritative already-active checkout guard — closure — 2026-09-28
+
+Status: 100% — CLOSED / AUTOMATED AUTHORITATIVE GATES COMPLETE.
+
+Verified:
+- durable authenticated identity is required before checkout;
+- authoritative backend reconciliation runs immediately before store checkout;
+- identity generation is rechecked after backend resolution;
+- authoritative same-user Premium returns `PurchaseError.alreadyPurchased`
+  before the store purchase owner is called;
+- `unknownPreserved` is not treated as authoritative active Premium;
+- one production `_iap.buyNonConsumable(...)` owner remains;
+- checkout launch is service-level single-flight;
+- an active restore prevents checkout launch;
+- checkout launch prevents both startup and manual restore from issuing a
+  second store operation;
+- startup and manual restore continue sharing `_restoreCompleter`, preserving
+  existing restore-vs-restore single-flight;
+- exactly two intentional raw `_iap.restorePurchases()` calls remain:
+  startup ownership recovery and explicit/manual restore;
+- provider purchase/restore re-entry is rejected before `_isLoading` mutation;
+- legacy Premium purchase/restore owners remain disabled.
+
+Verification:
+- authoritative checkout/identity suite: PASS;
+- purchase/restore/receipt suite: PASS;
+- full Premium suite: PASS;
+- `flutter analyze`: zero issues;
+- diff checks pass;
+- branch, HEAD and semantic staged tree remained protected.
+
+Decision:
+- C10.13I.3F is CLOSED;
+- physical iPhone + Android subscription proof remains the next parent
+  C10.13I release gate;
+- final release packaging remains unauthorized until the immediate release
+  missions are complete.
+
+Next gate:
+1. physical iPhone subscription proof;
+2. physical Android subscription proof;
+3. confirm already-active Premium does not reopen checkout;
+4. confirm genuine inactive ownership can still enter normal checkout;
+5. continue to ADMOB-CMP-P0.
+
+### C10.13I.3G — Receipt-owner conflict UX closure — 2026-09-28
+
+Status: 100% — AUTOMATED CLOSED / PHYSICAL ACCOUNT-OWNER PROOF STILL OPEN.
+
+Verified:
+- backend `receipt_owner_conflict` remains fail-closed;
+- restore no longer collapses authoritative ownership conflict into generic `No subscription found`;
+- user-facing restore state now explains that the App Store subscription belongs to a different Flow Ai account;
+- no receipt ownership transfer, entitlement bypass, UID merge or weakening of backend ownership isolation was introduced;
+- temporary receipt diagnostics and UID display instrumentation were removed;
+- targeted Premium regression suite: 31/31 PASS;
+- targeted Premium analyzer: 0 issues;
+- `git diff --check`: PASS.
+
+Physical gate still required:
+- sign in with the Firebase account that canonically owns the Apple receipt;
+- restore the active Apple subscription;
+- verify Premium Active without checkout;
+- verify unrelated Firebase UID remains denied.
+
+FINAL_RELEASE_BUILD=NOT_AUTHORIZED
+
+### C10.13I.3H — iPhone physical subscription ownership proof — 2026-09-28
+
+Status: 100% — PHYSICAL CLOSED.
+
+Verified on physical iPhone:
+- canonical Apple-owner Flow Ai account restored active Monthly Premium successfully;
+- Premium Active rendered with verified expiry 29.09.2026;
+- wrong Google Flow Ai account remained non-Premium;
+- restore on wrong account returned explicit receipt-owner conflict;
+- after authoritative receipt-owner conflict, Start Premium did not reopen App Store checkout;
+- backend receipt ownership isolation remained fail-closed;
+- no UID merge, receipt transfer or entitlement bypass introduced.
+
+Automated evidence:
+- targeted owner-conflict/checkout suite: 32/32 PASS;
+- full Premium suite: 130/130 PASS;
+- monetization release contracts: 73/73 PASS;
+- analyzer: 0 issues;
+- temporary diagnostics removed.
+
+NEXT=PHYSICAL_ANDROID_SUBSCRIPTION_PROOF
+FINAL_RELEASE_BUILD=NOT_AUTHORIZED
+
+### PREMIUM-PHYSICAL-CLOSURE — 2026-09-28
+
+Status: 100% — CLOSED.
+
+Verified:
+- latest current source refreshed on physical iPhone and Android;
+- Premium Active copy finalized as `Premium Subscription Active`;
+- accepted iOS geometry/measurements unchanged;
+- Premium suite 130/130 PASS;
+- targeted analyzer 0 issues;
+- iPhone active-owner restore PASS;
+- wrong-account ownership isolation PASS;
+- checkout blocked after authoritative receipt-owner conflict;
+- Android subscription proof CLOSED;
+- temporary receipt diagnostics removed.
+
+NEXT=MON-CMP_ADMOB_CONSENT_FULL_MAP_AUDIT
+FINAL_RELEASE_BUILD=NOT_AUTHORIZED
+
+### MON-CMP.2 — Consent lifecycle hardening — 2026-09-28
+
+Status: AUTOMATED CLOSED / PHYSICAL OPEN.
+
+Verified:
+- UMP remains the single authoritative advertising-consent owner.
+- Consent withdrawal immediately invalidates/disposes loaded and in-flight fullscreen ads.
+- Consent granted after startup can resume Mobile Ads initialization without app restart.
+- Banner eligibility independently re-evaluates current consent and entitlement.
+- Premium entitlement suppression remains authoritative and fail closed.
+- No production consent debug geography/reset/test-device path introduced.
+- Targeted CMP contracts: 20/20 PASS.
+- Full CMP/monetization contracts: 71/71 PASS.
+- Analyzer: 0 issues.
+- git diff checks: PASS.
+
+NEXT=MON-CMP.3_PHYSICAL_UMP_ANDROID_THEN_IOS
+FINAL_RELEASE_BUILD=NOT_AUTHORIZED
+
+### MON-CMP.3 — Physical CMP / ad eligibility verification — 2026-09-28
+- Status: **100% — PHYSICAL GATE PASSED**
+- Android free entitlement:
+  - UMP `canRequestAds=true`
+  - Mobile Ads initialized
+  - production banner request executed
+  - physical banner load observed
+- iOS free entitlement:
+  - production release build physically verified
+  - UMP active
+  - production ads physically displayed after runtime tracing
+- Android Premium entitlement:
+  - `premium=true`
+  - `setPremiumSuppressed(true)`
+  - `canLoadAds=false`
+  - banner suppressed after authoritative entitlement resolution
+- Premium ad-free invariant: **PASS**
+- CMP privacy-options behavior: conditional UMP behavior verified; no forced privacy tile.
+- Source patch required for entitlement suppression: **NO**
+- Remaining CMP gate: remove temporary `[FLOW_AD_DIAG]` instrumentation and rerun automated contracts/analyzer.
+- Next: **MON-CMP.4**
+
+### MON-CMP.4 — Production diagnostic cleanup — 2026-09-28
+- Status: **100% — CLOSED**
+- Temporary `[FLOW_AD_DIAG]` instrumentation removed.
+- Remaining temporary diagnostic occurrences: **0**
+- CMP/monetization regression suite: **PASS**
+- Targeted analyzer: **0 issues**
+- Android free production ads: **PASS**
+- iOS free production ads: **PASS**
+- Android Premium ad suppression: **PASS**
+- UMP/CMP consent lifecycle: **PASS**
+- Production behavior changed by diagnostic cleanup: **NO**
+- Branch / HEAD / staged-tree integrity preserved.
+- Next: **WEB-PRIVACY.1**
+
+### WEB-PRIVACY.1 — Privacy page responsive title — 2026-09-28
+- Status: **90% — SOURCE FIX COMPLETE / PHYSICAL VERIFY OPEN**
+- Authoritative owner: `web/privacy.html`.
+- Root cause: mobile breakpoint forced the H1 to `2rem`, exceeding the usable card width on narrow phones.
+- Fix: mobile-only responsive H1 sizing with `clamp(1.1rem, 5.5vw, 2rem)` plus `white-space: nowrap`.
+- Heading remains bold and text remains `Flow Ai - Privacy Policy`.
+- Existing desktop/tablet privacy-page layout and content were not altered by this patch.
+- Static responsive contract: **PASS**
+- HTML parse sanity: **PASS**
+- Deployment: PASS to `flowai-demo-project`.
+- Physical navigation from Premium Privacy Policy link: PASS.
+- Physical title layout: FAIL — title still wraps to two lines on iPhone.
+- Next gate: verify live deployed CSS/hash and eliminate the remaining narrow-screen wrap.
+
+### WEB-PRIVACY.1A — Mobile title visual refinement — 2026-09-29
+- Status: **95% — DEPLOYED / PHYSICAL VERIFY OPEN**
+- Previous forced one-line treatment rejected after physical review because it reduced visual quality.
+- Final hierarchy:
+  - line 1: `🌸 Flow Ai`
+  - line 2: `Privacy Policy`
+- Brand line intentionally smaller.
+- Document title remains dominant without oversized typography.
+- `Last Updated` mobile text increased slightly for balance and readability.
+- No privacy content changed.
+- No desktop/tablet structure outside title typography changed.
+- Next gate: physical iPhone verification.
+
+### WEB-PRIVACY.1B — Legal-page cache hardening — 2026-09-29
+- Status: **95% — DEPLOYED / PHYSICAL VERIFY OPEN**
+- Physical iPhone verification showed stale pre-refinement privacy HTML after deployment.
+- Live-source verification and Firebase Hosting cache behavior audited.
+- Added explicit `Cache-Control: no-cache, no-store, must-revalidate` for `/privacy.html` and `/terms.html`.
+- Current authoritative `web/privacy.html` synchronized to `build/web/privacy.html`.
+- Next gate: reopen Privacy Policy and verify refreshed title hierarchy physically.
+
+### PREMIUM-ANDROID-END — Android Premium bottom composition — 2026-09-29
+- Status: **100% — CLOSED / PHYSICAL + FORENSIC GATES PASSED**
+- Physical Android max-scroll verification: PASS.
+- Privacy Policy and Terms of Use cards are fully visible and reachable at maximum scroll.
+- Collapsed/faded `Premium Active` pinned header at maximum scroll is accepted.
+- Deep owner map confirmed Premium uses its own `SafeArea -> CustomScrollView -> Sliver` composition.
+- Premium does not own or import `SettingsSection` / `SettingsTile`.
+- Premium platform geometry remains shared; no Android-specific geometry fork exists.
+- Settings design and measurements remain untouched.
+- Subscription flow and entitlement behavior remain untouched.
+- Accepted iPhone Premium geometry remains untouched.
+- Premium layout contract: **7/7 PASS**.
+- Premium header contracts: **11/11 PASS**.
+- Settings header contract: **1/1 PASS**.
+- Analyzer: **0 issues**.
+- Source mutation for this mission: **NONE**.
+- Final disposition: preserve current Premium geometry exactly as verified.
+
+### WEB-PRIVACY.1C — Title spacing refinement — 2026-09-29
+- Status: **98% — DEPLOYED / PHYSICAL VERIFY OPEN**
+- Physical review confirmed correct typography hierarchy:
+  - Flow Ai: largest
+  - Privacy Policy: smaller
+  - Introduction: smaller than Privacy Policy
+- Remaining visual issue was insufficient vertical separation between `Flow Ai` and `Privacy Policy`.
+- Changed only brand-to-document vertical gap:
+  - desktop: 8px
+  - mobile: 9px
+- No font sizes changed.
+- No Premium, Settings, subscription, or app geometry changed.
+- Next gate: physical phone verification.
+
+### WEB-PRIVACY.1 — Privacy Policy production presentation — 2026-09-29
+- Status: **100% — CLOSED / DEPLOYED / PHYSICAL VERIFIED**
+- Production URL: `https://flowai-demo-project.web.app/privacy.html`
+- Final title: `🌸 Flow Ai - Privacy Policy`
+- Final mobile hierarchy:
+  - Flow Ai: 1.8rem
+  - Privacy Policy: 1.46rem
+  - Introduction: 1.35rem
+- Title remains on one line on verified iPhone and Android physical devices.
+- Firebase Hosting deployment verified on project `flowai-demo-project`.
+- Privacy/Terms cache hardening remains active.
+- iPhone physical verification: PASS.
+- Android physical verification: PASS.
+- Premium geometry changed: NO.
+- Settings geometry changed: NO.
+- Subscription behavior changed: NO.
+- Mission disposition: **CLOSED**.
+
+### ANDROID-PREMIUM-ACTIVE.1 — Android Premium Active forensic closure
+
+Status: ACTIVE — UNRESOLVED.
+
+Scope:
+- Android Premium Active composition only.
+- iOS Premium Active geometry is frozen and must remain unchanged.
+- No screenshot-derived production measurements are permitted.
+- Geometry decisions must come from source ownership, runtime constraints, device metrics, layout contracts and physical verification.
+
+Required gates:
+1. deep owner/dependency map;
+2. exact Android runtime/device geometry evidence;
+3. source/history/blame audit;
+4. root-cause classification;
+5. minimal centralized responsive correction only if evidence requires it;
+6. Premium regression contracts;
+7. full analyzer;
+8. signed/release Android physical verification;
+9. iPhone regression verification proving accepted iOS geometry unchanged;
+10. ledger closure with exact evidence.
+
+Related missions preserved:
+- APPLE-IAP-P0 — ACTIVE.
+- GPLAY-HC-P0.5 — WAITING GOOGLE REVIEW.
+- FINAL-E2E — PENDING.
+- FINAL-RELEASE — NOT AUTHORIZED.
+
+Next gate:
+- complete forensic Android Premium Active map before any Premium source mutation.
+
+#### ANDROID-PREMIUM-ACTIVE.1A — tall-viewport root-transfer correction
+
+Status: IMPLEMENTED / STATIC VERIFICATION IN PROGRESS.
+
+Forensic root cause:
+- installed Android release APK is byte-identical to the latest local signed release APK;
+- Premium source predates that APK and no Premium source changed after the APK build;
+- stale-artifact hypothesis is rejected;
+- tall-view responsive logic removed two Premium post-action root gaps;
+- current root top inset did not receive the removed spacing, contradicting the intended redistribution invariant.
+
+Correction:
+- one centralized `_premiumRootTopInset` owner now transfers exactly the spacing removed by the two Premium post-action root gaps;
+- redistribution is derived solely from runtime viewport/safe-area/text-scale constraints;
+- no Android/iOS geometry branch was introduced;
+- accepted shorter iOS geometry receives zero transfer and remains unchanged by construction;
+- no screenshot-derived measurement was used;
+- Settings, subscription logic and entitlement behavior were untouched.
+
+Remaining gates:
+1. Premium regression suite;
+2. analyzer;
+3. signed release Android build/install;
+4. physical Android Premium Active verification;
+5. iPhone regression verification;
+6. final ledger closure.
+
+#### ANDROID-PREMIUM-ACTIVE.1B — multi-viewport responsive gate
+
+Status: STATIC + RELEASE BUILD GATES PASSED / PHYSICAL VERIFY OPEN.
+
+Responsive invariant:
+- Premium must adapt across compact, medium, tall and large viewports;
+- geometry derives from viewport, safe area, text scale and layout constraints;
+- no screenshot-derived production measurements;
+- no Android/iOS geometry magic offsets;
+- accepted iOS composition remains frozen;
+- Android correction must remain presentable across device-size classes.
+
+Verification:
+- multi-viewport mathematical constraint matrix passed;
+- Premium targeted regression passed;
+- full Premium regression passed;
+- analyzer passed with zero issues;
+- signed Android release APK rebuilt;
+- release APK installed on physical Android device;
+- installed package verified non-debuggable.
+
+Remaining:
+1. physical Android Premium Active verification;
+2. physical iPhone regression verification;
+3. close ANDROID-PREMIUM-ACTIVE.1;
+4. immediately resume APPLE-IAP-P0.
+
+#### ANDROID-PREMIUM-ACTIVE.1C — root-transfer experiment reverted
+
+Status: REVERTED — FAILED PHYSICAL/RUNTIME GEOMETRY.
+
+Evidence:
+- `_premiumRootTopInset` experiment added approximately 15.76dp on the current Android runtime;
+- live UIAutomator bounds then placed subscription/legal content lower in the viewport;
+- Privacy Policy and Terms of Use cards were no longer exposed in the default viewport;
+- this contradicted the previously verified Android invariant where legal bottom remained inside the usable fold.
+
+Disposition:
+- `_premiumRootTopInset` experiment removed completely;
+- original centralized `_premiumAdaptiveGap` root owner restored;
+- no Android/iOS platform geometry fork introduced;
+- iOS accepted geometry remains untouched;
+- Settings/subscription/entitlement behavior untouched;
+- screenshot measurements were not used.
+
+Mission remains ACTIVE.
+Next gate:
+- obtain fresh live runtime bounds from the rebuilt release;
+- compare those bounds against the previously verified runtime geometry;
+- identify any remaining responsive defect before another source mutation.
+
+#### ANDROID-PREMIUM-ACTIVE.1E — responsive double-expansion correction
+
+Status: IMPLEMENTED / RELEASE PHYSICAL VERIFICATION PENDING.
+
+System-level root cause:
+- Premium had two independent height-responsive expansion systems;
+- expanded pinned-header maximum height scaled upward with total viewport height;
+- body spacing separately scaled upward with usable viewport height through `_premiumVerticalDensity`;
+- on tall devices both systems therefore increased vertical consumption simultaneously;
+- accepted iOS height remained at the baseline and did not expose this compounding behavior.
+
+Correction:
+- expanded header remains proportional on smaller viewports;
+- physical expanded top-band now has a centralized comfortable maximum;
+- body remains authoritative for tall-screen vertical rhythm;
+- no Android/iOS geometry fork;
+- no device-model condition;
+- no screenshot-derived measurement;
+- accepted iOS result remains mathematically unchanged;
+- Settings, subscription logic and entitlement behavior untouched.
+
+Required remaining gates:
+1. signed Android release rebuild;
+2. runtime bounds verification on physical Android;
+3. physical presentation verification;
+4. iPhone regression verification;
+5. close ANDROID-PREMIUM-ACTIVE.1;
+6. resume APPLE-IAP-P0 immediately.
+
+#### ANDROID-PREMIUM-ACTIVE.1F — signed release runtime verification
+
+Status: SIGNED RELEASE INSTALLED / LIVE BOUNDS CAPTURED / PHYSICAL ACCEPTANCE OPEN.
+
+Verified:
+- responsive header cap compiled into a signed release APK;
+- installed Android package is non-debuggable;
+- no Android/iOS geometry branch exists;
+- runtime geometry captured from UIAutomator rather than screenshot measurement;
+- compact/medium/tall/large/tablet viewport model remains structurally valid;
+- Premium regression and analyzer rerun after release build;
+- accepted iOS model remains mathematically unchanged.
+
+Remaining:
+1. compare live bounds against reverted baseline;
+2. physical Android presentation acceptance;
+3. physical iPhone regression acceptance;
+4. close ANDROID-PREMIUM-ACTIVE.1;
+5. resume APPLE-IAP-P0.
+
+#### ANDROID-PREMIUM-ACTIVE.1H — authoritative Android runtime gate
+
+Status: ANDROID GATES PASSED / IPHONE REGRESSION REMAINS.
+
+Verified:
+- current signed release APK equals installed physical-device APK;
+- package is release/non-debuggable;
+- Flow Ai was explicitly verified as foreground before UI capture;
+- Premium Active runtime markers verified before bounds capture;
+- Premium Active, Current subscription, Manage Subscription, Restore Purchases, Privacy Policy and Terms of Use are present in the authoritative live UI tree;
+- Android physical presentation accepted;
+- responsive header correction has no Android/device-model branch;
+- screenshot measurements were not used;
+- Premium regression contracts and analyzer pass.
+
+Only remaining gate for ANDROID-PREMIUM-ACTIVE.1:
+- physical iPhone regression proving accepted iOS Premium geometry remains unchanged.
+
+#### IOS-PREMIUM-BOTTOM.1A — duplicate post-action gap removal
+
+Status: IMPLEMENTED / PHYSICAL IPHONE VERIFY OPEN.
+
+Forensic root cause:
+- active Premium inserted one `_premiumPostActionRootGap` immediately after `_buildActiveSubscriptionDetails`;
+- root composition then inserted a second shared `_premiumPostActionRootGap`;
+- accepted iPhone transfer factor is zero, therefore both gaps remained at approximately 8dp each;
+- together with the existing fixed 8dp and legal-section 6dp top inset, the post-Restore chain was approximately 30dp;
+- historical physical verification established the natural Restore-to-legal rhythm at approximately 23.76–24dp.
+
+Correction:
+- removed only the duplicate active-state root gap;
+- retained the single shared responsive post-action gap;
+- expected accepted-iPhone reduction is approximately 8dp;
+- expected current tall-Android change is 0dp because its transfer factor is already 1;
+- no platform/device branch added;
+- header, legal cards, Settings, subscription logic and entitlement behavior untouched;
+- no screenshot-derived production measurements used.
+
+Remaining:
+1. build/launch current iOS source on physical iPhone;
+2. physical Premium Active presentation verify;
+3. confirm Android regression remains zero-effect;
+4. close IOS-PREMIUM-BOTTOM.1 and ANDROID-PREMIUM-ACTIVE.1 if both pass.
+
+#### IOS-PREMIUM-BOTTOM.1C — signed physical-device provenance
+
+Status: SIGNED DEVICE BUILD INSTALLED / FINAL PHYSICAL ACCEPTANCE OPEN.
+
+Evidence:
+- previous physical install attempt failed because `Runner.app` was built with `--no-codesign`;
+- device correctly rejected the unsigned artifact with `ApplicationVerificationFailed`;
+- no source regression was involved;
+- current Premium source still contains one shared post-action root gap;
+- fresh release build was code-signed for the physical iPhone;
+- code signature verified locally;
+- exact signed Runner.app installed successfully to the physical iPhone;
+- exact signed build launched successfully;
+- Premium regression contracts and analyzer remain green.
+
+Remaining:
+1. open Premium Active on physical iPhone;
+2. physically verify bottom spacing;
+3. close IOS-PREMIUM-BOTTOM.1 if accepted;
+4. resume APPLE-IAP-P0.
+
+#### PREMIUM ACTIVE CROSS-PLATFORM FINAL CLOSURE — 2026-09-29
+
+Status: 100% — CLOSED / GEOMETRY FROZEN.
+
+IOS-PREMIUM-BOTTOM.1:
+- CLOSED.
+- Physical iPhone presentation accepted by user.
+- Current Restore Purchases bottom breathing room accepted as final.
+- No further spacing reduction authorized.
+- Duplicate active root-gap correction preserved.
+- No screenshot-derived production measurement used.
+
+ANDROID-PREMIUM-ACTIVE.1:
+- CLOSED.
+- Signed Android release physically verified.
+- Installed APK matched verified release artifact.
+- Premium Active runtime/legal surfaces verified.
+- Tall-screen responsive header correction physically accepted.
+
+Cross-platform invariants:
+- no Android/iOS geometry fork;
+- no device-model magic offsets;
+- responsive behavior remains viewport/safe-area/text-scale driven;
+- Settings geometry untouched;
+- subscription authority/entitlement behavior untouched;
+- Premium legal cards untouched;
+- Premium targeted contracts pass;
+- full Premium regression passes;
+- analyzer zero issues.
+
+Final disposition:
+- freeze Premium presentation.
+- do not reopen without a new reproducible regression.
+
+Next active mission:
+- APPLE-IAP-P0 — 98% ACTIVE.
+
+#### MON-PROD-TELEMETRY — AdMob production evidence — 2026-09-29
+
+Status: OBSERVED / PRODUCTION ANDROID ADS LIVE.
+
+Owner-supplied AdMob evidence from the currently published Android app:
+- estimated earnings: €0.27;
+- ad requests: 3.52K;
+- impressions: 555;
+- match rate: 27.79%;
+- eCPM: €0.48;
+- AdMob app shown as Flow Ai / Android.
+
+Interpretation:
+- production Android ad serving is live;
+- this is monetization-runtime evidence only;
+- it does not prove Apple IAP review association, subscription readiness, entitlement authority or App Store Connect metadata;
+- preserve for FINAL-E2E monetization reconciliation.
+
+#### APPLE-IAP-P0 — pre-submission counter-check — 2026-09-29
+
+Status: ACTIVE — DO NOT CLOSE WITHOUT LIVE STORE PROOF.
+
+Closure policy:
+- static source evidence is insufficient for App Store Connect state;
+- local build evidence is insufficient for App Review association state;
+- historical screenshots are insufficient unless they prove the current draft;
+- App Store Connect metadata, agreements and IAP review association require current authoritative proof;
+- no mission percentage is inferred from missing store evidence.
+
+Verified app-side gates remain preserved.
+Unverified store-side gates remain open until current App Store Connect proof is captured.
+
+#### APPLE-IAP-P0 — legal URL and iPad environment counter-check — 2026-09-29
+
+Status: ACTIVE — STORE-SIDE CLOSURE GATES REMAIN OPEN.
+
+Latest verified regression:
+- Premium targeted counter-check: 42/42 PASS;
+- full Premium suite: 131/131 PASS;
+- full analyzer: zero issues.
+
+Closure rule:
+- APPLE-IAP-P0 must not close from source/tests alone;
+- current App Store metadata must be proven;
+- current Paid Apps Agreement state must be proven;
+- Monthly and Yearly review association must be proven;
+- subscription-group review association must be proven;
+- reviewer navigation notes must be proven;
+- Apple-requested screen recording must be supplied;
+- iPad review path must be verified before resubmission.
+
+#### APPLE-IAP-P0 — iPad runtime verification deferred — 2026-09-29
+
+Status: DEFERRED BY OWNER — NOT PASSED / NOT CLOSED.
+
+Facts:
+- Apple reviewed the rejected build on iPad Air 11-inch (M3);
+- exact matching local simulator exists;
+- iPad runtime verification is intentionally deferred for now;
+- no iPad PASS is claimed;
+- no iPad-specific source mutation is authorized;
+- APPLE-IAP-P0 remains active.
+
+Continue with:
+1. App Store metadata verification;
+2. Paid Apps Agreement verification;
+3. Monthly review association;
+4. Yearly review association;
+5. subscription-group review association;
+6. App Review navigation notes;
+7. Apple-requested screen recording.
+
+Do not close APPLE-IAP-P0 until the remaining current-store gates are proven.
+
+#### APPLE-IAP-P0 — live ASC draft verification — 2026-09-29
+
+Status: ACTIVE — FINAL IOS RELEASE BUILD PENDING.
+
+Verified directly in current App Store Connect UI:
+- Paid Apps Agreement: Active;
+- Flow Ai Premium subscription group exists;
+- Monthly product:
+  `flow_ai_premium_monthly`;
+- Yearly product:
+  `flow_ai_premium_yearly`;
+- both Monthly and Yearly are present in the current Draft Submission;
+- Monthly visibly reports Ready for Review;
+- both subscription records have App Review screenshots;
+- current app submission remains rejected and has not been resubmitted.
+
+Metadata still open:
+- App Description must contain Apple Standard EULA URL;
+- Privacy Policy metadata currently points to
+  `https://flow-iq-app.web.app/privacy-policy/`,
+  while the app purchase flow uses the separately verified Flow Ai policy
+  `https://flowai-demo-project.web.app/privacy.html`;
+- metadata consistency must be resolved before submission.
+
+Release rule:
+- do not submit yet;
+- prove next unused App Store build number;
+- finalize exact source;
+- create signed App Store artifact;
+- upload and verify processing;
+- attach the new build;
+- finish App Review notes / screen recording;
+- only then resubmit.
+
+#### APPLE-IAP-P0 — final signed iOS artifact 1783342123 — 2026-09-29
+
+Status: SIGNED ARTIFACT VERIFIED / UPLOAD NOT YET PERFORMED.
+
+Verified:
+- App Store Connect highest prior uploaded build: `1783342122`;
+- next unused build selected: `1783342123`;
+- final marketing version: `2.2.4`;
+- bundle ID: `com.flowai.health`;
+- signed App Store IPA generated successfully;
+- packaged CFBundleVersion: `1783342123`;
+- code signature verification passed;
+- distribution provisioning profile verification passed;
+- `get-task-allow` is not enabled;
+- signing team verified as `9FY62NTL53`;
+- IPA SHA-256:
+  `4d4f6b8a1acbcad72615218f902334e30b146b02b57d52d069590e7f93bb0459`;
+- Premium regression: 131/131 PASS;
+- analyzer: zero issues;
+- branch, HEAD and staged index tree preserved.
+
+Not yet complete:
+- IPA has not yet been uploaded;
+- App Store Connect processing has not yet been verified;
+- new build has not yet been attached to version 2.2.4;
+- metadata consistency remains open;
+- App Review notes/screen recording remain open;
+- submission remains unauthorized until those gates pass.
+
+#### APPLE-IAP-P0 — build 1783342123 Transporter architecture rejection — 2026-09-29
+
+Status: ACTIVE — ARTIFACT REJECTED / ROOT SOURCE UNDER FORENSIC AUDIT.
+
+Verified Transporter rejection:
+- build: `2.2.4 (1783342123)`;
+- generated IPA SHA-256:
+  `4d4f6b8a1acbcad72615218f902334e30b146b02b57d52d069590e7f93bb0459`;
+- `Runner.app/Frameworks/objective_c.framework` contains unsupported
+  `x86_64`;
+- Transporter also reports the arm64 slice references an unsupported
+  simulator platform;
+- error 90087: Unsupported Architectures;
+- error 91169: Invalid executable / simulator platform not permitted;
+- upload did not complete successfully;
+- build `1783342123` must not be treated as delivered;
+- final-release submission remains blocked.
+
+Important:
+- code signing, provisioning, application identity and entitlements had
+  passed before Transporter validation;
+- those passes do not override this binary-platform rejection;
+- no source root cause is claimed until framework provenance is proven.
+
+Next gate:
+- trace the exact producer/source of `objective_c.framework`;
+- determine whether the invalid framework comes from generated native
+  assets, package cache, stale simulator build state, or another proven
+  source;
+- only then perform the smallest corrective action and rebuild.
+
+#### C10.13H.2 — centralized free-paywall tall-body transfer
+
+Status: IMPLEMENTED / PHYSICAL ANDROID ACCEPTANCE PENDING.
+
+Verified basis:
+- exact free-body root owner is the single Padding immediately below the
+  pinned Premium header;
+- current internal free-body gaps reproduce physical Android runtime rhythm;
+- physical safe-view geometry establishes a valid downstream transfer interval
+  greater than 96.380952dp and no more than 104.380952dp;
+- exact interval midpoint is 100.380952dp.
+
+Correction:
+- free state only receives the downstream body transfer;
+- existing _premiumTallViewportTransferFactor is reused as the single
+  tall-viewport responsive owner;
+- no second MediaQuery/View height formula was introduced;
+- feature/card/plan/CTA/Restore internal gaps are unchanged;
+- header and back geometry are unchanged;
+- compact/standard layouts at <=800dp usable height receive zero transfer;
+- no device-name or platform-specific geometry branch introduced.
+
+Next gate:
+1. launch current source on physical Android;
+2. return Premium to true scroll origin;
+3. capture UIAutomator bounds;
+4. verify Start Premium fully visible;
+5. verify Restore Purchases begins below initial safe viewport;
+6. obtain owner visual acceptance;
+7. run full Premium regression and build fresh release artifact.
+
+#### C10.13H.2 — centralized free-paywall tall-body transfer — REJECTED / ROLLED BACK
+
+Status: REJECTED PHYSICALLY / SOURCE RESTORED EXACTLY.
+
+Physical qualitative result:
+- whole-body downstream transfer created an unacceptable large empty band
+  between the Premium header and the feature cards;
+- owner rejected the resulting composition immediately;
+- screenshot was used only for qualitative visual rejection, not measurement.
+
+Disposition:
+- root body transfer abandoned;
+- _premiumFreeTallBodyTransfer removed completely;
+- Premium source restored exactly to the verified f334 source;
+- header/back remain frozen;
+- internal body spacing remains unchanged;
+- no device/platform-specific geometry fork retained.
+
+Architectural conclusion:
+- the remaining correction must not translate the complete free-paywall body;
+- next investigation is restricted to the lower purchase composition owner,
+  preserving the accepted header-to-features relationship.
+
+#### C10.13H.2 — historical full-page shell candidate — REJECTED / ROLLED BACK
+
+Status: STATIC CONTRACT FAILURE / PHYSICAL RUN NOT PERFORMED.
+
+Evidence:
+- candidate analyzer passed with zero issues;
+- Premium regression failed before physical launch;
+- premium_header_responsive_contract_test rejected the changed header structure;
+- premium_layout_lock_contract_test rejected the changed shared post-action
+  composition;
+- physical Android launch was therefore correctly not reached.
+
+Disposition:
+- candidate removed completely;
+- premium_paywall_screen.dart restored exactly to verified f334 source;
+- current catalog/auth/purchase/restore/legal authorities preserved;
+- no contract weakened or rewritten to force the candidate through.
+
+Next gate:
+- map the exact historical full-page presentation contract against the current
+  required purchase/auth/legal contracts before any new source mutation.
+
+#### C10.13H.2 — natural full-page free Premium candidate
+
+Status: STATIC GATES PASS / PHYSICAL ANDROID ACCEPTANCE PENDING.
+
+Repository provenance:
+- committed Premium history uses natural full-page document flow;
+- current pinned-header implementation is uncommitted release work;
+- pinned-header presentation contracts are also untracked release contracts;
+- monetization/auth/pricing/claim-truth contracts remain independently enforced.
+
+Candidate:
+- fully tall free-Premium view uses natural scrolling header composition;
+- compact/non-tall and Premium Active paths retain existing pinned composition;
+- existing centralized tall-viewport classifier owns selection;
+- no Android/device-specific geometry branch introduced;
+- current catalog, purchase, restore, entitlement, active-state and legal
+  implementations remain unchanged.
+
+Static gates:
+- presentation contracts PASS;
+- hard Premium safety contracts PASS;
+- responsive geometry PASS;
+- analyzer ZERO issues.
+
+Next gate:
+- physical Android owner acceptance.
+
+#### C10.13H.2 — natural full-page candidate — REJECTED / ROLLED BACK
+
+Status: OWNER REJECTED / EXACT SOURCE RESTORED.
+
+Reason:
+- candidate moved/replaced the locked Premium logo/header composition;
+- header/logo movement was outside the permitted C10.13H.2 scope;
+- owner rejected the result immediately.
+
+Disposition:
+- natural full-page candidate removed completely;
+- premium_paywall_screen.dart restored exactly to verified f334 source;
+- Premium logo/header positioning is LOCKED;
+- Back control remains LOCKED;
+- no further header/logo mutation permitted in C10.13H.2;
+- future investigation is restricted to lower purchase/body composition only.
+
+#### C10.13H.2 — bottom legal-footer scroll clearance
+
+Status: STATIC PASS / PHYSICAL ANDROID VERIFY PENDING.
+
+Scope:
+- Premium logo/header/back remain locked and unchanged;
+- feature cards unchanged;
+- Monthly/Yearly cards unchanged;
+- Start Premium unchanged;
+- Restore Purchases unchanged;
+- renewal/legal-card geometry unchanged.
+
+Correction:
+- added only a trailing SliverToBoxAdapter after the legal footer;
+- trailing height reuses existing centralized free-state adaptive spacing;
+- purpose is to provide bottom scroll clearance so Privacy Policy and
+  Terms of Use can settle fully inside the visible safe viewport at
+  maximum scroll;
+- no platform/device branch introduced.
+
+Next gate:
+- physical Android max-scroll verification.
+
+
+### PREMIUM-GEOMETRY-PHYSICAL-2026-10-01
+
+1. **IOS-PREMIUM-BALANCE — ACTIVE**
+   - Physical device: iPhone 12 Pro, release mode.
+   - viewportHeight: 844.00
+   - safeTop: 47.00
+   - safeBottomInset: 34.00
+   - subtitleBottom: 232.00
+   - firstFeatureTop: 255.13
+   - topGap: 23.13
+   - Start Premium top: 725.00
+   - Start Premium bottom: 777.29
+   - safeBottom: 810.00
+   - bottomGap: 32.71
+   - required body shift: +4.79dp downward
+   - target balanced gap: 27.92dp
+   - Restore Purchases top: 785.29
+   - Restore visible at origin: true
+   - Restore leak into initial viewport: 24.71dp
+   - scrollOffset: 0.00
+   - maxScrollExtent: 128.35
+   - headerCollapseRange: 104.00
+   - implementation state: CODE MUTATED / PHYSICAL RELEASE VERIFICATION PENDING.
+   - authoritative root-body spacing owner receives verified +4.79dp correction.
+   - free-paywall post-action root gap is 27.92dp so Restore Purchases begins downstream of the measured initial safe viewport.
+   - subscription-card geometry is unchanged.
+   - temporary physical telemetry remains only until release-mode verification closes the geometry gate.
+   - next gate: release-mode physical iPhone verification; then remove temporary telemetry and proceed to numbered Android balance verification.
+
+2. **ANDROID-PREMIUM-BALANCE — QUEUED AFTER IOS**
+   - deterministic reference: android_ref_411x914_edge_to_edge
+   - topGap: 34.156393557666206
+   - bottomGap: 50.81818140000007
+   - delta: 16.661787842333865
+   - calculated midpoint correction: 8.330893921166932dp
+   - status: not patched; requires Android physical verification after iOS closure.
+
+
+3. **ANDROID-PREMIUM-ACTIVE-BALANCE — ACTIVE**
+   - User-reported physical symptom is on Premium Active state, not the free paywall.
+   - Visible state includes Current subscription, Manage Subscription, Restore Purchases, Privacy Policy and Terms of Use.
+   - Qualitative symptom: bottom breathing room after legal cards appears larger than the upper breathing room before Unlimited AI Insights.
+   - Screenshot is reference only; no production measurement may be derived from it.
+   - The free-paywall `android_ref_411x914_edge_to_edge` failure is separate evidence and must not be used as the Active-state correction.
+   - next gate: map Active-state owners and capture physical Android runtime geometry before mutation.
+
+#### IOS-PREMIUM-LOCK — production cleanup
+
+Status: STATIC CLEANUP COMPLETE / FINAL PHYSICAL RELEASE VERIFY PENDING.
+
+Verified:
+- accepted iPhone free-paywall geometry was previously physically balanced at 27.92dp / 27.92dp;
+- iOS spring-back previously passed physical release verification;
+- temporary Premium physical geometry telemetry has been removed from production source;
+- measurement GlobalKeys, measurement method, runtime trigger, overlay and header measurement plumbing are absent;
+- iOS spring-back owner remains intact;
+- accepted iOS responsive geometry owners remain intact;
+- no Android-specific visual geometry branch exists;
+- Premium targeted contracts pass;
+- analyzer reports zero issues.
+
+Next gate:
+1. build/install one fresh signed iPhone release;
+2. verify no measurement overlay is present;
+3. verify Premium initial composition remains accepted;
+4. verify iOS spring-back remains functional;
+5. close IOS-PREMIUM-LOCK at 100%.
+
+#### UX2-F16 — Android Premium title typography
+
+Status: ACTIVE — SOURCE AUDIT IN PROGRESS.
+
+User-reported symptom:
+- `Unlock Premium` appears visually too small on physical Android.
+- Expected hierarchy should sit properly and remain visually consistent with the approved Premium presentation.
+
+Verified architecture:
+- Premium title consumes semantic theme typography;
+- current pinned header interpolates between `headlineLarge` and `titleLarge`;
+- typography ownership must remain centralized through AppTheme/platform-root ownership;
+- no per-screen Android font-size patch is authorized without exact source/runtime evidence.
+
+Required gate:
+1. prove exact Android `headlineLarge` and `titleLarge` sizes;
+2. prove exact iOS equivalents;
+3. verify Premium interpolation behavior at expanded and collapsed states;
+4. determine whether defect belongs to centralized platform typography or Premium header semantics;
+5. apply only the authoritative-owner correction;
+6. run Premium contracts + analyzer;
+7. physically verify Android and ensure accepted iPhone typography does not regress.
+
+#### UX2-F17 — iOS Monthly/Yearly plan selection non-responsive
+
+Status: ACTIVE — PHYSICAL RELEASE REGRESSION / FORENSIC AUDIT.
+
+User-reported physical iPhone regression:
+- fresh signed release build 2.2.4 / 1790713306 installs and launches successfully;
+- Premium measurement telemetry is absent from the binary;
+- tapping Monthly or Yearly produces no visible selection response;
+- the same subscription interaction previously worked;
+- Settings positioning is accepted and unrelated.
+
+Current verified source facts:
+- Monthly and Yearly cards still own explicit onTap handlers;
+- handlers call setState and assign _selectedPeriod;
+- existing Premium feature-interaction contract does not simulate Monthly/Yearly taps;
+- therefore recent static/contract passes do not prove plan-selection runtime behavior.
+
+Required gate:
+1. compare current selection/overlay/provider ownership with last working history;
+2. prove whether pointer interception, provider loading state, gesture hit-testing,
+   rebuild/state projection, or another runtime owner is responsible;
+3. add a real widget interaction regression test reproducing Monthly -> Yearly selection;
+4. patch only the proven authoritative owner;
+5. rerun Premium suite/analyzer;
+6. rebuild signed iOS release and physically verify Monthly and Yearly selection;
+7. keep accepted iOS geometry/spring-back unchanged.
+
+##### UX2-F17 interaction regression evidence
+
+- Real Monthly -> Yearly widget interaction regression added.
+- Default-platform interaction test passes.
+- Monthly and Yearly visual selected-state projection is therefore statically proven.
+- iOS-specific interaction gate added separately because the original harness did not explicitly force TargetPlatform.iOS.
+- Production mutation remains blocked until the iOS-specific gate and physical runtime evidence identify the actual failing owner.
+
+#### UX2-PLATFORM-R1 — independent responsive platform centralization
+
+Status: ACTIVE — PERMANENT ARCHITECTURE REQUIREMENT.
+
+User-approved requirement:
+- iOS and Android must remain independently centralized;
+- Android must not be forced to use iOS physical geometry or typography values;
+- iOS must not be forced to use Android physical geometry or typography values;
+- both platforms must preserve the same Flow Ai visual hierarchy and product identity;
+- each platform must respond correctly across different phone sizes, safe areas,
+  text scales and viewport classes;
+- implementation must use centralized platform/theme/layout ownership;
+- no device-model conditions;
+- no screenshot-derived production measurements;
+- no one-device pixel tuning.
+
+Verification requirement:
+1. platform semantic typography remains centralized;
+2. Premium consumes semantic tokens rather than local platform font constants;
+3. geometry responds to runtime viewport/safe-area/text-scale constraints;
+4. representative Android and iPhone physical verification is required;
+5. compact, standard and tall viewport contracts protect future regressions.
+
+#### UX2-F19 — iOS release artifact signature integrity
+
+Status: P0 ACTIVE — FORENSIC ROOT AUDIT.
+
+Verified failure:
+- `flutter build ios --release` completed successfully;
+- generated application identity is `com.flowai.health`;
+- generated marketing version is `2.2.4`;
+- generated build number is `1790713306`;
+- immediate `codesign --verify --deep --strict` failed;
+- failing sealed resource is `Runner.app/Frameworks/App.framework/App`;
+- physical installation / launch / UX2-F17 runtime probe did not execute because the guarded command stopped at signature verification.
+
+Rules:
+- do not blindly re-sign;
+- do not clean DerivedData or Pods as a shortcut;
+- do not alter Premium/subscription source;
+- identify the exact producer and mutation/signing order first.
+
+Next gate:
+1. verify root and nested signing identities;
+2. identify exactly which nested bundle fails;
+3. inspect artifact timestamps/hashes;
+4. inspect Release signing settings and build phases that can mutate App.framework;
+5. classify root cause before correction.
+
+##### UX2-F19 forensic narrowing — stale root seal
+
+Verified:
+- Runner.app root signature fails because sealed App.framework/App no longer matches;
+- App.framework itself verifies successfully;
+- all inspected nested frameworks verify successfully;
+- Runner and App.framework/App are arm64 device binaries;
+- App.framework/App was produced later than the root Runner.app CodeResources seal;
+- no architecture failure is currently implicated;
+- branch, HEAD and staged index remain protected.
+
+Still unproven:
+- whether build/ios/iphoneos is copied from a stale DerivedData product;
+- whether Xcode/Flutter incremental build order updated App.framework after root signing;
+- which exact build product is authoritative.
+
+Next gate:
+- compare build/ios and DerivedData artifacts byte-for-byte and trace producer timestamps before any cleanup/rebuild correction.
+
+##### UX2-F17 — loading overlay pointer blocker correction
+
+Progress: 97%.
+
+Verified root cause:
+- plan-card callbacks and selected-state rebuild pass;
+- provider `isLoading` remains true during restore/verification;
+- store restore may remain pending for up to 15 seconds;
+- the paywall rendered a transparent full-screen Container above the plan cards while loading;
+- that layer intercepted physical taps even though Monthly/Yearly remained visible.
+
+Correction:
+- loading indicator is now wrapped by `IgnorePointer(ignoring: true)`;
+- visible loading feedback remains;
+- plan-card pointer events can pass through;
+- Start Premium and Restore Purchases remain independently protected by provider `isLoading`;
+- purchase, restore, receipt-validation and entitlement authority are unchanged.
+
+Remaining gate:
+- physical iPhone release verification while restore/verification is still running.
+
+##### UX2-F20 — Start Premium loading feedback
+
+Progress: 98%.
+
+Verified root cause:
+- subscription plans can already be visible while provider initialization remains loading;
+- provider initialization awaits best-effort startup restore;
+- startup restore can remain pending for up to 15 seconds;
+- Start Premium was hard-disabled during that entire loading interval;
+- this produced a physically silent button even though plan selection remained interactive.
+
+Correction:
+- Start Premium remains authority-safe;
+- while loading, tapping it now explains that subscription setup or verification is still in progress;
+- no store checkout is launched during loading;
+- authoritative provider/service single-flight and receipt-owner protection remain unchanged.
+
+Remaining gate:
+- physical iPhone verification on a new Flow Ai account:
+  1. select Monthly/Yearly;
+  2. tap Start Premium during startup verification and confirm immediate feedback;
+  3. after verification settles, confirm receipt-owner conflict remains explicit and StoreKit is not opened for the wrong account.
+
+#### APPLE-2.1B — permanent reviewer-visible Premium entry point — 2026-10-01
+
+Verified:
+- Apple review could not locate the Monthly and Yearly subscriptions in submitted build 2.2.4 (1783342123).
+- Production Premium routes remain `/premium` and `/premium/paywall`.
+- Store product IDs remain:
+  - `flow_ai_premium_monthly`
+  - `flow_ai_premium_yearly`
+- Settings previously had no permanent direct Premium entry point.
+- Added one permanent Settings entry:
+  - section: `Premium`
+  - tile: `Flow Ai Premium`
+  - subtitle: `View Monthly and Yearly subscription options`
+  - destination: `/premium`
+- No entitlement, receipt-validation, ownership, checkout, catalog, or product-ID behavior was changed.
+- Targeted navigation/settings contracts passed.
+- Targeted analyzer passed with zero issues.
+
+Next gate:
+- physical iPhone verification of Settings → Flow Ai Premium → Monthly/Yearly;
+- verify StoreKit catalog renders both products;
+- then prepare exact App Review response and determine corrected-binary submission.
+
+### POSTREL-UX-1 — Premium Cross-Platform Visual Parity — 0% — POST-RELEASE
+
+**Priority:** Start only after the current Android and iOS release cycle is completed and store-ready.
+
+**Scope**
+- Centralize Premium paywall presentation so Android and iOS use the same authoritative visual owners wherever platform-specific behavior is not genuinely required.
+- Bring Android Premium feature cells/cards to visual parity with the accepted iOS default presentation, including vertical height, internal spacing, typography scale, title/subtitle hierarchy, plan-card presentation, and overall default viewport composition.
+- Ensure `Unlock Premium` and supporting Premium typography on Android no longer render materially smaller than the accepted iOS presentation.
+- Preserve responsive behavior across device sizes; do not hard-code screenshot-derived measurements.
+- Derive geometry from source/runtime constraints and centralized design owners only.
+- Preserve existing Premium entitlement, purchase, restore, receipt-validation, account-ownership, and ad-suppression behavior.
+- Remove the trailing period from:
+  `Subscription automatically renews unless canceled.`
+  so the production copy becomes:
+  `Subscription automatically renews unless canceled`
+
+**Verification gates**
+1. Deep-map existing Premium layout/typography owners before mutation.
+2. No duplicated Android/iOS geometry constants unless platform behavior genuinely requires them.
+3. Android physical-device verification.
+4. iPhone physical-device verification.
+5. Responsive geometry contracts across representative device sizes.
+6. Premium purchase/restore and entitlement contracts remain green.
+7. Full analyzer: zero issues.
+8. Full release contracts: zero failures.
+9. Full test suite: zero failures.
+10. No screenshot-derived measurements.
+11. Record final source owners, physical evidence, and release-safe result in this ledger.
+
+**Current gate**
+- BLOCKED intentionally until the current new Android and iOS releases are completed.
+- No Premium visual mutation is authorized before that gate.

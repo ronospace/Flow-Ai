@@ -147,7 +147,9 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: generatedInvitation != null
                               ? (isSent
-                                    ? AppTheme.primaryRose.withOpacity(0.35)
+                                    ? AppTheme.primaryRose.withValues(
+                                        alpha: 0.35,
+                                      )
                                     : AppTheme.primaryRose)
                               : AppTheme.primaryRose.withValues(alpha: 0.12),
                           foregroundColor: generatedInvitation != null

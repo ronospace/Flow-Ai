@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,9 +32,6 @@ class DatabaseService {
         onUpgrade: _upgradeDatabase,
       );
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Database init failed, using in-memory DB: $e');
-      }
       return await openDatabase(
         inMemoryDatabasePath,
         version: 2,
@@ -367,6 +363,12 @@ class DatabaseService {
             'RENAME TO daily_tracking_legacy_v1_unowned',
           );
         }
+
+        // SQLite preserves named indexes when a table is renamed. The v1
+        // daily-tracking index therefore belongs to the archived legacy table
+        // after the rename and must be released before the v2 table recreates
+        // the canonical index name.
+        await txn.execute('DROP INDEX IF EXISTS idx_daily_tracking_user_date');
 
         await _createDailyTrackingTable(txn);
       });
@@ -897,7 +899,6 @@ class DatabaseService {
       try {
         return DateTime.parse(dateValue);
       } catch (e) {
-        debugPrint('Error parsing date string: $dateValue, error: $e');
         return DateTime.now();
       }
     }
@@ -909,7 +910,6 @@ class DatabaseService {
         final timestamp = dateValue as dynamic;
         return timestamp.toDate() as DateTime;
       } catch (e) {
-        debugPrint('Error parsing Timestamp: $dateValue, error: $e');
         return DateTime.now();
       }
     }
@@ -919,15 +919,11 @@ class DatabaseService {
       try {
         return DateTime.fromMillisecondsSinceEpoch(dateValue);
       } catch (e) {
-        debugPrint('Error parsing timestamp: $dateValue, error: $e');
         return DateTime.now();
       }
     }
 
     // Fallback
-    debugPrint(
-      'Unknown date format: ${dateValue.runtimeType}, value: $dateValue',
-    );
     return DateTime.now();
   }
 

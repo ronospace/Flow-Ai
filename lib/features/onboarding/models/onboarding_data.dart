@@ -26,8 +26,6 @@ class OnboardingData {
   List<String> healthConcerns;
 
   // Privacy & Preferences
-  bool shareDataForResearch;
-  bool enableAIInsights;
   String? preferredLanguage;
   String? timeZone;
 
@@ -47,8 +45,6 @@ class OnboardingData {
     this.isFirstTimeTracking = true,
     this.previousTrackingMethod,
     this.healthConcerns = const [],
-    this.shareDataForResearch = false,
-    this.enableAIInsights = true,
     this.preferredLanguage,
     this.timeZone,
   });
@@ -70,8 +66,6 @@ class OnboardingData {
       'isFirstTimeTracking': isFirstTimeTracking,
       'previousTrackingMethod': previousTrackingMethod,
       'healthConcerns': healthConcerns,
-      'shareDataForResearch': shareDataForResearch,
-      'enableAIInsights': enableAIInsights,
       'preferredLanguage': preferredLanguage,
       'timeZone': timeZone,
     };
@@ -104,8 +98,6 @@ class OnboardingData {
       isFirstTimeTracking: json['isFirstTimeTracking'] ?? true,
       previousTrackingMethod: json['previousTrackingMethod'],
       healthConcerns: List<String>.from(json['healthConcerns'] ?? []),
-      shareDataForResearch: json['shareDataForResearch'] ?? false,
-      enableAIInsights: json['enableAIInsights'] ?? true,
       preferredLanguage: json['preferredLanguage'],
       timeZone: json['timeZone'],
     );
@@ -127,8 +119,6 @@ class OnboardingData {
     bool? isFirstTimeTracking,
     String? previousTrackingMethod,
     List<String>? healthConcerns,
-    bool? shareDataForResearch,
-    bool? enableAIInsights,
     String? preferredLanguage,
     String? timeZone,
   }) {
@@ -149,8 +139,6 @@ class OnboardingData {
       previousTrackingMethod:
           previousTrackingMethod ?? this.previousTrackingMethod,
       healthConcerns: healthConcerns ?? this.healthConcerns,
-      shareDataForResearch: shareDataForResearch ?? this.shareDataForResearch,
-      enableAIInsights: enableAIInsights ?? this.enableAIInsights,
       preferredLanguage: preferredLanguage ?? this.preferredLanguage,
       timeZone: timeZone ?? this.timeZone,
     );

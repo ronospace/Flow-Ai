@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/identity/active_account_scope.dart';
 import '../../../core/services/local_user_service.dart';
 import '../models/partner_models.dart'
     show Partnership, PartnershipStatus, PartnerPrivacySettings;
@@ -33,7 +33,6 @@ class LocalPartnerService {
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    debugPrint('✅ LocalPartnerService initialized');
   }
 
   Future<void> _ensureInitialized() async {
@@ -42,29 +41,36 @@ class LocalPartnerService {
     }
   }
 
-  /// Get current user info from LocalUserService
+  /// Resolve partner ownership from the canonical authenticated account.
   Future<Map<String, String>> _getCurrentUserInfo() async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
+
+    String userName = 'User';
+    String userEmail = '';
+
     try {
-      final userService = LocalUserService();
-      final currentUser = await userService.getCurrentUser();
-      if (currentUser != null) {
-        return {
-          'userId': currentUser.uid,
-          'userName': currentUser.displayName,
-          'userEmail': currentUser.email,
-        };
+      final currentUser = await LocalUserService().getCurrentUser();
+
+      if (currentUser != null && currentUser.uid.trim() == activeUserId) {
+        final displayName = currentUser.displayName.trim();
+        final email = currentUser.email.trim();
+
+        if (displayName.isNotEmpty) {
+          userName = displayName;
+        }
+        if (email.isNotEmpty) {
+          userEmail = email;
+        }
       }
-    } catch (e) {
-      debugPrint('Error getting current user: $e');
+    } catch (_) {
+      // Identity ownership remains authoritative even if optional profile
+      // presentation metadata cannot be loaded.
     }
 
-    // Fallback to prefs
     return {
-      'userId':
-          _prefs?.getString('current_user_id') ??
-          'user_${DateTime.now().millisecondsSinceEpoch}',
-      'userName': _prefs?.getString('current_user_name') ?? 'User',
-      'userEmail': _prefs?.getString('current_user_email') ?? '',
+      'userId': activeUserId,
+      'userName': userName,
+      'userEmail': userEmail,
     };
   }
 
@@ -93,7 +99,6 @@ class LocalPartnerService {
     // Persist locally while production cloud activation is blocked.
     // PartnerCloudGateway owns remote publication after billing recovery.
     await _saveInvitation(invitation);
-    debugPrint('✅ Partner invitation created: $invitationCode');
 
     return invitation;
   }
@@ -118,19 +123,16 @@ class LocalPartnerService {
     // Cloud acceptance remains isolated in PartnerCloudGateway.
     final invitation = await _findInvitationByCode(invitationCode);
     if (invitation == null) {
-      debugPrint('❌ Invitation not found: $invitationCode');
       return null;
     }
 
     // Check if expired
     if (DateTime.now().isAfter(invitation.expiresAt)) {
-      debugPrint('❌ Invitation expired');
       return null;
     }
 
     // Check if user is trying to connect to themselves
     if (invitation.inviterId == inviteeUserId) {
-      debugPrint('❌ Cannot connect to yourself');
       return null;
     }
 
@@ -140,7 +142,6 @@ class LocalPartnerService {
       inviteeUserId,
     );
     if (existing != null) {
-      debugPrint('⚠️ Partnership already exists');
       return existing.toJson();
     }
 
@@ -164,9 +165,16 @@ class LocalPartnerService {
     // Remove invitation (one-time use)
     await _removeInvitation(invitation.id);
 
-    debugPrint('✅ Partnership created: ${partnership.id}');
-
     return partnership.toJson();
+  }
+
+  /// Cache a partnership already verified by the authenticated cloud boundary.
+  Future<void> cacheCloudPartnership(
+    Map<String, dynamic> partnershipData,
+  ) async {
+    await _ensureInitialized();
+    final partnership = Partnership.fromJson(partnershipData);
+    await _savePartnership(partnership);
   }
 
   /// Get partnership for current user
@@ -238,7 +246,6 @@ class LocalPartnerService {
       final List<dynamic> jsonList = jsonDecode(jsonString);
       return jsonList.map((json) => Partnership.fromJson(json)).toList();
     } catch (e) {
-      debugPrint('❌ Error loading partnerships: $e');
       return [];
     }
   }
@@ -271,7 +278,6 @@ class LocalPartnerService {
     partnerships.removeWhere((p) => p.id == partnershipId);
     final jsonList = partnerships.map((p) => p.toJson()).toList();
     await _prefs!.setString(_partnershipsKey, jsonEncode(jsonList));
-    debugPrint('✅ Partnership disconnected: $partnershipId');
   }
 
   /// Save invitation
@@ -358,7 +364,6 @@ class LocalPartnerService {
     );
 
     await _saveMessage(message);
-    debugPrint('✅ Message sent: ${message.id}');
   }
 
   /// Get messages for partnership
@@ -442,7 +447,6 @@ class LocalPartnerService {
     );
 
     await _saveCareAction(careAction);
-    debugPrint('✅ Care action sent: ${careAction.id}');
   }
 
   /// Update sharing settings
@@ -467,10 +471,7 @@ class LocalPartnerService {
         lastActiveAt: DateTime.now(),
       );
       await _savePartnership(updated);
-      debugPrint('✅ Sharing settings updated');
-    } catch (e) {
-      debugPrint('❌ Partnership not found for update: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get care actions for partnership

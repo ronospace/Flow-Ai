@@ -176,7 +176,9 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                 _buildDataItem(
                   context,
                   Icons.favorite,
-                  'Heart rate & HRV for cycle correlation',
+                  Platform.isIOS
+                      ? 'Heart rate & HRV for cycle correlation'
+                      : 'Heart rate for cycle correlation',
                 ),
                 _buildDataItem(
                   context,
@@ -191,7 +193,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                 _buildDataItem(
                   context,
                   Icons.directions_walk,
-                  'Activity & steps for wellness insights',
+                  'Sleep duration for wellness insights',
                 ),
                 _buildDataItem(
                   context,
@@ -307,7 +309,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
   }
 
   void _launchPrivacyPolicy() async {
-    final url = Uri.parse('https://flowai.app/privacy');
+    final url = Uri.parse('https://flowai-demo-project.web.app/privacy.html');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }

@@ -42,7 +42,7 @@ Copy this into App Store Connect "App Review Information" → "Notes":
 DEMO ACCOUNT FOR TESTING:
 
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 This demo account includes 6 months of pre-loaded cycle data for comprehensive
 testing of all app features including:
@@ -165,7 +165,7 @@ Contact: author@example.invalid for any questions.
 
 ### Issue: Demo account doesn't work for reviewer
 **Solution**: 
-- Ensure credentials are exactly: demo@flowai.app / REDACTED_DEMO_PW!
+- Ensure credentials are exactly: demo@flowai.app / <REDACTED>
 - Password is case-sensitive
 - If still failing, account may need to be recreated in Firebase
 

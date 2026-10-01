@@ -230,7 +230,7 @@ class UpgradePromptDialog extends StatelessWidget {
     switch (blockedFeature) {
       case PremiumFeatureType.advancedAI:
         return [
-          '95%+ prediction accuracy',
+          'Deeper cycle and wellness insights',
           'Personalized insights',
           'Advanced pattern detection',
         ];
@@ -248,33 +248,33 @@ class UpgradePromptDialog extends StatelessWidget {
         ];
       case PremiumFeatureType.healthcareIntegration:
         return [
-          'Connect with doctors',
-          'Share reports securely',
-          'Get professional insights',
+          'Use richer wellness insights',
+          'Export your data in supported formats',
+          'Review your tracked health trends',
         ];
       case PremiumFeatureType.biometricSync:
         return [
-          'Sync with Apple Health',
-          'Connect wearable devices',
-          'Automatic data updates',
+          'Use supported health data sources',
+          'Review imported health metrics',
+          'Keep supported health data refreshed',
         ];
       case PremiumFeatureType.advancedAnalytics:
         return [
-          'Deep data analysis',
-          'Predictive modeling',
-          'Comprehensive health metrics',
+          'Deeper trend analysis',
+          'Pattern and trend insights',
+          'Comprehensive tracked metrics',
         ];
       case PremiumFeatureType.multiUserProfiles:
         return [
-          'Manage up to 5 profiles',
-          'Family health tracking',
-          'Individual privacy controls',
+          'Advanced analytics and data export'
+              'Deeper cycle and wellness insights'
+              'Clear control of your personal health data',
         ];
       default:
         return [
           'Access premium features',
           'Enhanced functionality',
-          'Priority support',
+          'Advanced analytics and data export',
         ];
     }
   }

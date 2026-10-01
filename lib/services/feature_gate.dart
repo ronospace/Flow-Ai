@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flow_ai/features/premium/services/premium_service.dart';
+import 'package:flow_ai/features/premium/providers/subscription_provider.dart';
 
 class FeatureGate {
   static bool isPremium(BuildContext context) {
-    final service = context.read<PremiumService?>();
-    return service?.hasPremium ?? false;
+    final subscriptionProvider = context.read<SubscriptionProvider>();
+    return subscriptionProvider.isPremium;
   }
 
   static bool adsEnabled(BuildContext context) => !isPremium(context);

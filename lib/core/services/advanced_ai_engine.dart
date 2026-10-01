@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../models/biometric_data.dart';
@@ -29,10 +28,8 @@ class AdvancedAIEngine {
   List<PredictionFeedback> _feedbackHistory = [];
 
   Future<void> initialize() async {
-    debugPrint('🤖 Initializing Advanced AI Engine...');
     await _loadPersonalFactors();
     await _calibrateModels();
-    debugPrint('✅ Advanced AI Engine initialized');
   }
 
   /// Main prediction method with 95%+ accuracy
@@ -42,7 +39,6 @@ class AdvancedAIEngine {
     required UserProfile userProfile,
     Map<String, dynamic>? environmentalData,
   }) async {
-    debugPrint('🔮 Running advanced cycle prediction...');
 
     // Multi-modal analysis
     final cyclePatterns = await _analyzeCyclePatterns(historicalCycles);
@@ -67,9 +63,6 @@ class AdvancedAIEngine {
     // Apply personal calibration
     final calibratedPrediction = _applyPersonalCalibration(prediction);
 
-    debugPrint(
-      '✅ Prediction complete - Confidence: ${calibratedPrediction.confidence}%',
-    );
     return calibratedPrediction;
   }
 
@@ -315,9 +308,6 @@ class AdvancedAIEngine {
       _feedbackHistory = _feedbackHistory.sublist(_feedbackHistory.length - 50);
     }
 
-    debugPrint(
-      '📊 Feedback recorded. New accuracy: ${_userAccuracyScore.toStringAsFixed(3)}',
-    );
   }
 
   /// Predict symptoms for upcoming cycle

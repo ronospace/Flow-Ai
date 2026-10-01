@@ -5,11 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Premium purchase validation policy', () {
     late String subscriptionService;
+    late String subscriptionModels;
     late String receiptValidationService;
 
     setUpAll(() {
       subscriptionService = File(
         'lib/features/premium/services/subscription_service.dart',
+      ).readAsStringSync();
+
+      subscriptionModels = File(
+        'lib/features/premium/models/subscription_models.dart',
       ).readAsStringSync();
 
       receiptValidationService = File(
@@ -57,7 +62,14 @@ void main() {
         );
         expect(subscriptionService, contains('validateAppleReceipt'));
         expect(subscriptionService, contains('validateGooglePlayReceipt'));
-        expect(subscriptionService, contains('PackageInfo.fromPlatform'));
+        expect(
+          subscriptionService,
+          contains('AppRuntimeMetadataService.instance.packageName'),
+        );
+        expect(
+          subscriptionService,
+          isNot(contains('PackageInfo.fromPlatform')),
+        );
         expect(subscriptionService, contains('_currentSubscription?.userId'));
         expect(subscriptionService, contains('purchaseDetails.purchaseID'));
         expect(
@@ -68,10 +80,19 @@ void main() {
           subscriptionService,
           contains('backend validation before Premium is granted'),
         );
-        expect(subscriptionService, contains('unawaited(_onPurchaseUpdate'));
         expect(
           subscriptionService,
-          contains('await _handlePurchased(purchaseDetails)'),
+          matches(
+            RegExp(
+              r'unawaited\(\s*_onPurchaseUpdate\(purchaseDetails, normalizedUserId, generation\)',
+            ),
+          ),
+        );
+        expect(
+          subscriptionService,
+          contains(
+            'await _handlePurchased(purchaseDetails, userId, generation)',
+          ),
         );
         expect(
           subscriptionService,
@@ -300,7 +321,18 @@ void main() {
         premiumService,
         contains('Legacy PremiumService restore path disabled'),
       );
-      expect(premiumService, contains('backend-validated SubscriptionService'));
+      expect(
+        premiumService,
+        contains(
+          'Authoritative purchases are owned by SubscriptionProvider -> SubscriptionService',
+        ),
+      );
+      expect(
+        premiumService,
+        contains(
+          'Authoritative restore is owned by SubscriptionProvider -> SubscriptionService',
+        ),
+      );
     });
 
     test('uses one secure build-time Cloud Run base URL', () {
@@ -395,11 +427,15 @@ void main() {
 
         expect(
           subscriptionService,
-          contains('await _loadBackendVerifiedSubscription(userId);'),
+          contains('await _loadBackendVerifiedSubscription('),
         );
         expect(
           subscriptionService,
-          contains('_loadBackendVerifiedSubscription(String userId)'),
+          matches(
+            RegExp(
+              r'_loadBackendVerifiedSubscription\(\s*String userId,\s*int generation,',
+            ),
+          ),
         );
         expect(subscriptionService, contains('canValidateSubscriptionStatus'));
         expect(
@@ -411,12 +447,101 @@ void main() {
           subscriptionService,
           contains('UserSubscription.fromJson(decoded)'),
         );
-        expect(subscriptionService, contains('verifySubscriptionActive('));
-        expect(subscriptionService, contains('isActive'));
-        expect(subscriptionService, contains('? candidate'));
+        expect(subscriptionService, contains('fetchSubscriptionStatus('));
+        expect(subscriptionService, contains('backendStatus'));
+        expect(subscriptionService, contains('backendStatus?.active == true'));
+        expect(subscriptionService, contains('backendStatus?.active == false'));
+        expect(subscriptionService, contains('candidate.isPremium'));
         expect(
           subscriptionService,
-          contains(': UserSubscription.free(userId)'),
+          contains('Backend status is temporarily unknown'),
+        );
+      },
+    );
+
+    test(
+      'distinguishes authoritative inactive from temporary backend failure',
+      () {
+        expect(
+          receiptValidationService,
+          contains('Future<bool?> verifySubscriptionActive'),
+        );
+        expect(
+          receiptValidationService,
+          contains('if (response == null || response.statusCode != 200)'),
+        );
+        expect(receiptValidationService, contains('return null;'));
+        expect(receiptValidationService, contains('active is! bool'));
+        expect(
+          receiptValidationService,
+          contains(
+            'Future<SubscriptionStatusProjection?> fetchSubscriptionStatus',
+          ),
+        );
+        expect(
+          receiptValidationService,
+          contains('const SubscriptionStatusProjection(active: false)'),
+        );
+        expect(
+          receiptValidationService,
+          contains('return projection?.active;'),
+        );
+
+        expect(
+          subscriptionService,
+          contains('if (backendStatus?.active == true)'),
+        );
+        expect(
+          subscriptionService,
+          contains('if (backendStatus?.active == false)'),
+        );
+        expect(
+          subscriptionService,
+          contains('_currentSubscription = UserSubscription.free(userId)'),
+        );
+      },
+    );
+
+    test(
+      'unknown backend status preserves only same-user locally-valid persisted Premium',
+      () {
+        expect(subscriptionService, contains('candidate.userId != userId ||'));
+        expect(subscriptionService, contains('candidate.isPremium'));
+        expect(
+          subscriptionModels,
+          contains(
+            'bool get isPremium => tier != SubscriptionTier.free && isValid',
+          ),
+        );
+        expect(
+          subscriptionModels,
+          contains('!expiryDate!.isAfter(DateTime.now())'),
+        );
+        expect(
+          subscriptionService,
+          contains('Never manufacture or extend Premium access'),
+        );
+
+        final unknownStart = subscriptionService.indexOf(
+          '// Backend status is temporarily unknown.',
+        );
+        final unknownEnd = subscriptionService.indexOf(
+          '} catch (e) {',
+          unknownStart,
+        );
+
+        expect(unknownStart, greaterThanOrEqualTo(0));
+        expect(unknownEnd, greaterThan(unknownStart));
+
+        final unknownBackendBranch = subscriptionService.substring(
+          unknownStart,
+          unknownEnd,
+        );
+
+        expect(
+          unknownBackendBranch,
+          isNot(contains('UserSubscription.premium(')),
+          reason: 'UNKNOWN backend fallback must never manufacture Premium.',
         );
       },
     );
@@ -459,7 +584,7 @@ void main() {
         'androidpublisher',
         'premiumEntitlements',
         'allowedProducts',
-        'FLOW_AI_APPLE_ISSUER_ID_NEXT',
+        'FLOW_AI_APPLE_ISSUER_ID',
         'FLOW_AI_GOOGLE_PLAY_SERVICE_ACCOUNT',
         'valid: true',
         'active: true',

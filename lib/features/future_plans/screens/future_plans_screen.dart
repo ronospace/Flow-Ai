@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../features/coming_soon/widgets/coming_soon_card.dart';
+import '../../../core/widgets/app_header_components.dart';
 
 class FuturePlansScreen extends StatefulWidget {
   const FuturePlansScreen({super.key});
@@ -159,6 +160,14 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
             expandedHeight: 200,
             floating: false,
             pinned: true,
+            automaticallyImplyLeading: false,
+            leading: AppBackButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              color:
+                  Theme.of(context).appBarTheme.iconTheme?.color ??
+                  Theme.of(context).colorScheme.onSurface,
+              iconSize: 24,
+            ),
             backgroundColor: Colors.transparent,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(

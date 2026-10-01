@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 import '../models/cycle_data.dart';
 import '../models/daily_tracking_data.dart';
@@ -23,7 +22,6 @@ class CloudSyncService {
 
   CloudSyncService() {
     _initializeEncryption();
-    debugPrint('⚠️ CloudSyncService: Firebase disabled, using local-only mode');
   }
 
   void _initializeEncryption() {
@@ -45,7 +43,6 @@ class CloudSyncService {
     String email,
     String password,
   ) async {
-    debugPrint('⚠️ CloudSyncService: Firebase auth disabled, returning null');
     throw Exception('Firebase authentication is disabled in this build');
   }
 
@@ -53,25 +50,16 @@ class CloudSyncService {
     String email,
     String password,
   ) async {
-    debugPrint('⚠️ CloudSyncService: Firebase auth disabled, returning null');
     throw Exception('Firebase authentication is disabled in this build');
   }
 
   Future<void> signOut() async {
-    debugPrint(
-      '⚠️ CloudSyncService: Firebase auth disabled, local sign out only',
-    );
     _lastSyncTime = null;
   }
 
   // Stub cloud sync operations (local-only)
   Future<void> syncToCloud({bool force = false}) async {
-    debugPrint(
-      '⚠️ CloudSyncService: Cloud sync disabled, data stored locally only',
-    );
-
     if (_isSyncing && !force) {
-      debugPrint('Local sync already in progress');
       return;
     }
 
@@ -83,10 +71,7 @@ class CloudSyncService {
 
       _lastSyncTime = DateTime.now();
       _preferencesService.setLastSyncTime(_lastSyncTime!);
-
-      debugPrint('✅ Local backup completed successfully (Firebase disabled)');
     } catch (e) {
-      debugPrint('❌ Error creating local backup: $e');
       rethrow;
     } finally {
       _isSyncing = false;
@@ -94,17 +79,12 @@ class CloudSyncService {
   }
 
   Future<void> syncFromCloud({bool force = false}) async {
-    debugPrint('⚠️ CloudSyncService: Cloud sync disabled, no data to download');
-
     // No-op when Firebase is disabled
     _lastSyncTime = DateTime.now();
     _preferencesService.setLastSyncTime(_lastSyncTime!);
   }
 
   Future<void> bidirectionalSync() async {
-    debugPrint(
-      '⚠️ CloudSyncService: Cloud sync disabled, performing local backup only',
-    );
     syncToCloud(force: true);
   }
 
@@ -143,10 +123,7 @@ class CloudSyncService {
         'local_backup',
         jsonEncode(encryptedBackup),
       );
-
-      debugPrint('✅ Local backup created successfully');
     } catch (e) {
-      debugPrint('❌ Error creating local backup: $e');
       rethrow;
     }
   }
@@ -196,40 +173,23 @@ class CloudSyncService {
       if (backupData['preferences'] != null) {
         _preferencesService.setAllPreferences(backupData['preferences']);
       }
-
-      debugPrint('✅ Local backup restored successfully');
     } catch (e) {
-      debugPrint('❌ Error restoring local backup: $e');
       rethrow;
     }
   }
 
   // Stub methods for Firebase features
   Future<void> createBackup() async {
-    debugPrint(
-      '⚠️ CloudSyncService: Creating local backup instead of cloud backup',
-    );
     _createLocalBackup();
   }
 
   Future<void> restoreFromBackup(String backupId) async {
-    debugPrint(
-      '⚠️ CloudSyncService: Restoring from local backup instead of cloud backup',
-    );
     restoreFromLocalBackup();
   }
 
-  void enableAutoSync({Duration interval = const Duration(hours: 6)}) {
-    debugPrint(
-      '⚠️ CloudSyncService: Auto sync disabled (Firebase unavailable)',
-    );
-  }
+  void enableAutoSync({Duration interval = const Duration(hours: 6)}) {}
 
-  void disableAutoSync() {
-    debugPrint(
-      '⚠️ CloudSyncService: Auto sync already disabled (Firebase unavailable)',
-    );
-  }
+  void disableAutoSync() {}
 
   // Sync status (local-only)
   Future<SyncStatus> getSyncStatus() async {
@@ -249,15 +209,9 @@ class CloudSyncService {
 
   // Data deletion (local only)
   Future<void> deleteCloudData() async {
-    debugPrint(
-      '⚠️ CloudSyncService: Deleting local backup data only (Firebase unavailable)',
-    );
-
     try {
       _preferencesService.remove('local_backup');
-      debugPrint('✅ Local backup data deleted successfully');
     } catch (e) {
-      debugPrint('❌ Error deleting local backup data: $e');
       rethrow;
     }
   }
@@ -279,7 +233,6 @@ class CloudSyncService {
       final createdAt = backupData['createdAt'] as String?;
       return createdAt != null ? DateTime.parse(createdAt) : null;
     } catch (e) {
-      debugPrint('Error getting local backup time: $e');
       return null;
     }
   }

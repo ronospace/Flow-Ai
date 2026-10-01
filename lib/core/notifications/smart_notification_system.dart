@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../models/user_profile.dart';
 import '../models/cycle_data.dart';
@@ -42,8 +41,6 @@ class SmartNotificationSystem {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    debugPrint('🔔 Initializing Smart Notification System...');
-
     // Initialize notification plugin
     await _initializeNotificationPlugin();
 
@@ -57,9 +54,6 @@ class SmartNotificationSystem {
     _startOptimizationEngine();
 
     _initialized = true;
-    debugPrint(
-      '✅ Smart Notification System initialized with AI-powered personalization',
-    );
   }
 
   Future<void> _initializeNotificationPlugin() async {
@@ -112,8 +106,6 @@ class SmartNotificationSystem {
   }
 
   Future<void> _initializeSmartComponents() async {
-    debugPrint('🧠 Initializing smart notification components...');
-
     _personalizationEngine = NotificationPersonalizationEngine();
     _scheduler = NotificationScheduler();
     _contentGenerator = NotificationContentGenerator();
@@ -154,15 +146,10 @@ class SmartNotificationSystem {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint(
-      '📱 Generating smart health notification for ${user.displayName}...',
-    );
-
     try {
       // Check if we should send this notification
       final shouldSend = await _shouldSendNotification(user, type, priority);
       if (!shouldSend) {
-        debugPrint('⏭️ Skipping notification due to optimization rules');
         return;
       }
 
@@ -213,11 +200,7 @@ class SmartNotificationSystem {
 
       // Track notification
       _trackNotification(notification);
-
-      debugPrint('✅ Smart notification scheduled: ${notification.title}');
-    } catch (e) {
-      debugPrint('❌ Error sending smart notification: $e');
-    }
+    } catch (e) {}
   }
 
   /// Send cycle phase notification with contextual awareness
@@ -452,8 +435,6 @@ class SmartNotificationSystem {
   }
 
   void _onNotificationResponse(NotificationResponse response) {
-    debugPrint('📱 Notification tapped: ${response.payload}');
-
     try {
       final notification = SmartNotification.fromJsonString(response.payload!);
 
@@ -467,14 +448,10 @@ class SmartNotificationSystem {
 
       // Update engagement metrics
       _optimizer?.recordEngagement(notification, 'tapped');
-    } catch (e) {
-      debugPrint('Error parsing notification response: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _updateUserContext() async {
-    debugPrint('🔄 Updating user context for notifications...');
-
     final now = DateTime.now();
     _userContext['current_time'] = now.toIso8601String();
     _userContext['hour'] = now.hour;
@@ -494,17 +471,9 @@ class SmartNotificationSystem {
   }
 
   Future<void> _optimizeNotificationStrategy() async {
-    debugPrint('⚡ Optimizing notification strategy...');
-
-    final insights =
-        await _optimizer?.analyzeNotificationPerformance(
-          _notificationHistory,
-          _userContext,
-        ) ??
-        [];
-
-    debugPrint(
-      '📊 Notification insights: ${insights.length} optimizations found',
+    await _optimizer?.analyzeNotificationPerformance(
+      _notificationHistory,
+      _userContext,
     );
   }
 
@@ -552,9 +521,7 @@ class SmartNotificationSystem {
 // Supporting classes and components
 
 class NotificationPersonalizationEngine {
-  Future<void> initialize() async {
-    debugPrint('🎯 Notification Personalization Engine initialized');
-  }
+  Future<void> initialize() async {}
 
   Future<NotificationPreferences> getUserPreferences(UserProfile user) async {
     // In a real implementation, this would load from user settings
@@ -563,9 +530,7 @@ class NotificationPersonalizationEngine {
 }
 
 class NotificationScheduler {
-  Future<void> initialize() async {
-    debugPrint('⏰ Notification Scheduler initialized');
-  }
+  Future<void> initialize() async {}
 
   Future<DateTime> calculateOptimalTime({
     required UserProfile user,
@@ -641,9 +606,7 @@ class NotificationScheduler {
 }
 
 class NotificationContentGenerator {
-  Future<void> initialize() async {
-    debugPrint('📝 Notification Content Generator initialized');
-  }
+  Future<void> initialize() async {}
 
   Future<NotificationContent> generatePersonalizedContent({
     required UserProfile user,
@@ -832,9 +795,7 @@ class NotificationContentGenerator {
 }
 
 class NotificationOptimizer {
-  Future<void> initialize() async {
-    debugPrint('⚡ Notification Optimizer initialized');
-  }
+  Future<void> initialize() async {}
 
   Future<List<String>> analyzeNotificationPerformance(
     List<SmartNotification> history,
@@ -871,7 +832,6 @@ class NotificationOptimizer {
 
   void recordEngagement(SmartNotification notification, String action) {
     notification.recordEngagement(action);
-    debugPrint('📊 Recorded engagement: ${notification.id} -> $action');
   }
 }
 

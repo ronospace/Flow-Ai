@@ -24,6 +24,8 @@ void main() {
 
     expect(home, contains('HealthcareProviderPortalScreen()'));
     expect(portal, contains('class HealthcareProviderPortalScreen'));
-    expect(portal, contains('Share.shareXFiles'));
+    expect(portal, contains('SharePlus.instance.share('));
+    expect(portal, contains('ShareParams('));
+    expect(portal, contains('files: [XFile(_exportFilePath!)]'));
   });
 }

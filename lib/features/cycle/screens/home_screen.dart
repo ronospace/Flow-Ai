@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/app_state_service.dart';
+import '../../../core/utils/user_display_name_resolver.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
@@ -15,13 +16,11 @@ import '../../health/providers/health_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
-import '../../../core/ai/period_prediction_engine.dart';
-import '../../ai_predictions/widgets/ai_prediction_card.dart';
-import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import '../../../core/widgets/pressable_avatar.dart';
 import '../widgets/premium_features_preview.dart';
+import 'package:flow_ai/features/premium/providers/subscription_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,11 +36,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _dashboardAnimation;
   late Animation<double> _healthAnimation;
   late Animation<double> _predictiveAnimation;
-
-  // AI Prediction
-  PeriodPrediction? _currentPrediction;
-  bool _isLoadingPrediction = false;
-
   @override
   void initState() {
     super.initState();
@@ -98,9 +92,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
       // Load AI prediction
       Future.delayed(const Duration(milliseconds: 800), () {
-        if (mounted) {
-          _loadAIPrediction();
-        }
+        if (mounted) {}
       });
     });
   }
@@ -115,38 +107,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _showPremiumInsightsPaywall() {
     context.push('/premium/paywall');
-  }
-
-  Future<void> _loadAIPrediction() async {
-    if (mounted) {
-      setState(() {
-        _isLoadingPrediction = true;
-      });
-    }
-
-    try {
-      // Get current user ID from app state service
-      final appState = Provider.of<AppStateService>(context, listen: false);
-      final currentUser = appState.auth.currentUser;
-      final userId = currentUser?.uid ?? 'anonymous_user';
-
-      final prediction = await PeriodPredictionEngine().predictNextPeriod(
-        userId,
-      );
-
-      if (mounted) {
-        setState(() {
-          _currentPrediction = prediction;
-          _isLoadingPrediction = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoadingPrediction = false;
-        });
-      }
-    }
   }
 
   Widget _buildLockedAdvancedInsightTeaserWidget() {
@@ -291,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
     final appState = context.read<AppStateService>();
     final user = appState.auth.currentUser;
@@ -299,11 +258,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        centerTitle: false,
         title: Text(
           localizations.home,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppPageTypography.title(context),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -345,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // REVOLUTIONARY: AI-Powered Dynamic Header
-                              _buildRevolutionaryHeader(settings),
+                              _buildRevolutionaryHeader(settings, user),
                               const SizedBox(height: AppTheme.spaceXxl),
 
                               // AI Prediction Summary
@@ -386,15 +344,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                               // Premium Features Coming Soon
                               _LazyWidget(
-                                builder: () => PremiumFeaturesPreview(
-                                  onPremiumTap: _showPremiumInsightsPaywall,
-                                  onAICoach: () => _navigateToAICoach(),
-                                  onPartnerSharing: () =>
-                                      _navigateToPartnerSharing(),
-                                  onHealthcarePortal: () =>
-                                      _navigateToHealthcarePortal(),
-                                  onAdvancedAnalytics: () =>
-                                      _navigateToAdvancedAnalytics(),
+                                builder: () => Consumer<SubscriptionProvider>(
+                                  builder: (context, subscription, _) =>
+                                      PremiumFeaturesPreview(
+                                        isPremium: subscription.isPremium,
+                                        onPremiumTap:
+                                            _showPremiumInsightsPaywall,
+                                        onAICoach: () => _navigateToAICoach(),
+                                        onPartnerSharing: () =>
+                                            _navigateToPartnerSharing(),
+                                        onHealthcarePortal: () =>
+                                            _navigateToHealthcarePortal(),
+                                        onAdvancedAnalytics: () =>
+                                            _navigateToAdvancedAnalytics(),
+                                      ),
                                 ),
                               ),
                             ],
@@ -501,7 +464,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildRevolutionaryHeader(SettingsProvider settingsProvider) {
+  Widget _buildRevolutionaryHeader(
+    SettingsProvider settingsProvider,
+    dynamic user,
+  ) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
     final now = DateTime.now();
@@ -511,14 +477,29 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? localizations.goodAfternoon
         : localizations.goodEvening;
 
-    final greetingName = settingsProvider.preferences.greetingName;
+    final preferences = settingsProvider.preferences;
+
+    final identity = UserDisplayNameResolver.resolveIdentity(
+      userId: user?.uid,
+      email: user?.email,
+      displayName: user?.displayName,
+      existingUserId: preferences.userId,
+      existingDisplayName: preferences.displayName,
+      existingGreetingName: preferences.greetingName,
+    );
+
+    final greetingName = identity.greetingName;
     final personalizedGreeting = greetingName.isNotEmpty
         ? '$baseGreeting, $greetingName!'
         : '$baseGreeting!';
 
-    final healthScore = (context.watch<HealthProvider>().healthScore / 100.0)
-        .clamp(0.0, 1.0)
-        .toDouble();
+    final healthProvider = context.watch<HealthProvider>();
+    final hasObservedHealthData = healthProvider.hasObservedHealthData;
+    final healthDataCoverage = hasObservedHealthData
+        ? (healthProvider.snapshot?.dataQuality ?? 0.0)
+              .clamp(0.0, 1.0)
+              .toDouble()
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceXxl),
@@ -552,18 +533,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '$personalizedGreeting 👋',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '$personalizedGreeting 👋',
+                        maxLines: 1,
+                        softWrap: false,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       DateFormat('EEEE, MMMM d').format(now),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -626,7 +615,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           builder: (context, child) {
                             return CustomPaint(
                               painter: HealthScorePainter(
-                                score: healthScore,
+                                score: healthDataCoverage,
                                 animation: _healthAnimation.value,
                               ),
                             );
@@ -638,7 +627,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Column(
                         children: [
                           Text(
-                            '${(healthScore * 100).round()}',
+                            '${(healthDataCoverage * 100).round()}',
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppTheme.primaryRose,
@@ -669,7 +658,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      localizations.optimal,
+                      hasObservedHealthData ? 'Data' : 'No data',
                       style: TextStyle(
                         color: AppTheme.successGreen,
                         fontSize: AppTheme.fsXs,
@@ -795,7 +784,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       localizations.healthDashboardMatrix,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -831,7 +820,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 AppTheme.primaryRose,
                 provider.predictions?.confidence != null
                     ? '${(provider.predictions!.confidence.score * 100).round()}%'
-                    : '0%',
+                    : '—',
               ),
 
               _buildHealthMetricCard(
@@ -842,7 +831,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 AppTheme.secondaryBlue,
                 provider.predictions?.confidence != null
                     ? '${(provider.predictions!.confidence.score * 100).round()}%'
-                    : '0%',
+                    : '—',
               ),
 
               _buildHealthMetricCard(
@@ -854,7 +843,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 AppTheme.accentMint,
                 provider.predictions?.confidence != null
                     ? '${(provider.predictions!.confidence.score * 100).round()}%'
-                    : '0%',
+                    : '—',
               ),
 
               _buildHealthMetricCard(
@@ -865,7 +854,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Icons.loop,
                 AppTheme.warningOrange,
                 provider.insights?.periodPredictionAccuracy != null
-                    ? '${(provider.insights!.periodPredictionAccuracy * 100).round()}%'
+                    ? '${(provider.insights!.periodPredictionAccuracy! * 100).round()}%'
                     : '—',
               ),
             ],
@@ -1000,7 +989,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       localizations.predictiveAnalyticsCenter,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -1251,7 +1240,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       'Health Insights Portal',
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -1515,7 +1504,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       localizations.smartActionCommandCenter,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -1724,7 +1713,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       'Health Trends Visualization',
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -1781,14 +1770,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '87%',
+                        '—',
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.successGreen,
                         ),
                       ),
                       Text(
-                        '+5% this month',
+                        'No trend data',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: AppTheme.successGreen,
                         ),
@@ -1861,7 +1850,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '28.5 days',
+                        '—',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primaryRose,
@@ -1909,7 +1898,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '4.2/5',
+                        '—',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.secondaryBlue,
@@ -2136,12 +2125,6 @@ extension _NavigationMethods on _HomeScreenState {
     }
   }
 
-  void _navigateToAIPredictions() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const AIPredictionsScreen()),
-    );
-  }
-
   void _navigateToHealthcarePortal() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -2167,78 +2150,74 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   Widget _buildAIPredictionSummary() {
-    if (_isLoadingPrediction) {
-      return Container(
-        padding: const EdgeInsets.all(AppTheme.spaceXl),
+    final provider = context.watch<CycleProvider>();
+    final prediction = provider.predictions;
+
+    if (prediction == null) {
+      return const SizedBox.shrink();
+    }
+
+    final confidencePercent = (prediction.confidence.score * 100).round();
+
+    return GestureDetector(
+      onTap: () => context.push('/predictions'),
+      child: Container(
+        padding: const EdgeInsets.all(AppTheme.spaceLg),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppTheme.primaryRose.withValues(alpha: 0.1),
-              AppTheme.primaryPurple.withValues(alpha: 0.05),
-            ],
-          ),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+            color: AppTheme.primaryRose.withValues(alpha: 0.12),
           ),
         ),
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                ),
-                borderRadius: BorderRadius.circular(20),
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(
-                Icons.psychology_rounded,
-                color: AppTheme.onBrightAccent,
-                size: 20,
-              ),
-            ).animate().shimmer(duration: 1200.ms),
-            const SizedBox(width: AppTheme.spaceMd),
+              child: const Icon(Icons.psychology, color: Colors.white),
+            ),
+            const SizedBox(width: AppTheme.spaceLg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Generating AI Prediction',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'AI Prediction',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '$confidencePercent%',
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: AppTheme.accentMint,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 4),
                   Text(
-                    'AI is analyzing your cycle patterns...',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    'Next period in ${prediction.daysUntilNextPeriod} days',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              width: 12,
-              height: 12,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
-              ),
-            ),
+            const Icon(Icons.chevron_right),
           ],
         ),
-      ).animate().fadeIn(delay: 600.ms);
-    }
-
-    if (_currentPrediction == null) {
-      return const SizedBox.shrink();
-    }
-
-    return AIPredictionSummary(
-      prediction: _currentPrediction!,
-      onTap: _navigateToAIPredictions,
+      ),
     );
   }
 }

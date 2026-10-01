@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
@@ -54,9 +53,7 @@ class SecurityPrivacyService {
       await _initializeBiometrics();
 
       _isInitialized = true;
-      debugPrint('🔒 Security and privacy service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize security service: $e');
       throw SecurityException('Failed to initialize security service: $e');
     }
   }
@@ -75,10 +72,7 @@ class SecurityPrivacyService {
 
       // Initialize AES encrypter
       _dataEncrypter = Encrypter(AES(_masterKey));
-
-      debugPrint('🔐 Encryption system initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize encryption: $e');
       throw SecurityException('Failed to initialize encryption: $e');
     }
   }
@@ -109,7 +103,6 @@ class SecurityPrivacyService {
         await _saveSecurityConfig();
       }
     } catch (e) {
-      debugPrint('⚠️ Failed to load security config, using defaults: $e');
       _securityConfig = SecurityConfig.defaultConfig();
       await _saveSecurityConfig();
     }
@@ -239,9 +232,6 @@ class SecurityPrivacyService {
     }
 
     await _prefs?.setBool(_biometricEnabledKey, enabled);
-    debugPrint(
-      '🔓 Biometric authentication ${enabled ? 'enabled' : 'disabled'}',
-    );
   }
 
   /// Check if biometric authentication is enabled
@@ -268,10 +258,8 @@ class SecurityPrivacyService {
         additionalContext: additionalContext,
       );
 
-      debugPrint('🔐 Data encrypted successfully');
       return result;
     } catch (e) {
-      debugPrint('❌ Failed to encrypt data: $e');
       throw SecurityException('Failed to encrypt data: $e');
     }
   }
@@ -288,10 +276,8 @@ class SecurityPrivacyService {
 
       final String decrypted = _dataEncrypter.decrypt(encrypted, iv: iv);
 
-      debugPrint('🔓 Data decrypted successfully');
       return decrypted;
     } catch (e) {
-      debugPrint('❌ Failed to decrypt data: $e');
       throw SecurityException('Failed to decrypt data: $e');
     }
   }
@@ -368,7 +354,9 @@ class SecurityPrivacyService {
       await _logDataAccess(DataAccessType.read, key, sensitivity);
 
       return data;
-    } catch (e) {}
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Delete encrypted health data
@@ -398,7 +386,6 @@ class SecurityPrivacyService {
         return PrivacySettings.defaultSettings();
       }
     } catch (e) {
-      debugPrint('⚠️ Failed to load privacy settings, using defaults: $e');
       return PrivacySettings.defaultSettings();
     }
   }
@@ -412,9 +399,7 @@ class SecurityPrivacyService {
         _privacySettingsKey,
         json.encode(settings.toJson()),
       );
-      debugPrint('⚙️ Privacy settings updated');
     } catch (e) {
-      debugPrint('❌ Failed to update privacy settings: $e');
       throw SecurityException('Failed to update privacy settings: $e');
     }
   }
@@ -455,7 +440,6 @@ class SecurityPrivacyService {
       filteredEntries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       return filteredEntries.take(limit).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get security audit log: $e');
       return [];
     }
   }
@@ -510,7 +494,6 @@ class SecurityPrivacyService {
         isPassphraseProtected: passphrase != null,
       );
     } catch (e) {
-      debugPrint('❌ Failed to generate secure backup: $e');
       throw SecurityException('Failed to generate secure backup: $e');
     }
   }
@@ -561,7 +544,6 @@ class SecurityPrivacyService {
           restoredCount++;
         } catch (e) {
           failedKeys.add(entry.key);
-          debugPrint('⚠️ Failed to restore key ${entry.key}: $e');
         }
       }
 
@@ -572,7 +554,6 @@ class SecurityPrivacyService {
         totalKeys: restoredData.length,
       );
     } catch (e) {
-      debugPrint('❌ Failed to restore from backup: $e');
       throw SecurityException('Failed to restore from backup: $e');
     }
   }
@@ -696,9 +677,7 @@ class SecurityPrivacyService {
       }
 
       await _prefs?.setStringList('security_audit', auditEntries);
-    } catch (e) {
-      debugPrint('⚠️ Failed to log audit entry: $e');
-    }
+    } catch (e) {}
   }
 
   /// Clear all security data (use with caution)
@@ -728,10 +707,7 @@ class SecurityPrivacyService {
           await _prefs?.remove(key);
         }
       }
-
-      debugPrint('🧹 All security data cleared');
     } catch (e) {
-      debugPrint('❌ Failed to clear security data: $e');
       throw SecurityException('Failed to clear security data: $e');
     }
   }

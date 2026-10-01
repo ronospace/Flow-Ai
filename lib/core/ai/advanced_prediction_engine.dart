@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 
 /// Advanced AI Prediction Engine with enhanced capabilities
 class AdvancedPredictionEngine {
@@ -79,7 +78,6 @@ class AdvancedPredictionEngine {
         nextCycles: _predictFutureFertilityWindows(cycleHistory, 3),
       );
     } catch (e) {
-      debugPrint('Error in fertility prediction: $e');
       return _getFallbackFertilityPrediction();
     }
   }
@@ -126,7 +124,6 @@ class AdvancedPredictionEngine {
         confidence: _calculatePatternConfidence(patterns),
       );
     } catch (e) {
-      debugPrint('Error in hormone pattern analysis: $e');
       return _getFallbackHormoneAnalysis();
     }
   }
@@ -185,7 +182,6 @@ class AdvancedPredictionEngine {
         nextUpdateDue: DateTime.now().add(const Duration(days: 7)),
       );
     } catch (e) {
-      debugPrint('Error generating personalized insights: $e');
       return _getFallbackPersonalizedInsights(userId);
     }
   }
@@ -229,7 +225,6 @@ class AdvancedPredictionEngine {
         confidence: _calculateIrregularityConfidence(irregularities),
       );
     } catch (e) {
-      debugPrint('Error in irregularity detection: $e');
       return _getFallbackIrregularityAnalysis();
     }
   }

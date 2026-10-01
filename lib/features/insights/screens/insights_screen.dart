@@ -148,14 +148,14 @@ class _InsightsScreenState extends State<InsightsScreen>
               children: [
                 Text(
                   'AI Insights',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
+                  style: AppPageTypography.title(context),
                 ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   AppLocalizations.of(context).learnYourPatterns,
-                  style: theme.textTheme.bodyLarge?.copyWith(
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ).animate().fadeIn(delay: 100.ms),
@@ -371,10 +371,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
               Text(
                 'AI Insights',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
-                ),
+                style: AppPageTypography.title(context),
               ).animate().fadeIn(delay: 200.ms),
 
               const SizedBox(height: 16),

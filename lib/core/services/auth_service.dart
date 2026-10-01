@@ -15,6 +15,8 @@ import 'dart:io';
 import 'dart:async';
 import 'local_user_service.dart';
 import 'cloud_data_deletion_gateway.dart';
+import 'enhanced_ai_chat_service.dart';
+import 'production_analytics_service.dart';
 import '../database/database_service.dart';
 import '../utils/app_logger.dart';
 
@@ -73,6 +75,13 @@ class AuthService {
     return firebaseUser;
   }
 
+  Future<void> _syncAnalyticsAccountScope() async {
+    final account = await getCurrentUser();
+    await ProductionAnalyticsService().setAuthenticatedUser(
+      account?.uid?.toString(),
+    );
+  }
+
   /// Get comprehensive user data for UI display and persistence
   Future<Map<String, dynamic>?> getUserData() async {
     final currentUser = await getCurrentUser();
@@ -107,6 +116,7 @@ class AuthService {
         'uid': currentUser.uid,
         'email': currentUser.email,
         'displayName': resolvedDisplayName,
+        'greetingName': matchedStoredData?['greetingName'],
         'username': matchedStoredData?['username'] ?? resolvedDisplayName,
         'photoURL': currentUser.photoURL,
         'provider': matchedStoredData?['provider'] ?? 'firebase',
@@ -220,6 +230,7 @@ class AuthService {
       // Local auth remains available; explicit auth flows can handle remote sync later.
 
       _isInitialized = true;
+      await _syncAnalyticsAccountScope();
       AppLogger.auth(
         'AuthService initialized successfully (Firebase: $_firebaseAvailable)',
       );
@@ -232,6 +243,7 @@ class AuthService {
         _localUserService = LocalUserService();
         await _localUserService!.initialize();
         _isInitialized = true;
+        await _syncAnalyticsAccountScope();
         AppLogger.warning('AuthService initialized with local components only');
       } catch (criticalError) {
         AppLogger.error(
@@ -299,7 +311,6 @@ class AuthService {
 
       final bool isAvailable = await isBiometricAvailable();
       final bool isEnabled = isBiometricEnabled();
-      debugPrint('BIO: isAvailable=$isAvailable enabled=$isEnabled');
       if (!isAvailable) {
         return AuthResult.failure(
           'Biometric authentication is not available on this device',
@@ -312,7 +323,6 @@ class AuthService {
         );
       }
 
-      debugPrint("BIO: calling localAuth.authenticate");
       final bool didAuthenticate = await _localAuth!.authenticate(
         localizedReason: 'Please authenticate to access Flow Ai',
         options: const AuthenticationOptions(
@@ -321,7 +331,6 @@ class AuthService {
         ),
       );
 
-      debugPrint("BIO: localAuth result=$didAuthenticate");
       if (!didAuthenticate) {
         return AuthResult.failure('Biometric authentication failed');
       }
@@ -335,10 +344,6 @@ class AuthService {
 
       return AuthResult.success(activeUser);
     } on PlatformException catch (e) {
-      debugPrint(
-        'Biometric authentication platform error: ${e.code} - ${e.message}',
-      );
-
       switch (e.code) {
         case 'NotAvailable':
           return AuthResult.failure(
@@ -663,7 +668,6 @@ class AuthService {
       await AppStateService().preferences.setOnboardingComplete(true);
       return AuthResult.success(userCredential.user);
     } catch (error, stackTrace) {
-      debugPrint('Google sign-in failed: $error');
       debugPrintStack(stackTrace: stackTrace);
       return AuthResult.failure(
         'We could not complete Google sign-in. Please try again.',
@@ -745,12 +749,13 @@ class AuthService {
         );
       }
 
-      final appleDisplayName =
-          [appleCredential.givenName, appleCredential.familyName]
-              .whereType<String>()
-              .map((part) => part.trim())
-              .where((part) => part.isNotEmpty)
-              .join(' ');
+      final appleGivenName = appleCredential.givenName?.trim() ?? '';
+      final appleFamilyName = appleCredential.familyName?.trim() ?? '';
+
+      final appleDisplayName = [
+        appleGivenName,
+        appleFamilyName,
+      ].where((part) => part.isNotEmpty).join(' ');
 
       final storedData = await _getStoredUserData();
       final matchedStoredData =
@@ -759,6 +764,8 @@ class AuthService {
           : null;
       final storedDisplayName =
           matchedStoredData?['displayName']?.toString().trim() ?? '';
+      final storedGreetingName =
+          matchedStoredData?['greetingName']?.toString().trim() ?? '';
       final providerDisplayName = user.displayName?.trim() ?? '';
       final emailDisplayName = _displayNameFromEmail(user.email) ?? '';
 
@@ -778,17 +785,27 @@ class AuthService {
 
       final refreshedUser = _auth!.currentUser ?? user;
 
+      final resolvedGreetingName = appleFamilyName.isNotEmpty
+          ? appleFamilyName
+          : storedGreetingName.isNotEmpty
+          ? storedGreetingName
+          : null;
+
       await _storeUserData({
         'uid': refreshedUser.uid,
         'email': refreshedUser.email,
         'displayName': resolvedDisplayName.isNotEmpty
             ? resolvedDisplayName
             : refreshedUser.displayName,
+        'greetingName': resolvedGreetingName,
         'username': resolvedDisplayName.isNotEmpty
             ? resolvedDisplayName
             : refreshedUser.displayName,
         'photoURL': refreshedUser.photoURL,
         'provider': 'apple',
+        'appleNameCaptured':
+            appleDisplayName.isNotEmpty ||
+            matchedStoredData?['appleNameCaptured'] == true,
         'lastLogin': DateTime.now().toIso8601String(),
       });
       await _prefs?.setString(_lastLoginMethodKey, 'apple');
@@ -854,15 +871,11 @@ class AuthService {
     // Never reuse a Firebase or anonymous cloud identity across app accounts.
     try {
       await _auth?.signOut();
-    } catch (error) {
-      debugPrint('⚠️ Firebase sign out failed: $error');
-    }
+    } catch (error) {}
 
     try {
-      debugPrint('🔐 Starting complete sign out process...');
-
       // Always clear local data first, even if Firebase operations fail
-      await _clearAllUserData();
+      await _clearSignOutSessionData();
       if (_prefs != null) {
         await _prefs!.remove(_lastLoginMethodKey);
         // Clear any cached user preferences
@@ -874,18 +887,12 @@ class AuthService {
       if (_localUserService != null) {
         try {
           await _localUserService!.signOut();
-          debugPrint('✅ Local user service sign out successful');
-        } catch (localError) {
-          debugPrint('⚠️ Local user service sign out failed: $localError');
-        }
+        } catch (localError) {}
       }
 
       // Clear memory cache and force garbage collection
       await _clearMemoryCache();
-
-      debugPrint('✅ Complete sign out successful - all user data cleared');
     } catch (e) {
-      debugPrint('❌ Critical sign out error: $e');
       // Still try to clear local data even if everything else fails
       try {
         if (_prefs != null) {
@@ -894,10 +901,7 @@ class AuthService {
         if (_localUserService != null) {
           await _localUserService!.signOut();
         }
-        debugPrint('✅ Local data cleared despite errors');
-      } catch (localError) {
-        debugPrint('❌ Even local data clearing failed: $localError');
-      }
+      } catch (localError) {}
     }
   }
 
@@ -908,7 +912,6 @@ class AuthService {
       if (_localUserService != null) {
         final localUser = await _localUserService!.getUserByEmail(email);
         if (localUser != null) {
-          debugPrint('✅ Email found in local storage: $email');
           return true;
         }
       }
@@ -917,14 +920,11 @@ class AuthService {
       final storedData = await _getStoredUserData();
       final storedEmail = storedData?['email']?.toString().trim().toLowerCase();
       if (storedEmail == email.trim().toLowerCase()) {
-        debugPrint('✅ Email found in stored data: $email');
         return true;
       }
 
-      debugPrint('❌ Email not found: $email');
       return false;
     } catch (e) {
-      debugPrint('❌ Error checking email registration: $e');
       return false;
     }
   }
@@ -1064,6 +1064,10 @@ class AuthService {
     if (_prefs != null) {
       await _prefs!.setString(_userDataKey, json.encode(userData));
     }
+
+    await ProductionAnalyticsService().setAuthenticatedUser(
+      userData['uid']?.toString(),
+    );
   }
 
   Future<Map<String, dynamic>?> _getStoredUserData() async {
@@ -1075,8 +1079,26 @@ class AuthService {
     return null;
   }
 
+  /// Clear only active-session identity state on normal sign-out.
+  ///
+  /// Persisted account-scoped health, cycle, tracking, and conversation data
+  /// must remain available when the same account signs in again.
+  Future<void> _clearSignOutSessionData() async {
+    await ProductionAnalyticsService().setAuthenticatedUser(null);
+
+    if (_prefs != null) {
+      await _prefs!.remove(_userDataKey);
+      await _prefs!.remove(_lastLoginMethodKey);
+      await _prefs!.remove('user_preferences');
+      await _prefs!.remove('user_metadata');
+      await _prefs!.remove('app_settings');
+    }
+  }
+
   /// Clear all user-related data from local storage
   Future<void> _clearAllUserData() async {
+    await ProductionAnalyticsService().setAuthenticatedUser(null);
+
     // Cycle, symptom, prediction, and tracking records live in SQLite.
     await DatabaseService().deleteDatabase();
 
@@ -1093,7 +1115,6 @@ class AuthService {
             key.contains('cycle_') ||
             key.contains('health_')) {
           await _prefs!.remove(key);
-          debugPrint('🧹 Cleared user data key: $key');
         }
       }
     }
@@ -1101,9 +1122,7 @@ class AuthService {
 
   /// Clear memory cache and force cleanup
   Future<void> _clearMemoryCache() async {
-    // Reset internal state
-    // Force memory cleanup for better isolation between users
-    debugPrint('🧠 Memory cache cleared for user isolation');
+    await EnhancedAIChatService().resetSession();
   }
 
   Future<UserCredential> firebaseCreateUserWithEmailAndPassword(

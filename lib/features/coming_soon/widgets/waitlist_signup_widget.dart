@@ -440,14 +440,6 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
       if (!mounted) return;
 
       // Here you would typically send data to your backend
-      final userData = {
-        'name': _nameController.text.trim(),
-        'email': _emailController.text.trim(),
-        'interests': _selectedInterests.toList(),
-        'timestamp': DateTime.now().toIso8601String(),
-      };
-
-      debugPrint('Beta signup data: $userData');
 
       setState(() {
         _isLoading = false;

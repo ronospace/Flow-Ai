@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 
 class ComingSoonCard extends StatefulWidget {
@@ -128,21 +127,6 @@ class _ComingSoonCardState extends State<ComingSoonCard>
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Got it'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // TODO: Implement notification signup
-              AdaptiveMessages.showSuccess(
-                context,
-                "We'll notify you when this feature is ready!",
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: widget.gradientColors.first,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Notify Me'),
           ),
         ],
       ),

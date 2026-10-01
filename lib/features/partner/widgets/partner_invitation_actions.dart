@@ -11,8 +11,8 @@ class PartnerInvitationActions {
     return Clipboard.setData(ClipboardData(text: text));
   }
 
-  static Future<void> shareLink(PartnerInvitation invitation) {
+  static Future<void> shareLink(PartnerInvitation invitation) async {
     final link = generateInvitationLink(invitation);
-    return Share.share(link);
+    await SharePlus.instance.share(ShareParams(text: link));
   }
 }

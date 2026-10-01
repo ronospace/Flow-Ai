@@ -13,7 +13,13 @@ void main() {
       expect(paywall, contains('getMonthlyProduct()'));
       expect(paywall, contains('getYearlyProduct()'));
       expect(paywall, contains('hasYearlyBillingOption'));
-      expect(paywall, contains('Yearly billing'));
+      expect(
+        paywall,
+        contains("final duration = isYearly ? '12 months' : '1 month'"),
+      );
+      expect(paywall, contains('product.priceString'));
+      expect(paywall, isNot(contains('Yearly billing')));
+      expect(paywall, isNot(contains('Billed yearly by your app store')));
     });
 
     test('does not expose hardcoded savings or trusted client pricing', () {

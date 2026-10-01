@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../utils/collection_extensions.dart';
@@ -34,8 +33,6 @@ class PreventiveHealthInsights {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-
-    debugPrint('🏥 Initializing Preventive Health Insights...');
 
     // PCOS Detection Model
     _pcosDetectionModel = {
@@ -88,7 +85,6 @@ class PreventiveHealthInsights {
     _initializeMedicalMarkers();
 
     _isInitialized = true;
-    debugPrint('✅ Preventive Health Insights initialized successfully');
   }
 
   /// Comprehensive health screening for all major reproductive conditions
@@ -99,8 +95,6 @@ class PreventiveHealthInsights {
     Map<String, dynamic>? lifestyleData,
   }) async {
     if (!_isInitialized) await initialize();
-
-    debugPrint('🔍 Performing comprehensive health screening...');
 
     // Individual condition assessments
     final pcosAssessment = await assessPCOSRisk(
@@ -175,8 +169,6 @@ class PreventiveHealthInsights {
     UserProfile userProfile,
     Map<String, dynamic>? biometricData,
   ) async {
-    debugPrint('🔬 Assessing PCOS risk...');
-
     final riskFactors = <String, double>{};
     final detectedSymptoms = <String>[];
 
@@ -253,8 +245,6 @@ class PreventiveHealthInsights {
     UserProfile userProfile,
     Map<String, dynamic>? biometricData,
   ) async {
-    debugPrint('🦋 Assessing thyroid function...');
-
     final riskFactors = <String, double>{};
     final detectedSymptoms = <String>[];
 
@@ -312,8 +302,6 @@ class PreventiveHealthInsights {
     List<CycleData> cycles,
     UserProfile userProfile,
   ) async {
-    debugPrint('🌸 Assessing endometriosis risk...');
-
     final riskFactors = <String, double>{};
     final detectedSymptoms = <String>[];
 
@@ -379,8 +367,6 @@ class PreventiveHealthInsights {
     UserProfile userProfile,
     Map<String, dynamic>? lifestyleData,
   ) async {
-    debugPrint('🌱 Assessing fertility health...');
-
     // Ovulation quality analysis
     final ovulationQuality = _assessOvulationQuality(cycles);
 
@@ -431,8 +417,6 @@ class PreventiveHealthInsights {
     List<CycleData> cycles,
     UserProfile userProfile,
   ) async {
-    debugPrint('📊 Assessing hormonal shifts...');
-
     if (cycles.length < 6) {
       return HormonalShiftAssessment.insufficient();
     }

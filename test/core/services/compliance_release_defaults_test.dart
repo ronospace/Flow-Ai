@@ -11,7 +11,9 @@ void main() {
     expect(source, isNot(contains('adsEnabled => false')));
     expect(source, contains('FLOW_AI_ENABLE_ADS'));
     expect(source, contains('defaultValue: kReleaseMode'));
-    expect(source, contains('_consentAllowsAds'));
+    expect(source, contains('AdConsentService.instance.canRequestAds'));
+    expect(source, contains('_adsSuppressedByEntitlement'));
+    expect(source, isNot(contains('_consentAllowsAds')));
   });
 
   test('analytics is disabled until explicit consent is persisted', () {
@@ -72,15 +74,8 @@ void main() {
 
     for (final permission in <String>[
       'READ_HEART_RATE',
-      'READ_RESTING_HEART_RATE',
-      'READ_HEART_RATE_VARIABILITY',
       'READ_BODY_TEMPERATURE',
       'READ_SLEEP',
-      'READ_STEPS',
-      'READ_ACTIVE_CALORIES_BURNED',
-      'READ_OXYGEN_SATURATION',
-      'READ_RESPIRATORY_RATE',
-      'READ_HYDRATION',
       'READ_MENSTRUATION',
     ]) {
       expect(

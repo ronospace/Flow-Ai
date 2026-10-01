@@ -1,6 +1,122 @@
 import 'package:flutter/material.dart';
+import '../ui/app_geometry.dart';
+
+class PremiumHeaderTypography {
+  const PremiumHeaderTypography._();
+
+  static TextStyle? expanded(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return theme.textTheme.headlineLarge?.copyWith(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      color: theme.colorScheme.onSurface,
+    );
+  }
+
+  static TextStyle? collapsed(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return theme.textTheme.titleLarge?.copyWith(
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+      color: theme.colorScheme.onSurface,
+    );
+  }
+}
+
+class AppPageTypography {
+  const AppPageTypography._();
+
+  static TextStyle? title(BuildContext context) {
+    final theme = Theme.of(context);
+
+    // Proven retained page-title sizes:
+    // Android: previous Calendar headlineMedium = 20.
+    // iOS: approved Settings titleLarge = 22.
+    final fontSize = theme.platform == TargetPlatform.iOS ? 22.0 : 20.0;
+
+    return theme.textTheme.titleLarge?.copyWith(
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+      color: theme.colorScheme.onSurface,
+    );
+  }
+}
 
 class AppTheme {
+  /// Authoritative Material back-navigation visual.
+  ///
+  /// Flutter-owned surfaces such as LicensePage also consume this through
+  /// ThemeData.actionIconTheme, preventing framework implicit back buttons
+  /// from drifting from Flow Ai's approved chevron navigation.
+  static const ActionIconThemeData backNavigationActionIconTheme =
+      ActionIconThemeData(backButtonIconBuilder: _buildBackNavigationIcon);
+
+  static Widget _buildBackNavigationIcon(BuildContext context) =>
+      const Icon(Icons.arrow_back_ios_new);
+
+  /// Authoritative Material typography used by Material feature widgets
+  /// rendered under the iOS Cupertino root.
+  ///
+  /// Exact values were measured from the current effective iOS Material
+  /// theme before centralization. Do not duplicate platform font constants
+  /// inside feature screens.
+  /// Material typography policy for feature widgets rendered under iOS.
+  ///
+  /// The complete Flow Ai semantic TextTheme is preserved. iOS changes only
+  /// the exact measured font sizes; colors, weights, letter spacing, line
+  /// heights and other theme properties continue to come from the relevant
+  /// Flow Ai light/dark theme.
+  static TextTheme _iosMaterialTextTheme(TextTheme base) => base.copyWith(
+    headlineLarge: base.headlineLarge?.copyWith(fontSize: 32),
+    headlineMedium: base.headlineMedium?.copyWith(fontSize: 28),
+    headlineSmall: base.headlineSmall?.copyWith(fontSize: 24),
+    titleLarge: base.titleLarge?.copyWith(fontSize: 22),
+    titleMedium: base.titleMedium?.copyWith(fontSize: 16),
+    titleSmall: (base.titleSmall ?? const TextStyle()).copyWith(fontSize: 14),
+    bodyLarge: base.bodyLarge?.copyWith(fontSize: 16),
+    bodyMedium: base.bodyMedium?.copyWith(fontSize: 14),
+    bodySmall: base.bodySmall?.copyWith(fontSize: 12),
+  );
+
+  static ThemeData get iosMaterialTheme {
+    final base = lightTheme;
+    return base.copyWith(textTheme: _iosMaterialTextTheme(base.textTheme));
+  }
+
+  static ThemeData get iosMaterialDarkTheme {
+    final base = darkTheme;
+    return base.copyWith(textTheme: _iosMaterialTextTheme(base.textTheme));
+  }
+
+  static ShapeBorder get dialogShape =>
+      const RoundedRectangleBorder(borderRadius: AppGeometry.dialogRadius);
+
+  static ButtonStyle dialogSecondaryActionStyle(ThemeData theme) {
+    return OutlinedButton.styleFrom(
+      minimumSize: const Size(112, AppGeometry.capsuleHeight),
+      foregroundColor: theme.colorScheme.onSurface,
+      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+      side: BorderSide(color: theme.colorScheme.outline),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
+      ),
+    );
+  }
+
+  static ButtonStyle dialogPrimaryActionStyle(ThemeData theme) {
+    return ElevatedButton.styleFrom(
+      minimumSize: const Size(112, AppGeometry.capsuleHeight),
+      backgroundColor: secondaryBlue,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    );
+  }
+
   // Motion Tokens
   static const Duration motionFast = Duration(milliseconds: 200);
   static const Duration motionBase = Duration(milliseconds: 300);
@@ -18,12 +134,25 @@ class AppTheme {
 
   // Brand Colors
   static const Color primaryRose = Color(0xFFFF6B9D);
+
+  /// Primary Symptom Tracker action.
+  /// Deliberately ~12% softer than primaryRose so the CTA
+  /// remains prominent without overpowering nearby symptom chips.
+  static const Color symptomActionRose = Color(0xFFE05E8A);
   static const Color primaryPurple = Color(0xFF9B59B6);
   static const Color secondaryBlue = Color(0xFF3498DB);
   static const Color accentMint = Color(0xFF00D4AA);
   static const Color accentCoral = Color(0xFFFF6B6B);
   static const Color warningOrange = Color(0xFFFFA726);
   static const Color errorRed = Color(0xFFE74C3C);
+
+  /// Reversible warning action surface.
+  /// Intentionally softer than destructive/error semantics.
+  static const Color disconnectCaution = Color(0xFFFFD9DE);
+  static const Color disconnectCautionDark = Color(0xFF5C2A32);
+  static const Color onDisconnectCaution = Color(0xFF6D1823);
+  static const Color onDisconnectCautionDark = Color(0xFFFFD9DE);
+
   static const Color successGreen = Color(0xFF2ECC71);
 
   // Warm Sweet Colors for Period Moods
@@ -116,6 +245,24 @@ class AppTheme {
   );
 
   // Theme-aware gradients
+  static Color segmentedTabUnselectedColor(ThemeData theme) {
+    return theme.brightness == Brightness.dark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onSurfaceVariant;
+  }
+
+  static LinearGradient featureHeaderGradient(Brightness brightness) {
+    if (brightness == Brightness.dark) {
+      return backgroundGradient(true);
+    }
+
+    return const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [secondaryBlue, primaryPurple, primaryRose],
+    );
+  }
+
   static LinearGradient backgroundGradient(bool isDark) {
     return LinearGradient(
       begin: Alignment.topCenter,
@@ -130,6 +277,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      actionIconTheme: backNavigationActionIconTheme,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryRose,
         brightness: Brightness.light,
@@ -216,7 +364,9 @@ class AppTheme {
       // Card Theme
       cardTheme: CardThemeData(
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppGeometry.carrierRadius,
+        ),
         color: white,
       ),
 
@@ -278,6 +428,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      actionIconTheme: backNavigationActionIconTheme,
       scaffoldBackgroundColor: AppTheme.darkBackground,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryRose,
@@ -371,7 +522,9 @@ class AppTheme {
       // Card Theme for dark mode
       cardTheme: CardThemeData(
         elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppGeometry.carrierRadius,
+        ),
         color: AppTheme.darkCard,
       ),
 
@@ -441,7 +594,7 @@ class AppTheme {
 
       dialogTheme: DialogThemeData(
         backgroundColor: AppTheme.darkSurface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: dialogShape,
       ),
 
       snackBarTheme: SnackBarThemeData(

@@ -694,7 +694,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<CareActionType>(
-                value: selectedType,
+                initialValue: selectedType,
                 decoration: InputDecoration(
                   labelText: 'Care Type',
                   border: OutlineInputBorder(

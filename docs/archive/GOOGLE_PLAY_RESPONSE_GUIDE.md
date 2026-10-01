@@ -116,7 +116,7 @@ All screenshots show REAL app functionality with medical citations clearly visib
 ```
 DEMO ACCOUNT FOR TESTING:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 The demo account includes sample cycle data, symptoms, and AI insights for immediate testing.
 
@@ -172,7 +172,7 @@ Key Points:
 
 Demo Account for Testing:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 I'm available to provide any additional information needed. Please let me know if you have questions.
 

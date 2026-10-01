@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/widgets/app_header_components.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -154,6 +155,14 @@ class _FeedbackScreenState extends State<FeedbackScreen>
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: AppBackButton(
+          onPressed: () => Navigator.of(context).maybePop(),
+          color:
+              Theme.of(context).appBarTheme.iconTheme?.color ??
+              Theme.of(context).colorScheme.onSurface,
+          iconSize: 24,
+        ),
         title: const Text('Help Us Improve'),
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -95,7 +95,7 @@ class FeatureComparisonWidget extends StatelessWidget {
             ultimate: true,
           ),
           _buildFeatureRow(
-            'Healthcare Integration',
+            'Advanced Analytics',
             basic: false,
             premium: true,
             ultimate: true,
@@ -107,13 +107,13 @@ class FeatureComparisonWidget extends StatelessWidget {
             ultimate: true,
           ),
           _buildFeatureRow(
-            'Biometric Data Sync',
+            'Health Trends',
             basic: false,
             premium: true,
             ultimate: true,
           ),
           _buildFeatureRow(
-            'Multi-User Profiles',
+            'Data Export',
             basic: false,
             premium: false,
             ultimate: true,

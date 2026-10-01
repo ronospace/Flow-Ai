@@ -84,7 +84,7 @@ Medical Citations (Guideline 1.4.1):
 
 Demo Account (for testing):
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 Both issues from previous rejection (Submission ID: e30f24d8-7bc8-4034-9f57-646b0328dc0c) 
 have been comprehensively addressed. The app now fully complies with App Store 

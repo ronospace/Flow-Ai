@@ -86,12 +86,7 @@ class OnboardingController extends ChangeNotifier {
       case 'healthConcerns':
         _data = _data.copyWith(healthConcerns: value as List<String>);
         break;
-      case 'shareDataForResearch':
-        _data = _data.copyWith(shareDataForResearch: value as bool);
-        break;
-      case 'enableAIInsights':
-        _data = _data.copyWith(enableAIInsights: value as bool);
-        break;
+
       case 'preferredLanguage':
         _data = _data.copyWith(preferredLanguage: value as String?);
         break;
@@ -218,28 +213,8 @@ class OnboardingController extends ChangeNotifier {
     final currentUser = await _authService.getCurrentUser();
     if (currentUser == null) return;
 
-    final profileData = {
-      'fullName': _data.fullName,
-      'preferredName': _data.preferredName,
-      'dateOfBirth': _data.dateOfBirth?.toIso8601String(),
-      'age': _data.age,
-      'healthConcerns': _data.healthConcerns,
-      'lifestyle': _data.lifestyle?.toJson(),
-      'healthGoals': _data.healthGoals?.toJson(),
-      'notificationPrefs': _data.notificationPrefs?.toJson(),
-      'shareDataForResearch': _data.shareDataForResearch,
-      'enableAIInsights': _data.enableAIInsights,
-      'preferredLanguage': _data.preferredLanguage,
-      'timeZone': _data.timeZone,
-      'onboardingCompleted': true,
-      'onboardingCompletedAt': DateTime.now().toIso8601String(),
-    };
-
     // For now, we'll save this data to the LocalUserService
     // In the future, this can be extended to save to a proper user profile system
-    debugPrint(
-      'Saving user profile data from onboarding: ${profileData.keys.join(', ')}',
-    );
   }
 
   /// Initialize tracking data with cycle history
@@ -249,31 +224,11 @@ class OnboardingController extends ChangeNotifier {
     try {
       // For now, just log the tracking data that would be saved
       // In the future, this will be saved to a proper tracking service
-      final initialEntry = {
-        'date': _data.lastPeriodDate!.toIso8601String(),
-        'isFlow': true,
-        'flowLevel': 3, // Medium flow as default
-        'symptoms': _data.symptoms,
-        'notes': 'Initial cycle data from onboarding',
-      };
-
-      debugPrint('Initial tracking entry would be saved: $initialEntry');
 
       // If we have cycle irregularities, save them as notes
-      if (_data.cycleIrregularities.isNotEmpty) {
-        final irregularitiesNote = {
-          'date': DateTime.now().toIso8601String(),
-          'type': 'note',
-          'content':
-              'Cycle irregularities reported during onboarding: ${_data.cycleIrregularities.join(", ")}',
-        };
-        debugPrint(
-          'Cycle irregularities note would be saved: $irregularitiesNote',
-        );
-      }
+      if (_data.cycleIrregularities.isNotEmpty) {}
     } catch (e) {
       // Log error but don't fail onboarding
-      debugPrint('Failed to initialize tracking data: $e');
     }
   }
 

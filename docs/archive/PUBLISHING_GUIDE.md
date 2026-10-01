@@ -132,7 +132,7 @@ open ios/Runner.xcworkspace
 - Set pricing (Free)
 - **Update demo account**:
   - Email: `demo@flowai.app`
-  - Password: `REDACTED_DEMO_PW!`
+  - Password: `<REDACTED>`
 
 #### 6. Submit for Review
 - Click "Submit for Review"
@@ -196,7 +196,7 @@ open ios/Runner.xcworkspace
 
 **Credentials:**
 - Email: `demo@flowai.app`
-- Password: `REDACTED_DEMO_PW!`
+- Password: `<REDACTED>`
 
 **Features to Review:**
 - Sign in with demo account (auto-created on first launch)

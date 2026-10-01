@@ -196,7 +196,7 @@ class CycleCalculationEngine {
   }
 
   /// Calculate comprehensive cycle predictions for a user
-  Future<CyclePredictions> calculatePredictions({
+  Future<CyclePredictions?> calculatePredictions({
     required DateTime referenceDate,
     int monthsOfHistory = 12,
   }) async {
@@ -204,14 +204,36 @@ class CycleCalculationEngine {
       // Get historical cycle data
       final historicalCycles = await _getHistoricalCycles(monthsOfHistory);
 
-      // Find current or most recent cycle
+      // Truth gate: fewer than two recorded cycle starts cannot produce
+      // an observed user-specific cycle interval.
+      if (historicalCycles.length < 2) {
+        return null;
+      }
+
+      // Find current or most recent cycle.
+      // Historical intervals alone are not enough to anchor a current
+      // user-facing prediction.
       final currentCycle = await _getCurrentCycle(referenceDate);
+      if (currentCycle == null) {
+        return null;
+      }
 
       // Calculate cycle statistics
       final stats = _calculateCycleStatistics(historicalCycles);
 
+      // Existing records can still yield no valid observed intervals
+      // after cycle-length validation. Configuration defaults must not
+      // become user-facing predictions.
+      if (stats.sampleSize == 0) {
+        return null;
+      }
+
       // Generate predictions
       final nextPeriod = _predictNextPeriod(currentCycle, stats, referenceDate);
+      if (nextPeriod == null) {
+        return null;
+      }
+
       final fertileWindow = _calculateFertileWindow(nextPeriod, stats);
       final ovulationDate = _calculateOvulationDate(nextPeriod, stats);
       final currentPhase = _calculateCurrentPhase(
@@ -236,7 +258,8 @@ class CycleCalculationEngine {
       );
     } catch (e) {
       // Return default predictions if calculation fails
-      return _getDefaultPredictions(referenceDate);
+      // Calculation/storage failure is not a prediction.
+      rethrow;
     }
   }
 
@@ -289,11 +312,16 @@ class CycleCalculationEngine {
       );
     }
 
-    // Calculate cycle lengths
+    // Normalize ordering locally so interval truth does not depend on
+    // database/query ordering.
+    final chronologicalCycles = List<CycleData>.from(cycles)
+      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+
+    // Calculate observed cycle-start intervals.
     final cycleLengths = <int>[];
-    for (int i = 0; i < cycles.length - 1; i++) {
-      final currentCycle = cycles[i];
-      final nextCycle = cycles[i + 1];
+    for (int i = 0; i < chronologicalCycles.length - 1; i++) {
+      final currentCycle = chronologicalCycles[i];
+      final nextCycle = chronologicalCycles[i + 1];
       final length = nextCycle.startDate
           .difference(currentCycle.startDate)
           .inDays;
@@ -338,28 +366,25 @@ class CycleCalculationEngine {
   }
 
   /// Predict next period date
-  DateTime _predictNextPeriod(
-    CycleData? currentCycle,
+  DateTime? _predictNextPeriod(
+    CycleData currentCycle,
     CycleStatistics stats,
     DateTime referenceDate,
   ) {
-    if (currentCycle == null) {
-      // No cycle data, predict based on reference date
-      return referenceDate.add(Duration(days: stats.averageCycleLength));
+    // Cycle intervals are measured start-to-start. Anchor the prediction to
+    // the latest recorded cycle start rather than adding a second interval
+    // after the recorded cycle end.
+    final predictedStart = currentCycle.startDate.add(
+      Duration(days: stats.averageCycleLength),
+    );
+
+    // Do not fabricate one or more unrecorded cycles just to move a stale
+    // prediction into the future.
+    if (predictedStart.isBefore(referenceDate)) {
+      return null;
     }
 
-    // If cycle is still active, predict from cycle start
-    final estimatedEnd =
-        currentCycle.endDate ?? _estimateCycleEnd(currentCycle);
-    if (referenceDate.isBefore(estimatedEnd)) {
-      // We're still in current cycle
-      return currentCycle.startDate.add(
-        Duration(days: stats.averageCycleLength),
-      );
-    }
-
-    // Current cycle has ended, predict next cycle
-    return estimatedEnd.add(Duration(days: stats.averageCycleLength));
+    return predictedStart;
   }
 
   /// Calculate fertile window
@@ -445,8 +470,12 @@ class CycleCalculationEngine {
 
     // Factor 3: Recent data availability (0-20 points)
     if (cycles.isNotEmpty) {
+      final latestCycle = cycles.reduce(
+        (latest, candidate) =>
+            candidate.startDate.isAfter(latest.startDate) ? candidate : latest,
+      );
       final daysSinceLastCycle = DateTime.now()
-          .difference(cycles.first.startDate)
+          .difference(latestCycle.startDate)
           .inDays;
       if (daysSinceLastCycle <= 60) {
         confidenceScore += 20;
@@ -481,28 +510,5 @@ class CycleCalculationEngine {
   /// Estimate cycle end date when not provided
   DateTime _estimateCycleEnd(CycleData cycle) {
     return cycle.startDate.add(Duration(days: averageCycleLength));
-  }
-
-  /// Get default predictions when no data is available
-  CyclePredictions _getDefaultPredictions(DateTime referenceDate) {
-    final nextPeriod = referenceDate.add(
-      const Duration(days: averageCycleLength),
-    );
-    final ovulation = nextPeriod.subtract(
-      const Duration(days: averageLutealPhase),
-    );
-    final fertileStart = ovulation.subtract(const Duration(days: 5));
-
-    return CyclePredictions(
-      nextPeriodDate: nextPeriod,
-      ovulationDate: ovulation,
-      fertileWindowStart: fertileStart,
-      fertileWindowEnd: ovulation,
-      currentPhase: CyclePhase.unknown,
-      cycleLength: averageCycleLength,
-      cycleRegularity: CycleRegularity.unknown,
-      confidence: PredictionConfidence.veryLow,
-      lastUpdated: DateTime.now(),
-    );
   }
 }

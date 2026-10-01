@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 
 import '../screens/enhanced_daily_feelings_tracker.dart';
 import 'feelings_database_service.dart';
@@ -26,9 +25,7 @@ class FeelingsAnalyticsService {
     try {
       await _databaseService.initialize();
       _isInitialized = true;
-      debugPrint('📈 Feelings analytics service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize feelings analytics: $e');
       throw AnalyticsException('Failed to initialize analytics service: $e');
     }
   }
@@ -42,9 +39,7 @@ class FeelingsAnalyticsService {
     try {
       // Trigger background analytics processing
       _processEntryInBackground(entry);
-    } catch (e) {
-      debugPrint('❌ Failed to process new entry: $e');
-    }
+    } catch (e) {}
   }
 
   /// Background processing of entry analytics
@@ -58,11 +53,7 @@ class FeelingsAnalyticsService {
 
       // Clean up expired data
       await _databaseService.cleanupExpiredInsights();
-
-      debugPrint('✅ Processed analytics for entry ${entry.id}');
-    } catch (e) {
-      debugPrint('❌ Error in background processing: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get recent trends for user
@@ -103,7 +94,6 @@ class FeelingsAnalyticsService {
       trends.sort((a, b) => b.confidence.compareTo(a.confidence));
       return trends.take(limit).toList();
     } catch (e) {
-      debugPrint('❌ Failed to get recent trends: $e');
       return [];
     }
   }
@@ -304,9 +294,7 @@ class FeelingsAnalyticsService {
       for (final trend in trends) {
         await _databaseService.saveTrend(trend);
       }
-    } catch (e) {
-      debugPrint('❌ Failed to analyze trends: $e');
-    }
+    } catch (e) {}
   }
 
   /// Generate insights from entry data
@@ -418,9 +406,7 @@ class FeelingsAnalyticsService {
       for (final insight in insights) {
         await _databaseService.saveInsight(insight);
       }
-    } catch (e) {
-      debugPrint('❌ Failed to generate insights: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get comprehensive analytics summary
@@ -458,7 +444,6 @@ class FeelingsAnalyticsService {
         generatedAt: DateTime.now(),
       );
     } catch (e) {
-      debugPrint('❌ Failed to get analytics summary: $e');
       return AnalyticsSummary.empty();
     }
   }
@@ -599,7 +584,6 @@ class FeelingsAnalyticsService {
     try {
       return await _databaseService.getActiveInsights(userId: userId);
     } catch (e) {
-      debugPrint('❌ Failed to get insights for range: $e');
       return [];
     }
   }

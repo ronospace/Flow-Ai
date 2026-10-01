@@ -1,5 +1,4 @@
 import 'app_lock_service.dart';
-import 'package:flutter/foundation.dart';
 import 'auth_service.dart';
 import 'user_preferences_service.dart';
 
@@ -42,9 +41,7 @@ class AppStateService {
       ]);
 
       _isInitialized = true;
-      debugPrint('✅ AppStateService initialized successfully');
     } catch (e) {
-      debugPrint('❌ AppStateService initialization failed: $e');
       _initializationFuture = null;
       rethrow;
     }
@@ -61,7 +58,6 @@ class AppStateService {
       final isAuthenticated = await _authService.isAuthenticated;
 
       if (!isAuthenticated) {
-        debugPrint('📱 User not authenticated -> /auth/choice');
         return '/auth/choice';
       }
 
@@ -69,23 +65,15 @@ class AppStateService {
       final hasCompletedOnboarding = _preferencesService.onboardingComplete;
 
       if (!hasCompletedOnboarding) {
-        debugPrint(
-          '📱 User authenticated but onboarding incomplete -> /onboarding',
-        );
         return '/onboarding';
       }
 
       if (await AppLockService().shouldRequireLock()) {
-        debugPrint(
-          '📱 User authenticated and biometric app lock active -> /auth/lock',
-        );
         return '/auth/lock';
       }
 
-      debugPrint('📱 User authenticated and onboarding complete -> /home');
       return '/home';
     } catch (e) {
-      debugPrint('❌ Error determining initial route: $e');
       // Default to auth choice screen
       return '/auth/choice';
     }
@@ -113,7 +101,6 @@ class AppStateService {
       await initialize();
     }
     await _preferencesService.setOnboardingComplete(true);
-    debugPrint('✅ Onboarding marked as complete');
   }
 
   /// Reset app state (for testing or sign-out)
@@ -128,7 +115,6 @@ class AppStateService {
 
     // Do NOT reset onboarding status on sign out
 
-    debugPrint('🔄 App state reset');
   }
 
   /// Get user preferences service

@@ -164,7 +164,7 @@ After uploading AAB to Play Console, verify "16 KB support" badge appears in the
 
 ### For Information Request
 - [ ] Use responses from `GOOGLE_PLAY_RESPONSE_GUIDE.md`
-- [ ] Include demo credentials: `demo@flowai.app` / `REDACTED_DEMO_PW!`
+- [ ] Include demo credentials: `demo@flowai.app` / `<REDACTED>`
 - [ ] Submit within 14 days of request
 
 ---

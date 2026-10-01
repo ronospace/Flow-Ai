@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
@@ -20,29 +19,13 @@ class MemoryManager {
   Future<void> initialize() async {
     if (_isMonitoring) return;
 
-    debugPrint('🧠 Memory Manager initialized');
     _isMonitoring = true;
-
-    // Start memory monitoring in debug mode only
-    if (kDebugMode) {
-      _startMemoryMonitoring();
-    }
 
     // Register system memory warning callbacks
     SystemChannels.platform.setMethodCallHandler(_handlePlatformCalls);
 
     // Set up periodic cleanup
     _schedulePeriodicCleanup();
-  }
-
-  /// Start monitoring memory usage
-  void _startMemoryMonitoring() {
-    // Only start intensive monitoring in debug mode
-    if (kDebugMode) {
-      _memoryMonitorTimer = Timer.periodic(const Duration(minutes: 2), (timer) {
-        _checkMemoryUsage();
-      });
-    }
   }
 
   /// Handle platform-specific memory warnings
@@ -59,7 +42,6 @@ class MemoryManager {
 
   /// Handle low memory warnings from the system
   Future<void> _handleLowMemoryWarning() async {
-    debugPrint('⚠️ System memory warning received');
     _memoryWarnings.add('System memory warning at ${DateTime.now()}');
 
     // Aggressive cleanup on memory warnings
@@ -69,7 +51,6 @@ class MemoryManager {
   /// Handle thermal state changes (device getting hot)
   Future<void> _handleThermalStateChange(dynamic state) async {
     if (state == 'Critical' || state == 'Heavy') {
-      debugPrint('🌡️ Thermal warning: $state');
       await performThermalOptimization();
     }
   }
@@ -80,9 +61,7 @@ class MemoryManager {
       // This would use platform-specific methods to get actual memory usage
       // For now, we simulate memory tracking
       _simulateMemoryTracking();
-    } catch (e) {
-      debugPrint('Error checking memory usage: $e');
-    }
+    } catch (e) {}
   }
 
   /// Simulate memory tracking (replace with real implementation)
@@ -104,9 +83,6 @@ class MemoryManager {
 
   /// Perform automatic cleanup when memory usage is high
   Future<void> _performAutomaticCleanup() async {
-    if (kDebugMode) {
-      debugPrint('🧹 Automatic memory cleanup triggered');
-    }
     await _performSilentCleanup();
   }
 
@@ -124,11 +100,7 @@ class MemoryManager {
 
       // Force garbage collection
       _forceGarbageCollection();
-
-      debugPrint('✅ Standard memory cleanup completed');
-    } catch (e) {
-      debugPrint('❌ Error during standard cleanup: $e');
-    }
+    } catch (e) {}
   }
 
   /// Perform silent cleanup without debug logs
@@ -147,14 +119,7 @@ class MemoryManager {
       _forceGarbageCollection();
 
       // Only log in debug mode
-      if (kDebugMode) {
-        debugPrint('✅ Silent memory cleanup completed');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('❌ Error during silent cleanup: $e');
-      }
-    }
+    } catch (e) {}
   }
 
   /// Perform aggressive cleanup for low memory situations
@@ -171,11 +136,7 @@ class MemoryManager {
 
       // Clear analytics data (keep only essential)
       await _clearAnalyticsData();
-
-      debugPrint('🚨 Aggressive memory cleanup completed');
-    } catch (e) {
-      debugPrint('❌ Error during aggressive cleanup: $e');
-    }
+    } catch (e) {}
   }
 
   /// Optimize for thermal conditions
@@ -189,11 +150,7 @@ class MemoryManager {
 
       // Clear non-essential caches
       await _clearNonEssentialCaches();
-
-      debugPrint('🌡️ Thermal optimization completed');
-    } catch (e) {
-      debugPrint('❌ Error during thermal optimization: $e');
-    }
+    } catch (e) {}
   }
 
   /// Clear Flutter image cache
@@ -210,9 +167,6 @@ class MemoryManager {
     // Clear expired cache entries
 
     // This would be implemented with actual data clearing logic
-    if (kDebugMode) {
-      debugPrint('Expired data cleared');
-    }
   }
 
   /// Optimize collections and data structures
@@ -220,19 +174,10 @@ class MemoryManager {
     // Trim collections to reasonable sizes
     // Remove duplicate entries
     // Compress data where possible
-
-    if (kDebugMode) {
-      debugPrint('Collections optimized');
-    }
   }
 
-  /// Force garbage collection
-  void _forceGarbageCollection() {
-    if (kDebugMode) {
-      // In debug mode, we can suggest GC
-      developer.Service.getInfo();
-    }
-  }
+  /// Runtime garbage collection is owned by the Dart VM.
+  void _forceGarbageCollection() {}
 
   /// Clear all caches aggressively
   Future<void> _clearAllCaches() async {
@@ -242,24 +187,18 @@ class MemoryManager {
     // Clear HTTP cache if using dio or similar
     // Clear database query cache
     // Clear AI response cache
-
-    debugPrint('All caches cleared');
   }
 
   /// Clear old conversation history to save memory
   Future<void> _clearOldConversationHistory() async {
     // Keep only last 50 messages instead of 100
     // Clear old personalized insights
-
-    debugPrint('Old conversation history cleared');
   }
 
   /// Clear analytics data to save memory
   Future<void> _clearAnalyticsData() async {
     // Keep only essential metrics
     // Clear detailed analytics logs
-
-    debugPrint('Analytics data cleared');
   }
 
   /// Throttle AI processing during thermal stress
@@ -267,8 +206,6 @@ class MemoryManager {
     // Reduce AI prediction frequency
     // Simplify AI responses
     // Delay non-critical AI operations
-
-    debugPrint('AI processing throttled');
   }
 
   /// Reduce animation complexity for thermal optimization
@@ -276,8 +213,6 @@ class MemoryManager {
     // Disable complex animations
     // Reduce animation frame rates
     // Use simpler transitions
-
-    debugPrint('Animations optimized for thermal conditions');
   }
 
   /// Clear non-essential caches
@@ -285,16 +220,11 @@ class MemoryManager {
     // Clear preview image cache
     // Clear non-critical API response cache
     // Clear temporary file cache
-
-    debugPrint('Non-essential caches cleared');
   }
 
   /// Schedule periodic cleanup
   void _schedulePeriodicCleanup() {
-    // Only schedule cleanup in debug mode, or less frequently in release mode
-    final duration = kDebugMode
-        ? const Duration(minutes: 15)
-        : const Duration(hours: 1);
+    const duration = Duration(hours: 1);
 
     Timer.periodic(duration, (timer) {
       if (_isMonitoring) {
@@ -320,7 +250,6 @@ class MemoryManager {
     // Enable skia text rendering optimizations
     if (kReleaseMode) {
       // Production optimizations
-      debugPrint('🚀 Performance optimizations enabled for release');
     }
 
     // Optimize Flutter rendering
@@ -330,14 +259,12 @@ class MemoryManager {
   /// Optimize Flutter rendering performance
   void _optimizeRendering() {
     // These would be implemented with platform-specific optimizations
-    debugPrint('Rendering optimizations applied');
   }
 
   /// Dispose of memory manager resources
   void dispose() {
     _memoryMonitorTimer?.cancel();
     _isMonitoring = false;
-    debugPrint('Memory Manager disposed');
   }
 
   /// Memory usage recommendations based on current state
@@ -375,7 +302,5 @@ class MemoryManager {
     // Optimize images
     PaintingBinding.instance.imageCache.maximumSize = 50; // Reduce cache size
     PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20; // 50MB
-
-    debugPrint('📱 App optimized for low-end device');
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import '../utils/collection_extensions.dart';
@@ -24,8 +23,6 @@ class PersonalizationEngine {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-
-    debugPrint('🧠 Initializing Personalization Engine (Week 2)...');
 
     // User profile and preference modeling
     _userProfileModel = {
@@ -139,7 +136,6 @@ class PersonalizationEngine {
     };
 
     _isInitialized = true;
-    debugPrint('✅ Personalization Engine initialized with adaptive learning');
   }
 
   /// Create or update user profile with personalized settings
@@ -209,10 +205,6 @@ class PersonalizationEngine {
       predictionType,
       correctionMagnitude,
       correctionReason,
-    );
-
-    debugPrint(
-      '📊 Learning from correction: $predictionType, accuracy: ${accuracy[correctionKey]?.toStringAsFixed(2)}',
     );
   }
 
@@ -331,14 +323,11 @@ class PersonalizationEngine {
 
   Future<void> _initializeUserSpecificModels(UserProfile profile) async {
     // Initialize user-specific learning parameters
-    final userId = profile.id;
     final behaviorModel =
         _behavioralPatterns['tracking_behavior'] as Map<String, dynamic>;
 
     behaviorModel['consistency_score'] = 0.5; // Start with neutral
     behaviorModel['engagement_level'] = 0.7; // Assume moderate engagement
-
-    debugPrint('👤 Initialized personalized models for user: $userId');
   }
 
   Future<void> _adaptModelParameters(

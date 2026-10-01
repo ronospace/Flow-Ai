@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import 'premium_feature_preview_card.dart';
+import '../../../core/ui/app_upcoming_feature_status.dart';
 
 class PremiumFeaturesPreview extends StatelessWidget {
+  final bool isPremium;
   final VoidCallback onPremiumTap;
   final VoidCallback onAICoach;
   final VoidCallback onPartnerSharing;
@@ -11,6 +13,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
   final VoidCallback onAdvancedAnalytics;
 
   const PremiumFeaturesPreview({
+    this.isPremium = false,
     super.key,
     required this.onPremiumTap,
     required this.onAICoach,
@@ -73,7 +76,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
                   children: [
                     Text(
                       'Premium Features',
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
                       ),
@@ -104,10 +107,14 @@ class PremiumFeaturesPreview extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Semantics(
             button: true,
-            label: 'Unlock All Premium Features',
+            label: isPremium
+                ? 'Premium Active'
+                : isPremium
+                ? 'Premium Active'
+                : 'Unlock All Premium Features',
             child: SizedBox(
               width: double.infinity,
               child: Material(
@@ -125,7 +132,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 16,
@@ -134,7 +141,9 @@ class PremiumFeaturesPreview extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.lock_open_rounded,
+                            isPremium
+                                ? Icons.verified_rounded
+                                : Icons.lock_open_rounded,
                             color: AppTheme.onBrightAccent,
                             size: 20,
                           ),
@@ -174,7 +183,8 @@ class PremiumFeaturesPreview extends StatelessWidget {
                 description: 'Personal health guidance powered by advanced AI',
                 icon: Icons.psychology_rounded,
                 color: AppTheme.primaryPurple,
-                estimatedDate: 'Q2 2026',
+                estimatedDate: 'Q4 2026',
+                availability: AppFeatureAvailability.comingSoon,
                 onTap: onAICoach,
               ),
               PremiumFeaturePreviewCard(

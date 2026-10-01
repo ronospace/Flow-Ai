@@ -59,7 +59,14 @@ class PartnerInvitationQrTab extends StatelessWidget {
                                   ),
                               version: QrVersions.auto,
                               size: 176,
-                              foregroundColor: AppTheme.darkGrey,
+                              eyeStyle: const QrEyeStyle(
+                                eyeShape: QrEyeShape.square,
+                                color: AppTheme.darkGrey,
+                              ),
+                              dataModuleStyle: const QrDataModuleStyle(
+                                dataModuleShape: QrDataModuleShape.square,
+                                color: AppTheme.darkGrey,
+                              ),
                             )
                           else
                             Container(
@@ -144,7 +151,9 @@ class PartnerInvitationQrTab extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: generatedInvitation != null
                               ? (isSent
-                                    ? AppTheme.primaryRose.withOpacity(0.35)
+                                    ? AppTheme.primaryRose.withValues(
+                                        alpha: 0.35,
+                                      )
                                     : AppTheme.primaryRose)
                               : AppTheme.primaryRose.withValues(alpha: 0.12),
                           foregroundColor: generatedInvitation != null

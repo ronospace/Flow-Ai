@@ -581,9 +581,12 @@ class _HealthcareProviderPortalScreenState
     if (_exportFilePath == null) return;
 
     try {
-      await Share.shareXFiles([
-        XFile(_exportFilePath!),
-      ], text: 'My Flow Ai Health Data Export');
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(_exportFilePath!)],
+          text: 'My Flow Ai Health Data Export',
+        ),
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(

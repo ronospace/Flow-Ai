@@ -136,7 +136,7 @@ This update ensures compliance with Apple's health app guidelines while maintain
 ```
 Demo Account:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 This account has pre-populated sample data to demonstrate all features.
 

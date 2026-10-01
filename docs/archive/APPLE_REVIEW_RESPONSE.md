@@ -176,7 +176,7 @@ Citations are:
 
 ### Demo Account (for testing):
 - **Email**: demo@flowai.app
-- **Password**: REDACTED_DEMO_PW!
+- **Password**: <REDACTED>
 
 ---
 

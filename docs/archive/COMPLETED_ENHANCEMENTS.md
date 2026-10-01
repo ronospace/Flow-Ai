@@ -36,7 +36,7 @@
 - **File**: `lib/core/services/local_user_service.dart`
 - Added `import 'package:flutter/foundation.dart'`
 - Wrapped demo account creation in `if (kDebugMode)`
-- Demo account credentials: `demo@flowai.app` / `REDACTED_DEMO_PW!`
+- Demo account credentials: `demo@flowai.app` / `<REDACTED>`
 
 **Behavior**:
 - **Production**: No auto-created demo accounts

@@ -35,11 +35,9 @@
       }
     }
   },
-
   "firestore": {
     "rules": "firestore.rules"
   },
-
   "hosting": {
     "public": "build/web",
     "ignore": [
@@ -53,12 +51,39 @@
         "destination": "/invite/index.html"
       },
       {
+        "source": "/privacy",
+        "destination": "/privacy.html"
+      },
+      {
+        "source": "/terms",
+        "destination": "/terms.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "headers": [
+      {
+        "source": "/privacy.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/terms.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      }
     ]
   },
-
   "functions": [
     {
       "source": "functions",

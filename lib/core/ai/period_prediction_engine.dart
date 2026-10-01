@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../database/database_service.dart';
 import '../models/cycle_data.dart';
 
@@ -38,9 +37,6 @@ class PeriodPredictionEngine {
   /// Main prediction method - combines multiple AI algorithms
   Future<PeriodPrediction> predictNextPeriod(String userId) async {
     try {
-      debugPrint(
-        '🧠 AI Engine: Starting advanced period prediction for user $userId',
-      );
 
       // Get historical data
       final historicalData = await _getHistoricalCycleData(userId);
@@ -61,13 +57,9 @@ class PeriodPredictionEngine {
         finalPrediction,
       );
 
-      debugPrint(
-        '🎯 AI Prediction complete: Next period ${finalPrediction.nextPeriodDate}, Confidence: ${finalPrediction.confidenceLevel}%',
-      );
 
       return finalPrediction;
     } catch (e) {
-      debugPrint('❌ AI Prediction error: $e');
       return _generateFallbackPrediction();
     }
   }

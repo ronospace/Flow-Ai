@@ -368,18 +368,7 @@ class _InteractiveOnboardingScreenState
     BuildContext context,
     EnhancedOnboardingController controller,
   ) {
-    return PrivacyPreferencesWidget(
-      onPrivacyChanged: (shareForResearch, enableAI) {
-        controller.updateData(
-          controller.data.copyWith(
-            shareDataForResearch: shareForResearch,
-            enableAIInsights: enableAI,
-          ),
-        );
-      },
-      initialShareForResearch: controller.data.shareDataForResearch,
-      initialEnableAI: controller.data.enableAIInsights,
-    );
+    return const PrivacyPreferencesWidget();
   }
 
   Widget _buildCompleteStep(
@@ -604,15 +593,6 @@ class _InteractiveOnboardingScreenState
             ),
             const SizedBox(height: 12),
           ],
-
-          _buildSummaryItem(
-            context,
-            icon: Icons.security,
-            title: 'Privacy Protected',
-            subtitle: data.enableAIInsights
-                ? 'AI insights enabled with privacy protection'
-                : 'Basic tracking mode selected',
-          ),
         ],
       ),
     );

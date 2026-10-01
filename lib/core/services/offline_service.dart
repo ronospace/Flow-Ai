@@ -66,10 +66,6 @@ class OfflineService {
     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       _onConnectivityChanged([result]);
     });
-
-    debugPrint(
-      '🔄 Offline Service initialized - Status: ${_isOffline ? 'Offline' : 'Online'}',
-    );
   }
 
   /// Check current connectivity status
@@ -79,7 +75,6 @@ class OfflineService {
       _connectionStatus = [result];
       await _updateConnectivityStatus(_connectionStatus);
     } catch (e) {
-      debugPrint('Connectivity check failed: $e');
       _isOffline = true;
     }
   }
@@ -108,7 +103,6 @@ class OfflineService {
         !(await _hasInternetAccess());
 
     if (wasOffline != _isOffline) {
-      debugPrint('Connectivity changed: ${_isOffline ? 'OFFLINE' : 'ONLINE'}');
       _connectivityController.add(isOnline);
 
       // Update last sync timestamp when going online
@@ -133,17 +127,12 @@ class OfflineService {
     _syncQueue.add(operation);
     await _saveSyncQueue();
     _syncQueueController.add(_syncQueue);
-
-    debugPrint(
-      'Added operation to sync queue: ${operation.type} - ${operation.id}',
-    );
   }
 
   /// Process all operations in sync queue
   Future<void> processSyncQueue() async {
     if (_syncQueue.isEmpty || _isOffline) return;
 
-    debugPrint('Processing ${_syncQueue.length} queued operations...');
     final completedOperations = <PendingSyncOperation>[];
 
     for (final operation in _syncQueue) {
@@ -151,11 +140,8 @@ class OfflineService {
         final success = await _processOperation(operation);
         if (success) {
           completedOperations.add(operation);
-          debugPrint('Synced operation: ${operation.type} - ${operation.id}');
         }
-      } catch (e) {
-        debugPrint('Failed to sync operation ${operation.id}: $e');
-      }
+      } catch (e) {}
     }
 
     // Remove completed operations
@@ -170,8 +156,6 @@ class OfflineService {
       // Update last sync timestamp
       await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
     }
-
-    debugPrint('Sync completed. Remaining operations: ${_syncQueue.length}');
   }
 
   /// Process individual sync operation
@@ -194,31 +178,26 @@ class OfflineService {
   Future<bool> _syncCreateCycle(PendingSyncOperation operation) async {
     // In a real implementation, this would upload to your backend server
     // For now, we'll just mark it as synced
-    debugPrint('Syncing cycle creation');
     return true;
   }
 
   /// Sync cycle update to server
   Future<bool> _syncUpdateCycle(PendingSyncOperation operation) async {
-    debugPrint('Syncing cycle update');
     return true;
   }
 
   /// Sync daily tracking creation to server
   Future<bool> _syncCreateDailyTracking(PendingSyncOperation operation) async {
-    debugPrint('Syncing daily tracking creation: [redacted]');
     return true;
   }
 
   /// Sync daily tracking update to server
   Future<bool> _syncUpdateDailyTracking(PendingSyncOperation operation) async {
-    debugPrint('Syncing daily tracking update: [redacted]');
     return true;
   }
 
   /// Sync settings upload to server
   Future<bool> _syncUploadSettings(PendingSyncOperation operation) async {
-    debugPrint('Syncing settings upload: [redacted]');
     return true;
   }
 
@@ -251,7 +230,6 @@ class OfflineService {
   /// Force sync now (if online)
   Future<bool> forceSyncNow() async {
     if (_isOffline) {
-      debugPrint('Cannot force sync - device is offline');
       return false;
     }
 

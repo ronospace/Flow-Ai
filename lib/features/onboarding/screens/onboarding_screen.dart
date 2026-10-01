@@ -272,9 +272,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       try {
         await provider.scheduleWelcomeNotification();
       } catch (notifError) {
-        debugPrint(
-          'Warning: Could not schedule welcome notification: $notifError',
-        );
         // Continue anyway - notification failure shouldn't block completion
       }
 
@@ -286,7 +283,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           try {
             context.go('/home');
           } catch (navError) {
-            debugPrint('Navigation error: $navError');
             // If navigation fails, try replacing current route
             if (mounted) {
               context.pushReplacement('/home');
@@ -295,7 +291,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         }
       }
     } catch (e) {
-      debugPrint('Onboarding completion error: $e');
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         _showErrorMessage('${localizations.error}: $e');

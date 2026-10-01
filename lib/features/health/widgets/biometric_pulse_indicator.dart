@@ -108,8 +108,8 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: indicatorColor.withOpacity(
-                      0.3 * (1 - _rippleAnimation.value),
+                    color: indicatorColor.withValues(
+                      alpha: 0.3 * (1 - _rippleAnimation.value),
                     ),
                     width: 2,
                   ),
@@ -214,7 +214,7 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
                 height: 4,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: color.withOpacity(opacity),
+                  color: color.withValues(alpha: opacity),
                 ),
               ),
             ),

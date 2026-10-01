@@ -13,7 +13,7 @@ void main() async {
     // Try to sign in with demo credentials
     final result = await service.signInUser(
       email: 'ronos.ai@icloud.com',
-      password: 'REDACTED_DEMO_PW',
+      password: 'REDACTED_VALUE',
     );
 
     if (result.isSuccess) {

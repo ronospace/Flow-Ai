@@ -5,6 +5,25 @@ class AppLayoutMetrics {
   static const double radius = 24;
   static const double gap = 8;
 
+  // Authoritative responsive breakpoints.
+  static const double mobileBreakpoint = 600;
+  static const double tabletBreakpoint = 900;
+  static const double desktopBreakpoint = 1200;
+
+  static double width(BuildContext c) => MediaQuery.sizeOf(c).width;
+
+  static bool isMobile(BuildContext c) => width(c) < mobileBreakpoint;
+
+  static bool isTablet(BuildContext c) {
+    final w = width(c);
+    return w >= mobileBreakpoint && w < desktopBreakpoint;
+  }
+
+  static bool isDesktop(BuildContext c) => width(c) >= desktopBreakpoint;
+
+  // Preserves the existing Zyra `width > 900` behavior exactly.
+  static bool isWiderThanTablet(BuildContext c) => width(c) > tabletBreakpoint;
+
   static double safeTop(BuildContext c) => MediaQuery.of(c).padding.top;
 
   static double safeBottom(BuildContext c) => MediaQuery.of(c).padding.bottom;

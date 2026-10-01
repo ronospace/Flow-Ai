@@ -8,6 +8,7 @@ import '../widgets/trend_chart_widget.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../core/widgets/app_header_components.dart';
 
 class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
@@ -85,9 +86,10 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          IconButton(
+          AppBackButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
+            color: theme.colorScheme.onSurface,
+            iconSize: 24,
           ),
           const SizedBox(width: 8),
           Expanded(

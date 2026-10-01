@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/deployment_models.dart';
 import '../../premium/constants/store_product_ids.dart';
+import '../../../core/services/app_runtime_metadata_service.dart';
 
 class DeploymentService {
   static DeploymentService? _instance;
@@ -40,21 +40,19 @@ class DeploymentService {
       await _loadAppMetadata();
       await _createDeploymentDirectories();
       await _initializeComplianceChecks();
-
-      debugPrint('✅ Deployment Service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize Deployment Service: $e');
       rethrow;
     }
   }
 
   Future<void> _loadAppMetadata() async {
-    // Create default Flow Ai app metadata
+    final metadata = await AppRuntimeMetadataService.instance.packageInfo;
+
     _appMetadata = AppMetadata(
-      appName: 'Flow Ai',
-      bundleId: 'com.flowai.health',
-      version: '1.0.0',
-      buildNumber: '1',
+      appName: metadata.appName,
+      bundleId: metadata.packageName,
+      version: metadata.version,
+      buildNumber: metadata.buildNumber,
       description:
           '''Flow Ai is a comprehensive women's health tracking app that empowers users to understand their menstrual cycles, track symptoms, monitor mood patterns, and gain personalized insights.
 
@@ -90,7 +88,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       supportUrl: 'https://support.flowiq.app',
       marketingUrl: 'https://www.flowiq.app',
       privacyPolicyUrl: 'https://www.flowiq.app/privacy',
-      copyrightText: '© 2026 Flow Ai Technologies. All rights reserved.',
+      copyrightText: '© 2026 ZyraFlow GmbH™ All rights reserved.',
       localizedDescriptions: {
         'en':
             'Advanced women\'s health tracking with AI-powered cycle predictions',
@@ -599,8 +597,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
   // === COMPLIANCE CHECKING ===
 
   Future<ComplianceReport> runComplianceCheck(DeploymentTarget target) async {
-    debugPrint('🔍 Running compliance check for ${target.name}...');
-
     // ignore: unused_local_variable
     final startTime = DateTime.now();
     final updatedChecks = <ComplianceCheck>[];
@@ -638,10 +634,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     await _saveComplianceReport(report);
     _complianceController.add(report);
 
-    debugPrint(
-      '✅ Compliance check completed: $passedCount/${updatedChecks.length} passed',
-    );
-
     return report;
   }
 
@@ -649,8 +641,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     ComplianceCheck check,
     DeploymentTarget target,
   ) async {
-    debugPrint('🔍 Checking: ${check.name}');
-
     final issues = <ComplianceIssue>[];
     ComplianceStatus status = ComplianceStatus.checking;
 
@@ -973,8 +963,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     PlatformTarget platform, {
     BuildConfiguration? configuration,
   }) async {
-    debugPrint('🔨 Building for ${platform.name} (${target.name})...');
-
     final buildConfig =
         configuration ?? _createDefaultBuildConfiguration(target, platform);
     final buildId = 'build_${DateTime.now().millisecondsSinceEpoch}';
@@ -1037,8 +1025,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       _buildResults.add(updatedResult);
       _buildController.add(updatedResult);
 
-      debugPrint('✅ Build completed successfully: ${updatedResult.outputPath}');
-
       return updatedResult;
     } catch (e) {
       final errorResult = BuildResult(
@@ -1061,8 +1047,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
 
       _buildResults.add(errorResult);
       _buildController.add(errorResult);
-
-      debugPrint('❌ Build failed: $e');
 
       return errorResult;
     }
@@ -1163,8 +1147,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     Map<String, List<String>>? localizedReleaseNotes,
     ReleaseConfiguration? configuration,
   }) async {
-    debugPrint('📦 Creating release package v$version ($buildNumber)...');
-
     // Run compliance check
     final complianceReport = await runComplianceCheck(
       DeploymentTarget.production,
@@ -1198,8 +1180,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     _releases.add(release);
     await _saveReleasePackage(release);
 
-    debugPrint('✅ Release package created: ${release.id}');
-
     return release;
   }
 
@@ -1215,11 +1195,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       await file.writeAsString(
         const JsonEncoder.withIndent('  ').convert(report.toJson()),
       );
-
-      debugPrint('📄 Compliance report saved: ${file.path}');
-    } catch (e) {
-      debugPrint('⚠️ Failed to save compliance report: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _saveReleasePackage(ReleasePackage release) async {
@@ -1232,11 +1208,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       await file.writeAsString(
         const JsonEncoder.withIndent('  ').convert(release.toJson()),
       );
-
-      debugPrint('📦 Release package saved: ${file.path}');
-    } catch (e) {
-      debugPrint('⚠️ Failed to save release package: $e');
-    }
+    } catch (e) {}
   }
 
   // === PUBLIC API ===
@@ -1249,7 +1221,6 @@ Flow Ai transforms complex health data into actionable insights, helping women m
 
   Future<void> updateAppMetadata(AppMetadata metadata) async {
     _appMetadata = metadata;
-    debugPrint('✅ App metadata updated');
   }
 
   Future<List<ComplianceCheck>> getComplianceChecksByCategory(

@@ -14,8 +14,6 @@ class NotificationService {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('🔔 Initializing Notification Service...');
-
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
@@ -38,8 +36,6 @@ class NotificationService {
 
     await _notifications.initialize(settings);
     _isInitialized = true;
-
-    debugPrint('✅ Notification Service initialized');
   }
 
   Future<void> scheduleNotification({

@@ -70,8 +70,18 @@ void main() {
       'lib/features/settings/providers/settings_provider.dart',
     ).readAsStringSync();
 
+    final resolver = File(
+      'lib/core/utils/user_display_name_resolver.dart',
+    ).readAsStringSync();
+
     expect(profile.contains('preferences.displayName'), isTrue);
-    expect(home.contains('preferences.greetingName'), isTrue);
+    expect(home.contains('UserDisplayNameResolver.resolveIdentity('), isTrue);
+    expect(
+      home.contains('final greetingName = identity.greetingName;'),
+      isTrue,
+    );
+    expect(resolver.contains('final String displayName;'), isTrue);
+    expect(resolver.contains('final String greetingName;'), isTrue);
     expect(settings.contains('Syncing user data: \$userData'), isFalse);
   });
 }

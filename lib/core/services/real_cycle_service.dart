@@ -53,8 +53,7 @@ class RealCycleService {
     final recentData = await _database.getRecentTrackingData(days: 90);
 
     return CycleInsights(
-      averageCycleLength:
-          stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0,
+      averageCycleLength: stats['cycle_stats']['avg_length']?.toDouble(),
       cycleVariability: _calculateVariability(stats),
       totalCycles: stats['cycle_stats']['total_cycles'] ?? 0,
       commonSymptoms: _extractCommonSymptoms(stats['common_symptoms']),
@@ -113,7 +112,7 @@ class RealCycleService {
   }
 
   /// Update cycle predictions (refresh calculations)
-  Future<CyclePredictions> refreshPredictions() async {
+  Future<CyclePredictions?> refreshPredictions() async {
     return await _calculationEngine.calculatePredictions(
       referenceDate: DateTime.now(),
       monthsOfHistory: 12,
@@ -122,12 +121,14 @@ class RealCycleService {
 
   // Helper methods
 
-  double _calculateVariability(Map<String, dynamic> stats) {
-    final min = stats['cycle_stats']['min_length']?.toDouble() ?? 28.0;
-    final max = stats['cycle_stats']['max_length']?.toDouble() ?? 28.0;
-    final avg = stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0;
+  double? _calculateVariability(Map<String, dynamic> stats) {
+    final min = stats['cycle_stats']['min_length']?.toDouble();
+    final max = stats['cycle_stats']['max_length']?.toDouble();
+    final avg = stats['cycle_stats']['avg_length']?.toDouble();
 
-    if (avg == 0) return 0.0;
+    if (min == null || max == null || avg == null || avg == 0) {
+      return null;
+    }
     return ((max - min) / avg) * 100; // Variability as percentage
   }
 
@@ -143,7 +144,7 @@ class RealCycleService {
     List<Map<String, dynamic>> trackingData,
   ) {
     if (trackingData.isEmpty) {
-      return {'avgMood': 3.0, 'avgEnergy': 3.0, 'avgPain': 2.0};
+      return <String, double>{};
     }
 
     double totalMood = 0;
@@ -168,14 +169,24 @@ class RealCycleService {
       }
     }
 
-    return {
-      'avgMood': moodCount > 0 ? totalMood / moodCount : 3.0,
-      'avgEnergy': energyCount > 0 ? totalEnergy / energyCount : 3.0,
-      'avgPain': painCount > 0 ? totalPain / painCount : 2.0,
-    };
+    final result = <String, double>{};
+
+    if (moodCount > 0) {
+      result['avgMood'] = totalMood / moodCount;
+    }
+
+    if (energyCount > 0) {
+      result['avgEnergy'] = totalEnergy / energyCount;
+    }
+
+    if (painCount > 0) {
+      result['avgPain'] = totalPain / painCount;
+    }
+
+    return result;
   }
 
-  Future<double> _calculatePredictionAccuracy() async {
+  Future<double?> _calculatePredictionAccuracy() async {
     // Simple accuracy calculation based on recent predictions
     // In a real implementation, you'd track prediction vs actual data
     final recentCycles = await _database.getCyclesInRange(
@@ -183,7 +194,9 @@ class RealCycleService {
       DateTime.now(),
     );
 
-    if (recentCycles.length < 3) return 0.5; // Default 50% when not enough data
+    if (recentCycles.length < 3) {
+      return null;
+    }
 
     // Calculate how regular cycles have been (more regular = higher accuracy)
     final cycleLengths = <int>[];
@@ -194,7 +207,9 @@ class RealCycleService {
       cycleLengths.add(length);
     }
 
-    if (cycleLengths.isEmpty) return 0.5;
+    if (cycleLengths.isEmpty) {
+      return null;
+    }
 
     final avgLength =
         cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
@@ -216,7 +231,7 @@ class RealCycleService {
 
 /// Combined cycle data with predictions and insights
 class RealCycleData {
-  final CyclePredictions predictions;
+  final CyclePredictions? predictions;
   final List<CycleData> recentCycles;
   final CycleData? currentCycle;
   final List<Map<String, dynamic>> recentTrackingData;
@@ -243,30 +258,34 @@ class RealCycleData {
 
   /// Get cycle phase description for UI
   String get phaseDescription {
-    return predictions.currentPhase.description;
+    return predictions?.currentPhase.description ?? 'Unknown';
   }
 
   /// Get next significant event (period, ovulation, etc.)
-  NextEvent get nextEvent {
+  NextEvent? get nextEvent {
+    final prediction = predictions;
+    if (prediction == null) {
+      return null;
+    }
     final now = DateTime.now();
-    final daysUntilPeriod = predictions.daysUntilNextPeriod;
-    final daysUntilOvulation = predictions.daysUntilOvulation;
+    final daysUntilPeriod = prediction.daysUntilNextPeriod;
+    final daysUntilOvulation = prediction.daysUntilOvulation;
 
-    if (predictions.isInFertileWindow) {
+    if (prediction.isInFertileWindow) {
       return NextEvent(
         type: EventType.fertility,
-        date: predictions.fertileWindowEnd,
-        daysAway: predictions.fertileWindowEnd.difference(now).inDays,
+        date: prediction.fertileWindowEnd,
+        daysAway: prediction.fertileWindowEnd.difference(now).inDays,
         description: 'Fertile window ends',
       );
     }
 
     if (daysUntilOvulation > 0 &&
         daysUntilOvulation < daysUntilPeriod &&
-        predictions.ovulationDate != null) {
+        prediction.ovulationDate != null) {
       return NextEvent(
         type: EventType.ovulation,
-        date: predictions.ovulationDate!,
+        date: prediction.ovulationDate!,
         daysAway: daysUntilOvulation,
         description: 'Ovulation expected',
       );
@@ -274,7 +293,7 @@ class RealCycleData {
 
     return NextEvent(
       type: EventType.period,
-      date: predictions.nextPeriodDate,
+      date: prediction.nextPeriodDate,
       daysAway: daysUntilPeriod,
       description: 'Next period expected',
     );
@@ -283,12 +302,12 @@ class RealCycleData {
 
 /// Cycle insights for analytics
 class CycleInsights {
-  final double averageCycleLength;
-  final double cycleVariability;
+  final double? averageCycleLength;
+  final double? cycleVariability;
   final int totalCycles;
   final List<String> commonSymptoms;
   final Map<String, double> moodTrends;
-  final double periodPredictionAccuracy;
+  final double? periodPredictionAccuracy;
 
   CycleInsights({
     required this.averageCycleLength,

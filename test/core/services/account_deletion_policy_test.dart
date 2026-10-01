@@ -70,7 +70,7 @@ void main() {
 
     expect(privacy, contains('Privacy Policy'));
     expect(privacy, contains('delete-account.html'));
-    expect(deletion, contains('Delete your Flow AI account'));
+    expect(deletion, contains('Delete your Flow Ai account'));
     expect(deletion, contains('privacy@flowai.app'));
   });
 }

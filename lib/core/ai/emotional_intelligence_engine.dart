@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 
@@ -35,7 +34,6 @@ class EmotionalIntelligenceEngine {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    debugPrint('🌈 Initializing Emotional Intelligence Engine...');
 
     // Initialize AI components
     await _initializeAIComponents();
@@ -47,13 +45,9 @@ class EmotionalIntelligenceEngine {
     await _setupEmotionalMonitoring();
 
     _initialized = true;
-    debugPrint(
-      '✅ Emotional Intelligence Engine initialized with advanced empathy',
-    );
   }
 
   Future<void> _initializeAIComponents() async {
-    debugPrint('🧠 Initializing emotional AI components...');
 
     _sentimentAnalyzer = SentimentAnalyzer();
     _moodPredictor = MoodPredictor();
@@ -71,7 +65,6 @@ class EmotionalIntelligenceEngine {
   }
 
   Future<void> _loadEmotionalModels() async {
-    debugPrint('📚 Loading emotional intelligence models...');
     // Load pre-trained models for sentiment analysis and mood prediction
     // In production, this would load actual ML models
   }
@@ -97,9 +90,6 @@ class EmotionalIntelligenceEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint(
-      '💭 Analyzing sentiment for text: "${text.length > 50 ? text.substring(0, 50) : text}..."',
-    );
 
     // Basic sentiment analysis with hormonal context
     final sentiment = await _sentimentAnalyzer.analyze(text, currentPhase);
@@ -144,7 +134,6 @@ class EmotionalIntelligenceEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('🔮 Predicting mood trajectory for $currentPhase phase...');
 
     // Analyze historical mood patterns
     final patterns = await _patternDetector.detectMoodPatterns(
@@ -179,7 +168,6 @@ class EmotionalIntelligenceEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('💬 Generating empathetic response for: "$userMessage"');
 
     // Analyze user's emotional state from message
     final sentimentResult = await analyzeSentiment(
@@ -209,7 +197,6 @@ class EmotionalIntelligenceEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('📊 Generating comprehensive emotional wellness report...');
 
     // Analyze recent emotional data
     final recentHistory = _getRecentEmotionalHistory(daysPeriod);
@@ -717,7 +704,6 @@ class EmotionalIntelligenceEngine {
 // AI Component Classes
 class SentimentAnalyzer {
   Future<void> initialize() async {
-    debugPrint('📊 Initializing sentiment analyzer...');
   }
 
   Future<Sentiment> analyze(String text, String phase) async {
@@ -790,7 +776,6 @@ class SentimentAnalyzer {
 
 class MoodPredictor {
   Future<void> initialize() async {
-    debugPrint('🔮 Initializing mood predictor...');
   }
 
   Future<Map<String, dynamic>> predict({
@@ -921,7 +906,6 @@ class MoodPredictor {
 
 class EmpatheticChatbot {
   Future<void> initialize() async {
-    debugPrint('💬 Initializing empathetic chatbot...');
   }
 
   Future<ChatbotResponse> generateResponse({
@@ -1091,7 +1075,6 @@ class EmpatheticChatbot {
 
 class EmotionalPatternDetector {
   Future<void> initialize() async {
-    debugPrint('🔍 Initializing emotional pattern detector...');
   }
 
   Future<Map<String, dynamic>> detectMoodPatterns(
@@ -1232,7 +1215,6 @@ class EmotionalPatternDetector {
 
 class HormonalCorrelationEngine {
   Future<void> initialize() async {
-    debugPrint('🧬 Initializing hormonal correlation engine...');
   }
 
   Future<Map<String, dynamic>> analyzeHormonalImpact(

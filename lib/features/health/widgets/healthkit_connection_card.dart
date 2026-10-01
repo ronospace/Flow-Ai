@@ -1,15 +1,50 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../core/ui/adaptive_messages.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../providers/health_provider.dart';
+import 'healthkit_permission_dialog.dart';
+import '../../../core/ui/app_geometry.dart';
 
 /// HealthKit Connection Card
 /// Allows users to connect/disconnect HealthKit integration
 class HealthKitConnectionCard extends StatelessWidget {
   const HealthKitConnectionCard({super.key});
+
+  Widget _buildConnectionAction({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required VoidCallback? onPressed,
+    Color? foregroundColor,
+    bool showProgress = false,
+  }) {
+    return Center(
+      child: FractionallySizedBox(
+        widthFactor: 0.70,
+        child: ElevatedButton.icon(
+          onPressed: onPressed,
+          icon: showProgress
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Icon(icon, size: 20),
+          label: Text(label),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            foregroundColor: foregroundColor ?? Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +58,10 @@ class HealthKitConnectionCard extends StatelessWidget {
       builder: (context, healthProvider, child) {
         final hasAccess = healthProvider.hasHealthDataAccess;
         final isIOS = Platform.isIOS;
+        final isAndroidConnecting =
+            Platform.isAndroid && healthProvider.isConnectingHealthData;
         final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
-        final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
-        final disclosureLabel = isIOS ? null : 'Uses Android Health';
+        const String? disclosureLabel = null;
         final syncSource = isIOS ? 'Apple Health' : 'Android Health';
 
         return Container(
@@ -44,7 +80,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                       AppTheme.secondaryBlue.withValues(alpha: 0.05),
                     ],
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppGeometry.radiusSm),
             border: Border.all(
               color: hasAccess
                   ? AppTheme.successGreen.withValues(alpha: 0.3)
@@ -89,13 +125,10 @@ class HealthKitConnectionCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                hasAccess
-                                    ? '${platformName} Access Granted'
-                                    : 'Connect ${platformName}',
+                                platformName,
                                 style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   color: theme.colorScheme.onSurface,
-                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -110,10 +143,12 @@ class HealthKitConnectionCard extends StatelessWidget {
                                   color: AppTheme.successGreen.withValues(
                                     alpha: 0.2,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(
+                                    AppGeometry.radiusSm,
+                                  ),
                                 ),
                                 child: Text(
-                                  'Access granted',
+                                  'Access Granted',
                                   style: TextStyle(
                                     color: AppTheme.successGreen,
                                     fontSize: 10,
@@ -152,9 +187,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                         ],
                         const SizedBox(height: 4),
                         Text(
-                          hasAccess
-                              ? 'Flow AI can read the health data you chose to share through ${syncSource}'
-                              : 'Allow Flow AI to read supported health data you choose to share through ${syncSource}',
+                          'Flow Ai can read the health data you choose to share through $syncSource.',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.7,
@@ -165,8 +198,11 @@ class HealthKitConnectionCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(999),
-                            onTap: () => _showHealthKitDisclosure(context),
+                            borderRadius: BorderRadius.circular(
+                              AppGeometry.radiusSm,
+                            ),
+                            onTap: () =>
+                                HealthKitPermissionDialog.showDetails(context),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -176,7 +212,9 @@ class HealthKitConnectionCard extends StatelessWidget {
                                 color: AppTheme.secondaryBlue.withValues(
                                   alpha: 0.12,
                                 ),
-                                borderRadius: BorderRadius.circular(999),
+                                borderRadius: BorderRadius.circular(
+                                  AppGeometry.radiusSm,
+                                ),
                                 border: Border.all(
                                   color: AppTheme.secondaryBlue.withValues(
                                     alpha: 0.22,
@@ -202,241 +240,78 @@ class HealthKitConnectionCard extends StatelessWidget {
               ),
               if (hasAccess) ...[
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          await healthProvider.disconnectHealthKit();
-                          if (context.mounted) {
-                            AdaptiveMessages.showSuccess(
-                              context,
-                              '${platformShort} disconnected',
-                            );
-                          }
-                        },
-                        icon: const Icon(Icons.link_off, size: 18),
-                        label: const Text('Disconnect'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppTheme.errorRed,
-                          side: BorderSide(
-                            color: AppTheme.errorRed.withValues(alpha: 0.5),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                  ],
+                _buildConnectionAction(
+                  label: 'Disconnect',
+                  icon: Icons.link_off,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppTheme.disconnectCautionDark
+                      : AppTheme.disconnectCaution,
+                  foregroundColor:
+                      Theme.of(context).brightness == Brightness.dark
+                      ? AppTheme.onDisconnectCautionDark
+                      : AppTheme.onDisconnectCaution,
+                  onPressed: () async {
+                    await healthProvider.disconnectHealthKit();
+                  },
                 ),
               ] else ...[
                 const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      await healthProvider.connectHealthKit(context);
-                    },
-                    icon: const Icon(Icons.link, size: 20),
-                    label: Text('Connect ${platformShort}'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.secondaryBlue,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                if (Platform.isAndroid &&
+                    healthProvider.requiresHealthConnectInstallOrUpdate) ...[
+                  Text(
+                    'Health Connect is required on this Android device before '
+                    'Flow Ai can read health data.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        await healthProvider.installHealthConnect();
+                      },
+                      icon: const Icon(Icons.download, size: 20),
+                      label: const Text('Install Health Connect'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.secondaryBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppGeometry.radiusSm,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ] else if (Platform.isAndroid &&
+                    healthProvider.isHealthConnectUnsupported) ...[
+                  Text(
+                    'Health Connect is unavailable on this Android device.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ] else ...[
+                  _buildConnectionAction(
+                    label: isAndroidConnecting ? 'Connecting…' : 'Connect',
+                    icon: Icons.link,
+                    color: AppTheme.secondaryBlue,
+                    showProgress: isAndroidConnecting,
+                    onPressed: isAndroidConnecting
+                        ? null
+                        : () async {
+                            await healthProvider.connectHealthKit(context);
+                          },
+                  ),
+                ],
               ],
             ],
           ),
         ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0);
       },
-    );
-  }
-
-  void _showHealthKitDisclosure(BuildContext context) {
-    final theme = Theme.of(context);
-    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Icon(Icons.health_and_safety, color: AppTheme.secondaryBlue),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                '${platformName} Integration',
-                style: TextStyle(color: AppTheme.secondaryBlue),
-              ),
-            ),
-          ],
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.warningOrange.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppTheme.warningOrange.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 18,
-                      color: AppTheme.warningOrange,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Health data disclosure',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.warningOrange,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            Platform.isIOS
-                                ? 'Health Data Transparency'
-                                : 'Health Connect Data Transparency',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: AppTheme.warningOrange.withValues(
-                                alpha: 0.9,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Flow Ai uses ${platformName} to access your health data for enhanced cycle predictions and personalized insights.',
-                style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Health data we may access:',
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildDisclosureItem(
-                theme,
-                Icons.favorite,
-                'Heart rate & HRV for cycle correlation',
-              ),
-              _buildDisclosureItem(
-                theme,
-                Icons.thermostat,
-                'Body temperature for ovulation tracking',
-              ),
-              _buildDisclosureItem(
-                theme,
-                Icons.bedtime,
-                'Sleep data for pattern analysis',
-              ),
-              _buildDisclosureItem(
-                theme,
-                Icons.directions_walk,
-                'Activity & steps for wellness insights',
-              ),
-              _buildDisclosureItem(
-                theme,
-                Icons.water_drop,
-                'Menstrual flow data (if tracked in HealthKit)',
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.successGreen.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppTheme.successGreen.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.lock_outline,
-                      size: 18,
-                      color: AppTheme.successGreen,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'This data is used exclusively to provide personalized cycle predictions, health insights, and pattern detection. We never sell or share your health data.',
-                        style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                Platform.isIOS
-                    ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.'
-                    : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  fontSize: 10,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDisclosureItem(ThemeData theme, IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: AppTheme.secondaryBlue.withValues(alpha: 0.7),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodySmall?.copyWith(height: 1.3),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

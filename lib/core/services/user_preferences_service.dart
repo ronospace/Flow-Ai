@@ -382,22 +382,6 @@ class UserPreferencesService {
     }
   }
 
-  Future<void> setShareDataForResearch(bool shareData) async {
-    await setBool('share_data_for_research', shareData);
-  }
-
-  bool getShareDataForResearch() {
-    return getBool('share_data_for_research', defaultValue: false);
-  }
-
-  Future<void> setEnableAIInsights(bool enableAI) async {
-    await setBool('enable_ai_insights', enableAI);
-  }
-
-  bool getEnableAIInsights() {
-    return getBool('enable_ai_insights', defaultValue: true);
-  }
-
   Future<void> setOnboardingData(Map<String, dynamic> data) async {
     final jsonString = jsonEncode(data);
     await setString('onboarding_data', jsonString);

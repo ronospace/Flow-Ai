@@ -36,7 +36,7 @@ Thank you for your feedback regarding medical citations in Flow Ai.
 
 ### Where to Find Citations in the App
 
-Using the demo account (demo@flowai.app / REDACTED_DEMO_PW!):
+Using the demo account (demo@flowai.app / <REDACTED>):
 
 1. **Navigate to "Insights" tab** (bottom navigation)
 2. **Tap any AI Insight card** (e.g., "Cycle Pattern Analysis", "Symptom Predictions", "Health Recommendations")
@@ -128,7 +128,7 @@ If the App Review team is unable to locate the citations, we would greatly appre
 1. **Launch Flow Ai**
 2. **Sign in with demo account:**
    - Email: demo@flowai.app
-   - Password: REDACTED_DEMO_PW!
+   - Password: <REDACTED>
 3. **Tap "Insights" tab** (4th icon in bottom navigation)
 4. **Tap any insight card** (e.g., "Cycle Health Analysis")
 5. **Scroll to bottom** → "📚 Sources:" section visible

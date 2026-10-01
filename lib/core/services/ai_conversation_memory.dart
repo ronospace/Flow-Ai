@@ -30,13 +30,25 @@ class AIConversationMemory {
   Map<String, String> _personalizedInsights = {};
 
   Future<void> initialize({String? userId}) async {
+    final normalizedUserId = userId?.trim();
+    if (normalizedUserId == null || normalizedUserId.isEmpty) {
+      throw StateError(
+        'AI conversation memory requires an authenticated user ID.',
+      );
+    }
+
     _prefs = await SharedPreferences.getInstance();
-    _currentUserId = userId;
 
-    // Initialize cloud sync service
-    await _cloudSync.initialize(userId: userId);
+    // Never carry in-memory state across account ownership boundaries.
+    if (_currentUserId != normalizedUserId) {
+      _resetInMemoryState();
+    }
+    _currentUserId = normalizedUserId;
 
-    // Try to restore from cloud first (for new device)
+    // Initialize/rebind local backup state to the same authoritative owner.
+    await _cloudSync.initialize(userId: normalizedUserId);
+
+    // Restore this account's device-local backup when available.
     final restored = await _cloudSync.restoreFromCloud();
     if (restored) {
       // Reload data after cloud restore
@@ -46,7 +58,7 @@ class AIConversationMemory {
       await _loadMemoryData();
     }
 
-    // Start auto-sync for cross-device persistence
+    // Start periodic device-local backup refresh.
     _cloudSync.startAutoSync();
   }
 
@@ -66,7 +78,7 @@ class AIConversationMemory {
 
     await _saveConversationHistory();
 
-    // Sync message to cloud immediately for cross-device persistence
+    // Refresh the device-local backup after storing the message.
     await _cloudSync.syncMessage(message);
   }
 
@@ -126,7 +138,7 @@ class AIConversationMemory {
     await _saveTopicsOfInterest();
     await _saveFrequentQuestions();
 
-    // Sync to cloud for cross-device persistence
+    // Refresh the device-local backup.
     await _cloudSync.syncToCloud();
   }
 
@@ -352,7 +364,7 @@ class AIConversationMemory {
     await _prefs.remove(_getUserSpecificKey(_frequentQuestionsKey));
     await _prefs.remove(_getUserSpecificKey(_personalizedInsightsKey));
 
-    // Clear cloud backup as well
+    // Clear this account's device-local backup as well.
     await _cloudSync.clearCloudBackup();
   }
 
@@ -390,9 +402,30 @@ class AIConversationMemory {
     await _loadPersonalizedInsights();
   }
 
-  /// Get user-specific key for data isolation
+  void _resetInMemoryState() {
+    _conversationHistory = [];
+    _userPreferences = {};
+    _topicsOfInterest = {};
+    _frequentQuestions = {};
+    _personalizedInsights = {};
+  }
+
+  /// Detach the active account without deleting its persisted memory.
+  Future<void> resetSession() async {
+    _resetInMemoryState();
+    _currentUserId = null;
+    await _cloudSync.resetSession();
+  }
+
+  /// Get user-specific key for data isolation.
   String _getUserSpecificKey(String baseKey) {
-    return _currentUserId != null ? '${baseKey}_$_currentUserId' : baseKey;
+    final userId = _currentUserId;
+    if (userId == null || userId.isEmpty) {
+      throw StateError(
+        'AI conversation memory cannot access unscoped user data.',
+      );
+    }
+    return '${baseKey}_$userId';
   }
 
   Future<void> _loadConversationHistory() async {

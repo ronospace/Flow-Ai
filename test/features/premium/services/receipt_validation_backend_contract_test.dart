@@ -57,7 +57,7 @@ void main() {
       expect(backend, contains('androidpublisher'));
       expect(backend, contains('premiumEntitlements'));
       expect(backend, contains('allowedProducts'));
-      expect(backend, contains('FLOW_AI_APPLE_ISSUER_ID_NEXT'));
+      expect(backend, contains('FLOW_AI_APPLE_ISSUER_ID'));
       expect(backend, contains('FLOW_AI_GOOGLE_PLAY_SERVICE_ACCOUNT'));
 
       expect(backend, isNot(contains('FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON')));

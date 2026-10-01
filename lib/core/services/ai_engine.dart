@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/ai_insights.dart';
 import 'flowai_service.dart';
@@ -29,7 +28,6 @@ class AIEngine {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('🧠 Initializing Enhanced AI Engine (Week 1)...');
 
     // Enhanced prediction model with multiple factors
     _predictionModel = {
@@ -121,12 +119,10 @@ class AIEngine {
       try {
         await _initializeFlowAI();
       } catch (e) {
-        debugPrint('FlowAI initialization failed in AI Engine: $e');
       }
     }
 
     _isInitialized = true;
-    debugPrint('✅ Enhanced AI Engine initialized with advanced algorithms');
   }
 
   /// Enhanced prediction with symptom timing and mood/energy forecasting
@@ -659,11 +655,7 @@ class AIEngine {
     try {
       await _flowAIService.initialize(apiKey: FlowIQConfig.apiKey!);
       _useFlowAI = _flowAIService.isInitialized;
-      debugPrint(
-        '🤖 AI Engine FlowAI integration ${_useFlowAI ? "enabled" : "failed"}',
-      );
     } catch (e) {
-      debugPrint('AI Engine FlowAI initialization error: $e');
       _useFlowAI = false;
     }
   }
@@ -708,7 +700,6 @@ class AIEngine {
 
       return combinedInsights;
     } catch (e) {
-      debugPrint('FlowAI insights generation failed: $e');
       // Fallback to local insights on error
       return generateInsights(cycles);
     }
@@ -810,7 +801,6 @@ class AIEngine {
         }
       }
     } catch (e) {
-      debugPrint('Error parsing FlowAI insights: $e');
     }
 
     return insights;

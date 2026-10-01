@@ -12,7 +12,7 @@ KEY FEATURES FOR REVIEW:
 
 DEMO ACCOUNT:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 TESTING NOTES:
 • The demo account includes 6 months of pre-populated cycle data to showcase AI predictions

@@ -67,13 +67,13 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            widget.primaryColor.withOpacity(0.1),
-            widget.primaryColor.withOpacity(0.05),
+            widget.primaryColor.withValues(alpha: 0.1),
+            widget.primaryColor.withValues(alpha: 0.05),
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: widget.primaryColor.withOpacity(0.2),
+            color: widget.primaryColor.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -121,7 +121,10 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
           drawVerticalLine: false,
           horizontalInterval: 1,
           getDrawingHorizontalLine: (value) {
-            return FlLine(color: Colors.grey.withOpacity(0.1), strokeWidth: 1);
+            return FlLine(
+              color: Colors.grey.withValues(alpha: 0.1),
+              strokeWidth: 1,
+            );
           },
         ),
         titlesData: FlTitlesData(
@@ -174,7 +177,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
             gradient: LinearGradient(
               colors: [
                 widget.primaryColor,
-                widget.primaryColor.withOpacity(0.5),
+                widget.primaryColor.withValues(alpha: 0.5),
               ],
             ),
             barWidth: 3,
@@ -186,8 +189,8 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  widget.primaryColor.withOpacity(0.3),
-                  widget.primaryColor.withOpacity(0.0),
+                  widget.primaryColor.withValues(alpha: 0.3),
+                  widget.primaryColor.withValues(alpha: 0.0),
                 ],
               ),
             ),
@@ -216,7 +219,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
                   end: Alignment.topCenter,
                   colors: [
                     widget.primaryColor,
-                    widget.primaryColor.withOpacity(0.7),
+                    widget.primaryColor.withValues(alpha: 0.7),
                   ],
                 ),
                 width: 20,
@@ -249,7 +252,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
             gradient: LinearGradient(
               colors: [
                 widget.primaryColor,
-                widget.primaryColor.withOpacity(0.3),
+                widget.primaryColor.withValues(alpha: 0.3),
               ],
             ),
             barWidth: 3,
@@ -259,8 +262,8 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  widget.primaryColor.withOpacity(0.5),
-                  widget.primaryColor.withOpacity(0.1),
+                  widget.primaryColor.withValues(alpha: 0.5),
+                  widget.primaryColor.withValues(alpha: 0.1),
                 ],
               ),
             ),
@@ -290,9 +293,9 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
   Color _getColorForIndex(int index) {
     final colors = [
       widget.primaryColor,
-      widget.primaryColor.withOpacity(0.8),
-      widget.primaryColor.withOpacity(0.6),
-      widget.primaryColor.withOpacity(0.4),
+      widget.primaryColor.withValues(alpha: 0.8),
+      widget.primaryColor.withValues(alpha: 0.6),
+      widget.primaryColor.withValues(alpha: 0.4),
     ];
     return colors[index % colors.length];
   }

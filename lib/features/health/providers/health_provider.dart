@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,16 +8,38 @@ import '../widgets/healthkit_permission_dialog.dart';
 
 class HealthProvider extends ChangeNotifier {
   bool _hasHealthDataAccess = false;
+  bool _isConnectingHealthData = false;
   double _healthScore = 0.0;
   bool _healthKitBannerDismissed = false;
   BiometricSnapshot? _snapshot;
 
   bool get hasHealthDataAccess => _hasHealthDataAccess;
+  bool get isConnectingHealthData => _isConnectingHealthData;
   double get healthScore => _healthScore;
   bool get healthKitBannerDismissed => _healthKitBannerDismissed;
   BiometricSnapshot? get snapshot => _snapshot;
+
+  bool get isHealthConnectAvailable =>
+      AdvancedBiometricService.instance.isHealthConnectAvailable;
+
+  bool get requiresHealthConnectInstallOrUpdate =>
+      AdvancedBiometricService.instance.requiresHealthConnectInstallOrUpdate;
+
+  bool get isHealthConnectUnsupported =>
+      AdvancedBiometricService.instance.isHealthConnectUnsupported;
+
+  Future<void> installHealthConnect() =>
+      AdvancedBiometricService.instance.installHealthConnect();
   bool get hasVerifiedHealthData =>
       _snapshot != null && _snapshot!.dataQuality > 0.0;
+
+  /// True only when the current snapshot contains real health-store
+  /// observations with preserved provenance.
+  ///
+  /// This does not imply freshness, clinical quality, or a connected
+  /// wearable.
+  bool get hasObservedHealthData =>
+      _snapshot != null && _snapshot!.metricProvenance.isNotEmpty;
 
   /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
@@ -24,7 +48,6 @@ class HealthProvider extends ChangeNotifier {
         defaultTargetPlatform == TargetPlatform.android;
 
     if (kIsWeb || !supportedPlatform) {
-      debugPrint('Native health integration is unavailable on this platform');
       return;
     }
 
@@ -33,40 +56,43 @@ class HealthProvider extends ChangeNotifier {
       onAccept: () async {
         final prefs = await SharedPreferences.getInstance();
 
+        _isConnectingHealthData = true;
+        notifyListeners();
+
         try {
           final biometricService = AdvancedBiometricService.instance;
 
-          if (!biometricService.isInitialized) {
-            await biometricService.initialize();
-          }
+          final authorized = await biometricService
+              .requestHealthAuthorization();
 
-          if (!biometricService.isInitialized) {
+          if (!authorized || !biometricService.isInitialized) {
             _hasHealthDataAccess = false;
             _snapshot = null;
             _healthScore = 0.0;
             await prefs.setBool('health_data_access_granted', false);
+            _isConnectingHealthData = false;
             notifyListeners();
 
-            debugPrint(
-              'Health connection failed or authorization was not granted',
-            );
             return;
           }
 
-          final snapshot = await biometricService.getCurrentBiometricSnapshot();
-
-          _snapshot = snapshot;
+          // Authorization truth and data-sync freshness are separate states.
+          // Mark access immediately once the platform confirms authorization.
           _hasHealthDataAccess = true;
-          _healthScore = _calculateHealthScore(snapshot);
-
-          await prefs.setBool('health_data_access_granted', true);
+          _isConnectingHealthData = false;
           notifyListeners();
 
-          debugPrint(
-            '✅ Health data access granted and initial health-store read completed',
-          );
+          await prefs.setBool('health_data_access_granted', true);
+
+          final snapshot = await biometricService
+              .refreshCurrentBiometricSnapshot();
+
+          _snapshot = snapshot;
+          _healthScore = _calculateHealthScore(snapshot);
+          notifyListeners();
         } catch (error) {
           _hasHealthDataAccess = false;
+          _isConnectingHealthData = false;
           _snapshot = null;
           _healthScore = 0.0;
           await prefs.setBool('health_data_access_granted', false);
@@ -75,11 +101,10 @@ class HealthProvider extends ChangeNotifier {
       },
       onDecline: () {
         _hasHealthDataAccess = false;
+        _isConnectingHealthData = false;
         _snapshot = null;
         _healthScore = 0.0;
         notifyListeners();
-
-        debugPrint('User declined HealthKit integration');
       },
     );
   }
@@ -115,14 +140,13 @@ class HealthProvider extends ChangeNotifier {
   /// Disconnect HealthKit
   Future<void> disconnectHealthKit() async {
     _hasHealthDataAccess = false;
+    _isConnectingHealthData = false;
     _snapshot = null;
     _healthScore = 0.0;
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('health_data_access_granted', false);
-
-    debugPrint('✅ Flow AI health-data access disabled');
   }
 
   /// Load health-data access state
@@ -141,6 +165,20 @@ class HealthProvider extends ChangeNotifier {
 
     try {
       final biometricService = AdvancedBiometricService.instance;
+
+      if (Platform.isAndroid) {
+        final stillAuthorized = await biometricService
+            .hasCurrentAndroidHealthPermissions();
+
+        if (!stillAuthorized) {
+          _hasHealthDataAccess = false;
+          _snapshot = null;
+          _healthScore = 0.0;
+          await prefs.setBool('health_data_access_granted', false);
+          notifyListeners();
+          return;
+        }
+      }
 
       if (!biometricService.isInitialized) {
         await biometricService.initialize();
@@ -183,7 +221,6 @@ class HealthProvider extends ChangeNotifier {
     // Persist dismissal preference
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('healthkit_banner_dismissed', true);
-    debugPrint('✅ HealthKit disclosure banner dismissed');
   }
 
   /// Load banner dismissal state
@@ -197,10 +234,10 @@ class HealthProvider extends ChangeNotifier {
   /// Clear all user health data (used during sign out)
   void clearUserData() {
     _hasHealthDataAccess = false;
+    _isConnectingHealthData = false;
     _snapshot = null;
     _healthScore = 0.0;
     _healthKitBannerDismissed = false;
     notifyListeners();
-    debugPrint('✅ HealthProvider: All user data cleared');
   }
 }

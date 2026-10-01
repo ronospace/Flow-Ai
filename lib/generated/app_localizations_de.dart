@@ -1079,25 +1079,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unlockPremiumAiInsights => 'Unlock Premium AI Insights';
 
   @override
-  String get watchAdToUnlockInsights =>
-      'Watch an ad to unlock advanced insights';
-
-  @override
   String get free => 'FREE';
-
-  @override
-  String get watchAdUnlockInsights => 'Watch Ad & Unlock Insights';
-
-  @override
-  String get getAdditionalPremiumInsights =>
-      'Get 3 additional premium insights';
-
-  @override
-  String get unlockAdvancedHealthRecommendations =>
-      'Unlock advanced health recommendations';
-
-  @override
-  String get premiumInsightsUnlocked => 'Premium insights unlocked! 🎉';
 
   @override
   String day(int day) {

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart' as cycle_data;
 import '../models/daily_tracking_data.dart';
 import '../database/database_service.dart';
@@ -7,6 +6,8 @@ import 'cycle_calculation_engine.dart';
 import 'performance_optimizer.dart';
 
 import 'advanced_biometric_service.dart';
+
+import '../identity/active_account_scope.dart';
 
 class AnalyticsService {
   static final AnalyticsService _instance = AnalyticsService._internal();
@@ -40,10 +41,11 @@ class AnalyticsService {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
     // Use performance optimizer for caching
     return await PerformanceOptimizer.instance.getOrCompute<CycleAnalytics>(
       key:
-          'cycle_analytics_${startDate?.toIso8601String() ?? 'all'}_${endDate?.toIso8601String() ?? 'now'}',
+          'cycle_analytics_${activeUserId}_${startDate?.toIso8601String() ?? 'all'}_${endDate?.toIso8601String() ?? 'now'}',
       compute: () async {
         try {
           startDate ??= DateTime.now().subtract(const Duration(days: 365));
@@ -100,7 +102,6 @@ class AnalyticsService {
 
           return _calculateCycleAnalytics(cycles, trackingData);
         } catch (e) {
-          debugPrint('Error getting cycle analytics');
           return CycleAnalytics.empty();
         }
       },
@@ -113,10 +114,11 @@ class AnalyticsService {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
     // Use performance optimizer for caching
     return await PerformanceOptimizer.instance.getOrCompute<HealthAnalytics>(
       key:
-          'health_analytics_${startDate?.toIso8601String() ?? 'all'}_${endDate?.toIso8601String() ?? 'now'}',
+          'health_analytics_${activeUserId}_${startDate?.toIso8601String() ?? 'all'}_${endDate?.toIso8601String() ?? 'now'}',
       compute: () async {
         try {
           startDate ??= DateTime.now().subtract(const Duration(days: 90));
@@ -168,7 +170,6 @@ class AnalyticsService {
 
           return _calculateHealthAnalytics(trackingData, symptoms);
         } catch (e) {
-          debugPrint('Error getting health analytics: $e');
           return HealthAnalytics.empty();
         }
       },
@@ -186,7 +187,6 @@ class AnalyticsService {
 
       return _calculatePredictionAnalytics(cycles);
     } catch (e) {
-      debugPrint('Error getting prediction analytics: $e');
       return PredictionAnalytics.empty();
     }
   }
@@ -250,7 +250,6 @@ class AnalyticsService {
 
       return _calculateTrendAnalytics(trackingData, cycles);
     } catch (e) {
-      debugPrint('Error getting trend analytics: $e');
       return TrendAnalytics.empty();
     }
   }
@@ -362,7 +361,6 @@ class AnalyticsService {
         trendAnalytics,
       );
     } catch (e) {
-      debugPrint('Error getting personalized recommendations: $e');
       return [];
     }
   }
@@ -371,9 +369,7 @@ class AnalyticsService {
   void logEvent(String eventName, Map<String, dynamic> parameters) {
     try {
       // In a production app, this would send to your analytics backend
-      debugPrint('Analytics Event: $eventName, Parameters: $parameters');
     } catch (e) {
-      debugPrint('Error logging analytics event: $e');
     }
   }
 
@@ -462,19 +458,16 @@ class AnalyticsService {
     // Symptom severity trends
     final symptomSeverity = _calculateSymptomSeverityTrends(trackingData);
 
-    // Overall health score
-    final healthScore = _calculateOverallHealthScore(
-      moodData,
-      energyData,
-      sleepData,
-    );
-
+    // A numeric overall health rating is intentionally not
+    // generated from mood, energy, and sleep tracking data.
     return HealthAnalytics(
       moodTrend: moodTrend,
       energyTrend: energyTrend,
       sleepTrend: sleepTrend,
       symptomSeverity: symptomSeverity,
-      overallHealthScore: healthScore,
+      // Legacy compatibility field. Flow AI no longer presents
+      // this as a health rating.
+      overallHealthScore: 0.0,
       lastUpdated: DateTime.now(),
     );
   }
@@ -482,62 +475,16 @@ class AnalyticsService {
   PredictionAnalytics _calculatePredictionAnalytics(
     List<cycle_data.CycleData> cycles,
   ) {
-    if (cycles.length < 3) return PredictionAnalytics.empty();
-
-    // Calculate prediction accuracy for past cycles
-    final accuracyData = <PredictionAccuracy>[];
-
-    for (int i = 2; i < cycles.length; i++) {
-      final pastCycles = cycles.sublist(0, i);
-      final actualCycle = cycles[i];
-
-      // Use calculation engine to predict based on past data
-      // Using a mock prediction since calculateNextCycle method needs CyclePrediction return type
-      final prediction = cycle_data.CyclePrediction(
-        predictedStartDate: pastCycles.last.startDate.add(Duration(days: 28)),
-        predictedLength: 28,
-        confidence: 0.8,
-        fertileWindow: cycle_data.FertileWindow(
-          start: DateTime.now().add(Duration(days: 12)),
-          end: DateTime.now().add(Duration(days: 16)),
-          peak: DateTime.now().add(Duration(days: 14)),
-        ),
-      );
-
-      final predictedStart = prediction.predictedStartDate;
-      final actualStart = actualCycle.startDate;
-      final daysDifference = actualStart
-          .difference(predictedStart)
-          .inDays
-          .abs();
-
-      accuracyData.add(
-        PredictionAccuracy(
-          cycleNumber: i + 1,
-          predictedDate: predictedStart,
-          actualDate: actualStart,
-          accuracyDays: daysDifference,
-        ),
-      );
+    if (cycles.length < 3) {
+      return PredictionAnalytics.empty();
     }
 
-    final averageAccuracy = accuracyData.isNotEmpty
-        ? accuracyData.map((a) => a.accuracyDays).fold(0, (a, b) => a + b) /
-              accuracyData.length
-        : 0.0;
-
-    final confidenceScore = _calculateConfidenceScore(
-      averageAccuracy,
-      cycles.length,
-    );
-
-    return PredictionAnalytics(
-      averageAccuracyDays: averageAccuracy,
-      confidenceScore: confidenceScore,
-      accuracyHistory: accuracyData,
-      totalPredictions: accuracyData.length,
-      lastUpdated: DateTime.now(),
-    );
+    // Flow AI does not currently persist historical production
+    // prediction snapshots alongside their later actual outcomes.
+    // Without that ledger, a retrospective accuracy calculation would
+    // be synthetic. Fail closed until real prediction-versus-actual
+    // records exist.
+    return PredictionAnalytics.empty();
   }
 
   TrendAnalytics _calculateTrendAnalytics(
@@ -624,28 +571,12 @@ class AnalyticsService {
       );
     }
 
-    // Health-based recommendations
-    if (healthAnalytics.overallHealthScore < 70) {
-      recommendations.add(
-        PersonalizedRecommendation(
-          id: 'overall_health',
-          title: 'Boost Overall Wellness',
-          description: 'Your health metrics suggest room for improvement.',
-          category: RecommendationCategory.health,
-          priority: RecommendationPriority.high,
-          actionItems: [
-            'Increase physical activity',
-            'Focus on balanced nutrition',
-            'Prioritize quality sleep',
-            'Practice mindfulness or meditation',
-          ],
-          icon: 'health_boost',
-        ),
-      );
-    }
+    // No generic health recommendation is generated from an
+    // unvalidated numeric health score.
 
     // Mood-based recommendations
-    if (healthAnalytics.moodTrend.direction == TrendDirection.declining) {
+    if (healthAnalytics.moodTrend.isAvailable &&
+        healthAnalytics.moodTrend.direction == TrendDirection.declining) {
       recommendations.add(
         PersonalizedRecommendation(
           id: 'mood_support',
@@ -760,53 +691,6 @@ class AnalyticsService {
   ) {
     // Placeholder implementation
     return {};
-  }
-
-  double _calculateOverallHealthScore(
-    List<int> moodData,
-    List<int> energyData,
-    List<double> sleepData,
-  ) {
-    double score = 50.0; // Base score
-
-    if (moodData.isNotEmpty) {
-      final avgMood = moodData.fold(0, (a, b) => a + b) / moodData.length;
-      score += (avgMood - 3) * 10; // Mood scale 1-5, neutral is 3
-    }
-
-    if (energyData.isNotEmpty) {
-      final avgEnergy = energyData.fold(0, (a, b) => a + b) / energyData.length;
-      score += (avgEnergy - 3) * 10;
-    }
-
-    if (sleepData.isNotEmpty) {
-      final avgSleep = sleepData.fold(0.0, (a, b) => a + b) / sleepData.length;
-      if (avgSleep >= 7 && avgSleep <= 9) {
-        score += 20;
-      } else {
-        score -= (avgSleep - 8).abs() * 5;
-      }
-    }
-
-    return max(0, min(100, score));
-  }
-
-  double _calculateConfidenceScore(double averageAccuracy, int cycleCount) {
-    // Base confidence on cycle count and prediction accuracy
-    double confidence =
-        min(cycleCount / 12.0, 1.0) * 50; // Up to 50% for cycle count
-
-    // Add accuracy bonus (lower average accuracy = higher confidence)
-    if (averageAccuracy <= 1)
-      confidence += 50;
-    else if (averageAccuracy <= 2)
-      confidence += 40;
-    else if (averageAccuracy <= 3)
-      confidence += 30;
-    else
-      confidence += max(0, 30 - (averageAccuracy - 3) * 5);
-
-    return max(0, min(100, confidence));
   }
 
   List<List<DailyTrackingData>> _groupDataByMonth(
@@ -931,11 +815,11 @@ class HealthAnalytics {
   });
 
   factory HealthAnalytics.empty() => HealthAnalytics(
-    moodTrend: TrendData.stable(),
-    energyTrend: TrendData.stable(),
-    sleepTrend: TrendData.stable(),
+    moodTrend: TrendData.unavailable(),
+    energyTrend: TrendData.unavailable(),
+    sleepTrend: TrendData.unavailable(),
     symptomSeverity: {},
-    overallHealthScore: 50,
+    overallHealthScore: 0.0,
     lastUpdated: DateTime.now(),
   );
 }
@@ -980,11 +864,13 @@ class TrendAnalytics {
 }
 
 class TrendData {
+  final bool isAvailable;
   final TrendDirection direction;
   final double magnitude;
   final double confidence;
 
   TrendData({
+    this.isAvailable = true,
     required this.direction,
     required this.magnitude,
     required this.confidence,
@@ -1000,6 +886,12 @@ class TrendData {
     direction: TrendDirection.declining,
     magnitude: 0.5,
     confidence: 0.8,
+  );
+  factory TrendData.unavailable() => TrendData(
+    isAvailable: false,
+    direction: TrendDirection.stable,
+    magnitude: 0.0,
+    confidence: 0.0,
   );
 
   factory TrendData.stable() => TrendData(

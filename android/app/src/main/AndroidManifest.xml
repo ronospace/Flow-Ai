@@ -5,20 +5,12 @@
 
     <!-- Health Connect: production read-only wellness data -->
     <uses-permission android:name="android.permission.health.READ_HEART_RATE"/>
-    <uses-permission android:name="android.permission.health.READ_RESTING_HEART_RATE"/>
-    <uses-permission android:name="android.permission.health.READ_HEART_RATE_VARIABILITY"/>
     <uses-permission android:name="android.permission.health.READ_BODY_TEMPERATURE"/>
     <uses-permission android:name="android.permission.health.READ_SLEEP"/>
-    <uses-permission android:name="android.permission.health.READ_STEPS"/>
-    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED"/>
-    <uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION"/>
-    <uses-permission android:name="android.permission.health.READ_RESPIRATORY_RATE"/>
-    <uses-permission android:name="android.permission.health.READ_HYDRATION"/>
     <uses-permission android:name="android.permission.health.READ_MENSTRUATION"/>
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
 <application
-        android:label="flow_ai"
+        android:label="Flow Ai"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon" android:roundIcon="@mipmap/ic_launcher_round">
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8707491489514576~2318954189"/>

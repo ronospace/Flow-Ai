@@ -12,7 +12,7 @@ DEMO ACCOUNT CREDENTIALS
 ================================================================================
 
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 IMPORTANT: This is a pre-configured demo account with realistic sample data
 for testing all app features without requiring actual user cycle tracking.
@@ -153,7 +153,7 @@ STEP 1: Login
 1. Open Flow Ai app
 2. If onboarding appears, complete it or skip to login
 3. Enter email: demo@flowai.app
-4. Enter password: REDACTED_DEMO_PW!
+4. Enter password: <REDACTED>
 5. Tap "Sign In"
 
 STEP 2: Explore Home Dashboard
@@ -327,7 +327,7 @@ If you encounter any issues:
 
 1. Login Problems:
    - Ensure email is: demo@flowai.app (no spaces)
-   - Password is case-sensitive: REDACTED_DEMO_PW!
+   - Password is case-sensitive: <REDACTED>
    - Try "Forgot Password" if needed (will send reset to demo email)
 
 2. Data Not Showing:

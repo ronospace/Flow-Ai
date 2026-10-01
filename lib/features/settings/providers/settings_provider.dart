@@ -66,7 +66,6 @@ class SettingsProvider extends ChangeNotifier {
 
       final userData = await appState.auth.getUserData();
       if (userData == null) {
-        debugPrint('⚠️ No user data found in AuthService');
         return;
       }
 
@@ -75,13 +74,16 @@ class SettingsProvider extends ChangeNotifier {
       final username = userData['username'] as String?;
       final photoUrl = (userData['photoURL'] as String?)?.trim() ?? '';
       final providerName = userData['displayName'] as String?;
+      final preferredGreetingName = userData['greetingName'] as String?;
 
       final identity = UserDisplayNameResolver.resolveIdentity(
         userId: uid,
         email: email,
         displayName: providerName,
+        preferredGreetingName: preferredGreetingName,
         existingUserId: _preferences.userId,
         existingDisplayName: _preferences.displayName,
+        existingGreetingName: _preferences.greetingName,
       );
 
       final sameUser = uid.isNotEmpty && uid == _preferences.userId;
@@ -124,14 +126,11 @@ class SettingsProvider extends ChangeNotifier {
 
       await _savePreferences();
       notifyListeners();
-    } catch (e) {
-      debugPrint('❌ Error syncing user data from auth: $e');
-    }
+    } catch (e) {}
   }
 
   /// Force user data synchronization - called after authentication
   Future<void> forceUserDataSync() async {
-    debugPrint('🔄 Forcing user data sync...');
     await _syncUserDataFromAuth();
   }
 
@@ -146,9 +145,7 @@ class SettingsProvider extends ChangeNotifier {
         _preferences = UserPreferences.fromJson(json);
         notifyListeners();
       }
-    } catch (e) {
-      debugPrint('Error loading preferences: $e');
-    }
+    } catch (e) {}
 
     // Migrate existing users whose Settings preference predates
     // the authentication-service biometric gate.
@@ -165,9 +162,7 @@ class SettingsProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final preferencesJson = jsonEncode(_preferences.toJson());
       await prefs.setString(_preferencesKey, preferencesJson);
-    } catch (e) {
-      debugPrint('Error saving preferences: $e');
-    }
+    } catch (e) {}
   }
 
   // Update display name
@@ -346,9 +341,7 @@ class SettingsProvider extends ChangeNotifier {
       _preferences = UserPreferences.fromJson(settings);
       notifyListeners();
       await _savePreferences();
-    } catch (e) {
-      debugPrint('Error importing settings: $e');
-    }
+    } catch (e) {}
   }
 
   // Store additional user metadata
@@ -356,10 +349,7 @@ class SettingsProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_userMetadataKey, jsonEncode(metadata));
-      debugPrint('📝 User metadata stored: ${metadata.keys}');
-    } catch (e) {
-      debugPrint('Error storing user metadata: $e');
-    }
+    } catch (e) {}
   }
 
   // Retrieve user metadata
@@ -370,9 +360,7 @@ class SettingsProvider extends ChangeNotifier {
       if (metadataJson != null) {
         return Map<String, dynamic>.from(jsonDecode(metadataJson));
       }
-    } catch (e) {
-      debugPrint('Error retrieving user metadata: $e');
-    }
+    } catch (e) {}
     return null;
   }
 }

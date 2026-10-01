@@ -71,10 +71,6 @@ class HealthAnalyticsCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // Overall Health Score
-          _buildHealthScoreSection(theme),
-          const SizedBox(height: 20),
-
           // Health Metrics
           Row(
             children: [
@@ -111,98 +107,12 @@ class HealthAnalyticsCard extends StatelessWidget {
                   theme,
                 ),
               ),
-              const SizedBox(width: 12),
-              // Add wellness tips card
-              Expanded(child: _buildWellnessTipsCard(theme)),
             ],
           ),
           const SizedBox(height: 20),
 
           // Health Trends Chart
           _buildHealthTrendsChart(theme, history),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHealthScoreSection(ThemeData theme) {
-    final score = analytics.overallHealthScore;
-    final scoreColor = _getHealthScoreColor(score);
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            scoreColor.withValues(alpha: 0.1),
-            scoreColor.withValues(alpha: 0.05),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: scoreColor.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        children: [
-          // Score Circle
-          SizedBox(
-            width: 80,
-            height: 80,
-            child: CircularProgressIndicator(
-              value: score / 100,
-              strokeWidth: 8,
-              backgroundColor: scoreColor.withValues(alpha: 0.2),
-              valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Overall Health Score',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '${score.round()}',
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: scoreColor,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        '/100',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.7,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _getHealthScoreLabel(score),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: scoreColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -230,8 +140,12 @@ class HealthAnalyticsCard extends StatelessWidget {
               Icon(icon, color: color, size: 16),
               const Spacer(),
               Icon(
-                _getTrendIcon(trend.direction),
-                color: _getTrendColor(trend.direction),
+                trend.isAvailable
+                    ? _getTrendIcon(trend.direction)
+                    : Icons.remove_circle_outline,
+                color: trend.isAvailable
+                    ? _getTrendColor(trend.direction)
+                    : AppTheme.mediumGrey,
                 size: 14,
               ),
             ],
@@ -246,54 +160,11 @@ class HealthAnalyticsCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            _getTrendLabel(trend.direction),
+            trend.isAvailable ? _getTrendLabel(trend.direction) : 'No data',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: _getTrendColor(trend.direction),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWellnessTipsCard(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.3),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.lightbulb, color: theme.colorScheme.primary, size: 16),
-              const Spacer(),
-              Icon(
-                Icons.arrow_forward,
-                color: theme.colorScheme.primary,
-                size: 14,
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Wellness Tips',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            'View tips',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.primary,
+              color: trend.isAvailable
+                  ? _getTrendColor(trend.direction)
+                  : AppTheme.mediumGrey,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -496,42 +367,6 @@ class HealthAnalyticsCard extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  Widget _buildLegendItem(String label, Color color, ThemeData theme) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 12,
-          height: 2,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(1),
-          ),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Color _getHealthScoreColor(double score) {
-    if (score >= 80) return AppTheme.successGreen;
-    if (score >= 60) return AppTheme.warningOrange;
-    return AppTheme.errorRed;
-  }
-
-  String _getHealthScoreLabel(double score) {
-    if (score >= 80) return 'Excellent';
-    if (score >= 60) return 'Good';
-    if (score >= 40) return 'Fair';
-    return 'Needs Attention';
   }
 
   IconData _getTrendIcon(TrendDirection direction) {

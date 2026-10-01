@@ -24,9 +24,9 @@ class ErrorHandler {
 
     // Configure logger with production settings
     _logger = Logger(
-      level: kDebugMode ? Level.debug : Level.info,
+      level: Level.info,
       printer: PrettyPrinter(
-        methodCount: kDebugMode ? 3 : 1,
+        methodCount: 1,
         errorMethodCount: 5,
         lineLength: 120,
         colors: true,
@@ -35,7 +35,7 @@ class ErrorHandler {
       ),
       output: MultiOutput([
         ConsoleOutput(),
-        if (!kDebugMode) FileOutput(file: await _getLogFile()),
+        FileOutput(file: await _getLogFile()),
       ]),
     );
 
@@ -245,7 +245,6 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
       AnalyticsService.instance.logEvent('app_error', analyticsData);
     } catch (e) {
       // Don't let analytics reporting cause more errors
-      debugPrint('Failed to report error to analytics: $e');
     }
   }
 
@@ -488,7 +487,6 @@ class FileOutput extends LogOutput {
       file.writeAsStringSync('$lines\n', mode: FileMode.append);
     } catch (e) {
       // Don't let file logging errors break the app
-      debugPrint('Failed to write to log file: $e');
     }
   }
 }
@@ -506,7 +504,6 @@ class MultiOutput extends LogOutput {
         output.output(event);
       } catch (e) {
         // Continue with other outputs even if one fails
-        debugPrint('Log output failed: $e');
       }
     }
   }

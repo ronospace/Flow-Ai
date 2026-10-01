@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 
 class CycleTracker {
@@ -29,14 +28,12 @@ class CycleTracker {
 
   void addCycle(CycleData cycle) {
     _cycles.add(cycle);
-    debugPrint('➕ Added new cycle: [redacted]');
   }
 
   void updateCycle(CycleData updatedCycle) {
     final index = _cycles.indexWhere((c) => c.id == updatedCycle.id);
     if (index != -1) {
       _cycles[index] = updatedCycle;
-      debugPrint('✏️ Updated cycle: [redacted]');
     }
   }
 

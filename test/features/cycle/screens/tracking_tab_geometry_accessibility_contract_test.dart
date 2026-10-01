@@ -1,89 +1,53 @@
 import 'dart:io';
 
-import 'package:flow_ai/core/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final source = File(
+  final tracking = File(
     'lib/features/cycle/screens/tracking_screen.dart',
   ).readAsStringSync();
 
-  String extractMethod(String signature) {
-    final start = source.indexOf(signature);
+  final shared = File(
+    'lib/core/ui/app_segmented_selector.dart',
+  ).readAsStringSync();
 
-    if (start < 0) {
-      throw StateError('Method not found: $signature');
-    }
+  test('Track exposes five localized shared selector entries', () {
+    expect(tracking, contains('localizations.flowTab'));
+    expect(tracking, contains('localizations.symptomsTab'));
+    expect(tracking, contains('localizations.moodTab'));
+    expect(tracking, contains('localizations.painTab'));
+    expect(tracking, contains('localizations.notesTab'));
 
-    final openingBrace = source.indexOf('{', start);
-
-    if (openingBrace < 0) {
-      throw StateError('Opening brace not found: $signature');
-    }
-
-    var depth = 0;
-
-    for (var index = openingBrace; index < source.length; index++) {
-      final character = source[index];
-
-      if (character == '{') {
-        depth++;
-      } else if (character == '}') {
-        depth--;
-
-        if (depth == 0) {
-          return source.substring(start, index + 1);
-        }
-      }
-    }
-
-    throw StateError('Method did not close: $signature');
-  }
-
-  final tabBar = extractMethod('Widget _buildTabBar()');
-  final tabContent = extractMethod(
-    'Widget _buildTabContent(IconData icon, String label)',
-  );
-
-  test('tracking exposes five equal shared tab lanes', () {
-    expect(RegExp(r'\bTab\(').allMatches(tabBar).length, 5);
-    expect(tabBar, contains('isScrollable: false'));
-    expect(tabBar, contains('tabAlignment: TabAlignment.fill'));
-    expect(tabBar, contains('BoxConstraints(minHeight: 56)'));
-
-    for (final width in <double>[320, 360, 390, 430]) {
-      final availableWidth = width - (2 * AppTheme.spaceLg);
-      final laneWidth = availableWidth / 5;
-
-      expect(
-        laneWidth,
-        greaterThanOrEqualTo(48),
-        reason: '$width px must preserve a 48 px tab lane',
-      );
-    }
+    expect(tracking, contains('AppSegmentedSelector('));
   });
 
-  test('large text retains bounded geometry', () {
-    expect(tabContent, contains('MediaQuery.textScalerOf(context).scale(1)'));
-    expect(tabContent, contains('textScale > 1.3'));
-    expect(tabContent, contains('FittedBox('));
-    expect(tabContent, contains('fit: BoxFit.scaleDown'));
-    expect(tabContent, contains('maxLines: 1'));
-    expect(tabContent, contains('overflow: TextOverflow.ellipsis'));
+  test('narrow widths scroll instead of rigidly compressing labels', () {
+    expect(shared, contains('SingleChildScrollView('));
+    expect(shared, contains('scrollDirection: Axis.horizontal'));
+    expect(shared, contains('mainAxisSize: MainAxisSize.min'));
+    expect(shared, contains('softWrap: false'));
+    expect(shared, contains('overflow: TextOverflow.visible'));
+
+    expect(tracking, isNot(contains('isScrollable: false')));
+    expect(tracking, isNot(contains('TabAlignment.fill')));
   });
 
-  test('each tab exposes its complete localized label', () {
-    expect(tabContent, contains('Semantics('));
-    expect(tabContent, contains('button: true'));
-    expect(tabContent, contains('label: label'));
-    expect(tabContent, contains('excludeSemantics: true'));
+  test('each selector entry exposes its complete label semantically', () {
+    expect(shared, contains('Semantics('));
+    expect(shared, contains('button: true'));
+    expect(shared, contains('label: widget.labels[index]'));
+    expect(shared, contains('excludeSemantics: true'));
   });
 
-  test('tab presentation has no platform-specific fork', () {
-    final combined = '$tabBar\n$tabContent';
+  test('shared selector has no platform-specific presentation fork', () {
+    expect(shared, isNot(contains('Platform.isAndroid')));
+    expect(shared, isNot(contains('Platform.isIOS')));
+    expect(shared, isNot(contains('defaultTargetPlatform')));
+  });
 
-    expect(combined, isNot(contains('Platform.isAndroid')));
-    expect(combined, isNot(contains('Platform.isIOS')));
-    expect(combined, isNot(contains('defaultTargetPlatform')));
+  test('Track preserves PageController and TabController synchronization', () {
+    expect(tracking, contains('_pageController.animateToPage('));
+    expect(tracking, contains('_tabController.animateTo(index)'));
+    expect(tracking, contains('onPageChanged: (index)'));
   });
 }

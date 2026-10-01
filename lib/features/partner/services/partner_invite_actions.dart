@@ -1,43 +1,50 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import '../models/partner_service_models.dart';
 import 'local_partner_service.dart';
+import 'partner_cloud_gateway.dart';
 
 class PartnerInviteActions {
+  PartnerInviteActions(this.localService, {PartnerCloudGateway? cloudGateway})
+    : _cloudGateway = cloudGateway ?? PartnerCloudGateway();
+
   final LocalPartnerService localService;
-  PartnerInviteActions(this.localService);
+  final PartnerCloudGateway _cloudGateway;
 
-  Future<PartnerInvitation> createInvitation({String? personalMessage}) {
-    return localService.createPartnerInvitation(
-      personalMessage: personalMessage,
-    );
-  }
-
-  Future<PartnerInvitation?> sendInvitation({
-    required String inviteeEmail,
-    String? personalMessage,
-  }) async {
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-    if (!emailRegex.hasMatch(inviteeEmail)) {
-      throw Exception('Invalid email address');
-    }
-
+  Future<PartnerInvitation> createInvitation({String? personalMessage}) async {
     final invitation = await localService.createPartnerInvitation(
       personalMessage: personalMessage,
     );
 
-    final code = invitation.invitationCode;
-    final link = "https://flowai-demo-project.web.app/invite/$code";
+    await _cloudGateway.publishInvitation(invitation);
+    return invitation;
+  }
 
-    final callable = FirebaseFunctions.instance.httpsCallable(
-      'sendPartnerInvite',
+  Future<PartnerInvitation> sendInvitation({
+    required String inviteeEmail,
+    String? personalMessage,
+  }) async {
+    final invitation = await localService.createPartnerInvitation(
+      personalMessage: personalMessage,
     );
-    await callable.call({
-      'email': inviteeEmail,
-      'personalMessage': personalMessage ?? '',
-      'invitationCode': code,
-      'invitationLink': link,
-    });
+
+    await _cloudGateway.publishInvitation(
+      invitation,
+      recipientEmail: inviteeEmail,
+    );
+
+    await _cloudGateway.sendInvitation(
+      invitation: invitation,
+      inviteeEmail: inviteeEmail,
+      personalMessage: personalMessage,
+    );
 
     return invitation;
+  }
+
+  Future<Map<String, dynamic>?> fetchCurrentPartnership() {
+    return _cloudGateway.fetchCurrentPartnership();
+  }
+
+  Future<Map<String, dynamic>> acceptInvitation(String invitationCode) {
+    return _cloudGateway.acceptInvitation(invitationCode);
   }
 }

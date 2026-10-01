@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../../../core/services/user_preferences_service.dart';
 import '../models/subscription.dart';
 import '../models/premium_feature.dart';
@@ -19,8 +18,6 @@ class PremiumService {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('💎 Initializing Premium Service...');
-
     try {
       // Legacy local subscription hydration is disabled; Premium access must
       // come from the validated store/backend subscription flow.
@@ -28,9 +25,7 @@ class PremiumService {
       await _loadAvailableFeatures();
 
       _isInitialized = true;
-      debugPrint('✅ Premium Service initialized');
     } catch (e) {
-      debugPrint('❌ Premium Service initialization failed: $e');
       rethrow;
     }
   }
@@ -62,15 +57,13 @@ class PremiumService {
     SubscriptionTier.ultimate,
   ];
 
+  /// Legacy PremiumService purchase path disabled.
+  /// Authoritative purchases are owned by SubscriptionProvider -> SubscriptionService.
   /// Purchase subscription
   Future<bool> purchaseSubscription(
     SubscriptionTier tier,
     PaymentMethod paymentMethod,
   ) async {
-    debugPrint(
-      '🔒 Legacy PremiumService purchase path disabled for ${tier.displayName}; '
-      'use backend-validated SubscriptionService purchases.',
-    );
     return false;
   }
 
@@ -79,8 +72,6 @@ class PremiumService {
     if (_currentSubscription == null) return false;
 
     try {
-      debugPrint('🚫 Canceling subscription...');
-
       final updatedSubscription = _currentSubscription!.copyWith(
         status: SubscriptionStatus.cancelled,
         cancelledAt: DateTime.now(),
@@ -89,20 +80,16 @@ class PremiumService {
 
       _currentSubscription = updatedSubscription;
 
-      debugPrint('✅ Subscription cancelled successfully');
       return true;
     } catch (e) {
-      debugPrint('❌ Subscription cancellation failed: $e');
       return false;
     }
   }
 
+  /// Legacy PremiumService restore path disabled.
+  /// Authoritative restore is owned by SubscriptionProvider -> SubscriptionService.
   /// Restore subscription (for App Store/Play Store purchases)
   Future<bool> restoreSubscription() async {
-    debugPrint(
-      '🔒 Legacy PremiumService restore path disabled; use backend-validated '
-      'SubscriptionService restorePurchases.',
-    );
     return false;
   }
 
@@ -142,11 +129,6 @@ class PremiumService {
     }
 
     // Handle auto-renewal
-    if (subscription.shouldAutoRenew) {
-      debugPrint(
-        'ℹ️ Auto-renewal is handled by the app store/backend validation flow',
-      );
-    }
   }
 
   /// Get feature limits for current subscription
@@ -164,26 +146,15 @@ class PremiumService {
     _availableFeatures = [
       PremiumFeature(
         type: PremiumFeatureType.advancedAI,
-        name: 'Advanced AI Predictions',
-        description: 'Enhanced AI with 95%+ accuracy and detailed insights',
+        name: 'Cycle & Wellness AI Insights',
+        description:
+            'Deeper AI insights using your tracked cycle and wellness context',
         tier: SubscriptionTier.premium,
         benefits: [
-          '95%+ prediction accuracy',
+          'Deeper cycle and wellness insights',
           'Detailed cycle phase insights',
-          'Personalized recommendations',
+          'Personalized wellness insights',
           'Advanced pattern detection',
-        ],
-      ),
-      PremiumFeature(
-        type: PremiumFeatureType.healthcareIntegration,
-        name: 'Healthcare Provider Integration',
-        description: 'Connect with doctors and share health reports',
-        tier: SubscriptionTier.premium,
-        benefits: [
-          'Share reports with doctors',
-          'Secure medical data sync',
-          'Appointment scheduling',
-          'Health record integration',
         ],
       ),
       PremiumFeature(
@@ -192,7 +163,7 @@ class PremiumService {
         description: 'Export your data in multiple formats anytime',
         tier: SubscriptionTier.basic,
         benefits: [
-          'Export in PDF, CSV, Excel',
+          'Export in PDF or CSV',
           'No monthly limits',
           'Custom date ranges',
           'Include all health metrics',
@@ -200,28 +171,10 @@ class PremiumService {
         usage: FeatureUsage.unlimited(),
       ),
       PremiumFeature(
-        type: PremiumFeatureType.prioritySupport,
-        name: 'Priority Support',
-        description: '24/7 priority customer support',
-        tier: SubscriptionTier.premium,
-      ),
-      PremiumFeature(
         type: PremiumFeatureType.customReports,
         name: 'Custom Health Reports',
         description: 'Generate detailed, customizable health reports',
         tier: SubscriptionTier.basic,
-      ),
-      PremiumFeature(
-        type: PremiumFeatureType.biometricSync,
-        name: 'Biometric Data Sync',
-        description: 'Sync with wearables and health apps',
-        tier: SubscriptionTier.premium,
-      ),
-      PremiumFeature(
-        type: PremiumFeatureType.multiUserProfiles,
-        name: 'Multi-User Profiles',
-        description: 'Manage multiple family member profiles',
-        tier: SubscriptionTier.ultimate,
       ),
       PremiumFeature(
         type: PremiumFeatureType.advancedAnalytics,
@@ -255,9 +208,6 @@ class PremiumService {
           PremiumFeatureType.unlimitedExports,
           PremiumFeatureType.customReports,
           PremiumFeatureType.advancedAI,
-          PremiumFeatureType.healthcareIntegration,
-          PremiumFeatureType.prioritySupport,
-          PremiumFeatureType.biometricSync,
         ]);
         break;
       case SubscriptionTier.ultimate:
@@ -265,10 +215,6 @@ class PremiumService {
           PremiumFeatureType.unlimitedExports,
           PremiumFeatureType.customReports,
           PremiumFeatureType.advancedAI,
-          PremiumFeatureType.healthcareIntegration,
-          PremiumFeatureType.prioritySupport,
-          PremiumFeatureType.biometricSync,
-          PremiumFeatureType.multiUserProfiles,
           PremiumFeatureType.advancedAnalytics,
         ]);
         break;

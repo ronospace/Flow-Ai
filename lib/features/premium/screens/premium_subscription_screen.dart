@@ -173,7 +173,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            'Get access to advanced AI predictions, healthcare integration, and unlimited features',
+            'Get deeper cycle and wellness insights, advanced analytics, and flexible data export',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(
                 context,
@@ -402,20 +402,32 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
   }
 
   Widget _buildPaymentMethods() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Payment Method',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        ...PaymentMethod.values.map(
-          (method) => _buildPaymentMethodTile(method),
-        ),
-      ],
+    return RadioGroup<PaymentMethod>(
+      groupValue: _selectedPaymentMethod,
+      onChanged: (value) {
+        if (value == null) {
+          return;
+        }
+
+        setState(() {
+          _selectedPaymentMethod = value;
+        });
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Payment Method',
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          ...PaymentMethod.values.map(
+            (method) => _buildPaymentMethodTile(method),
+          ),
+        ],
+      ),
     );
   }
 
@@ -448,17 +460,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
           ),
           child: Row(
             children: [
-              Radio<PaymentMethod>(
-                value: method,
-                groupValue: _selectedPaymentMethod,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedPaymentMethod = value;
-                    });
-                  }
-                },
-              ),
+              Radio<PaymentMethod>(value: method),
               const SizedBox(width: 12),
               _getPaymentMethodIcon(method),
               const SizedBox(width: 12),

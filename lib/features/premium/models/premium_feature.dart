@@ -38,15 +38,15 @@ enum PremiumFeatureType {
       case PremiumFeatureType.customReports:
         return 'Custom Health Reports';
       case PremiumFeatureType.advancedAI:
-        return 'Advanced AI Predictions';
+        return 'Cycle & Wellness AI Insights';
       case PremiumFeatureType.healthcareIntegration:
-        return 'Healthcare Integration';
+        return 'Unavailable Legacy Feature';
       case PremiumFeatureType.prioritySupport:
-        return 'Priority Support';
+        return 'Unavailable Legacy Feature';
       case PremiumFeatureType.biometricSync:
-        return 'Biometric Data Sync';
+        return 'Unavailable Legacy Feature';
       case PremiumFeatureType.multiUserProfiles:
-        return 'Multi-User Profiles';
+        return 'Unavailable Legacy Feature';
       case PremiumFeatureType.advancedAnalytics:
         return 'Advanced Analytics';
     }
@@ -66,15 +66,15 @@ enum PremiumFeatureType {
       case PremiumFeatureType.customReports:
         return 'Generate detailed, customizable health reports';
       case PremiumFeatureType.advancedAI:
-        return 'Enhanced AI with 95%+ accuracy and detailed insights';
+        return 'Deeper AI insights using your tracked cycle and wellness context';
       case PremiumFeatureType.healthcareIntegration:
-        return 'Connect with healthcare providers and share reports';
+        return 'Not available in this release';
       case PremiumFeatureType.prioritySupport:
-        return '24/7 priority customer support';
+        return 'Not available in this release';
       case PremiumFeatureType.biometricSync:
-        return 'Sync with Apple Health, Health Connect, and wearables';
+        return 'Not available as a Premium capability';
       case PremiumFeatureType.multiUserProfiles:
-        return 'Manage multiple family member profiles';
+        return 'Not available in this release';
       case PremiumFeatureType.advancedAnalytics:
         return 'Comprehensive health analytics and trend analysis';
     }

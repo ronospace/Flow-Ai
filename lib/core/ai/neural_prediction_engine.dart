@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 
@@ -34,7 +33,6 @@ class NeuralPredictionEngine {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    debugPrint('🧠 Initializing Neural Prediction Engine...');
 
     // Initialize neural network architecture
     await _initializeNeuralNetwork();
@@ -46,9 +44,6 @@ class NeuralPredictionEngine {
     await _initializePredictionModels();
 
     _initialized = true;
-    debugPrint(
-      '✅ Neural Prediction Engine initialized with ${_extractors.length} feature extractors',
-    );
   }
 
   /// Generate comprehensive health predictions
@@ -61,7 +56,6 @@ class NeuralPredictionEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('🔮 Generating AI predictions for user ${user.id}...');
 
     // Extract multi-modal features
     final features = await _extractMultiModalFeatures(
@@ -104,7 +98,6 @@ class NeuralPredictionEngine {
   }
 
   Future<void> _initializeNeuralNetwork() async {
-    debugPrint('🏗️ Building neural network architecture...');
 
     const inputSize = 50; // Multi-modal feature vector size
     const hidden1Size = 128;
@@ -122,7 +115,6 @@ class NeuralPredictionEngine {
   }
 
   Future<void> _initializeFeatureExtractors() async {
-    debugPrint('🔧 Initializing feature extractors...');
 
     _extractors['cycle_patterns'] = CyclePatternExtractor();
     _extractors['biometric'] = BiometricFeatureExtractor();
@@ -133,7 +125,6 @@ class NeuralPredictionEngine {
   }
 
   Future<void> _initializePredictionModels() async {
-    debugPrint('🎯 Initializing specialized prediction models...');
 
     _cycleLengthModel = CycleLengthPredictionModel();
     _ovulationModel = OvulationPredictionModel();

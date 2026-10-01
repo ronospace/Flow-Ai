@@ -272,7 +272,9 @@ class MoodColorMorph {
         gradient: RadialGradient(
           center: Alignment.center,
           radius: intensity,
-          colors: palette.map((c) => c.withOpacity(0.3 * intensity)).toList(),
+          colors: palette
+              .map((c) => c.withValues(alpha: 0.3 * intensity))
+              .toList(),
           stops: List.generate(palette.length, (i) => i / (palette.length - 1)),
         ),
       ),
@@ -508,8 +510,8 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: widget.color.withOpacity(
-                        _opacityAnimation.value * 0.3,
+                      color: widget.color.withValues(
+                        alpha: _opacityAnimation.value * 0.3,
                       ),
                       width: 2,
                     ),
@@ -524,7 +526,9 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
                   height: widget.size * 0.6,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.color.withOpacity(_opacityAnimation.value),
+                    color: widget.color.withValues(
+                      alpha: _opacityAnimation.value,
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: widget.color.withValues(alpha: 0.1),
@@ -863,8 +867,9 @@ class ParticlePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (final particle in particles) {
       final paint = Paint()
-        ..color = color.withOpacity(
-          particle.opacity *
+        ..color = color.withValues(
+          alpha:
+              particle.opacity *
               (0.5 + 0.5 * math.sin(animationValue * 2 * math.pi)),
         )
         ..style = PaintingStyle.fill;

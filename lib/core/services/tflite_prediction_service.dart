@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 // Temporarily disabled due to package compatibility issue
 // import 'package:tflite_flutter/tflite_flutter.dart';
 
@@ -28,11 +27,7 @@ class TFLitePredictionService {
       // For now, use statistical fallback
       await _loadModel();
       _isInitialized = true;
-      debugPrint('🤖 TensorFlow Lite service initialized');
     } catch (e) {
-      debugPrint(
-        '⚠️ TFLite initialization failed, using statistical fallback: $e',
-      );
       _isInitialized = true; // Still mark as initialized to use fallback
     }
   }
@@ -49,12 +44,8 @@ class TFLitePredictionService {
       // _interpreter = Interpreter.fromAsset('assets/models/cycle_predictor.tflite');
       // _modelLoaded = true;
 
-      debugPrint(
-        '📦 TFLite model loading prepared (model file not yet available)',
-      );
       _modelLoaded = false; // Model not yet available
     } catch (e) {
-      debugPrint('❌ Error loading TFLite model: $e');
       _modelLoaded = false;
     }
   }
@@ -87,7 +78,6 @@ class TFLitePredictionService {
     //   // Process output
     //   return _processModelOutput(output, historicalData);
     // } catch (e) {
-    //   debugPrint('❌ TFLite prediction error: $e, using fallback');
     //   return _statisticalFallback(historicalData);
     // }
   }

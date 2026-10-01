@@ -46,7 +46,6 @@ class FlowIQConfig {
   static void initialize({required String apiKey, String? organizationId}) {
     _apiKey = apiKey;
     _organizationId = organizationId;
-    debugPrint('🔑 Flow Ai configuration initialized');
   }
 
   /// Get API key (should be set from secure storage or environment)
@@ -54,10 +53,6 @@ class FlowIQConfig {
     if (_apiKey != null) return _apiKey;
 
     // In production, this should come from secure storage or environment variables
-    if (kDebugMode) {
-      // For development, you can set a debug API key here
-      return const String.fromEnvironment('FLOWAI_API_KEY');
-    }
 
     return null;
   }
@@ -70,25 +65,14 @@ class FlowIQConfig {
 
   /// Get environment-specific configuration
   static Map<String, dynamic> getEnvironmentConfig() {
-    if (kDebugMode) {
-      return {
-        'base_url': baseUrl,
-        'timeout': defaultTimeout.inSeconds,
-        'max_tokens': maxTokens,
-        'temperature': temperature,
-        'enable_logging': true,
-        'enable_debug_mode': true,
-      };
-    } else {
-      return {
-        'base_url': baseUrl,
-        'timeout': defaultTimeout.inSeconds,
-        'max_tokens': maxTokens,
-        'temperature': temperature,
-        'enable_logging': false,
-        'enable_debug_mode': false,
-      };
-    }
+    return {
+      'base_url': baseUrl,
+      'timeout': defaultTimeout.inSeconds,
+      'max_tokens': maxTokens,
+      'temperature': temperature,
+      'enable_logging': false,
+      'enable_debug_mode': false,
+    };
   }
 
   /// Get headers for API requests

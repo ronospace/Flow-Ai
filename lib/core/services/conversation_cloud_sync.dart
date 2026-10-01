@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../utils/app_logger.dart';
 
-/// Cloud Sync Service for AI Conversation Memory
-/// Ensures conversation logs persist across devices by syncing to cloud storage
+/// Device-local backup service for AI Conversation Memory.
+///
+/// This service does not perform remote or cross-device synchronization.
+/// It maintains account-scoped backup state in local SharedPreferences only.
 class ConversationCloudSync {
   static final ConversationCloudSync _instance =
       ConversationCloudSync._internal();
@@ -14,31 +17,43 @@ class ConversationCloudSync {
   late SharedPreferences _prefs;
   bool _isInitialized = false;
   String? _currentUserId;
+  Timer? _autoSyncTimer;
 
-  // Cloud sync keys
+  // Legacy persisted key names retained for backward compatibility.
   static const String _lastSyncKey = 'conversation_last_sync';
   static const String _pendingSyncKey = 'conversation_pending_sync';
   static const String _cloudBackupKey = 'conversation_cloud_backup';
 
   Future<void> initialize({String? userId}) async {
-    if (_isInitialized) return;
+    final normalizedUserId = userId?.trim();
+    if (normalizedUserId == null || normalizedUserId.isEmpty) {
+      throw StateError(
+        'Conversation cloud sync requires an authenticated user ID.',
+      );
+    }
 
     try {
       _prefs = await SharedPreferences.getInstance();
-      _currentUserId = userId;
+
+      if (_isInitialized && _currentUserId == normalizedUserId) {
+        return;
+      }
+
+      _autoSyncTimer?.cancel();
+      _autoSyncTimer = null;
+      _currentUserId = normalizedUserId;
       _isInitialized = true;
 
-      // Auto-sync on initialization
       await syncToCloud();
 
-      AppLogger.sync('Conversation Cloud Sync initialized for user: $userId');
+      AppLogger.sync('Conversation local backup initialized');
     } catch (e) {
       AppLogger.error('Failed to initialize Conversation Cloud Sync', e);
+      rethrow;
     }
   }
 
-  /// Sync conversation data to cloud storage
-  /// This ensures conversations persist across devices
+  /// Refresh the device-local account-scoped conversation backup.
   Future<bool> syncToCloud() async {
     if (!_isInitialized) {
       AppLogger.warning('Conversation Cloud Sync not initialized');
@@ -70,7 +85,7 @@ class ConversationCloudSync {
         'user_id': _currentUserId,
       };
 
-      // Store in cloud backup location (local for now, can be Firebase later)
+      // Store only in this device's local preferences.
       await _prefs.setString(
         _getUserSpecificKey(_cloudBackupKey),
         json.encode(backupData),
@@ -85,10 +100,10 @@ class ConversationCloudSync {
       // Clear pending sync flag
       await _prefs.remove(_getUserSpecificKey(_pendingSyncKey));
 
-      AppLogger.sync('Conversation data synced to cloud successfully');
+      AppLogger.sync('Conversation data backed up locally');
       return true;
     } catch (e) {
-      AppLogger.error('Failed to sync conversation data to cloud', e);
+      AppLogger.error('Failed to back up conversation data locally', e);
 
       // Mark as pending sync for retry later
       await _prefs.setBool(_getUserSpecificKey(_pendingSyncKey), true);
@@ -96,8 +111,7 @@ class ConversationCloudSync {
     }
   }
 
-  /// Restore conversation data from cloud storage
-  /// Called when user signs in on a new device
+  /// Restore conversation data from the account-scoped local backup.
   Future<bool> restoreFromCloud() async {
     if (!_isInitialized) {
       AppLogger.warning('Conversation Cloud Sync not initialized');
@@ -105,11 +119,11 @@ class ConversationCloudSync {
     }
 
     try {
-      // Get backup data from cloud
+      // Read the device-local account-scoped backup.
       final backupJson = _prefs.getString(_getUserSpecificKey(_cloudBackupKey));
 
       if (backupJson == null) {
-        AppLogger.info('No cloud backup found for conversation data');
+        AppLogger.info('No local conversation backup found');
         return false;
       }
 
@@ -117,7 +131,7 @@ class ConversationCloudSync {
 
       // Verify user ID matches
       if (backupData['user_id'] != _currentUserId) {
-        AppLogger.warning('Cloud backup user ID mismatch');
+        AppLogger.warning('Local backup user ID mismatch');
         return false;
       }
 
@@ -161,12 +175,12 @@ class ConversationCloudSync {
         );
       }
 
-      AppLogger.sync('Conversation data restored from cloud successfully');
+      AppLogger.sync('Conversation data restored from local backup');
       AppLogger.info('Backup timestamp: ${backupData['last_updated']}');
 
       return true;
     } catch (e) {
-      AppLogger.error('Failed to restore conversation data from cloud', e);
+      AppLogger.error('Failed to restore conversation data from local backup', e);
       return false;
     }
   }
@@ -191,24 +205,33 @@ class ConversationCloudSync {
     }
   }
 
-  /// Sync specific message to cloud immediately
-  /// Called after each new message for real-time sync
+  /// Refresh the local backup after each new message.
   Future<void> syncMessage(types.Message message) async {
-    // In production, this would push to Firebase/cloud service
-    // For now, we trigger a full sync
+    // Refresh the device-local backup.
     await syncToCloud();
   }
 
-  /// Auto-sync at regular intervals
+  /// Refresh the device-local backup at regular intervals.
   Future<void> startAutoSync() async {
-    // Sync every 5 minutes
-    Future.delayed(const Duration(minutes: 5), () async {
-      await syncToCloud();
-      startAutoSync(); // Recursive call for continuous sync
+    if (!_isInitialized || _currentUserId == null) return;
+    if (_autoSyncTimer?.isActive ?? false) return;
+
+    _autoSyncTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
+      if (_isInitialized && _currentUserId != null) {
+        await syncToCloud();
+      }
     });
   }
 
-  /// Clear cloud backup
+  /// Detach the active account without deleting its persisted backup.
+  Future<void> resetSession() async {
+    _autoSyncTimer?.cancel();
+    _autoSyncTimer = null;
+    _currentUserId = null;
+    _isInitialized = false;
+  }
+
+  /// Clear this account's device-local backup.
   Future<void> clearCloudBackup() async {
     if (!_isInitialized) return;
 
@@ -216,12 +239,18 @@ class ConversationCloudSync {
     await _prefs.remove(_getUserSpecificKey(_lastSyncKey));
     await _prefs.remove(_getUserSpecificKey(_pendingSyncKey));
 
-    AppLogger.sync('Cloud backup cleared for user: $_currentUserId');
+    AppLogger.sync('Local conversation backup cleared for user: $_currentUserId');
   }
 
   /// Get user-specific key for data isolation
   String _getUserSpecificKey(String baseKey) {
-    return _currentUserId != null ? '${baseKey}_$_currentUserId' : baseKey;
+    final userId = _currentUserId;
+    if (userId == null || userId.isEmpty) {
+      throw StateError(
+        'Conversation cloud sync cannot access unscoped user data.',
+      );
+    }
+    return '${baseKey}_$userId';
   }
 
   /// Get sync status for UI display

@@ -321,28 +321,18 @@
   "night": "Night",
   "am": "AM",
   "pm": "PM",
-  
   "trackingScreenTitle": "Tracking",
   "flowTab": "Flow",
   "symptomsTab": "Symptoms",
   "moodTab": "Mood",
   "painTab": "Pain",
   "notesTab": "Notes",
-  
-  "flowIntensity": "Flow Intensity",
   "selectTodaysFlowIntensity": "Select today's flow intensity",
-  
-  "symptoms": "Symptoms",
   "selectAllSymptoms": "Select all symptoms you're experiencing",
-  
   "moodAndEnergy": "Mood & Energy",
   "howAreYouFeelingToday": "How are you feeling today?",
-  "mood": "Mood",
-  "energy": "Energy",
-  
   "painLevel": "Pain Level",
   "rateOverallPainLevel": "Rate your overall pain level",
-  
   "personalNotes": "Personal Notes",
   "captureThoughtsAndFeelings": "Capture your thoughts, feelings, and observations about your cycle",
   "todaysJournalEntry": "Today's Journal Entry",
@@ -358,14 +348,11 @@
       }
     }
   },
-  
-  "sleepQuality": "Sleep quality",
+  "sleepQuality": "Sleep Quality",
   "foodCravings": "Food cravings",
   "hydration": "Hydration",
-  "exercise": "Exercise",
   "energyLevels": "Energy levels",
   "stressManagement": "Stress management",
-  
   "saveTrackingData": "Save Tracking Data",
   "noChangesToSave": "No Changes to Save",
   "trackingDataSaved": "Tracking data saved for {date}",
@@ -378,7 +365,6 @@
       }
     }
   },
-  "pm": "PM",
   "yesterday": "Yesterday",
   "tomorrow": "Tomorrow",
   "thisWeek": "This Week",
@@ -481,7 +467,6 @@
   "@startLogging": {
     "description": "Subtitle for period tracking"
   },
-  "moodAndEnergy": "Mood & Energy",
   "@moodAndEnergy": {
     "description": "Action card for mood and energy tracking"
   },
@@ -567,7 +552,7 @@
   },
   "currentCycle": "Current Cycle",
   "@currentCycle": {
-    "description": "Current cycle card title"
+    "description": "Title for current cycle card"
   },
   "noActiveCycle": "No active cycle",
   "@noActiveCycle": {
@@ -651,7 +636,6 @@
   "@hairChanges": {
     "description": "Hair changes symptom"
   },
-  "foodCravings": "Food cravings",
   "@foodCravings": {
     "description": "Food cravings symptom"
   },
@@ -741,77 +725,37 @@
   "@languageChangedTo": {
     "description": "Language change confirmation message"
   },
-  
   "appPreferences": "App Preferences",
   "@appPreferences": {
     "description": "App preferences section title"
   },
-  
   "customizeAppearance": "Customize app appearance",
   "@customizeAppearance": {
     "description": "Theme customization subtitle"
   },
-  
   "chooseYourLanguage": "Choose your language",
   "@chooseYourLanguage": {
     "description": "Language selection subtitle"
   },
-  
-  "enableNotifications": "Enable Notifications",
   "@enableNotifications": {
     "description": "Enable notifications setting title"
   },
-  
   "receiveReminders": "Receive reminders and updates",
   "@receiveReminders": {
     "description": "Enable notifications setting subtitle"
   },
-  
   "dailyReminders": "When to send daily reminders",
   "@dailyReminders": {
     "description": "Daily reminders setting subtitle"
   },
-  
   "unlockPremiumAiInsights": "Unlock Premium AI Insights",
   "@unlockPremiumAiInsights": {
     "description": "Title for premium insights unlock widget"
   },
-  
-  "watchAdToUnlockInsights": "Watch an ad to unlock advanced insights",
-  "@watchAdToUnlockInsights": {
-    "description": "Subtitle for premium insights unlock widget"
-  },
-  
   "free": "FREE",
   "@free": {
     "description": "Free label for premium unlock widget"
   },
-  
-  "watchAdUnlockInsights": "Watch Ad & Unlock Insights",
-  "@watchAdUnlockInsights": {
-    "description": "Button text for watching ad to unlock insights"
-  },
-  
-  "getAdditionalPremiumInsights": "Get 3 additional premium insights",
-  "@getAdditionalPremiumInsights": {
-    "description": "Benefit text for premium insights unlock"
-  },
-  
-  "unlockAdvancedHealthRecommendations": "Unlock advanced health recommendations",
-  "@unlockAdvancedHealthRecommendations": {
-    "description": "Benefit text for advanced health recommendations"
-  },
-  
-  "premiumInsightsUnlocked": "Premium insights unlocked! 🎉",
-  "@premiumInsightsUnlocked": {
-    "description": "Success message when premium insights are unlocked"
-  },
-  
-  "currentCycle": "Current Cycle",
-  "@currentCycle": {
-    "description": "Title for current cycle card"
-  },
-  
   "day": "Day {day}",
   "@day": {
     "description": "Day number in cycle",
@@ -822,7 +766,6 @@
       }
     }
   },
-  
   "confidencePercentage": "{percentage}% confidence",
   "@confidencePercentage": {
     "description": "Confidence percentage for predictions",
@@ -833,77 +776,62 @@
       }
     }
   },
-  
   "quickActions": "Quick Actions",
   "@quickActions": {
     "description": "Title for quick actions section"
   },
-  
   "logPeriod": "Log Period",
   "@logPeriod": {
     "description": "Quick action to log period"
   },
-  
   "currentCycleTitle": "Current Cycle",
   "@currentCycleTitle": {
     "description": "Current cycle section title"
   },
-  
   "moodLabel": "Mood",
   "@moodLabel": {
     "description": "Mood info label in current cycle"
   },
-  
   "aiSmartFeatures": "AI & Smart Features",
   "@aiSmartFeatures": {
     "description": "AI features section title"
   },
-  
   "personalizedAiInsights": "Get personalized AI insights",
   "@personalizedAiInsights": {
     "description": "AI insights setting subtitle"
   },
-  
   "hapticFeedback": "Haptic Feedback",
   "@hapticFeedback": {
     "description": "Haptic feedback setting title"
   },
-  
   "vibrationInteractions": "Feel vibrations on interactions",
   "@vibrationInteractions": {
     "description": "Haptic feedback setting subtitle"
   },
-  
   "supportAbout": "Support & Legal",
   "@supportAbout": {
     "description": "Support and about section title"
   },
-  
   "getHelpTutorials": "Get help and tutorials",
   "@getHelpTutorials": {
     "description": "Help section subtitle"
   },
-  
   "versionInfoLegal": "Version info and legal",
   "@versionInfoLegal": {
     "description": "About section subtitle"
   },
-  
   "light": "Light",
   "@light": {
     "description": "Light theme name"
   },
-  
   "dark": "Dark",
   "@dark": {
     "description": "Dark theme name"
   },
-  
   "system": "System",
   "@system": {
     "description": "System theme name"
   },
-  
   "flowIntensityNone": "None",
   "@flowIntensityNone": {
     "description": "No menstrual flow intensity"
@@ -920,7 +848,6 @@
   "@flowIntensityNoneMedicalInfo": {
     "description": "Medical info for no flow"
   },
-  
   "flowIntensitySpotting": "Spotting",
   "@flowIntensitySpotting": {
     "description": "Spotting flow intensity"
@@ -937,7 +864,6 @@
   "@flowIntensitySpottingMedicalInfo": {
     "description": "Medical info for spotting"
   },
-  
   "flowIntensityLight": "Light Flow",
   "@flowIntensityLight": {
     "description": "Light flow intensity"
@@ -954,7 +880,6 @@
   "@flowIntensityLightMedicalInfo": {
     "description": "Medical info for light flow"
   },
-  
   "flowIntensityMedium": "Normal Flow",
   "@flowIntensityMedium": {
     "description": "Medium/normal flow intensity"
@@ -971,7 +896,6 @@
   "@flowIntensityMediumMedicalInfo": {
     "description": "Medical info for medium flow"
   },
-  
   "flowIntensityHeavy": "Heavy Flow",
   "@flowIntensityHeavy": {
     "description": "Heavy flow intensity"
@@ -988,7 +912,6 @@
   "@flowIntensityHeavyMedicalInfo": {
     "description": "Medical info for heavy flow"
   },
-  
   "flowIntensityVeryHeavy": "Very Heavy",
   "@flowIntensityVeryHeavy": {
     "description": "Very heavy flow intensity"
@@ -1005,22 +928,18 @@
   "@flowIntensityVeryHeavyMedicalInfo": {
     "description": "Medical info for very heavy flow"
   },
-  
   "aiHealthInsights": "AI Health Insights",
   "@aiHealthInsights": {
     "description": "AI health insights title"
   },
-  
   "aboutThisFlowLevel": "About This Flow Level",
   "@aboutThisFlowLevel": {
     "description": "Modal title for flow level info"
   },
-  
   "recommendedProducts": "Recommended Products",
   "@recommendedProducts": {
     "description": "Recommended products section title"
   },
-  
   "hourlyChanges": "~{changes}/hour changes",
   "@hourlyChanges": {
     "description": "Hourly product changes indicator",
@@ -1031,137 +950,110 @@
       }
     }
   },
-  
   "monitor": "Monitor",
   "@monitor": {
     "description": "Monitor indicator for heavy flows"
   },
-  
   "spottingInsight": "Spotting is often normal at cycle start/end. Track patterns for insights.",
   "@spottingInsight": {
     "description": "AI insight for spotting"
   },
-  
   "lightFlowInsight": "Light flow detected. Consider stress levels and nutrition for optimal health.",
   "@lightFlowInsight": {
     "description": "AI insight for light flow"
   },
-  
   "mediumFlowInsight": "Normal flow pattern. Your cycle appears healthy and regular.",
   "@mediumFlowInsight": {
     "description": "AI insight for medium flow"
   },
-  
   "heavyFlowInsight": "Heavy flow detected. Monitor symptoms and consider iron-rich foods.",
   "@heavyFlowInsight": {
     "description": "AI insight for heavy flow"
   },
-  
   "veryHeavyFlowInsight": "Very heavy flow may need medical attention. Track duration carefully.",
   "@veryHeavyFlowInsight": {
     "description": "AI insight for very heavy flow"
   },
-  
   "noFlowInsight": "No flow detected. Track other symptoms for comprehensive insights.",
   "@noFlowInsight": {
     "description": "AI insight for no flow"
   },
-  
   "pantyLiners": "Panty liners",
   "@pantyLiners": {
     "description": "Panty liners product"
   },
-  
   "periodUnderwear": "Period underwear",
   "@periodUnderwear": {
     "description": "Period underwear product"
   },
-  
   "lightPads": "Light pads",
   "@lightPads": {
     "description": "Light pads product"
   },
-  
   "tamponsRegular": "Tampons (regular)",
   "@tamponsRegular": {
     "description": "Regular tampons product"
   },
-  
   "menstrualCups": "Menstrual cups",
   "@menstrualCups": {
     "description": "Menstrual cups product"
   },
-  
   "regularPads": "Regular pads",
   "@regularPads": {
     "description": "Regular pads product"
   },
-  
   "tamponsSuper": "Tampons (super)",
   "@tamponsSuper": {
     "description": "Super tampons product"
   },
-  
   "periodUnderwearHeavy": "Period underwear (heavy)",
   "@periodUnderwearHeavy": {
     "description": "Heavy period underwear product"
   },
-  
   "superPads": "Super pads",
   "@superPads": {
     "description": "Super pads product"
   },
-  
   "tamponsSuperPlus": "Tampons (super+)",
   "@tamponsSuperPlus": {
     "description": "Super plus tampons product"
   },
-  
   "menstrualCupsLarge": "Menstrual cups (large)",
   "@menstrualCupsLarge": {
     "description": "Large menstrual cups product"
   },
-  
   "ultraPads": "Ultra pads",
   "@ultraPads": {
     "description": "Ultra pads product"
   },
-  
   "tamponsUltra": "Tampons (ultra)",
   "@tamponsUltra": {
     "description": "Ultra tampons product"
   },
-  
   "menstrualCupsXL": "Menstrual cups (XL)",
   "@menstrualCupsXL": {
     "description": "XL menstrual cups product"
   },
-  
   "medicalConsultation": "Medical consultation",
   "@medicalConsultation": {
     "description": "Medical consultation product"
   },
-  
   "aiPoweredHealthInsights": "AI-Powered Health Insights",
   "@aiPoweredHealthInsights": {
     "description": "Biometric dashboard subtitle"
   },
-  
   "healthDataAccessNotGranted": "Health data access not granted. Please enable in settings.",
   "@healthDataAccessNotGranted": {
     "description": "Error message when health data access is denied"
   },
-  
   "failedToInitializeBiometricDashboard": "Failed to initialize biometric dashboard",
   "@failedToInitializeBiometricDashboard": {
     "description": "Error message when dashboard fails to initialize"
   },
-  
   "failedToLoadBiometricData": "Failed to load biometric data",
   "@failedToLoadBiometricData": {
     "description": "Error message when data fails to load"
   },
-  
   "biometricDataRefreshedAt": "Biometric data refreshed at {time}",
   "@biometricDataRefreshedAt": {
     "description": "Success message for data refresh with time",
@@ -1172,37 +1064,30 @@
       }
     }
   },
-  
   "failedToRefreshData": "Failed to refresh data",
   "@failedToRefreshData": {
     "description": "Error message when refresh fails"
   },
-  
   "overview": "Overview",
   "@overview": {
     "description": "Overview tab label"
   },
-  
   "metrics": "Metrics",
   "@metrics": {
     "description": "Metrics tab label"
   },
-  
   "sync": "Sync",
   "@sync": {
     "description": "Sync tab label"
   },
-  
   "healthDataConnected": "Health Data Connected",
   "@healthDataConnected": {
     "description": "Status when health data is connected"
   },
-  
   "limitedHealthData": "Limited Health Data",
   "@limitedHealthData": {
     "description": "Status when health data is limited"
   },
-  
   "dataCompleteness": "Data completeness: {percentage}%",
   "@dataCompleteness": {
     "description": "Data completeness percentage",
@@ -1213,12 +1098,10 @@
       }
     }
   },
-  
   "connectMoreDevicesForBetterInsights": "Connect more devices for better insights",
   "@connectMoreDevicesForBetterInsights": {
     "description": "Message encouraging device connection"
   },
-  
   "updatedAt": "Updated {time}",
   "@updatedAt": {
     "description": "Last update time",
@@ -1229,57 +1112,45 @@
       }
     }
   },
-  
   "overallHealthScore": "Overall Health Score",
   "@overallHealthScore": {
     "description": "Overall health score card title"
   },
-  
   "avgHeartRate": "Avg Heart Rate",
   "@avgHeartRate": {
     "description": "Average heart rate metric"
   },
-  
-  "sleepQuality": "Sleep Quality",
   "@sleepQuality": {
     "description": "Sleep quality metric"
   },
-  
   "bodyTemp": "Body Temp",
   "@bodyTemp": {
     "description": "Body temperature metric"
   },
-  
   "stressLevel": "Stress Level",
   "@stressLevel": {
     "description": "Stress level metric"
   },
-  
   "bpm": "BPM",
   "@bpm": {
     "description": "Beats per minute unit"
   },
-  
   "percent": "%",
   "@percent": {
     "description": "Percentage unit"
   },
-  
   "degreesF": "°F",
   "@degreesF": {
     "description": "Degrees Fahrenheit unit"
   },
-  
   "outOfTen": "/10",
   "@outOfTen": {
     "description": "Out of ten scale unit"
   },
-  
   "recentTrends": "Recent Trends",
   "@recentTrends": {
     "description": "Recent trends card title"
   },
-  
   "basedOnLastDaysOfData": "Based on the last {days} days of data",
   "@basedOnLastDaysOfData": {
     "description": "Trend analysis period",
@@ -1290,242 +1161,194 @@
       }
     }
   },
-  
   "sleepQualityImproving": "Sleep quality",
   "@sleepQualityImproving": {
     "description": "Sleep quality trend item"
   },
-  
   "improving": "Improving",
   "@improving": {
     "description": "Improving trend status"
   },
-  
   "stressLevels": "Stress levels",
   "@stressLevels": {
     "description": "Stress levels trend item"
   },
-  
   "stable": "Stable",
   "@stable": {
     "description": "Stable trend status"
   },
-  
   "heartRateMetric": "Heart rate",
   "@heartRateMetric": {
     "description": "Heart rate trend item"
   },
-  
   "slightlyElevated": "Slightly elevated",
   "@slightlyElevated": {
     "description": "Slightly elevated trend status"
   },
-  
   "heartRateChart": "Heart Rate",
   "@heartRateChart": {
     "description": "Heart rate chart title"
   },
-  
   "sleepQualityChart": "Sleep Quality",
   "@sleepQualityChart": {
     "description": "Sleep quality chart title"
   },
-  
   "bodyTemperatureChart": "Body Temperature",
   "@bodyTemperatureChart": {
     "description": "Body temperature chart title"
   },
-  
   "heartRateVariabilityChart": "Heart Rate Variability",
   "@heartRateVariabilityChart": {
     "description": "Heart rate variability chart title"
   },
-  
   "stressLevelChart": "Stress Level",
   "@stressLevelChart": {
     "description": "Stress level chart title"
   },
-  
   "aiHealthInsightsTitle": "AI Health Insights",
   "@aiHealthInsightsTitle": {
     "description": "AI insights section title"
   },
-  
   "personalizedInsightsBasedOnBiometricPatterns": "Personalized insights based on your biometric patterns",
   "@personalizedInsightsBasedOnBiometricPatterns": {
     "description": "AI insights section description"
   },
-  
   "noInsightsAvailable": "No Insights Available",
   "@noInsightsAvailable": {
     "description": "No insights card title"
   },
-  
   "keepTrackingHealthDataForAiInsights": "Keep tracking your health data to get personalized AI insights",
   "@keepTrackingHealthDataForAiInsights": {
     "description": "No insights card message"
   },
-  
   "connectedDevices": "Connected Devices",
   "@connectedDevices": {
     "description": "Connected devices card title"
   },
-  
   "iphoneHealth": "iPhone Health",
   "@iphoneHealth": {
     "description": "iPhone Health device"
   },
-  
   "connected": "Connected",
   "@connected": {
     "description": "Connected device status"
   },
-  
   "appleWatch": "Apple Watch",
   "@appleWatch": {
     "description": "Apple Watch device"
   },
-  
   "syncing": "Syncing",
   "@syncing": {
     "description": "Syncing device status"
   },
-  
   "garminConnect": "Garmin Connect",
   "@garminConnect": {
     "description": "Garmin Connect device"
   },
-  
   "notConnected": "Not connected",
   "@notConnected": {
     "description": "Not connected device status"
   },
-  
   "syncSettings": "Sync Settings",
   "@syncSettings": {
     "description": "Sync settings card title"
   },
-  
   "autoSync": "Auto Sync",
   "@autoSync": {
     "description": "Auto sync setting"
   },
-  
   "automaticallySyncHealthData": "Automatically sync health data",
   "@automaticallySyncHealthData": {
     "description": "Auto sync setting description"
   },
-  
   "backgroundSync": "Background Sync",
   "@backgroundSync": {
     "description": "Background sync setting"
   },
-  
   "syncDataInBackground": "Sync data in the background",
   "@syncDataInBackground": {
     "description": "Background sync setting description"
   },
-  
   "loadingBiometricData": "Loading biometric data...",
   "@loadingBiometricData": {
     "description": "Loading state message"
   },
-  
   "errorLoadingData": "Error Loading Data",
   "@errorLoadingData": {
     "description": "Error state title"
   },
-  
   "anUnexpectedErrorOccurred": "An unexpected error occurred",
   "@anUnexpectedErrorOccurred": {
     "description": "Generic error message"
   },
-  
   "retry": "Retry",
   "@retry": {
     "description": "Retry button"
   },
-  
   "noHealthData": "No Health Data",
   "@noHealthData": {
     "description": "Empty state title"
   },
-  
   "connectHealthDevicesForBiometricInsights": "Connect your health devices to see biometric insights",
   "@connectHealthDevicesForBiometricInsights": {
     "description": "Empty state message"
   },
-  
   "healthAccessRequired": "Health Access Required",
   "@healthAccessRequired": {
     "description": "Permission state title"
   },
-  
   "pleaseGrantAccessToHealthDataForBiometricInsights": "Please grant access to health data to view biometric insights",
   "@pleaseGrantAccessToHealthDataForBiometricInsights": {
     "description": "Permission state message"
   },
-  
   "grantAccess": "Grant Access",
   "@grantAccess": {
     "description": "Grant access button"
   },
-  
   "excellentHealthMetrics": "Excellent health metrics",
   "@excellentHealthMetrics": {
     "description": "Health score description for excellent health"
   },
-  
   "veryGoodHealthPatterns": "Very good health patterns",
   "@veryGoodHealthPatterns": {
     "description": "Health score description for very good health"
   },
-  
   "goodOverallHealth": "Good overall health",
   "@goodOverallHealth": {
     "description": "Health score description for good health"
   },
-  
   "moderateHealthIndicators": "Moderate health indicators",
   "@moderateHealthIndicators": {
     "description": "Health score description for moderate health"
   },
-  
   "focusOnHealthImprovement": "Focus on health improvement",
   "@focusOnHealthImprovement": {
     "description": "Health score description for poor health"
   },
-  
   "calendarTitle": "Calendar",
   "@calendarTitle": {
     "description": "Calendar screen title"
   },
-  
   "todayButton": "Today",
   "@todayButton": {
     "description": "Today button label"
   },
-  
   "faqAndKnowledgeBase": "FAQ & Knowledge Base",
   "@faqAndKnowledgeBase": {
     "description": "FAQ browser screen title"
   },
-  
   "findAnswersToCommonQuestions": "Find answers to common questions",
   "@findAnswersToCommonQuestions": {
     "description": "FAQ browser screen subtitle"
   },
-  
   "searchFAQs": "Search FAQs...",
   "@searchFAQs": {
     "description": "Search field placeholder for FAQs"
   },
-  
   "allCategories": "All",
   "@allCategories": {
     "description": "All categories filter chip label"
   },
-  
   "searchResults": "{count} search results",
   "@searchResults": {
     "description": "Number of search results found",
@@ -1536,7 +1359,6 @@
       }
     }
   },
-  
   "faqsInCategory": "{count} FAQs in {category}",
   "@faqsInCategory": {
     "description": "Number of FAQs in a specific category",
@@ -1551,7 +1373,6 @@
       }
     }
   },
-  
   "totalFAQs": "{count} total FAQs",
   "@totalFAQs": {
     "description": "Total number of FAQs available",
@@ -1562,127 +1383,94 @@
       }
     }
   },
-  
   "askZyra": "Ask Zyra",
   "@askZyra": {
     "description": "Button label to ask AI assistant"
   },
-  
   "askRelatedQuestion": "Ask related question",
   "@askRelatedQuestion": {
     "description": "Button to ask AI about related topics"
   },
-  
   "verified": "Verified",
   "@verified": {
     "description": "Verified content indicator"
   },
-  
   "askZyraAI": "Ask Zyra AI",
   "@askZyraAI": {
     "description": "AI chat dialog title"
   },
-  
   "getPersonalizedAnswers": "Get personalized answers to your questions",
   "@getPersonalizedAnswers": {
     "description": "AI chat dialog subtitle"
   },
-  
   "fullChatExperienceComingSoon": "Full chat experience coming soon!",
   "@fullChatExperienceComingSoon": {
     "description": "Message indicating full chat is coming soon"
   },
-  
   "useFloatingChatInInsights": "For now, use the floating chat in the insights screen",
   "@useFloatingChatInInsights": {
     "description": "Instructions for current chat functionality"
   },
-  
   "goToAIChat": "Go to AI Chat",
   "@goToAIChat": {
     "description": "Button to navigate to AI chat"
   },
-  
   "faqAndHelp": "FAQ & Help",
   "@faqAndHelp": {
     "description": "FAQ and help section title"
   },
-  
   "getAnswers": "Get answers",
   "@getAnswers": {
     "description": "Action button subtitle for FAQ"
   },
-  
-  "smartActionCommandCenter": "Smart Command Center",
-  "@smartActionCommandCenter": {
-    "description": "Smart action center title"
-  },
-  
-  "quickAccessToEssentialFeatures": "Quick access to essential features",
-  "@quickAccessToEssentialFeatures": {
-    "description": "Smart action center subtitle"
-  },
-  
   "medicalDisclaimer": "This information is AI-generated for awareness purposes only and not a substitute for professional medical advice. Consult a qualified healthcare provider for medical concerns.",
   "@medicalDisclaimer": {
     "description": "Medical disclaimer for health information"
   },
-  
   "medicalDisclaimerShort": "AI-generated information. Not medical advice.",
   "@medicalDisclaimerShort": {
     "description": "Short medical disclaimer"
   },
-  
   "aiGeneratedContent": "AI-Generated Content",
   "@aiGeneratedContent": {
     "description": "AI content indicator"
   },
-  
   "notMedicalAdvice": "Not Medical Advice",
   "@notMedicalAdvice": {
     "description": "Not medical advice indicator"
   },
-  
   "consultHealthcareProvider": "Consult a healthcare provider for medical advice",
   "@consultHealthcareProvider": {
     "description": "Recommendation to consult healthcare provider"
   },
-  
   "cycleAwarenessInsights": "Cycle Awareness & Personal Insights",
   "@cycleAwarenessInsights": {
     "description": "Non-medical app positioning"
   },
-  
   "learnYourPatterns": "Powered by Machine Learning",
   "@learnYourPatterns": {
     "description": "Safe app tagline focused on awareness"
   },
-  
   "basedOnYourLoggedData": "Based on your logged information",
   "@basedOnYourLoggedData": {
     "description": "Clarification that insights are based on user data"
   },
-  
   "personalizedEstimates": "Personalized Estimations",
   "@personalizedEstimates": {
     "description": "Safe term instead of predictions"
   },
-  
   "cyclePatternAwareness": "Cycle Pattern Awareness",
   "@cyclePatternAwareness": {
     "description": "Safe term for cycle insights"
   },
-  
   "mayHelpIncreaseAwareness": "May help increase awareness of your body's patterns",
   "@mayHelpIncreaseAwareness": {
     "description": "Safe benefit statement"
   },
-  
   "estimatedBasedOnPatterns": "Estimated based on your logged patterns",
   "@estimatedBasedOnPatterns": {
     "description": "Safe prediction language"
   },
-  
   "healthDashboardMatrix": "Health Dashboard Matrix",
   "@healthDashboardMatrix": {
     "description": "Health dashboard matrix title"

@@ -55,14 +55,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     _displayNameController.text = settings.preferences.displayName;
 
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService = AuthService();
 
     // Force a fresh sync first
     try {
       await settings.forceUserDataSync();
-    } catch (e) {
-      debugPrint('Warning: Could not sync user data: $e');
-    }
+    } catch (e) {}
 
     // Load email from stored user metadata (more reliable than auth service)
     try {
@@ -71,7 +69,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           userMetadata['email'] != null &&
           userMetadata['email'].toString().isNotEmpty) {
         _emailController.text = userMetadata['email'];
-        debugPrint('📧 Loaded email from metadata: ${userMetadata['email']}');
       } else {
         // Fallback to auth service if metadata doesn't have email
         final userData = await authService.getUserData();
@@ -79,19 +76,16 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             userData['email'] != null &&
             userData['email'].toString().isNotEmpty) {
           _emailController.text = userData['email'];
-          debugPrint('📧 Loaded email from auth service: ${userData['email']}');
 
           // Store this email in metadata for future use
           final currentMetadata = await settings.getUserMetadata() ?? {};
           currentMetadata['email'] = userData['email'];
           await settings.storeUserMetadata(currentMetadata);
         } else {
-          debugPrint('⚠️ No email found in metadata or auth service');
           _emailController.text = 'Not available';
         }
       }
     } catch (e) {
-      debugPrint('Error loading user data: $e');
       _emailController.text = 'Error loading email';
     }
   }
@@ -647,59 +641,35 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     );
   }
 
-  void _showDeactivateAccountDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
-          children: [
-            Icon(Icons.pause_circle, color: AppTheme.warningOrange),
-            SizedBox(width: 16),
-            Text('Deactivate Account'),
-          ],
-        ),
-        content: const Text(
-          'Your account will be temporarily deactivated. You can reactivate it by signing in again.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Account deactivation action is disabled until account lifecycle support is connected
-              _snack(
-                const SnackBar(
-                  content: Text(
-                    'Account deactivation is currently unavailable',
-                  ),
-                  backgroundColor: AppTheme.warningOrange,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.warningOrange,
-            ),
-            child: const Text('Deactivate'),
-          ),
-        ],
-      ),
+  Future<void> _showDeactivateAccountDialog() async {
+    final confirmed = await AdaptiveMessages.showConfirmation(
+      context,
+      title: 'Deactivate account?',
+      message: 'Temporarily pause your Flow Ai account.',
+      supportingText: 'You can reactivate it by signing in again.',
+      confirmText: 'Deactivate',
+      icon: Icons.pause_circle_rounded,
+      accentColor: AppTheme.warningOrange,
+    );
+
+    if (!confirmed || !mounted) return;
+
+    AdaptiveMessages.showInfo(
+      context,
+      'Account deactivation is currently unavailable',
     );
   }
 
   Future<void> _performAccountDeletion() async {
     if (_isDeletingAccount) return;
 
+    final navigator = Navigator.of(context, rootNavigator: true);
+    final auth = AuthService();
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+
     setState(() {
       _isDeletingAccount = true;
     });
-
-    final navigator = Navigator.of(context, rootNavigator: true);
-    final auth = Provider.of<AuthService>(context, listen: false);
-    final settings = Provider.of<SettingsProvider>(context, listen: false);
 
     showDialog<void>(
       context: context,
@@ -755,41 +725,23 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     }
   }
 
-  void _showDeleteAccountDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
-          children: [
-            Icon(Icons.warning, color: AppTheme.primaryRose),
-            SizedBox(width: 16),
-            Text('Delete Account'),
-          ],
-        ),
-        content: const Text(
-          'This action cannot be undone. All your data including cycle history, insights, and preferences will be permanently deleted.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: _isDeletingAccount
-                ? null
-                : () {
-                    Navigator.pop(context);
-                    _performAccountDeletion();
-                  },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryRose,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Delete Account'),
-          ),
-        ],
-      ),
+  Future<void> _showDeleteAccountDialog() async {
+    if (_isDeletingAccount) return;
+
+    final confirmed = await AdaptiveMessages.showConfirmation(
+      context,
+      title: 'Delete account?',
+      message: 'Permanently delete your Flow Ai account.',
+      supportingText:
+          'Cycle history, insights and preferences will be erased. '
+          'This cannot be undone.',
+      confirmText: 'Delete',
+      icon: Icons.delete_forever_rounded,
+      destructive: true,
     );
+
+    if (!confirmed || !mounted) return;
+
+    await _performAccountDeletion();
   }
 }

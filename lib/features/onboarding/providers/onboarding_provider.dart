@@ -28,7 +28,6 @@ class OnboardingProvider extends ChangeNotifier {
       _isInitialized = true;
       notifyListeners();
     } catch (e) {
-      debugPrint('Error initializing OnboardingProvider services: $e');
       _preferencesService = null; // Ensure it's null if initialization failed
     }
   }
@@ -51,13 +50,8 @@ class OnboardingProvider extends ChangeNotifier {
       if (_preferencesService != null) {
         await _preferencesService!.setOnboardingComplete(true);
         await _preferencesService!.setFirstLaunch(false);
-      } else {
-        debugPrint(
-          'PreferencesService not initialized, skipping preferences update',
-        );
-      }
+      } else {}
     } catch (e) {
-      debugPrint('Error completing onboarding: $e');
     } finally {
       _setLoading(false);
     }
@@ -98,7 +92,6 @@ class OnboardingProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      debugPrint('Error requesting notification permission: $e');
       return false;
     } finally {
       _setLoading(false);
@@ -123,7 +116,6 @@ class OnboardingProvider extends ChangeNotifier {
         throw Exception('PreferencesService not initialized');
       }
     } catch (e) {
-      debugPrint('Error saving user preferences: $e');
       rethrow;
     } finally {
       _setLoading(false);
@@ -166,7 +158,6 @@ class OnboardingProvider extends ChangeNotifier {
     final completed = await _tutorialService.isTutorialCompleted(tutorialId);
     if (!completed) {
       // Tutorial will be shown by the UI layer
-      debugPrint('Starting tutorial: $tutorialId');
     }
   }
 

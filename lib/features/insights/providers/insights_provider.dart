@@ -25,6 +25,5 @@ class InsightsProvider extends ChangeNotifier {
     _insights.clear();
     _isLoading = false;
     notifyListeners();
-    debugPrint('✅ InsightsProvider: All user data cleared');
   }
 }

@@ -29,6 +29,8 @@ void main() {
     expect(source, isNot(contains(forbiddenFeedback)));
     expect(emptyMountedGuard.hasMatch(exportMethod), isFalse);
     expect(source, contains('Future<void> _shareExport()'));
-    expect(source, contains('Share.shareXFiles'));
+    expect(source, contains('SharePlus.instance.share('));
+    expect(source, contains('ShareParams('));
+    expect(source, contains('files: [XFile(_exportFilePath!)]'));
   });
 }

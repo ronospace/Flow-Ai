@@ -34,7 +34,6 @@ class PerformanceOptimizer {
     _monitorFramePerformance();
 
     _isInitialized = true;
-    debugPrint('⚡ Performance Optimizer initialized');
   }
 
   /// Get cached value or compute and cache
@@ -127,7 +126,6 @@ class PerformanceOptimizer {
       compute: loader,
       cacheDuration: cacheDuration,
     ).catchError((error) {
-      debugPrint('⚠️ Preload failed for $key: $error');
       return Future<T>.value(null as T);
     });
   }
@@ -141,7 +139,6 @@ class PerformanceOptimizer {
       _cache.clear();
       _cacheTimestamps.clear();
     }
-    debugPrint('🗑️ Cache cleared${key != null ? ' for key: $key' : ''}');
   }
 
   /// Cleanup old cache entries
@@ -159,10 +156,6 @@ class PerformanceOptimizer {
     for (final key in keysToRemove) {
       _cache.remove(key);
       _cacheTimestamps.remove(key);
-    }
-
-    if (keysToRemove.isNotEmpty) {
-      debugPrint('🧹 Cleaned up ${keysToRemove.length} old cache entries');
     }
   }
 

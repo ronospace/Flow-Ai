@@ -1,16 +1,12 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../../core/ui/adaptive_messages.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart';
+
+import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
-import '../../cycle/providers/cycle_provider.dart';
-import '../../premium/providers/premium_provider.dart';
-import '../../premium/widgets/upgrade_prompt_dialog.dart';
-import '../../premium/models/premium_feature.dart';
-import '../../premium/models/subscription.dart';
+import '../../analytics/providers/analytics_provider.dart';
+import '../../analytics/widgets/health_analytics_card.dart';
+import '../../analytics/widgets/prediction_analytics_card.dart';
+import '../../analytics/widgets/recommendations_list.dart';
 
 class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
@@ -21,13 +17,20 @@ class AnalyticsDashboardScreen extends StatefulWidget {
 }
 
 class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  bool _initialLoadRequested = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _initialLoadRequested) return;
+      _initialLoadRequested = true;
+      context.read<AnalyticsProvider>().loadAllAnalytics();
+    });
   }
 
   @override
@@ -39,7 +42,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -49,35 +51,38 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              _buildHeader(theme, l10n),
-
-              // Tab Bar
-              _buildTabBar(theme),
-
-              // Tab Views
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildCycleTrendsTab(),
-                    _buildSymptomsTab(),
-                    _buildMoodEnergyTab(),
-                    _buildInsightsTab(),
-                  ],
-                ),
-              ),
-            ],
+          child: Consumer<AnalyticsProvider>(
+            builder: (context, analytics, _) {
+              return Column(
+                children: [
+                  _buildHeader(context, analytics),
+                  _buildTabBar(theme),
+                  Expanded(
+                    child: analytics.isLoading && !analytics.hasData
+                        ? const Center(child: CircularProgressIndicator())
+                        : TabBarView(
+                            controller: _tabController,
+                            children: [
+                              _buildCyclesTab(context, analytics),
+                              _buildHealthTab(context, analytics),
+                              _buildPredictionsTab(context, analytics),
+                              _buildInsightsTab(context, analytics),
+                            ],
+                          ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
-    return Container(
+  Widget _buildHeader(BuildContext context, AnalyticsProvider analytics) {
+    final theme = Theme.of(context);
+
+    return Padding(
       padding: const EdgeInsets.all(AppTheme.spaceXl),
       child: Row(
         children: [
@@ -93,350 +98,262 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
                   ),
-                ).animate().fadeIn().slideX(begin: -0.3, end: 0),
+                ),
                 Text(
-                  'Understand your patterns',
+                  'Patterns calculated from your recorded data',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ).animate().fadeIn(delay: 100.ms),
+                ),
               ],
             ),
           ),
-          // Export Button
-          _buildExportButton(theme),
+          IconButton(
+            tooltip: 'Refresh analytics',
+            onPressed: analytics.isLoading ? null : () => analytics.refresh(),
+            icon: const Icon(Icons.refresh),
+          ),
         ],
       ),
-    );
-  }
-
-  Widget _buildExportButton(ThemeData theme) {
-    return Consumer<PremiumProvider>(
-      builder: (context, premiumProvider, child) {
-        return Container(
-          decoration: BoxDecoration(
-            gradient: premiumProvider.hasPremium
-                ? const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  )
-                : null,
-            color: premiumProvider.hasPremium
-                ? null
-                : theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                if (premiumProvider.hasPremium) {
-                  _exportData(context);
-                } else {
-                  _showPremiumPrompt(context);
-                }
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.file_download_outlined,
-                      color: premiumProvider.hasPremium
-                          ? Colors.white
-                          : AppTheme.primaryRose,
-                      size: 20,
-                    ),
-                    if (premiumProvider.hasPremium) ...[
-                      const SizedBox(width: 8),
-                      Text(
-                        'Export',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: AppTheme.fwSemi,
-                          fontSize: AppTheme.fsMd,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ).animate().fadeIn(delay: 200.ms).scale();
-      },
     );
   }
 
   Widget _buildTabBar(ThemeData theme) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spaceXl),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withOpacity(0.9),
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: TabBar(
         controller: _tabController,
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        labelStyle: const TextStyle(
-          fontWeight: AppTheme.fwSemi,
-          fontSize: AppTheme.fsSm,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: AppTheme.fsSm,
-        ),
+        isScrollable: true,
+        indicatorSize: TabBarIndicatorSize.tab,
         tabs: const [
           Tab(text: 'Cycles'),
-          Tab(text: 'Symptoms'),
-          Tab(text: 'Mood'),
+          Tab(text: 'Health'),
+          Tab(text: 'Predictions'),
           Tab(text: 'Insights'),
         ],
       ),
-    ).animate().fadeIn(delay: 300.ms).slideY(begin: -0.2, end: 0);
-  }
-
-  Widget _buildCycleTrendsTab() {
-    return Consumer<CycleProvider>(
-      builder: (context, cycleProvider, child) {
-        final cycles = cycleProvider.cycles;
-
-        if (cycles.isEmpty) {
-          return _buildEmptyState(
-            'No cycle data yet',
-            'Start tracking to see trends',
-          );
-        }
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(AppTheme.spaceXl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Cycle Length Trend Chart
-              _buildChartCard(
-                title: 'Cycle Length Trend',
-                subtitle: 'Last 6 cycles',
-                child: _buildCycleLengthChart(cycles),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Statistics Cards
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildStatCard(
-                      icon: Icons.calendar_today,
-                      label: 'Avg Cycle',
-                      value: '${_calculateAverageCycleLength(cycles)} days',
-                      color: AppTheme.primaryRose,
-                    ),
-                  ),
-                  const SizedBox(width: AppTheme.spaceMd),
-                  Expanded(
-                    child: _buildStatCard(
-                      icon: Icons.show_chart,
-                      label: 'Regularity',
-                      value: '${_calculateRegularity(cycles)}%',
-                      color: AppTheme.accentMint,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Period Duration Chart
-              _buildChartCard(
-                title: 'Period Duration',
-                subtitle: 'Average flow days',
-                child: _buildPeriodDurationChart(cycles),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
-  Widget _buildSymptomsTab() {
-    return Consumer<CycleProvider>(
-      builder: (context, cycleProvider, child) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(AppTheme.spaceXl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildChartCard(
-                title: 'Symptom Frequency',
-                subtitle: 'Most common symptoms',
-                child: _buildSymptomFrequencyChart(),
-              ),
+  Widget _buildCyclesTab(BuildContext context, AnalyticsProvider analytics) {
+    final cycle = analytics.cycleAnalytics;
 
-              const SizedBox(height: 16),
+    if (cycle == null || cycle.totalCycles == 0) {
+      return _emptyState(
+        context,
+        icon: Icons.calendar_month_outlined,
+        title: 'No recorded cycle history yet',
+        message:
+            'Keep tracking your cycles. Analytics will appear when recorded history is available.',
+      );
+    }
 
-              _buildChartCard(
-                title: 'Symptom Timeline',
-                subtitle: 'When symptoms occur',
-                child: _buildSymptomTimelineChart(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildMoodEnergyTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spaceXl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return RefreshIndicator(
+      onRefresh: analytics.refresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         children: [
-          _buildChartCard(
-            title: 'Mood Patterns',
-            subtitle: 'Throughout your cycle',
-            child: _buildMoodPatternChart(),
-          ),
-
-          const SizedBox(height: 16),
-
-          _buildChartCard(
-            title: 'Energy Levels',
-            subtitle: 'Daily energy trends',
-            child: _buildEnergyLevelChart(),
-          ),
-
-          const SizedBox(height: 16),
-
-          _buildChartCard(
-            title: 'Mood-Energy Correlation',
-            subtitle: 'How they relate',
-            child: _buildCorrelationChart(),
-          ),
+          _sectionTitle(context, 'Recorded cycle analytics'),
+          const SizedBox(height: AppTheme.spaceMd),
+          _metricGrid(context, cycle),
+          if (cycle.symptomFrequency.isNotEmpty) ...[
+            const SizedBox(height: AppTheme.spaceXl),
+            _symptomFrequency(context, cycle.symptomFrequency),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildInsightsTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spaceXl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildInsightCard(
-            icon: Icons.lightbulb_outline,
-            title: 'Cycle Patterns',
-            description:
-                'Your cycles are very regular with an average length of 28 days. This is within the healthy range.',
-            confidence: 0.92,
-            color: AppTheme.accentMint,
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildInsightCard(
-            icon: Icons.favorite_outline,
-            title: 'Health Trends',
-            description:
-                'Your symptom patterns suggest consistent hormonal balance. Continue tracking for deeper insights.',
-            confidence: 0.85,
-            color: AppTheme.primaryRose,
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildInsightCard(
-            icon: Icons.psychology_outlined,
-            title: 'Mood Insights',
-            description:
-                'Your mood tends to be most positive during the follicular phase. Consider scheduling important activities then.',
-            confidence: 0.78,
-            color: AppTheme.secondaryBlue,
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildInsightCard(
-            icon: Icons.analytics_outlined,
-            title: 'Prediction Accuracy',
-            description:
-                'AI predictions have been 94% accurate over the last 3 cycles. Confidence is high for future predictions.',
-            confidence: 0.94,
-            color: AppTheme.primaryPurple,
-          ),
-        ],
-      ),
+  Widget _metricGrid(BuildContext context, CycleAnalytics analytics) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                label: 'Recorded cycles',
+                value: '${analytics.totalCycles}',
+                icon: Icons.history,
+              ),
+            ),
+            const SizedBox(width: AppTheme.spaceMd),
+            Expanded(
+              child: _metricCard(
+                context,
+                label: 'Average cycle',
+                value: '${analytics.averageCycleLength.toStringAsFixed(1)} d',
+                icon: Icons.calendar_today_outlined,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppTheme.spaceMd),
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                label: 'Average period',
+                value: '${analytics.averagePeriodLength.toStringAsFixed(1)} d',
+                icon: Icons.water_drop_outlined,
+              ),
+            ),
+            const SizedBox(width: AppTheme.spaceMd),
+            Expanded(
+              child: _metricCard(
+                context,
+                label: 'Cycle variation',
+                value: '±${analytics.cycleVariation.toStringAsFixed(1)} d',
+                icon: Icons.show_chart,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppTheme.spaceMd),
+        _metricCard(
+          context,
+          label: 'Regularity from recorded intervals',
+          value: '${(analytics.regularityScore * 100).round()}%',
+          icon: Icons.timeline,
+        ),
+      ],
     );
   }
 
-  Widget _buildChartCard({
-    required String title,
-    required String subtitle,
-    required Widget child,
-  }) {
+  Widget _symptomFrequency(BuildContext context, Map<String, double> symptoms) {
     final theme = Theme.of(context);
+    final entries = symptoms.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceXl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
-            style: theme.textTheme.titleLarge?.copyWith(
+            'Recorded symptom frequency',
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+          const SizedBox(height: AppTheme.spaceMd),
+          for (final entry in entries)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppTheme.spaceSm),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(entry.key, style: theme.textTheme.bodyMedium),
+                  ),
+                  Text(
+                    '${(entry.value * 100).round()}%',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(height: 200, child: child),
         ],
       ),
-    ).animate().fadeIn().slideY(begin: 0.3, end: 0);
+    );
   }
 
-  Widget _buildStatCard({
-    required IconData icon,
+  Widget _buildHealthTab(BuildContext context, AnalyticsProvider analytics) {
+    final health = analytics.healthAnalytics;
+
+    if (health == null || analytics.analyticsHistory.isEmpty) {
+      return _emptyState(
+        context,
+        icon: Icons.monitor_heart_outlined,
+        title: 'Insufficient recorded health history',
+        message:
+            'Mood, energy and sleep analytics appear only when recorded history is available.',
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: analytics.refresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
+        children: [
+          HealthAnalyticsCard(
+            analytics: health,
+            history: analytics.analyticsHistory,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPredictionsTab(
+    BuildContext context,
+    AnalyticsProvider analytics,
+  ) {
+    final predictions = analytics.predictionAnalytics;
+
+    if (predictions == null) {
+      return _emptyState(
+        context,
+        icon: Icons.fact_check_outlined,
+        title: 'Prediction validation unavailable',
+        message:
+            'Flow Ai only reports prediction performance from stored prediction-versus-actual history.',
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: analytics.refresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
+        children: [PredictionAnalyticsCard(analytics: predictions)],
+      ),
+    );
+  }
+
+  Widget _buildInsightsTab(BuildContext context, AnalyticsProvider analytics) {
+    return RefreshIndicator(
+      onRefresh: analytics.refresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
+        children: [
+          _sectionTitle(context, 'Personalized insights'),
+          const SizedBox(height: AppTheme.spaceMd),
+          RecommendationsList(recommendations: analytics.recommendations),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(BuildContext context, String text) {
+    return Text(
+      text,
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _metricCard(
+    BuildContext context, {
     required String label,
     required String value,
-    required Color color,
+    required IconData icon,
   }) {
     final theme = Theme.of(context);
 
@@ -445,341 +362,24 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn().scale();
-  }
-
-  Widget _buildInsightCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    required double confidence,
-    required Color color,
-  }) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spaceXl),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [color, color.withOpacity(0.7)],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: Colors.white, size: 20),
-              ),
-              const SizedBox(width: AppTheme.spaceMd),
-              Expanded(
-                child: Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${(confidence * 100).toInt()}%',
-                  style: TextStyle(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                    fontSize: AppTheme.fsSm,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+          Icon(icon, color: theme.colorScheme.primary),
+          const SizedBox(height: AppTheme.spaceSm),
           Text(
-            description,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.8),
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 12),
-          LinearProgressIndicator(
-            value: confidence,
-            backgroundColor: color.withOpacity(0.2),
-            valueColor: AlwaysStoppedAnimation<Color>(color),
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ],
-      ),
-    ).animate().fadeIn().slideX(begin: -0.2, end: 0);
-  }
-
-  // Chart implementations (simplified for now)
-  Widget _buildCycleLengthChart(List<dynamic> cycles) {
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: true, drawVerticalLine: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: List.generate(6, (index) {
-              return FlSpot(index.toDouble(), 26 + (index % 3).toDouble());
-            }),
-            isCurved: true,
-            gradient: const LinearGradient(
-              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-            ),
-            barWidth: 4,
-            dotData: FlDotData(show: true),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPeriodDurationChart(List<dynamic> cycles) {
-    return BarChart(
-      BarChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        barGroups: List.generate(6, (index) {
-          return BarChartGroupData(
-            x: index,
-            barRods: [
-              BarChartRodData(
-                toY: 4 + (index % 2).toDouble(),
-                gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-                width: 20,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ],
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget _buildSymptomFrequencyChart() {
-    return BarChart(
-      BarChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        barGroups: List.generate(5, (index) {
-          final colors = [
-            AppTheme.primaryRose,
-            AppTheme.primaryPurple,
-            AppTheme.secondaryBlue,
-            AppTheme.accentMint,
-            AppTheme.primaryRose.withOpacity(0.7),
-          ];
-          return BarChartGroupData(
-            x: index,
-            barRods: [
-              BarChartRodData(
-                toY: (5 - index).toDouble() * 2,
-                color: colors[index],
-                width: 30,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(4),
-                ),
-              ),
-            ],
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget _buildSymptomTimelineChart() {
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: true, drawVerticalLine: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: List.generate(28, (index) {
-              final double y = (index > 14 && index < 21) ? 3.0 : 1.0;
-              return FlSpot(index.toDouble(), y);
-            }),
-            isCurved: true,
-            gradient: const LinearGradient(
-              colors: [AppTheme.accentMint, AppTheme.secondaryBlue],
-            ),
-            barWidth: 3,
-            dotData: FlDotData(show: false),
-            belowBarData: BarAreaData(
-              show: true,
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.accentMint.withOpacity(0.3),
-                  AppTheme.secondaryBlue.withOpacity(0.1),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMoodPatternChart() {
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: true, drawVerticalLine: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: List.generate(28, (index) {
-              final double y = 3 + math.sin(index / 7) * 2;
-              return FlSpot(index.toDouble(), y);
-            }),
-            isCurved: true,
-            gradient: const LinearGradient(
-              colors: [AppTheme.secondaryBlue, AppTheme.primaryPurple],
-            ),
-            barWidth: 3,
-            dotData: FlDotData(show: false),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEnergyLevelChart() {
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: true, drawVerticalLine: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: List.generate(28, (index) {
-              final double y = 3.5 + math.cos(index / 8) * 1.5;
-              return FlSpot(index.toDouble(), y);
-            }),
-            isCurved: true,
-            gradient: const LinearGradient(
-              colors: [AppTheme.accentMint, AppTheme.primaryRose],
-            ),
-            barWidth: 3,
-            dotData: FlDotData(show: false),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCorrelationChart() {
-    return ScatterChart(
-      ScatterChartData(
-        gridData: FlGridData(show: true),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        scatterSpots: List.generate(20, (index) {
-          return ScatterSpot(
-            index % 5 + (index / 10),
-            index % 5 + (index / 8),
-            color: AppTheme.secondaryBlue.withOpacity(0.6),
-            radius: 8,
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(String title, String subtitle) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.analytics_outlined,
-            size: 80,
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
+            value,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 2),
           Text(
-            subtitle,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+            label,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ],
@@ -787,29 +387,37 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
-  // Helper methods
-  int _calculateAverageCycleLength(List<dynamic> cycles) {
-    if (cycles.isEmpty) return 28;
-    // Simplified calculation
-    return 28;
-  }
+  Widget _emptyState(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String message,
+  }) {
+    final theme = Theme.of(context);
 
-  int _calculateRegularity(List<dynamic> cycles) {
-    if (cycles.length < 2) return 100;
-    // Simplified calculation
-    return 92;
-  }
-
-  void _exportData(BuildContext context) {
-    // Export functionality
-    AdaptiveMessages.showInfo(context, 'Exporting analytics data...');
-  }
-
-  void _showPremiumPrompt(BuildContext context) {
-    UpgradePromptDialog.show(
-      context,
-      blockedFeature: PremiumFeatureType.unlimitedExports,
-      requiredTier: SubscriptionTier.premium,
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(AppTheme.spaceXl),
+      children: [
+        const SizedBox(height: 72),
+        Icon(icon, size: 52, color: theme.colorScheme.onSurfaceVariant),
+        const SizedBox(height: AppTheme.spaceMd),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: AppTheme.spaceSm),
+        Text(
+          message,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }

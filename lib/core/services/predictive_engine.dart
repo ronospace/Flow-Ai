@@ -30,8 +30,6 @@ class PredictiveEngine {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('🧠 Initializing Advanced Predictive Engine (Week 4)...');
-
     // Neural Network-inspired Model
     _neuralNetworkModel = {
       'layers': {
@@ -130,7 +128,6 @@ class PredictiveEngine {
     _feedbackHistory = [];
 
     _isInitialized = true;
-    debugPrint('✅ Advanced Predictive Engine initialized with ML capabilities');
   }
 
   /// Master prediction method using ensemble of all models
@@ -539,10 +536,6 @@ class PredictiveEngine {
 
     // Update reinforcement learning rewards
     await _updateRLRewards(feedback);
-
-    debugPrint(
-      '📊 Processed prediction feedback: ${wasAccurate ? 'Accurate' : 'Needs improvement'}',
-    );
   }
 
   /// Generate advanced insights from prediction results

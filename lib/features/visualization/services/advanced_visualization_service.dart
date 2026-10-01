@@ -10,7 +10,7 @@ import '../../tracking/services/feelings_database_service.dart';
 import '../../../core/services/advanced_biometric_service.dart'
     as canonical_health;
 import '../../tracking/screens/enhanced_daily_feelings_tracker.dart'
-    show MoodCategory;
+    show DailyFeelingsEntry, MoodCategory;
 
 /// Advanced visualization service for interactive charts and data presentation
 class AdvancedVisualizationService {
@@ -36,9 +36,7 @@ class AdvancedVisualizationService {
       _setupDefaultConfigurations();
 
       _isInitialized = true;
-      debugPrint('📊 Advanced visualization service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize visualization service: $e');
       throw VisualizationException(
         'Failed to initialize visualization service: $e',
       );
@@ -95,15 +93,19 @@ class AdvancedVisualizationService {
             );
           }
         } else {
-          // Overall wellbeing
-          dataPoints.add(
-            DataPoint(
-              x: entry.date.millisecondsSinceEpoch.toDouble(),
-              y: entry.overallWellbeing,
-              label: entry.date.toString().split(' ')[0],
-              metadata: {'type': 'wellbeing'},
-            ),
-          );
+          // Overall wellbeing is optional. Missing observations must remain
+          // missing rather than becoming synthetic chart values.
+          final overallWellbeing = entry.overallWellbeing;
+          if (overallWellbeing != null) {
+            dataPoints.add(
+              DataPoint(
+                x: entry.date.millisecondsSinceEpoch.toDouble(),
+                y: overallWellbeing,
+                label: entry.date.toString().split(' ')[0],
+                metadata: {'type': 'wellbeing'},
+              ),
+            );
+          }
         }
       }
 
@@ -151,7 +153,6 @@ class AdvancedVisualizationService {
         ),
       );
     } catch (e) {
-      debugPrint('❌ Failed to generate mood trend chart: $e');
       return ChartData.error('Failed to load mood data');
     }
   }
@@ -237,7 +238,6 @@ class AdvancedVisualizationService {
         ),
       );
     } catch (e) {
-      debugPrint('❌ Failed to generate cycle pattern chart: $e');
       return ChartData.error('Failed to load cycle data');
     }
   }
@@ -332,7 +332,6 @@ class AdvancedVisualizationService {
         ),
       );
     } catch (e) {
-      debugPrint('❌ Failed to generate symptom correlation heatmap: $e');
       return ChartData.error('Failed to load symptom correlation data');
     }
   }
@@ -367,7 +366,6 @@ class AdvancedVisualizationService {
 
       return charts;
     } catch (e) {
-      debugPrint('❌ Failed to generate health dashboard: $e');
       return [ChartData.error('Failed to load dashboard data')];
     }
   }
@@ -414,7 +412,6 @@ class AdvancedVisualizationService {
         annotations: config.annotations ?? const <ChartAnnotation>[],
       );
     } catch (e) {
-      debugPrint('❌ Failed to generate custom visualization: $e');
       return ChartData.error('Failed to create custom visualization');
     }
   }
@@ -429,10 +426,8 @@ class AdvancedVisualizationService {
     try {
       // In a real implementation, this would render the chart to an image
       // For now, return null as a placeholder
-      debugPrint('📸 Exporting chart as ${format.name} (${width}x$height)');
       return null;
     } catch (e) {
-      debugPrint('❌ Failed to export chart as image: $e');
       return null;
     }
   }

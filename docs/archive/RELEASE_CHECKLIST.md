@@ -87,7 +87,7 @@
 
 ## ✅ Features & Functionality
 
-- [x] Demo account working (demo@flowai.app / REDACTED_DEMO_PW!)
+- [x] Demo account working (demo@flowai.app / <REDACTED>)
 - [x] Authentication flow functional
 - [x] Cycle tracking operational
 - [x] AI insights generating with citations
@@ -160,7 +160,7 @@ Medical Citations (Guideline 1.4.1):
 
 Demo Account:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 Both issues from previous rejection have been comprehensively addressed.
 ```

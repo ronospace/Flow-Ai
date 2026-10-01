@@ -871,8 +871,6 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       if (!mounted) return;
       Navigator.of(context, rootNavigator: true).pop(true);
     } catch (e) {
-      debugPrint('JOIN_CATCH: $e');
-
       if (!mounted) return;
       setState(() {
         _isLoading = false;

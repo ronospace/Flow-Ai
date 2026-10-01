@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -57,11 +56,7 @@ class LocalizationService {
       await initializeDateFormatting(_currentLocale.toString());
 
       _isInitialized = true;
-      debugPrint(
-        '🌍 Localization service initialized with locale: $_currentLocale',
-      );
     } catch (e) {
-      debugPrint('❌ Failed to initialize localization: $e');
       throw LocalizationException(
         'Failed to initialize localization service: $e',
       );
@@ -94,10 +89,7 @@ class LocalizationService {
 
       // Notify listeners
       _localeController.add(locale);
-
-      debugPrint('🌍 Locale changed to: $locale');
     } catch (e) {
-      debugPrint('❌ Failed to set locale: $e');
       throw LocalizationException('Failed to set locale: $e');
     }
   }
@@ -163,7 +155,6 @@ class LocalizationService {
           customFormat ?? DateFormat.yMMMd(_currentLocale.toString());
       return formatter.format(date);
     } catch (e) {
-      debugPrint('⚠️ Date formatting error: $e');
       return DateFormat.yMMMd().format(date); // Fallback to default
     }
   }
@@ -178,7 +169,6 @@ class LocalizationService {
           : DateFormat.jm(_currentLocale.toString());
       return formatter.format(time);
     } catch (e) {
-      debugPrint('⚠️ Time formatting error: $e');
       return DateFormat.jm().format(time); // Fallback to default
     }
   }
@@ -192,7 +182,6 @@ class LocalizationService {
           customFormat ?? DateFormat.yMMMd(_currentLocale.toString()).add_jm();
       return formatter.format(dateTime);
     } catch (e) {
-      debugPrint('⚠️ DateTime formatting error: $e');
       return DateFormat.yMMMd().add_jm().format(
         dateTime,
       ); // Fallback to default
@@ -213,7 +202,6 @@ class LocalizationService {
       }
       return formatter.format(number);
     } catch (e) {
-      debugPrint('⚠️ Number formatting error: $e');
       return number.toString(); // Fallback to default
     }
   }
@@ -231,7 +219,6 @@ class LocalizationService {
       );
       return formatter.format(amount);
     } catch (e) {
-      debugPrint('⚠️ Currency formatting error: $e');
       return amount.toString(); // Fallback to default
     }
   }
@@ -250,7 +237,6 @@ class LocalizationService {
         return formatter.format(date);
       });
     } catch (e) {
-      debugPrint('⚠️ Month names formatting error: $e');
       return [];
     }
   }
@@ -270,7 +256,6 @@ class LocalizationService {
         return formatter.format(date);
       });
     } catch (e) {
-      debugPrint('⚠️ Day names formatting error: $e');
       return [];
     }
   }
@@ -301,13 +286,8 @@ class LocalizationService {
             translations[localeKey],
           );
         }
-
-        debugPrint(
-          '🌍 Imported translations for ${translations.keys.length} locales',
-        );
       }
     } catch (e) {
-      debugPrint('❌ Failed to import translations: $e');
       throw LocalizationException('Failed to import translations: $e');
     }
   }
@@ -328,7 +308,6 @@ class LocalizationService {
         _currentLocale = _getDefaultLocale();
       }
     } catch (e) {
-      debugPrint('⚠️ Failed to load locale, using default: $e');
       _currentLocale = _getDefaultLocale();
     }
   }
@@ -337,9 +316,7 @@ class LocalizationService {
   Future<void> _saveCurrentLocale() async {
     try {
       await _prefs?.setString(_selectedLocaleKey, _currentLocale.toString());
-    } catch (e) {
-      debugPrint('⚠️ Failed to save locale: $e');
-    }
+    } catch (e) {}
   }
 
   /// Load localized strings from assets
@@ -355,7 +332,6 @@ class LocalizationService {
         await _loadStringsForLocale('en_US');
       }
     } catch (e) {
-      debugPrint('❌ Failed to load localized strings: $e');
       // Load fallback strings
       _loadFallbackStrings();
     }
@@ -371,7 +347,6 @@ class LocalizationService {
 
       _localizedStrings[localeKey] = Map<String, String>.from(jsonMap);
     } catch (e) {
-      debugPrint('⚠️ Failed to load strings for $localeKey: $e');
       // Create with fallback strings if asset loading fails
       _localizedStrings[localeKey] = _getFallbackStrings();
     }
@@ -391,9 +366,7 @@ class LocalizationService {
           }
         }
       }
-    } catch (e) {
-      debugPrint('⚠️ Failed to get system locale: $e');
-    }
+    } catch (e) {}
 
     // Default to English
     return const SupportedLocale('en', 'US', 'English', 'English');

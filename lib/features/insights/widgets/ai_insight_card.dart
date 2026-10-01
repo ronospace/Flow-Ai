@@ -20,10 +20,12 @@ class AIInsightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getInsightTypeColor().withOpacity(0.3)),
+        border: Border.all(
+          color: _getInsightTypeColor().withValues(alpha: 0.3),
+        ),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -36,10 +38,10 @@ class AIInsightCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: AppTheme.warningOrange.withOpacity(0.1),
+              color: AppTheme.warningOrange.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppTheme.warningOrange.withOpacity(0.3),
+                color: AppTheme.warningOrange.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -72,7 +74,7 @@ class AIInsightCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: _getInsightTypeColor().withOpacity(0.1),
+                  color: _getInsightTypeColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -100,7 +102,7 @@ class AIInsightCard extends StatelessWidget {
           Text(
             insight.description,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               height: 1.5,
             ),
           ),
@@ -155,10 +157,10 @@ class AIInsightCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 16),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppTheme.primaryRose.withOpacity(0.1),
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withOpacity(0.3),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -192,17 +194,21 @@ class AIInsightCard extends StatelessWidget {
               ),
               childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               collapsedBackgroundColor: theme.brightness == Brightness.dark
-                  ? theme.colorScheme.surfaceContainerHighest.withOpacity(0.28)
-                  : AppTheme.secondaryBlue.withOpacity(0.05),
+                  ? theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.28,
+                    )
+                  : AppTheme.secondaryBlue.withValues(alpha: 0.05),
               backgroundColor: theme.brightness == Brightness.dark
-                  ? theme.colorScheme.surfaceContainerHighest.withOpacity(0.36)
-                  : AppTheme.secondaryBlue.withOpacity(0.08),
+                  ? theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.36,
+                    )
+                  : AppTheme.secondaryBlue.withValues(alpha: 0.08),
               collapsedShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   color: theme.brightness == Brightness.dark
-                      ? theme.colorScheme.outline.withOpacity(0.22)
-                      : AppTheme.secondaryBlue.withOpacity(0.18),
+                      ? theme.colorScheme.outline.withValues(alpha: 0.22)
+                      : AppTheme.secondaryBlue.withValues(alpha: 0.18),
                   width: 1,
                 ),
               ),
@@ -210,8 +216,8 @@ class AIInsightCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   color: theme.brightness == Brightness.dark
-                      ? theme.colorScheme.outline.withOpacity(0.28)
-                      : AppTheme.secondaryBlue.withOpacity(0.22),
+                      ? theme.colorScheme.outline.withValues(alpha: 0.28)
+                      : AppTheme.secondaryBlue.withValues(alpha: 0.22),
                   width: 1,
                 ),
               ),
@@ -219,14 +225,14 @@ class AIInsightCard extends StatelessWidget {
                 Icons.library_books_outlined,
                 size: 16,
                 color: theme.brightness == Brightness.dark
-                    ? theme.colorScheme.primary.withOpacity(0.9)
+                    ? theme.colorScheme.primary.withValues(alpha: 0.9)
                     : AppTheme.secondaryBlue,
               ),
               title: Text(
                 'Sources',
                 style: TextStyle(
                   fontSize: 12,
-                  color: theme.colorScheme.onSurface.withOpacity(0.58),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.58),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -234,11 +240,13 @@ class AIInsightCard extends StatelessWidget {
                 'Research references available',
                 style: TextStyle(
                   fontSize: 11,
-                  color: theme.colorScheme.onSurface.withOpacity(0.56),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.56),
                 ),
               ),
-              iconColor: theme.colorScheme.onSurface.withOpacity(0.56),
-              collapsedIconColor: theme.colorScheme.onSurface.withOpacity(0.44),
+              iconColor: theme.colorScheme.onSurface.withValues(alpha: 0.56),
+              collapsedIconColor: theme.colorScheme.onSurface.withValues(
+                alpha: 0.44,
+              ),
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
@@ -249,7 +257,9 @@ class AIInsightCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       height: 1.4,
-                      color: theme.colorScheme.onSurface.withOpacity(0.54),
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.54,
+                      ),
                     ),
                   ),
                 ),
@@ -343,7 +353,7 @@ class AIInsightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +376,7 @@ class AIInsightCard extends StatelessWidget {
                   citation.year!,
                   style: TextStyle(
                     fontSize: 10,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
             ],
@@ -378,7 +388,7 @@ class AIInsightCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: theme.colorScheme.onSurface.withOpacity(0.8),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
               height: 1.3,
             ),
           ),

@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-
-import 'dart:math';
 
 import '../services/advanced_biometric_service.dart' as canonical_health;
 
@@ -38,7 +35,6 @@ class AdvancedBiometricEngine {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    debugPrint('🎯 Initializing Advanced Biometric Engine...');
 
     // Initialize integrations
     await _initializeIntegrations();
@@ -53,9 +49,6 @@ class AdvancedBiometricEngine {
     await _setupRealtimeMonitoring();
 
     _initialized = true;
-    debugPrint(
-      '✅ Advanced Biometric Engine initialized with real-time monitoring',
-    );
   }
 
   Future<void> _initializeIntegrations() async {
@@ -63,7 +56,6 @@ class AdvancedBiometricEngine {
   }
 
   Future<void> _initializeProcessingEngines() async {
-    debugPrint('⚙️ Initializing processing engines...');
 
     _fusionEngine = DataFusionEngine();
     _anomalyDetector = AnomalyDetector();
@@ -135,7 +127,6 @@ class AdvancedBiometricEngine {
   void _checkForAnomalies(BiometricReading reading) {
     final anomaly = _anomalyDetector.detectAnomaly(reading);
     if (anomaly.isAnomalous) {
-      debugPrint('🚨 Anomaly detected: ${anomaly.description}');
       // Handle anomaly (notifications, alerts, etc.)
     }
   }
@@ -297,20 +288,6 @@ class AdvancedBiometricEngine {
     if (!value.isFinite) return <String, dynamic>{};
 
     return <String, dynamic>{'value': value};
-  }
-
-  String _getTemperaturePhaseIndication(double temp) {
-    if (temp >= 37.0) return 'Likely post-ovulation (luteal phase)';
-    if (temp >= 36.7) return 'Possible ovulation transition';
-    return 'Pre-ovulation (follicular phase)';
-  }
-
-  List<String> _getTemperatureRecommendations(double temp) {
-    return [
-      'Continue consistent morning measurements',
-      'Track alongside other fertility signs',
-      'Note any external factors affecting temperature',
-    ];
   }
 
   Map<String, dynamic> _analyzeSleep(dynamic data) {

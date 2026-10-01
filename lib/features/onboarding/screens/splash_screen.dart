@@ -62,13 +62,11 @@ class _SplashScreenState extends State<SplashScreen>
       try {
         // Determine the appropriate route based on user state
         final route = await AppStateService().getInitialRoute();
-        debugPrint('🚀 Navigating to: $route');
 
         if (mounted) {
           context.go(route);
         }
       } catch (e) {
-        debugPrint('❌ Error determining route: $e');
         // Fallback to auth choice screen
         if (mounted) {
           context.go('/auth/choice');

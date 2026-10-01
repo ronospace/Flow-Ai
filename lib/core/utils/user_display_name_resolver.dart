@@ -44,8 +44,10 @@ abstract final class UserDisplayNameResolver {
     required String? userId,
     required String? email,
     required String? displayName,
+    String? preferredGreetingName,
     required String existingUserId,
     required String existingDisplayName,
+    String existingGreetingName = '',
   }) {
     final normalizedUserId = userId?.trim() ?? '';
     final providerDisplayName = normalizeDisplayName(displayName);
@@ -53,6 +55,12 @@ abstract final class UserDisplayNameResolver {
         normalizedUserId.isNotEmpty && normalizedUserId == existingUserId;
     final savedDisplayName = sameUser
         ? normalizeDisplayName(existingDisplayName)
+        : '';
+    final explicitGreetingName = firstNameFromDisplayName(
+      preferredGreetingName,
+    );
+    final savedGreetingName = sameUser
+        ? firstNameFromDisplayName(existingGreetingName)
         : '';
     final emailFirstName = firstNameFromEmail(email);
 
@@ -63,7 +71,11 @@ abstract final class UserDisplayNameResolver {
         : emailFirstName;
 
     final profileFirstName = firstNameFromDisplayName(canonicalDisplayName);
-    final greetingName = profileFirstName.isNotEmpty
+    final greetingName = explicitGreetingName.isNotEmpty
+        ? explicitGreetingName
+        : savedGreetingName.isNotEmpty
+        ? savedGreetingName
+        : profileFirstName.isNotEmpty
         ? profileFirstName
         : emailFirstName;
 

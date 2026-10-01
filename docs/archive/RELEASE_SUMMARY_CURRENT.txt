@@ -16,7 +16,7 @@ Status: ✅ ALL READY
 2. Demo Documentation Created
    - APPLE_DEMO_LOGS.txt (356 lines - comprehensive testing guide)
    - SUBMISSION_INSTRUCTIONS.md (quick reference)
-   - Demo credentials: demo@flowai.app / REDACTED_DEMO_PW!
+   - Demo credentials: demo@flowai.app / <REDACTED>
 
 3. GitHub Backups
    - ✅ Pushed to ZyraFlow repo
@@ -53,7 +53,7 @@ DEMO ACCOUNT
 ================================================================================
 
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 Includes 6 months of pre-loaded cycle data for testing.
 

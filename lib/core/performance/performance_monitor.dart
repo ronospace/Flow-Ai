@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:isolate';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import '../error/error_handler.dart';
@@ -844,7 +843,7 @@ class PerformanceOptimizer {
   /// Optimize animations for better performance
   static void optimizeAnimations() {
     // Reduce animations in debug mode or low-end devices
-    if (kDebugMode || _isLowEndDevice()) {
+    if (_isLowEndDevice()) {
       // Note: disableAnimations is not available in newer Flutter versions
       // Instead, we can reduce animation durations or suggest users disable them in accessibility settings
       AppLogger.performance('🎬 Animation optimization suggestions applied');

@@ -1,3 +1,4 @@
+import '../../../core/ui/app_segmented_selector.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,7 +153,6 @@ class _TrackingScreenState extends State<TrackingScreen>
       }
     } catch (e) {
       // Handle database errors gracefully
-      debugPrint('Error loading tracking data: $e');
     }
   }
 
@@ -259,7 +259,6 @@ class _TrackingScreenState extends State<TrackingScreen>
       }
     } catch (e) {
       // Handle save errors
-      debugPrint('Error saving tracking data: $e');
 
       if (mounted) {
         setState(() {
@@ -316,6 +315,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar with Date Selector
@@ -400,9 +400,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.6,
-                              ),
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                           Text(
@@ -481,186 +479,108 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   Widget _buildTabBar() {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: AppTheme.spaceLg),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [...AppTheme.shadowLg(Colors.black)],
       ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 56),
-        child: TabBar(
-          controller: _tabController,
-          isScrollable: false,
-          indicator: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          dividerColor: Colors.transparent,
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-          splashBorderRadius: BorderRadius.circular(12),
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: const EdgeInsets.symmetric(
-            horizontal: 4,
-            vertical: 4,
-          ),
-          labelPadding: EdgeInsets.zero,
-          tabAlignment: TabAlignment.fill,
-          labelColor: theme.colorScheme.onPrimary,
-          unselectedLabelColor: theme.colorScheme.onSurface.withValues(
-            alpha: 0.6,
-          ),
-          labelStyle: const TextStyle(fontWeight: AppTheme.fwBold, fontSize: 9),
-          tabs: [
-            Tab(
-              child: _buildTabContent(
-                Icons.water_drop,
-                AppLocalizations.of(context).flowTab,
-              ),
-            ),
-            Tab(
-              child: _buildTabContent(
-                Icons.health_and_safety,
-                AppLocalizations.of(context).symptomsTab,
-              ),
-            ),
-            Tab(
-              child: _buildTabContent(
-                Icons.mood,
-                AppLocalizations.of(context).moodTab,
-              ),
-            ),
-            Tab(
-              child: _buildTabContent(
-                Icons.healing,
-                AppLocalizations.of(context).painTab,
-              ),
-            ),
-            Tab(
-              child: _buildTabContent(
-                Icons.note_alt,
-                AppLocalizations.of(context).notesTab,
-              ),
-            ),
-          ],
-        ),
+      child: AnimatedBuilder(
+        animation: _tabController,
+        builder: (context, child) {
+          return AppSegmentedSelector(
+            labels: [
+              localizations.flowTab,
+              localizations.symptomsTab,
+              localizations.moodTab,
+              localizations.painTab,
+              localizations.notesTab,
+            ],
+            icons: const [
+              Icons.water_drop,
+              Icons.health_and_safety,
+              Icons.mood,
+              Icons.healing,
+              Icons.note_alt,
+            ],
+            selectedIndex: _tabController.index,
+            onSelected: (index) {
+              if (index != _tabController.index) {
+                _tabController.animateTo(index);
+              }
+            },
+          );
+        },
       ),
     ).animate().fadeIn(delay: 300.ms).slideY(begin: -0.2, end: 0);
-  }
-
-  Widget _buildTabContent(IconData icon, String label) {
-    final textScale = MediaQuery.textScalerOf(context).scale(1);
-    final horizontalPadding = textScale > 1.3 ? 2.0 : 6.0;
-    final verticalPadding = textScale > 1.3 ? 6.0 : 8.0;
-
-    return Semantics(
-      button: true,
-      label: label,
-      excludeSemantics: true,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding,
-          vertical: verticalPadding,
-        ),
-        child: Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 12),
-                const SizedBox(width: 2),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildFlowTab() {
     final theme = Theme.of(context);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceLg,
-        vertical: AppTheme.spaceXl,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Flow',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
-            ),
-          ).animate().fadeIn().slideX(begin: -0.2, end: 0),
+    return LayoutBuilder(
+      builder: (context, viewportConstraints) {
+        final flowTitleStyle = theme.textTheme.headlineSmall?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onSurface,
+        );
 
-          const SizedBox(height: 24),
+        final titlePainter =
+            TextPainter(
+              text: TextSpan(text: 'Flow', style: flowTitleStyle),
+              textDirection: Directionality.of(context),
+              textScaler: MediaQuery.textScalerOf(context),
+              maxLines: 1,
+            )..layout(
+              maxWidth: viewportConstraints.maxWidth - (AppTheme.spaceLg * 2),
+            );
 
-          // Modern flow intensity selector
-          FlowIntensityPicker(
-            selectedIntensity: _flowIntensity,
-            onIntensitySelected: (intensity) {
-              setState(() {
-                _flowIntensity = intensity;
-              });
-              _markUnsavedChanges();
-              HapticFeedback.selectionClick();
-            },
-          ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
+        // Only space ABOVE the grid is deducted.
+        // Insights and contextual feedback remain below the grid and scroll.
+        final gridBudget = viewportConstraints.hasBoundedHeight
+            ? (viewportConstraints.maxHeight -
+                      AppTheme.spaceXl -
+                      titlePainter.height -
+                      24)
+                  .clamp(0.0, double.infinity)
+                  .toDouble()
+            : null;
 
-          const SizedBox(height: 24),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.spaceLg,
+            vertical: AppTheme.spaceXl,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Flow',
+                style: flowTitleStyle,
+              ).animate().fadeIn().slideX(begin: -0.2, end: 0),
 
-          // Simplified AI insight
-          if (_flowIntensity != FlowIntensity.none)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.accentMint.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.accentMint.withValues(alpha: 0.1),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.lightbulb_outline,
-                    color: AppTheme.accentMint,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      _getFlowInsight(_flowIntensity),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.8,
-                        ),
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
-        ],
-      ),
+              const SizedBox(height: 24),
+
+              // Modern flow intensity selector
+              FlowIntensityPicker(
+                maxGridHeight: gridBudget,
+                selectedIntensity: _flowIntensity,
+                onIntensitySelected: (intensity) {
+                  setState(() {
+                    _flowIntensity = intensity;
+                  });
+                  _markUnsavedChanges();
+                  HapticFeedback.selectionClick();
+                },
+              ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -1301,22 +1221,5 @@ class _TrackingScreenState extends State<TrackingScreen>
     if (pain <= 3) return '😣';
     if (pain <= 4) return '😖';
     return '😫';
-  }
-
-  String _getFlowInsight(FlowIntensity intensity) {
-    switch (intensity) {
-      case FlowIntensity.none:
-        return 'Start tracking to get personalized insights';
-      case FlowIntensity.spotting:
-        return 'Light spotting is normal at the beginning or end of your cycle.';
-      case FlowIntensity.light:
-        return 'Light flow - stay hydrated and rest as needed.';
-      case FlowIntensity.medium:
-        return 'Normal flow pattern - you\'re doing great!';
-      case FlowIntensity.heavy:
-        return 'Heavy flow - monitor iron intake and rest.';
-      case FlowIntensity.veryHeavy:
-        return 'Very heavy flow - consider tracking for your doctor.';
-    }
   }
 }

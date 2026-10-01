@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:csv/csv.dart';
 import 'package:archive/archive.dart';
 
 import '../models/export_import_models.dart';
 import '../../security/services/security_privacy_service.dart';
 import '../../tracking/services/feelings_database_service.dart';
+import '../../../core/services/app_runtime_metadata_service.dart';
 
 /// Data export/import service for comprehensive data management
 class DataExportImportService {
@@ -54,9 +53,7 @@ class DataExportImportService {
       }
 
       _isInitialized = true;
-      debugPrint('📤 Data export/import service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize export/import service: $e');
       throw DataManagementException('Failed to initialize service: $e');
     }
   }
@@ -69,8 +66,6 @@ class DataExportImportService {
     if (!_isInitialized) await initialize();
 
     try {
-      debugPrint('📤 Starting data export with config: ${config.format.name}');
-
       // Collect all requested data
       final DataCollection dataCollection = await _collectUserData(config);
 
@@ -84,10 +79,8 @@ class DataExportImportService {
       // Save export metadata
       await _saveExportMetadata(result);
 
-      debugPrint('✅ Data export completed: ${result.filePath}');
       return result;
     } catch (e) {
-      debugPrint('❌ Failed to export data: $e');
       throw DataManagementException('Failed to export data: $e');
     }
   }
@@ -101,8 +94,6 @@ class DataExportImportService {
     if (!_isInitialized) await initialize();
 
     try {
-      debugPrint('📥 Starting data import from: $filePath');
-
       // Validate file
       final File importFile = File(filePath);
       if (!importFile.existsSync()) {
@@ -125,10 +116,8 @@ class DataExportImportService {
       // Save import history
       await _saveImportHistory(result);
 
-      debugPrint('✅ Data import completed: ${result.importedItems} items');
       return result;
     } catch (e) {
-      debugPrint('❌ Failed to import data: $e');
       throw DataManagementException('Failed to import data: $e');
     }
   }
@@ -182,7 +171,6 @@ class DataExportImportService {
         itemCount: exportResult.exportedItems,
       );
     } catch (e) {
-      debugPrint('❌ Failed to create automatic backup: $e');
       return BackupResult(
         success: false,
         message: 'Failed to create backup: $e',
@@ -200,8 +188,6 @@ class DataExportImportService {
     if (!_isInitialized) await initialize();
 
     try {
-      debugPrint('🔄 Starting restore from backup: $backupPath');
-
       // Import backup data
       final ImportConfig config = ImportConfig(
         mergeStrategy: overwriteExisting
@@ -224,7 +210,6 @@ class DataExportImportService {
         errors: importResult.errors,
       );
     } catch (e) {
-      debugPrint('❌ Failed to restore from backup: $e');
       return RestoreResult(
         success: false,
         message: 'Failed to restore: $e',
@@ -301,10 +286,8 @@ class DataExportImportService {
         }
       }
 
-      debugPrint('📊 Healthcare report generated: $zipPath');
       return zipPath;
     } catch (e) {
-      debugPrint('❌ Failed to generate healthcare report: $e');
       throw DataManagementException('Failed to generate healthcare report: $e');
     }
   }
@@ -330,7 +313,6 @@ class DataExportImportService {
           .cast<ExportMetadata>()
           .toList();
     } catch (e) {
-      debugPrint('❌ Failed to get export history: $e');
       return [];
     }
   }
@@ -356,7 +338,6 @@ class DataExportImportService {
           .cast<ImportMetadata>()
           .toList();
     } catch (e) {
-      debugPrint('❌ Failed to get import history: $e');
       return [];
     }
   }
@@ -403,9 +384,7 @@ class DataExportImportService {
             }
             break;
         }
-      } catch (e) {
-        debugPrint('⚠️ Failed to collect $dataType: $e');
-      }
+      } catch (e) {}
     }
 
     return collection;
@@ -736,7 +715,6 @@ class DataExportImportService {
 
       return entries.map((entry) => entry.toJson()).toList();
     } catch (e) {
-      debugPrint('⚠️ Failed to collect mood data: $e');
       return [];
     }
   }
@@ -777,7 +755,7 @@ class DataExportImportService {
     try {
       final security = SecurityPrivacyService.instance;
       final privacySettings = await security.getPrivacySettings();
-      final packageInfo = await PackageInfo.fromPlatform();
+      final packageInfo = await AppRuntimeMetadataService.instance.packageInfo;
 
       return {
         'privacy_settings': privacySettings.toJson(),

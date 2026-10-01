@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/widgets/app_header_components.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});
@@ -110,9 +111,10 @@ class _HelpScreenState extends State<HelpScreen> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
+        leading: AppBackButton(
           onPressed: () => Navigator.pop(context),
+          color: theme.iconTheme.color,
+          iconSize: 24,
         ),
       ),
       body: SingleChildScrollView(
@@ -430,7 +432,6 @@ class _HelpScreenState extends State<HelpScreen> {
         }
       }
     } catch (e) {
-      debugPrint('Email launch error: $e');
       _showEmailManualDialog();
     }
   }

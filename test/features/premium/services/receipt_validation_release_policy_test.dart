@@ -71,7 +71,7 @@ void main() {
       for (final methodName in <String>[
         'validateAppleReceipt',
         'validateGooglePlayReceipt',
-        'verifySubscriptionActive',
+        'fetchSubscriptionStatus',
       ]) {
         expect(
           invocationArguments(methodName),

@@ -29,6 +29,7 @@ import 'account_management_screen.dart';
 import 'dart:io';
 
 import '../../../core/widgets/medical_sources_dialog.dart';
+import '../../premium/widgets/premium_upgrade_prompt.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -97,51 +98,35 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: SafeArea(
           child: CustomScrollView(
             slivers: [
-              // Custom App Bar
-              SliverAppBar(
-                expandedHeight: 96,
-                floating: false,
-                pinned: false,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: const EdgeInsets.only(left: 60, bottom: 12),
-                  title: Row(
+              // Fixed Settings header.
+              // SafeArea already owns the system inset. Do not add expanded
+              // or collapsing app-bar geometry here.
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  child: Row(
                     children: [
-                      Container(
-                            width: 32,
-                            height: 32,
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppTheme.primaryRose,
-                                  AppTheme.primaryPurple,
-                                ],
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.settings,
-                              color: Colors.white,
-                              size: 18,
-                            ),
+                      Icon(
+                            Icons.settings,
+                            size: 24,
+                            color: theme.colorScheme.primary,
                           )
                           .animate(controller: _headerController)
                           .scale(begin: const Offset(0, 0))
                           .fadeIn(),
-                      const SizedBox(width: 12),
-                      Text(
-                            l10n.settings,
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          )
-                          .animate(controller: _headerController)
-                          .slideX(begin: -0.3, end: 0)
-                          .fadeIn(delay: 200.ms),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child:
+                            Text(
+                                  l10n.settings,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppPageTypography.title(context),
+                                )
+                                .animate(controller: _headerController)
+                                .slideX(begin: -0.3, end: 0)
+                                .fadeIn(delay: 200.ms),
+                      ),
                     ],
                   ),
                 ),
@@ -166,6 +151,33 @@ class _SettingsScreenState extends State<SettingsScreen>
                           .animate(controller: _sectionsController)
                           .slideY(begin: 0.3, end: 0)
                           .fadeIn(delay: 50.ms),
+
+                      const SizedBox(height: 24),
+
+                      // Premium — permanent reviewer-visible entry point.
+                      SettingsSection(
+                            title: 'Premium',
+                            icon: Icons.workspace_premium_outlined,
+                            children: [
+                              SettingsTile(
+                                leading: const Icon(
+                                  Icons.diamond_outlined,
+                                  color: AppTheme.primaryPurple,
+                                ),
+                                title: 'Flow Ai Premium',
+                                subtitle:
+                                    'View Monthly and Yearly subscription options',
+                                onTap: () => context.push('/premium'),
+                                trailing: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                ),
+                              ),
+                            ],
+                          )
+                          .animate(controller: _sectionsController)
+                          .slideY(begin: 0.3, end: 0)
+                          .fadeIn(delay: 75.ms),
 
                       const SizedBox(height: 24),
 
@@ -823,18 +835,8 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  void _showAbout(BuildContext context) {
-    showAboutDialog(
-      context: context,
-      applicationName: 'Flow Ai',
-      applicationVersion: '2.0.0',
-      applicationLegalese: '© 2026 Flow Ai. All rights reserved.',
-      children: [
-        const Text(
-          'AI-powered menstrual cycle tracking for better reproductive health.',
-        ),
-      ],
-    );
+  Future<void> _showAbout(BuildContext context) async {
+    await AdaptiveMessages.showFlowAiAbout(context);
   }
 
   void _showHealthKitFullDisclosure(BuildContext context) {
@@ -1254,7 +1256,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _launchPrivacyPolicy() async {
-    final url = Uri.parse('https://flowai.app/privacy');
+    final url = Uri.parse('https://flowai-demo-project.web.app/privacy.html');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }
@@ -1279,7 +1281,6 @@ class _SettingsScreenState extends State<SettingsScreen>
         }
       }
     } catch (e) {
-      debugPrint('Error launching WhatsApp: $e');
       if (mounted) {
         AdaptiveMessages.showError(context, 'Could not open WhatsApp');
       }
@@ -1303,64 +1304,25 @@ class _SettingsScreenState extends State<SettingsScreen>
         }
       }
     } catch (e) {
-      debugPrint('Error launching Telegram: $e');
       if (mounted) {
         AdaptiveMessages.showError(context, 'Could not open Telegram');
       }
     }
   }
 
-  void _showSignOutDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        final theme = Theme.of(dialogContext);
-
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          icon: const Icon(
-            Icons.logout_rounded,
-            color: AppTheme.primaryRose,
-            size: 28,
-          ),
-          title: const Text('Sign out?', textAlign: TextAlign.center),
-          content: const Text(
-            'Return to the sign-in screen?',
-            textAlign: TextAlign.center,
-          ),
-          actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-          buttonPadding: const EdgeInsets.symmetric(horizontal: 4),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              style: TextButton.styleFrom(
-                foregroundColor: theme.colorScheme.onSurface,
-                minimumSize: const Size(112, 48),
-              ),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                _handleSignOut();
-              },
-              style: FilledButton.styleFrom(
-                backgroundColor: AppTheme.primaryRose,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(112, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Sign out'),
-            ),
-          ],
-        );
-      },
+  Future<void> _showSignOutDialog(BuildContext context) async {
+    final confirmed = await AdaptiveMessages.showConfirmation(
+      context,
+      title: 'Sign out?',
+      message: 'Return to the sign-in screen?',
+      confirmText: 'Sign out',
+      icon: Icons.logout_rounded,
+      accentColor: AppTheme.primaryRose,
     );
+
+    if (!confirmed || !mounted) return;
+
+    await _handleSignOut();
   }
 
   Future<void> _handleSignOut() async {
@@ -1482,6 +1444,17 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _exportData(BuildContext context, ExportFormat format) async {
+    if (format == ExportFormat.pdf || format == ExportFormat.csv) {
+      final allowed = await checkPremiumAccess(
+        context,
+        featureTitle: 'Premium Export',
+        featureDescription:
+            'PDF and CSV health reports are available with Flow Ai Premium.',
+        feature: 'data_export',
+      );
+      if (!allowed || !context.mounted) return;
+    }
+
     // Show date range selector
     final dateRange = await _showDateRangeSelector(context);
     if (dateRange == null || !context.mounted) return;

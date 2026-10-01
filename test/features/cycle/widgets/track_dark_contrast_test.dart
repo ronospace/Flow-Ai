@@ -73,7 +73,7 @@ void main() {
     ).readAsStringSync();
 
     expect(source, isNot(contains('height: 300')));
-    expect(source, contains('BorderRadius.circular(16)'));
+    expect(source, contains('BorderRadius.circular(AppGeometry.radiusSm)'));
     expect(source, contains('surfaceContainerHighest'));
     expect(source, contains('onSurfaceVariant'));
     expect(source, contains('AnimatedBuilder('));

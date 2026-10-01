@@ -134,6 +134,60 @@ class AdvancedBiometricService {
   AdvancedBiometricService._internal();
 
   bool _isInitialized = false;
+  HealthConnectSdkStatus? _healthConnectSdkStatus;
+
+  HealthConnectSdkStatus? get healthConnectSdkStatus => _healthConnectSdkStatus;
+
+  bool get isHealthConnectAvailable =>
+      !Platform.isAndroid ||
+      _healthConnectSdkStatus == HealthConnectSdkStatus.sdkAvailable;
+
+  bool get requiresHealthConnectInstallOrUpdate =>
+      Platform.isAndroid &&
+      _healthConnectSdkStatus ==
+          HealthConnectSdkStatus.sdkUnavailableProviderUpdateRequired;
+
+  bool get isHealthConnectUnsupported =>
+      Platform.isAndroid &&
+      _healthConnectSdkStatus == HealthConnectSdkStatus.sdkUnavailable;
+
+  Future<void> installHealthConnect() async {
+    if (!Platform.isAndroid) return;
+
+    final health = _health ?? Health();
+    await health.installHealthConnect();
+  }
+
+  Future<bool> hasCurrentAndroidHealthPermissions() async {
+    if (!Platform.isAndroid) return false;
+
+    try {
+      _health ??= Health();
+      await _health!.configure();
+
+      _healthConnectSdkStatus = await _health!.getHealthConnectSdkStatus();
+      if (_healthConnectSdkStatus != HealthConnectSdkStatus.sdkAvailable) {
+        return false;
+      }
+
+      final permissions = _platformDataTypes
+          .map((type) => HealthDataAccess.READ)
+          .toList();
+
+      final granted = await _health!.hasPermissions(
+        _platformDataTypes,
+        permissions: permissions,
+      );
+
+      return granted == true;
+    } catch (error) {
+      AppLogger.error(
+        'Failed to verify current Android health permissions: $error',
+      );
+      return false;
+    }
+  }
+
   bool get isInitialized => _isInitialized;
 
   Health? _health;
@@ -177,19 +231,11 @@ class AdvancedBiometricService {
   ];
 
   static const List<HealthDataType> _androidDataTypes = [
+    // Google Play Health Connect minimum-scope release policy:
+    // request only data required by current production features.
     HealthDataType.HEART_RATE,
-    HealthDataType.RESTING_HEART_RATE,
-    HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
     HealthDataType.BODY_TEMPERATURE,
     HealthDataType.SLEEP_ASLEEP,
-    HealthDataType.SLEEP_AWAKE,
-    HealthDataType.SLEEP_DEEP,
-    HealthDataType.SLEEP_REM,
-    HealthDataType.STEPS,
-    HealthDataType.ACTIVE_ENERGY_BURNED,
-    HealthDataType.BLOOD_OXYGEN,
-    HealthDataType.RESPIRATORY_RATE,
-    HealthDataType.WATER,
     HealthDataType.MENSTRUATION_FLOW,
   ];
 
@@ -231,8 +277,9 @@ class AdvancedBiometricService {
       await _health!.configure();
 
       if (Platform.isAndroid) {
-        final healthConnectAvailable = await _health!
-            .isHealthConnectAvailable();
+        _healthConnectSdkStatus = await _health!.getHealthConnectSdkStatus();
+        final healthConnectAvailable =
+            _healthConnectSdkStatus == HealthConnectSdkStatus.sdkAvailable;
 
         if (!healthConnectAvailable) {
           _isInitialized = false;
@@ -276,6 +323,46 @@ class AdvancedBiometricService {
     }
   }
 
+  /// Explicit user-initiated health authorization.
+  ///
+  /// This must remain separate from [initialize] because the canonical health
+  /// service may already have been initialized by another feature before the
+  /// user presses Connect. In that state initialize() is intentionally
+  /// idempotent and must not be relied upon to relaunch platform permissions.
+  Future<bool> requestHealthAuthorization() async {
+    if (kIsWeb || (!Platform.isIOS && !Platform.isAndroid)) {
+      return false;
+    }
+
+    try {
+      _health ??= Health();
+      await _health!.configure();
+
+      if (Platform.isAndroid) {
+        _healthConnectSdkStatus = await _health!.getHealthConnectSdkStatus();
+        if (_healthConnectSdkStatus != HealthConnectSdkStatus.sdkAvailable) {
+          return false;
+        }
+      }
+
+      final granted = await _requestHealthPermissions();
+      if (!granted) {
+        return false;
+      }
+
+      if (!_isInitialized) {
+        await _setupHealthDataMonitoring();
+        _isInitialized = true;
+        _startPeriodicSync();
+      }
+
+      return true;
+    } catch (error) {
+      AppLogger.error('Failed to authorize health access: $error');
+      return false;
+    }
+  }
+
   /// Request health data permissions
   /// NOTE: Health data transparency disclosure MUST be shown BEFORE calling this.
   Future<bool> _requestHealthPermissions() async {
@@ -287,10 +374,36 @@ class AdvancedBiometricService {
           .map((type) => HealthDataAccess.READ)
           .toList();
 
-      return await _health!.requestAuthorization(
+      if (Platform.isAndroid) {
+        final alreadyGranted = await _health!.hasPermissions(
+          _platformDataTypes,
+          permissions: permissions,
+        );
+
+        if (alreadyGranted == true) {
+          return true;
+        }
+      }
+
+      final authorizationGranted = await _health!.requestAuthorization(
         _platformDataTypes,
         permissions: permissions,
       );
+
+      if (authorizationGranted) {
+        return true;
+      }
+
+      if (Platform.isAndroid) {
+        final grantedAfterRequest = await _health!.hasPermissions(
+          _platformDataTypes,
+          permissions: permissions,
+        );
+
+        return grantedAfterRequest == true;
+      }
+
+      return false;
     } catch (e) {
       AppLogger.error('Failed to request health permissions: $e');
       return false;
@@ -686,6 +799,18 @@ class AdvancedBiometricService {
     return recentData;
   }
 
+  /// Refresh authoritative health-store data before building a snapshot.
+  ///
+  /// Connection state must not wait for this potentially slower data sync.
+  Future<BiometricSnapshot> refreshCurrentBiometricSnapshot() async {
+    if (!_isInitialized || _health == null) {
+      return BiometricSnapshot.empty();
+    }
+
+    await _syncHealthData();
+    return getCurrentBiometricSnapshot();
+  }
+
   /// Get biometric snapshot for current moment
   Future<List<BiometricHistoryPoint>> getHistoricalSleepHours({
     required DateTime start,
@@ -798,6 +923,13 @@ class AdvancedBiometricService {
     required DateTime start,
     required DateTime end,
   }) async {
+    // Google Play Health Connect minimum-scope policy:
+    // Steps access is intentionally disabled on Android because Steps is not
+    // part of the approved/current Android Health Connect scope.
+    if (Platform.isAndroid) {
+      return const <BiometricHistoryPoint>[];
+    }
+
     if (!start.isBefore(end)) {
       return const <BiometricHistoryPoint>[];
     }

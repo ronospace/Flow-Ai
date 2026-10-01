@@ -259,7 +259,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSent
-                              ? AppTheme.primaryRose.withOpacity(0.35)
+                              ? AppTheme.primaryRose.withValues(alpha: 0.35)
                               : AppTheme.primaryRose,
                           foregroundColor: Colors.white,
                           minimumSize: const Size(double.infinity, 56),

@@ -105,6 +105,48 @@ class PartnerCloudGateway {
     });
   }
 
+  /// Resolves the authenticated account's authoritative active partnership.
+  Future<Map<String, dynamic>?> fetchCurrentPartnership() async {
+    await _requireCloudIdentity();
+
+    final raw = await _invoke(
+      'getPartnerConnection',
+      const <String, dynamic>{},
+    );
+
+    if (raw is! Map) {
+      throw StateError('Invalid partner connection response.');
+    }
+
+    final response = Map<String, dynamic>.from(raw);
+    final partnership = response['partnership'];
+
+    if (partnership == null) {
+      return null;
+    }
+
+    if (partnership is! Map) {
+      throw StateError('Invalid partnership response.');
+    }
+
+    final normalized = Map<String, dynamic>.from(partnership);
+
+    const requiredKeys = <String>{
+      'id',
+      'userId1',
+      'userId2',
+      'establishedAt',
+      'status',
+      'privacySettings',
+    };
+
+    if (!requiredKeys.every(normalized.containsKey)) {
+      throw StateError('Partner connection response is incomplete.');
+    }
+
+    return normalized;
+  }
+
   /// Accepts an invitation and returns the legacy Partnership JSON shape.
   Future<Map<String, dynamic>> acceptInvitation(String invitationCode) async {
     await _requireCloudIdentity();

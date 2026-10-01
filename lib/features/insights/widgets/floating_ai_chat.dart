@@ -29,8 +29,7 @@ class FloatingAIChat extends StatefulWidget {
 }
 
 class _FloatingAIChatState extends State<FloatingAIChat>
-    with TickerProviderStateMixin {
-  static const double _floatingChatGap = 8;
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   static const _thinkingDelay = Duration(milliseconds: 900);
   late AnimationController _fabController;
   late AnimationController _chatController;
@@ -63,6 +62,26 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late TextEditingController _textController;
   late FocusNode _inputFocusNode;
 
+  // IME transition ownership.
+  //
+  // Focus gives us the earliest reliable OPEN intent.
+  // Window metrics give us physical IME progress/completion.
+  //
+  // Android can emit one or more zero-inset metrics callbacks
+  // after focus is gained but before the IME starts becoming
+  // physically visible. Those callbacks must not reverse Zyra
+  // back to its keyboard-closed presentation.
+  bool _awaitingPhysicalImeOpen = false;
+  bool _hasObservedPhysicalIme = false;
+
+  // Visual chrome state is intentionally separate from IME safety state.
+  //
+  // The shell remains keyboard-active until physical dismissal completes.
+  // Chrome expansion begins with the first physical falling IME frame so
+  // the header visually follows the keyboard instead of reacting afterward.
+  bool _imeChromeCompact = false;
+  double _lastPhysicalImeInset = 0.0;
+
   // For resize gesture
   // ignore: unused_field
   double _initialHeight = 0;
@@ -70,6 +89,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     _fabController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -86,15 +106,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       vsync: this,
     );
 
-    _pulseController =
-        AnimationController(
-            duration: const Duration(milliseconds: 950),
-            vsync: this,
-          )
-          ..addListener(() {
-            if (mounted) setState(() {});
-          })
-          ..repeat(reverse: true);
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 950),
+      vsync: this,
+    )..repeat(reverse: true);
 
     _fabAnimation = CurvedAnimation(
       parent: _fabController,
@@ -115,9 +130,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _inputFocusNode = FocusNode()
       ..addListener(() {
-        _shellController.setKeyboardVisibility(_inputFocusNode.hasFocus);
+        if (!_inputFocusNode.hasFocus) return;
 
-        if (mounted) setState(() {});
+        _awaitingPhysicalImeOpen = true;
+        _shellController.setKeyboardVisibility(true);
       });
 
     // Initialize chat service after first build to get localizations
@@ -148,7 +164,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         Future.delayed(_thinkingDelay, () {
           if (!mounted) return;
 
-          final keyboardOpen = _inputFocusNode.hasFocus;
+          final keyboardOpen = _shellController.isKeyboardVisible;
 
           _shellController.setTyping(false);
 
@@ -169,7 +185,70 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+
+    if (!mounted) return;
+
+    final view = View.maybeOf(context);
+    if (view == null) return;
+
+    final rawImeInset = view.viewInsets.bottom;
+    final previousImeInset = _lastPhysicalImeInset;
+    final physicalImeVisible = rawImeInset > 0;
+
+    final openingStarted = rawImeInset > 0 && previousImeInset <= 0;
+
+    final closingStarted =
+        rawImeInset > 0 &&
+        previousImeInset > 0 &&
+        rawImeInset < previousImeInset;
+
+    if (openingStarted && !_imeChromeCompact) {
+      setState(() {
+        _imeChromeCompact = true;
+      });
+    } else if (closingStarted && _imeChromeCompact) {
+      setState(() {
+        _imeChromeCompact = false;
+      });
+    }
+
+    _lastPhysicalImeInset = rawImeInset;
+
+    if (physicalImeVisible) {
+      _hasObservedPhysicalIme = true;
+      _awaitingPhysicalImeOpen = false;
+      _shellController.setKeyboardVisibility(true);
+      return;
+    }
+
+    // A zero inset immediately after focus gain is an Android
+    // pre-open metrics frame, not a genuine keyboard close.
+    if (_awaitingPhysicalImeOpen && _inputFocusNode.hasFocus) {
+      return;
+    }
+
+    // Once the physical IME has actually been observed, a later
+    // zero inset is authoritative completion of the close.
+    if (_hasObservedPhysicalIme) {
+      _hasObservedPhysicalIme = false;
+      _awaitingPhysicalImeOpen = false;
+      _shellController.setKeyboardVisibility(false);
+      return;
+    }
+
+    // Covers a cancelled open or a normal closed/unfocused state.
+    if (!_inputFocusNode.hasFocus) {
+      _awaitingPhysicalImeOpen = false;
+      _shellController.setKeyboardVisibility(false);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
     // Ensure animations are stopped and controllers disposed properly
     _fabController.stop();
     _chatController.stop();
@@ -271,13 +350,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   Widget build(BuildContext context) {
-    // // // // debugPrint("SCREEN HEIGHT: ");
-    // // debugPrint("SAFE TOP: ");
-    // // debugPrint("SAFE BOTTOM: ");
-    // // // // debugPrint("VIEW INSETS (keyboard): ");
-
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+
+    final keyboardOpen =
+        _shellController.isKeyboardVisible || keyboardInset > 0;
+
     final forceMaxMode = keyboardOpen || _shellController.isFullScreen;
 
     return Stack(
@@ -285,14 +363,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         // Enhanced Chat Interface - NO OVERLAY
         if (_shellController.isExpanded)
           AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
+            duration: Duration.zero,
+            curve: Curves.linear,
             right: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
             left: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
             top: forceMaxMode ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom:
                 MediaQuery.of(context).padding.bottom +
-                MediaQuery.of(context).viewInsets.bottom +
+                keyboardInset +
                 (forceMaxMode ? 0 : AppLayoutMetrics.gap),
             child: AnimatedBuilder(
               animation: _chatAnimation,
@@ -330,34 +408,45 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       child: Column(
                         children: [
                           // Enhanced Draggable Header with Controls
-                          _buildEnhancedHeader(theme, compact: keyboardOpen),
+                          AnimatedSize(
+                            duration: Duration(
+                              milliseconds: _imeChromeCompact ? 284 : 267,
+                            ),
+                            curve: Curves.linear,
+                            alignment: Alignment.topCenter,
+                            clipBehavior: Clip.hardEdge,
+                            child: AnimatedBuilder(
+                              animation: _pulseController,
+                              builder: (context, child) {
+                                return _buildEnhancedHeader(
+                                  theme,
+                                  compact: _imeChromeCompact,
+                                );
+                              },
+                            ),
+                          ),
 
                           // Main content area - improved spacing
                           Expanded(child: _buildChatArea(theme)),
 
-                          // Suggested Questions (above input)
-                          AnimatedSize(
-                            duration: const Duration(milliseconds: 220),
-                            curve: Curves.easeOutCubic,
-                            child: keyboardOpen
-                                ? const SizedBox.shrink()
-                                : Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      16,
-                                      4,
-                                      16,
-                                      2,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 4),
-                                      child: _buildEnhancedQuickReplies(theme),
-                                    ),
-                                  ),
-                          ),
+                          // Suggested Questions (above input).
+                          //
+                          // During an IME transition this section must leave
+                          // the vertical layout immediately. Animating its
+                          // height while Android simultaneously reduces the
+                          // viewport causes a transient RenderFlex overflow.
+                          if (!keyboardOpen)
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: _buildEnhancedQuickReplies(theme),
+                              ),
+                            ),
 
                           // Input Area (last = primary)
                           SizedBox(
-                            height: MediaQuery.of(context).size.width > 900
+                            height: AppLayoutMetrics.isWiderThanTablet(context)
                                 ? 0
                                 : 8,
                           ),
@@ -746,7 +835,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     child: Text(
                       _getInsightsBannerText(),
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize:
+                            Theme.of(context).platform == TargetPlatform.iOS
+                            ? 11.5
+                            : 12,
                         color: Colors.white.withValues(alpha: 0.9),
                         fontWeight: FontWeight.w400,
                       ),

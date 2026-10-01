@@ -1,11 +1,19 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 import '../utils/app_logger.dart';
+import 'app_runtime_metadata_service.dart';
 
 /// Production-ready analytics and monitoring service
 /// Tracks user behavior, app performance, and business metrics
 class ProductionAnalyticsService {
+  static const bool _runtimeDiagnosticsEnabled = bool.fromEnvironment(
+    'FLOW_AI_RUNTIME_DIAGNOSTICS',
+    defaultValue: false,
+  );
+
   static final ProductionAnalyticsService _instance =
       ProductionAnalyticsService._internal();
   factory ProductionAnalyticsService() => _instance;
@@ -19,7 +27,6 @@ class ProductionAnalyticsService {
   Map<String, dynamic> _sessionData = {};
 
   static const String _keyAnalyticsEnabled = 'analytics_enabled';
-  static const String _keyUserId = 'user_id';
   static const String _keySessionData = 'session_data';
   static const String _keyAppEvents = 'app_events';
 
@@ -31,11 +38,13 @@ class ProductionAnalyticsService {
     try {
       _prefs = await SharedPreferences.getInstance();
       _analyticsEnabled = _prefs?.getBool(_keyAnalyticsEnabled) ?? false;
-      _userId = userId ?? _prefs?.getString(_keyUserId);
+      _userId = userId;
+      final appVersion =
+          await AppRuntimeMetadataService.instance.versionWithBuild;
 
       _sessionData = {
         'session_start': DateTime.now().toIso8601String(),
-        'app_version': '2.0.0+2',
+        'app_version': appVersion,
         'platform': defaultTargetPlatform.name,
         'session_id': _generateSessionId(),
       };
@@ -58,6 +67,35 @@ class ProductionAnalyticsService {
     }
   }
 
+  /// Bind analytics attribution to the current authenticated account.
+  ///
+  /// Account changes clear queued account-attributed events before the new
+  /// identity is accepted, preventing cross-account attribution.
+  Future<void> setAuthenticatedUser(String? userId) async {
+    if (!_isInitialized) {
+      await initialize(userId: userId);
+      return;
+    }
+
+    if (_userId == userId) return;
+
+    await _prefs?.remove(_keyAppEvents);
+    await _prefs?.remove(_keySessionData);
+
+    _userId = userId;
+    final appVersion =
+        await AppRuntimeMetadataService.instance.versionWithBuild;
+
+    _sessionData = {
+      'session_start': DateTime.now().toIso8601String(),
+      'app_version': appVersion,
+      'platform': defaultTargetPlatform.name,
+      'session_id': _generateSessionId(),
+    };
+
+    AppLogger.info('Production analytics account scope updated');
+  }
+
   /// Track user events for analytics
   Future<void> trackEvent(
     String eventName,
@@ -69,20 +107,66 @@ class ProductionAnalyticsService {
       final event = {
         'event_name': eventName,
         'timestamp': DateTime.now().toIso8601String(),
-        'user_id': _userId,
         'session_id': _sessionData['session_id'],
         'properties': properties,
       };
 
       await _storeEvent(event);
-
-      // In production, you would send this to your analytics service
-      // For now, we'll log it for development
-      if (kDebugMode) {
-        AppLogger.info('Analytics Event: $eventName - ${jsonEncode(event)}');
-      }
     } catch (e) {
       AppLogger.error('Failed to track event: $eventName', e);
+    }
+  }
+
+  /// Release-validation navigation diagnostics.
+  ///
+  /// Disabled by default and enabled only with
+  /// --dart-define=FLOW_AI_RUNTIME_DIAGNOSTICS=true.
+  /// Persists route paths only; no user identity or route arguments.
+  Future<void> recordNavigationDiagnostic({
+    required String path,
+    String? previousPath,
+  }) async {
+    if (!_runtimeDiagnosticsEnabled) return;
+    if (path.isEmpty) return;
+
+    try {
+      final Directory directory;
+      if (Platform.isAndroid) {
+        directory =
+            await getExternalStorageDirectory() ??
+            await getApplicationSupportDirectory();
+      } else {
+        directory = await getApplicationSupportDirectory();
+      }
+
+      final file = File('${directory.path}/flow_runtime_navigation.jsonl');
+
+      final safePath = path.replaceAll('"', r'\"');
+      final safePrevious = previousPath?.replaceAll('"', r'\"');
+
+      final line = StringBuffer()
+        ..write('{"ts":"')
+        ..write(DateTime.now().toUtc().toIso8601String())
+        ..write('","type":"navigation","route":"')
+        ..write(safePath)
+        ..write('"');
+
+      if (safePrevious != null && safePrevious.isNotEmpty) {
+        line
+          ..write(',"previous":"')
+          ..write(safePrevious)
+          ..write('"');
+      }
+
+      line.write('}\n');
+
+      await file.writeAsString(
+        line.toString(),
+        mode: FileMode.append,
+        flush: true,
+      );
+    } catch (e) {
+      AppLogger.error('Failed to persist runtime navigation diagnostic', e);
     }
   }
 
@@ -107,6 +191,52 @@ class ProductionAnalyticsService {
       'action': action,
       'timestamp': DateTime.now().toIso8601String(),
       ...?context,
+    });
+  }
+
+  /// Track monetization user actions without store credentials or receipt data.
+  Future<void> trackMonetizationAction(
+    String action, {
+    String? platform,
+    String? productId,
+    String? result,
+  }) async {
+    await trackUserAction(
+      action,
+      context: <String, dynamic>{
+        if (platform != null) 'platform': platform,
+        if (productId != null) 'product_id': productId,
+        if (result != null) 'result': result,
+      },
+    );
+  }
+
+  /// Track ad lifecycle using non-sensitive operational metadata only.
+  Future<void> trackAdLifecycle(
+    String phase, {
+    required String format,
+    String? result,
+  }) async {
+    await trackEvent('ad_lifecycle', <String, dynamic>{
+      'phase': phase,
+      'format': format,
+      if (result != null) 'result': result,
+    });
+  }
+
+  /// Track consent lifecycle without consent strings, identifiers or PII.
+  Future<void> trackConsentLifecycle(
+    String phase, {
+    bool? canRequestAds,
+    bool? privacyOptionsRequired,
+    String? result,
+  }) async {
+    await trackEvent('consent_lifecycle', <String, dynamic>{
+      'phase': phase,
+      if (canRequestAds != null) 'can_request_ads': canRequestAds,
+      if (privacyOptionsRequired != null)
+        'privacy_options_required': privacyOptionsRequired,
+      if (result != null) 'result': result,
     });
   }
 
@@ -230,7 +360,6 @@ class ProductionAnalyticsService {
       'total_events': events.length,
       'session_data': _sessionData,
       'analytics_enabled': _analyticsEnabled,
-      'user_id': _userId,
       'recent_events': events.take(10).toList(),
     };
   }
@@ -289,6 +418,9 @@ class ProductionAnalyticsService {
   Future<void> clearAnalyticsData() async {
     await _prefs?.remove(_keyAppEvents);
     await _prefs?.remove(_keySessionData);
+
+    _userId = null;
+    _sessionData = {};
 
     AppLogger.info('Analytics data cleared');
   }

@@ -1,0 +1,16 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.flowai.app",
+      "sha256_cert_fingerprints": [
+        "9E:06:A7:5C:C1:01:91:8C:20:90:3F:5E:05:9C:D3:5D:4F:30:F7:8C:CD:C2:DA:AA:29:D4:52:0E:85:D8:39:8D",
+        "F3:A9:C6:76:A1:A8:00:F6:DF:35:5B:49:D2:92:E6:27:3A:7C:83:95:B5:6C:5D:19:E8:DF:56:E8:8C:7A:FB:D6",
+        "D5:FE:F1:81:BA:09:75:43:AD:84:00:D2:C9:7B:41:0F:1E:E6:79:B4:4E:8D:0C:6E:74:3F:B2:19:F2:4F:7F:F2"
+      ]
+    }
+  }
+]

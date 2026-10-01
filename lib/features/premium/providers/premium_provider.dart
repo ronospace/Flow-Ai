@@ -63,11 +63,8 @@ class PremiumProvider extends ChangeNotifier {
       await _loadSubscriptionData();
       await _loadFeatures();
       await _loadUsageData();
-
-      debugPrint('✅ PremiumProvider initialized');
     } catch (e) {
       _setError('Failed to initialize premium features: $e');
-      debugPrint('❌ PremiumProvider initialization failed: $e');
     } finally {
       _setLoading(false);
     }
@@ -87,7 +84,21 @@ class PremiumProvider extends ChangeNotifier {
       case 'advancedAI':
         return provider?.hasUnlimitedInsights ?? false;
       case 'prioritySupport':
-        return provider?.hasPrioritySupport ?? false;
+        // Serialized legacy key retained for backward compatibility.
+        // No differentiated priority-support service exists in this release.
+        return false;
+      case 'healthcareIntegration':
+        // Serialized legacy key retained for backward compatibility.
+        // This capability is not release-proven.
+        return false;
+      case 'biometricSync':
+        // Serialized legacy key retained for backward compatibility.
+        // This capability is not release-proven.
+        return false;
+      case 'multiUserProfiles':
+        // Serialized legacy key retained for backward compatibility.
+        // This capability is not release-proven.
+        return false;
       case 'advancedAnalytics':
         return provider?.hasAdvancedAnalytics ?? false;
       default:
@@ -164,9 +175,7 @@ class PremiumProvider extends ChangeNotifier {
       _notifyListeners();
 
       // TODO: Persist usage data to local storage or analytics service
-    } catch (e) {
-      debugPrint('⚠️ Failed to record feature usage: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get remaining usage for a feature
@@ -207,9 +216,7 @@ class PremiumProvider extends ChangeNotifier {
       await _premiumService.checkSubscriptionStatus();
       await _loadSubscriptionData();
       _notifyListeners();
-    } catch (e) {
-      debugPrint('⚠️ Failed to check subscription status: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get premium analytics
@@ -217,7 +224,6 @@ class PremiumProvider extends ChangeNotifier {
     try {
       return await _premiumService.getPremiumAnalytics();
     } catch (e) {
-      debugPrint('⚠️ Failed to get premium analytics: $e');
       return {};
     }
   }
@@ -286,7 +292,6 @@ class PremiumProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    debugPrint('🗑️ PremiumProvider disposed');
     _subscriptionProvider?.removeListener(_handleSubscriptionChanged);
     super.dispose();
   }

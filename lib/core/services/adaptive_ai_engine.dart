@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
 import 'ai_engine.dart';
@@ -37,9 +36,6 @@ class AdaptiveAIEngine {
   Future<void> initialize() async {
     await _baseEngine.initialize();
 
-    debugPrint(
-      '🧠 Initializing Adaptive AI Engine (Blueprint Implementation)...',
-    );
 
     // Initialize hormone-aware model
     _hormoneAwareModel = {
@@ -70,9 +66,6 @@ class AdaptiveAIEngine {
       'personalized_factors': _initializePersonalizationFactors(),
     };
 
-    debugPrint(
-      '✅ Adaptive AI Engine initialized with self-correction capabilities',
-    );
   }
 
   /// Blueprint Feature: Self-correcting prediction with hormone awareness
@@ -84,7 +77,6 @@ class AdaptiveAIEngine {
   }) async {
     if (!isInitialized) await initialize();
 
-    debugPrint('🔮 Generating adaptive prediction with self-correction...');
 
     // Base prediction using enhanced algorithms
     final basePrediction = await _baseEngine.predictNextCycle(historicalCycles);
@@ -172,10 +164,6 @@ class AdaptiveAIEngine {
     // Update self-correction parameters
     await _updateSelfCorrectionModel(error);
 
-    debugPrint(
-      '🎯 Learning from prediction accuracy: ${error.overallAccuracy}%',
-    );
-    debugPrint('🔄 Self-correction weights updated for user');
   }
 
   /// Hormone-aware prediction corrections
@@ -606,13 +594,11 @@ class AdaptiveAIEngine {
   /// Adjust hormone-aware model based on corrections
   Future<void> _adjustHormoneAwareModel(PredictionCorrection correction) async {
     // Adjust hormone model parameters based on actual data
-    debugPrint('Adjusting hormone model based on correction');
   }
 
   /// Update self-correction model parameters
   Future<void> _updateSelfCorrectionModel(PredictionError error) async {
     // Update self-correction parameters
-    debugPrint('Updating self-correction model: ${error.overallAccuracy}');
   }
 
   // Duplicate method removed - using the one defined earlier

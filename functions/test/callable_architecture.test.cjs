@@ -482,12 +482,10 @@ void function flowAiAuthenticationIntegrityContracts() {
     async () => {
       const primitivePath = flowAiPath.resolve(
         flowAiFunctionsRoot,
-        "src/partner_security_primitives.ts"
+        "lib/partner_security_primitives.js"
       );
 
-      const primitive = await import(
-        flowAiPathToFileURL(primitivePath).href
-      );
+      const primitive = require(primitivePath);
 
       flowAiAssert.equal(
         typeof primitive.requireAuthenticatedUid,

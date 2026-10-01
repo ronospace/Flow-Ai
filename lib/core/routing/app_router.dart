@@ -4,6 +4,12 @@ import '../services/app_lock_service.dart';
 import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import '../services/admob_service.dart';
+import '../services/ad_consent_service.dart';
+import '../identity/active_account_scope.dart';
+import '../../features/premium/providers/subscription_provider.dart';
 import '../constants/app_layout.dart';
 
 import '../../features/onboarding/screens/splash_screen.dart';
@@ -12,6 +18,7 @@ import '../../features/onboarding/screens/setup_screen.dart';
 import '../../features/auth/screens/auth_screen.dart';
 import '../../features/auth/screens/auth_choice_screen.dart';
 import '../../features/cycle/screens/home_screen.dart';
+import '../../features/cycle/screens/cycle_predictions_screen.dart';
 import '../../features/cycle/screens/calendar_screen.dart';
 import '../../features/cycle/screens/tracking_screen.dart';
 // Deferred (lazy) imports for heavy features
@@ -97,6 +104,11 @@ class AppRouter {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/predictions',
+        builder: (context, state) => const CyclePredictionsScreen(),
+      ),
+
       GoRoute(
         path: '/qr-join',
         builder: (context, state) => const QrJoinScreen(),
@@ -301,12 +313,18 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _currentIndex = 0;
   late ScrollController _scrollController;
+  BannerAd? _mainShellBannerAd;
+  bool _bannerLoadInFlight = false;
+  int _bannerLoadGeneration = 0;
+  bool _subscriptionSyncInFlight = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController = ScrollController();
+    AdMobService.readinessRevision.addListener(_onAdReadinessChanged);
+    AdConsentService.instance.addListener(_onAdReadinessChanged);
   }
 
   @override
@@ -317,26 +335,42 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      AppLockService().lock();
-      return;
-    }
+    final appLock = AppLockService();
 
-    if (state == AppLifecycleState.resumed) {
-      Future<void>.delayed(Duration.zero, () async {
-        if (!mounted) return;
-        if (await AppLockService().shouldRequireLock()) {
-          AppRouter.router.go('/auth/lock');
-        }
-      });
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+        appLock.recordBackgrounded();
+        return;
+
+      case AppLifecycleState.detached:
+        // A detached app/process cannot retain an unlocked UI session.
+        appLock.lock();
+        return;
+
+      case AppLifecycleState.resumed:
+        // Resuming from temporary system UI must not automatically force
+        // biometric re-authentication. A time-based background lock policy
+        // must be explicitly defined before it is enforced.
+        appLock.recordResumed();
+        return;
+
+      case AppLifecycleState.inactive:
+        // Permission sheets, biometric UI and platform transitions can make
+        // the app inactive briefly. This is not itself a security boundary.
+        return;
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    AdMobService.readinessRevision.removeListener(_onAdReadinessChanged);
+    AdConsentService.instance.removeListener(_onAdReadinessChanged);
+    _bannerLoadGeneration++;
+    _bannerLoadInFlight = false;
+    _mainShellBannerAd?.dispose();
+    _mainShellBannerAd = null;
     _scrollController.dispose();
     super.dispose();
   }
@@ -368,34 +402,137 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   void _onNavigationTap(int index) {
+    final fromRoute = GoRouterState.of(context).uri.path;
+
+    final toRoute = switch (index) {
+      0 => '/home',
+      1 => '/calendar',
+      2 => '/tracking',
+      3 => '/insights',
+      4 => '/health',
+      5 => '/settings',
+      _ => '/home',
+    };
+
     setState(() {
       _currentIndex = index;
     });
 
-    switch (index) {
-      case 0:
-        context.go('/home');
-        break;
-      case 1:
-        context.go('/calendar');
-        break;
-      case 2:
-        context.go('/tracking');
-        break;
-      case 3:
-        context.go('/insights');
-        break;
-      case 4:
-        context.go('/health');
-        break;
-      case 5:
-        context.go('/settings');
-        break;
+    context.go(toRoute);
+
+    if (fromRoute == '/insights' && toRoute == '/home') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+
+        AdMobService().showInterstitialAdWithFrequency(
+          fromRoute: fromRoute,
+          toRoute: toRoute,
+        );
+      });
     }
+  }
+
+  void _onAdReadinessChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _syncSubscriptionForActiveAccount() async {
+    if (_subscriptionSyncInFlight || !mounted) return;
+
+    _subscriptionSyncInFlight = true;
+    try {
+      final userId = await ActiveAccountScope.instance.requireUserId();
+      if (!mounted) return;
+
+      final subscription = context.read<SubscriptionProvider>();
+      if (!subscription.isInitialized ||
+          subscription.initializedUserId != userId) {
+        await subscription.initialize(userId);
+      }
+    } on StateError {
+      return;
+    } finally {
+      _subscriptionSyncInFlight = false;
+    }
+  }
+
+  void _syncBanner(bool entitlementResolved, bool isPremium, String route) {
+    final allowed =
+        entitlementResolved &&
+        !isPremium &&
+        AdMobService.canShowBannerOnRoute(route);
+
+    if (!allowed) {
+      _bannerLoadGeneration++;
+      _mainShellBannerAd?.dispose();
+      _mainShellBannerAd = null;
+      _bannerLoadInFlight = false;
+      return;
+    }
+
+    if (_mainShellBannerAd != null || _bannerLoadInFlight) return;
+
+    _bannerLoadInFlight = true;
+    final generation = ++_bannerLoadGeneration;
+
+    final ad = AdMobService().createBannerAd(
+      onLoaded: (loadedAd) {
+        if (!mounted || generation != _bannerLoadGeneration) {
+          loadedAd.dispose();
+          return;
+        }
+
+        final currentSubscription = context.read<SubscriptionProvider>();
+        final currentRoute = GoRouterState.of(context).uri.path;
+
+        final stillAllowed =
+            AdMobService.canLoadAds &&
+            currentSubscription.isInitialized &&
+            !currentSubscription.isPremium &&
+            AdMobService.canShowBannerOnRoute(currentRoute);
+
+        if (!stillAllowed) {
+          loadedAd.dispose();
+          setState(() {
+            _bannerLoadInFlight = false;
+            _mainShellBannerAd = null;
+          });
+          return;
+        }
+
+        setState(() {
+          _bannerLoadInFlight = false;
+          _mainShellBannerAd = loadedAd;
+        });
+      },
+      onFailedToLoad: (_) {
+        if (!mounted || generation != _bannerLoadGeneration) return;
+
+        setState(() {
+          _bannerLoadInFlight = false;
+          _mainShellBannerAd = null;
+        });
+      },
+    );
+    ad.load();
   }
 
   @override
   Widget build(BuildContext context) {
+    final subscription = context.watch<SubscriptionProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _syncSubscriptionForActiveAccount();
+      _syncBanner(
+        subscription.isInitialized,
+        subscription.isPremium,
+        GoRouterState.of(context).uri.path,
+      );
+    });
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -414,7 +551,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         extendBody: false,
-        body: widget.child,
+        body: Column(
+          children: [
+            Expanded(child: widget.child),
+            if (_mainShellBannerAd != null &&
+                AdMobService.canShowBannerOnRoute(
+                  GoRouterState.of(context).uri.path,
+                ))
+              SizedBox(
+                width: _mainShellBannerAd!.size.width.toDouble(),
+                height: _mainShellBannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _mainShellBannerAd!),
+              ),
+          ],
+        ),
         bottomNavigationBar: SafeArea(
           top: false,
           child: Container(

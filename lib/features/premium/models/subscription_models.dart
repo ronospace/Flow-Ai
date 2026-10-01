@@ -151,7 +151,7 @@ class UserSubscription {
     required String userId,
     required String productId,
     required BillingPeriod billingPeriod,
-    required DateTime purchaseDate,
+    DateTime? purchaseDate,
     required DateTime expiryDate,
     String? transactionId,
     String? originalTransactionId,
@@ -183,7 +183,7 @@ class UserSubscription {
         status != SubscriptionStatus.grace_period) {
       return false;
     }
-    if (expiryDate != null && DateTime.now().isAfter(expiryDate!)) {
+    if (expiryDate == null || !expiryDate!.isAfter(DateTime.now())) {
       return false;
     }
     return true;
@@ -206,6 +206,8 @@ class UserSubscription {
 
   /// Check if user can access a feature
   bool canAccessFeature(PremiumFeature feature) {
+    if (!isPremium) return false;
+
     switch (feature) {
       case PremiumFeature.unlimitedInsights:
         return hasUnlimitedInsights;

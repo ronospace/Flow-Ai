@@ -5,8 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const paywallPath =
       'lib/features/premium/screens/premium_paywall_screen.dart';
+  const providerPath =
+      'lib/features/premium/providers/subscription_provider.dart';
 
   final paywall = File(paywallPath).readAsStringSync();
+  final provider = File(providerPath).readAsStringSync();
 
   final uiFiles =
       Directory('lib')
@@ -111,6 +114,16 @@ void main() {
 
   test('Premium paywall restore remains provider delegation', () {
     expect(paywall, contains('restorePurchases'));
+    expect(provider, contains('bool _isRestoring = false;'));
+    expect(provider, contains('bool get isRestoring => _isRestoring;'));
+    expect(provider, contains('_isRestoring = true;'));
+    expect(provider, contains('_isRestoring = false;'));
+    expect(
+      paywall,
+      matches(RegExp(r'(?:subscriptionProvider|provider)\.isRestoring')),
+    );
+    expect(paywall, contains("Text('Restoring…')"));
+    expect(paywall, contains('CircularProgressIndicator('));
     expect(paywall, contains('SubscriptionProvider'));
     expect(paywall, isNot(contains('InAppPurchase')));
   });

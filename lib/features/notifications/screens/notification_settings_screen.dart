@@ -58,7 +58,6 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading notification preferences: $e');
       setState(() {
         _isLoading = false;
       });
@@ -792,7 +791,6 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         }
       }
     } catch (e) {
-      debugPrint('Error sending test notification: $e');
       if (mounted) {
         AdaptiveMessages.showError(context, 'Failed to send test notification');
       }
@@ -811,7 +809,6 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         );
       }
     } catch (e) {
-      debugPrint('Error saving preferences: $e');
       if (mounted) {
         AdaptiveMessages.showError(context, 'Failed to save preferences');
       }

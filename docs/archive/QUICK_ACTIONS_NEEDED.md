@@ -3,7 +3,7 @@
 ## ✅ What We Fixed
 
 ### 1. Demo Account Password Updated
-- Changed from `REDACTED_DEMO_PW!` to `REDACTED_DEMO_PW!`
+- Changed from `<REDACTED>` to `<REDACTED>`
 - Auto-created on app launch for reviewers
 
 ### 2. Privacy Policy Created
@@ -49,13 +49,13 @@
 1. Go to **Version Information** → **App Review Information**
 2. Update Sign-In required section:
    - **Email**: `demo@flowai.app`
-   - **Password**: `REDACTED_DEMO_PW!`
+   - **Password**: `<REDACTED>`
 3. In the **Notes** section, add this text:
 
 ```
 DEMO ACCOUNT SETUP:
 Email: demo@flowai.app
-Password: REDACTED_DEMO_PW!
+Password: <REDACTED>
 
 IMPORTANT FOR REVIEWERS:
 - This demo account is automatically created when the app launches
@@ -127,7 +127,7 @@ Thank you for your detailed feedback. We have resolved both issues:
 2. **Demo Account Credentials Updated** ✅
    Updated working credentials:
    Email: demo@flowai.app
-   Password: REDACTED_DEMO_PW!
+   Password: <REDACTED>
    
    IMPORTANT: This account is auto-created on first app launch. If you encounter "No account found":
    - Please close and reopen the app once
@@ -186,7 +186,7 @@ Then wait for Apple's review (typically 24-48 hours).
 ### Demo Account Still Failing?
 Option 1: Manually create the account
 - Open the app yourself
-- Sign up with `demo@flowai.app` / `REDACTED_DEMO_PW!`
+- Sign up with `demo@flowai.app` / `<REDACTED>`
 - Add some sample data
 
 Option 2: Use your personal account

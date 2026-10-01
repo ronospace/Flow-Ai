@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:uuid/uuid.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
 import 'ai_conversation_memory.dart';
+import '../identity/active_account_scope.dart';
 import 'flowai_service.dart';
 import '../config/flowiq_config.dart';
 import '../../generated/app_localizations.dart';
@@ -29,6 +29,8 @@ class EnhancedAIChatService {
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
+  String? _initializedUserId;
+  int _sessionGeneration = 0;
   // ignore: unused_field
   AppLocalizations? _localizations;
 
@@ -159,75 +161,123 @@ class EnhancedAIChatService {
     AppLocalizations? localizations,
     String? flowAIApiKey,
   }) async {
-    if (_isInitialized) {
-      _currentUser = types.User(id: userId, firstName: userName);
+    final requestedUserId = userId.trim();
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
 
+    if (requestedUserId.isEmpty || requestedUserId != activeUserId) {
+      throw StateError(
+        'Enhanced AI chat ownership does not match the active account.',
+      );
+    }
+
+    final sameOwner = _isInitialized && _initializedUserId == activeUserId;
+
+    _localizations = localizations;
+    _currentUser = types.User(id: activeUserId, firstName: userName);
+
+    if (sameOwner) {
       if (_messages.isNotEmpty &&
-          _messages.first.author.id == "ai_flowai_enhanced" &&
+          _messages.first.author.id == 'ai_flowai_enhanced' &&
           _messages.first is types.TextMessage) {
-        final updated = (_messages.first as types.TextMessage).copyWith(
+        _messages[0] = (_messages.first as types.TextMessage).copyWith(
           text: _buildWelcomeMessage(userName),
         );
-        _messages[0] = updated;
         _notifyListeners();
       }
       return;
     }
 
-    _localizations = localizations;
+    _sessionGeneration++;
+    _messages.clear();
+    _notifyListeners();
 
-    _currentUser = types.User(id: userId, firstName: userName);
-
-    _aiUser = types.User(
+    _aiUser ??= types.User(
       id: 'ai_flowai_enhanced',
       firstName: 'Zyra',
       lastName: 'AI',
-      imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
+      imageUrl: 'https://i.pravatar.cc/300?img=47',
     );
 
-    // Initialize FlowAI if API key is provided
     if (flowAIApiKey != null && flowAIApiKey.isNotEmpty) {
       try {
         await _initializeFlowAI(flowAIApiKey);
-      } catch (e) {
-        debugPrint(
-          'FlowAI initialization failed, using fallback responses: $e',
-        );
-      }
+      } catch (_) {}
     } else if (FlowIQConfig.isConfigured) {
       try {
         await _initializeFlowAI(FlowIQConfig.apiKey!);
-      } catch (e) {
-        debugPrint(
-          'FlowAI initialization failed, using fallback responses: $e',
-        );
-      }
+      } catch (_) {}
     }
 
-    // Initialize conversation memory with user ID for data isolation
+    await ActiveAccountScope.instance.requireOwnership(activeUserId);
+
     _conversationMemory = AIConversationMemory();
-    await _conversationMemory?.initialize(userId: userId);
+    await _conversationMemory!.initialize(userId: activeUserId);
 
-    // Clear any existing conversation history to ensure clean state
-    await _conversationMemory?.clearMemory();
-    _messages.clear();
+    await ActiveAccountScope.instance.requireOwnership(activeUserId);
 
-    // Add enhanced welcome message
-    _addAIMessage(_buildWelcomeMessage(userName));
-
+    _initializedUserId = activeUserId;
     _isInitialized = true;
+
+    final restoredMessages = _conversationMemory!.getRelevantContext(
+      maxMessages: 100,
+    );
+
+    if (restoredMessages.isNotEmpty) {
+      _messages
+        ..clear()
+        ..addAll(restoredMessages);
+      _notifyListeners();
+    } else {
+      await _addAIMessage(_buildWelcomeMessage(userName));
+    }
+  }
+
+  Future<bool> _isCurrentSession(String userId, int generation) async {
+    if (!_isInitialized ||
+        _initializedUserId != userId ||
+        _sessionGeneration != generation) {
+      return false;
+    }
+
+    try {
+      await ActiveAccountScope.instance.requireOwnership(userId);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> resetSession() async {
+    _sessionGeneration++;
+    _messages.clear();
+    _currentUser = null;
+    _initializedUserId = null;
+    _isInitialized = false;
+    await _conversationMemory?.resetSession();
+    _conversationMemory = null;
+    _notifyListeners();
   }
 
   /// Send user message and get AI response
   Future<void> sendMessage(types.TextMessage message) async {
-    // Add user message
+    final ownerId = _initializedUserId;
+    final generation = _sessionGeneration;
+
+    if (ownerId == null ||
+        message.author.id != ownerId ||
+        !await _isCurrentSession(ownerId, generation)) {
+      throw StateError(
+        'AI chat message ownership does not match the active account.',
+      );
+    }
+
     _messages.insert(0, message);
     _notifyListeners();
 
-    // Store in conversation memory
     await _conversationMemory?.storeMessage(message);
 
-    // Generate AI response with context
+    if (!await _isCurrentSession(ownerId, generation)) return;
+
     final contextPrompt = _conversationMemory?.getContextualPrompt(
       message.text,
     );
@@ -235,11 +285,20 @@ class EnhancedAIChatService {
       message.text,
       contextPrompt: contextPrompt,
     );
-    await _streamAIResponse(response);
+
+    if (!await _isCurrentSession(ownerId, generation)) return;
+
+    await _streamAIResponse(response, ownerId: ownerId, generation: generation);
   }
 
-  Future<void> _streamAIResponse(String text) async {
-    if (_aiUser == null) return;
+  Future<void> _streamAIResponse(
+    String text, {
+    required String ownerId,
+    required int generation,
+  }) async {
+    if (_aiUser == null || !await _isCurrentSession(ownerId, generation)) {
+      return;
+    }
 
     final words = text.split(' ');
     String current = '';
@@ -255,7 +314,11 @@ class EnhancedAIChatService {
     _notifyListeners();
 
     for (final word in words) {
+      if (!await _isCurrentSession(ownerId, generation)) return;
+
       current += (current.isEmpty ? '' : ' ') + word;
+
+      if (_messages.isEmpty || _messages.first.id != message.id) return;
 
       _messages[0] = types.TextMessage(
         author: _aiUser!,
@@ -268,12 +331,25 @@ class EnhancedAIChatService {
       await Future.delayed(const Duration(milliseconds: 45));
     }
 
-    await _conversationMemory?.storeMessage(_messages[0]);
+    if (!await _isCurrentSession(ownerId, generation) ||
+        _messages.isEmpty ||
+        _messages.first.id != message.id) {
+      return;
+    }
+
+    await _conversationMemory?.storeMessage(_messages.first);
   }
 
   /// Add AI message to conversation
   Future<void> _addAIMessage(String text) async {
-    if (_aiUser == null) return;
+    final ownerId = _initializedUserId;
+    final generation = _sessionGeneration;
+
+    if (_aiUser == null ||
+        ownerId == null ||
+        !await _isCurrentSession(ownerId, generation)) {
+      return;
+    }
 
     final aiMessage = types.TextMessage(
       author: _aiUser!,
@@ -285,7 +361,8 @@ class EnhancedAIChatService {
     _messages.insert(0, aiMessage);
     _notifyListeners();
 
-    // Store in conversation memory
+    if (!await _isCurrentSession(ownerId, generation)) return;
+
     await _conversationMemory?.storeMessage(aiMessage);
   }
 
@@ -308,14 +385,21 @@ class EnhancedAIChatService {
             userMessage.toLowerCase(),
           );
         }
-      } catch (e) {
-        debugPrint(
-          'FlowAI request failed, falling back to enhanced local responses: $e',
-        );
-      }
+      } catch (e) {}
     }
 
-    // Enhanced fallback responses with comprehensive knowledge
+    // Do not synthesize personalized health guidance when the configured
+    // online AI service is unavailable. Generic local FAQ/app-help content
+    // may be used only for non-health questions.
+    final normalizedMessage = userMessage.toLowerCase();
+
+    if (_isHealthRelated(normalizedMessage)) {
+      return 'I can’t generate a health response right now because the '
+          'online AI service is unavailable. You can still review your '
+          'recorded data in Flow Ai, or try again when the service is '
+          'available.';
+    }
+
     return _getEnhancedLocalResponse(userMessage, contextPrompt: contextPrompt);
   }
 
@@ -1159,9 +1243,7 @@ class EnhancedAIChatService {
     try {
       await _flowAIService.initialize(apiKey: apiKey);
       _useFlowAI = _flowAIService.isInitialized;
-      debugPrint('🤖 FlowAI integration ${_useFlowAI ? "enabled" : "failed"}');
     } catch (e) {
-      debugPrint('FlowAI initialization error: $e');
       _useFlowAI = false;
     }
   }
@@ -1190,11 +1272,9 @@ class EnhancedAIChatService {
         content,
         userMessage.toLowerCase(),
       );
-    } on FlowAIException catch (e) {
-      debugPrint('FlowAI service error: $e');
+    } on FlowAIException {
       return null;
     } catch (e) {
-      debugPrint('Unexpected FlowAI error: $e');
       return null;
     }
   }

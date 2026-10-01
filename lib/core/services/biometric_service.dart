@@ -9,7 +9,7 @@ class BiometricService {
       if (!canCheck) return false;
 
       final bool didAuthenticate = await _auth.authenticate(
-        localizedReason: 'Authenticate to access Flow AI',
+        localizedReason: 'Authenticate to access Flow Ai',
         options: const AuthenticationOptions(
           biometricOnly: true,
           stickyAuth: true,

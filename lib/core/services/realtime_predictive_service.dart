@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../database/database_service.dart';
 import 'ml_pattern_recognition_service.dart'
@@ -34,7 +33,6 @@ class RealtimePredictiveService {
     );
 
     _isInitialized = true;
-    debugPrint('⚡ Real-time Predictive Service initialized');
   }
 
   /// Get real-time prediction stream for a specific metric
@@ -239,8 +237,6 @@ class RealtimePredictiveService {
   // Private helper methods
 
   Future<void> _updateAllPredictions() async {
-    debugPrint('🔄 Updating all real-time predictions...');
-
     final metrics = ['next_period', 'symptoms', 'mood', 'energy'];
     for (final metric in metrics) {
       if (_predictionStreams.containsKey(metric)) {

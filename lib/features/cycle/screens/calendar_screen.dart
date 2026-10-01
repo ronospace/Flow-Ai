@@ -182,10 +182,7 @@ class _CalendarScreenState extends State<CalendarScreen>
               children: [
                 Text(
                   AppLocalizations.of(context).calendarTitle,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
+                  style: AppPageTypography.title(context),
                 ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   DateFormat('MMMM yyyy').format(_focusedDay),

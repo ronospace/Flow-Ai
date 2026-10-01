@@ -9,8 +9,6 @@ import '../../../core/biometrics/advanced_biometric_engine.dart';
 import '../../../core/health/advanced_health_analytics.dart';
 import '../../../core/performance/performance_optimization_engine.dart';
 import '../../../core/models/user_profile.dart';
-import '../../../core/models/cycle_data.dart';
-import '../widgets/real_time_metric_card.dart';
 import '../widgets/health_trend_chart.dart';
 import '../widgets/ai_insights_panel.dart';
 import '../widgets/biometric_pulse_indicator.dart';
@@ -114,7 +112,6 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
       _triggerHapticFeedback();
     } catch (e) {
-      debugPrint('Error initializing dashboard: $e');
       setState(() {
         _isLoading = false;
       });

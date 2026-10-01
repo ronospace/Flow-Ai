@@ -62,14 +62,23 @@ void main() {
     ).readAsStringSync();
 
     final configure = source.indexOf('await _health!.configure();');
-    final availability = source.indexOf('isHealthConnectAvailable');
+    final sdkStatus = source.indexOf(
+      'await _health!.getHealthConnectSdkStatus()',
+      configure,
+    );
+    final availabilityGate = source.indexOf(
+      'if (!healthConnectAvailable)',
+      sdkStatus,
+    );
     final authorization = source.indexOf(
       'final granted = await _requestHealthPermissions()',
+      availabilityGate,
     );
 
     expect(configure, greaterThanOrEqualTo(0));
-    expect(availability, greaterThan(configure));
-    expect(authorization, greaterThan(availability));
+    expect(sdkStatus, greaterThan(configure));
+    expect(availabilityGate, greaterThan(sdkStatus));
+    expect(authorization, greaterThan(availabilityGate));
 
     expect(
       source,
@@ -105,7 +114,7 @@ void main() {
     );
 
     expect(card, contains('Access Granted'));
-    expect(card, contains('Access granted'));
+    expect(card, isNot(contains('Access granted')));
 
     expect(card, isNot(contains('Health data syncing from')));
 

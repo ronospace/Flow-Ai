@@ -16,18 +16,20 @@
 
 <p align="center">
   <a href="https://apps.apple.com/app/flow-ai/id6751801915">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" height="60">
+    <img
+      src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+      alt="Download Flow Ai on the App Store"
+      height="56"
+    />
   </a>
-  &nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;
   <a href="https://play.google.com/store/apps/details?id=com.flowai.app">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="60">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+      alt="Get Flow Ai on Google Play"
+      height="56"
+    />
   </a>
-</p>
-
-<p align="center">
-  🍎 <a href="https://apps.apple.com/app/flow-ai/id6751801915">Download on the App Store</a>  
-  <br>
-  🤖 <a href="https://play.google.com/store/apps/details?id=com.flowai.app">Get it on Google Play</a>
 </p>
 
 ---

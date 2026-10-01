@@ -24,8 +24,6 @@ class UserService extends ChangeNotifier {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    debugPrint('🔄 Initializing User Service...');
-
     try {
       // Initialize dependencies
       await _localUserService.initialize();
@@ -34,10 +32,7 @@ class UserService extends ChangeNotifier {
       await _loadCurrentUser();
 
       _isInitialized = true;
-      debugPrint('✅ User Service initialized');
-    } catch (e) {
-      debugPrint('❌ Failed to initialize User Service: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get the current user profile
@@ -125,11 +120,9 @@ class UserService extends ChangeNotifier {
       if (user != null) {
         _currentUser = user;
         notifyListeners();
-        debugPrint('👤 User signed in: ${user.displayName}');
       }
       return user;
     } catch (e) {
-      debugPrint('❌ Failed to sign in user: $e');
       return null;
     }
   }
@@ -138,7 +131,6 @@ class UserService extends ChangeNotifier {
   Future<void> signOut() async {
     _currentUser = null;
     notifyListeners();
-    debugPrint('👤 User signed out');
   }
 
   /// Delete user account
@@ -152,7 +144,6 @@ class UserService extends ChangeNotifier {
       }
       return success;
     } catch (e) {
-      debugPrint('❌ Failed to delete user: $e');
       return false;
     }
   }
@@ -222,26 +213,16 @@ class UserService extends ChangeNotifier {
         _currentUser = UserProfile(
           id: localUser.uid,
           displayName: localUser.displayName,
-          age: 25,
-          lifestyle: 'active',
-          healthConcerns: [],
+          healthConcerns: const [],
           preferences: _getDefaultPreferences(),
-          personalizedBaselines: {},
-          adaptationHistory: [],
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          weight: 65.0,
-          height: 165.0,
-          familyHistory: {},
+          personalizedBaselines: const {},
+          adaptationHistory: const [],
+          createdAt: localUser.createdAt,
+          updatedAt: localUser.lastUpdated,
         );
         notifyListeners();
-        debugPrint('👤 Loaded current user: ${_currentUser!.displayName}');
-      } else {
-        debugPrint('👤 No existing user found');
-      }
-    } catch (e) {
-      debugPrint('❌ Failed to load current user: $e');
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> _saveUser(UserProfile user) async {
@@ -249,9 +230,7 @@ class UserService extends ChangeNotifier {
       await _localUserService.saveUser(user);
       _currentUser = user;
       notifyListeners();
-      debugPrint('💾 User saved: ${user.displayName}');
     } catch (e) {
-      debugPrint('❌ Failed to save user: $e');
       rethrow;
     }
   }
@@ -271,37 +250,6 @@ class UserService extends ChangeNotifier {
       'health_insights': true,
       'ai_coaching': true,
     };
-  }
-
-  /// Create a mock user for development/testing
-  Future<UserProfile> createMockUser() async {
-    final mockUser = UserProfile(
-      id: 'mock_user_${DateTime.now().millisecondsSinceEpoch}',
-      displayName: 'Flow Ai User',
-      age: 28,
-      lifestyle: 'active',
-      healthConcerns: ['irregular_cycles', 'mood_swings'],
-      preferences: _getDefaultPreferences(),
-      personalizedBaselines: {
-        'cycle_length': 28.5,
-        'flow_duration': 5.2,
-        'mood_baseline': 7.5,
-        'energy_baseline': 6.8,
-      },
-      adaptationHistory: [],
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      weight: 65.0,
-      height: 165.0,
-      familyHistory: {
-        'pcos': false,
-        'endometriosis': false,
-        'fertility_issues': false,
-      },
-    );
-
-    await _saveUser(mockUser);
-    return mockUser;
   }
 
   /// Get user BMI if height and weight are available
@@ -330,6 +278,5 @@ class UserService extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    debugPrint('🗑️ User Service disposed');
   }
 }

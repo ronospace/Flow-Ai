@@ -41,7 +41,6 @@ class AnalyticsProvider extends ChangeNotifier {
         loadRecommendations(),
       ]);
     } catch (e) {
-      debugPrint('Error loading analytics: $e');
     } finally {
       _setLoading(false);
     }
@@ -74,9 +73,7 @@ class AnalyticsProvider extends ChangeNotifier {
     try {
       _predictionAnalytics = await _analyticsService.getPredictionAnalytics();
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading prediction analytics: $e');
-    }
+    } catch (e) {}
   }
 
   // Load trend analytics
@@ -87,9 +84,7 @@ class AnalyticsProvider extends ChangeNotifier {
         endDate: _endDate,
       );
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading trend analytics: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> loadAnalyticsHistory() async {
@@ -111,9 +106,7 @@ class AnalyticsProvider extends ChangeNotifier {
       _recommendations = await _analyticsService
           .getPersonalizedRecommendations();
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading recommendations: $e');
-    }
+    } catch (e) {}
   }
 
   // Set time range for analytics
@@ -143,8 +136,10 @@ class AnalyticsProvider extends ChangeNotifier {
   Map<String, dynamic> getAnalyticsSummary() {
     return {
       'cycleRegularity': _cycleAnalytics?.regularityScore ?? 0.0,
-      'healthScore': _healthAnalytics?.overallHealthScore ?? 0.0,
-      'predictionAccuracy': _predictionAnalytics?.confidenceScore ?? 0.0,
+      'healthScore': null,
+      'predictionAccuracy': (_predictionAnalytics?.totalPredictions ?? 0) > 0
+          ? _predictionAnalytics?.confidenceScore
+          : null,
       'totalCycles': _cycleAnalytics?.totalCycles ?? 0,
       'recommendationsCount': _recommendations.length,
       'lastUpdated': DateTime.now(),

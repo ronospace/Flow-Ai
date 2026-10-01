@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/ui/app_upcoming_feature_status.dart';
 
 class PremiumFeaturePreviewCard extends StatelessWidget {
   final String title;
@@ -9,6 +10,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String estimatedDate;
+  final AppFeatureAvailability availability;
   final VoidCallback onTap;
 
   const PremiumFeaturePreviewCard({
@@ -18,6 +20,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.estimatedDate,
+    this.availability = AppFeatureAvailability.active,
     required this.onTap,
   });
 
@@ -59,25 +62,11 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                           child: Icon(icon, color: color, size: 18),
                         ),
                         const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.warningOrange.withValues(
-                              alpha: 0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            estimatedDate,
-                            style: const TextStyle(
-                              color: AppTheme.warningOrange,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        AppUpcomingFeatureStatus(
+                          releaseLabel: estimatedDate,
+                          availability: availability,
+                          compact: true,
+                          color: AppTheme.warningOrange,
                         ),
                       ],
                     ),
@@ -115,7 +104,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            estimatedDate == 'Q2 2026'
+                            availability == AppFeatureAvailability.comingSoon
                                 ? 'Coming Soon'
                                 : 'Active',
                             maxLines: 1,

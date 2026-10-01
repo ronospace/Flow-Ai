@@ -2,6 +2,7 @@ import {
   AppStoreServerAPIClient,
   Environment,
   SignedDataVerifier,
+  Status,
 } from "@apple/app-store-server-library";
 import {
   createHash,
@@ -29,6 +30,11 @@ type JsonRecord = Record<string, unknown>;
 
 type Platform = "ios" | "android";
 
+type LifecycleStatus =
+  | "active"
+  | "grace_period"
+  | "paid_through_cancellation";
+
 type ProviderValidationResult = {
   platform: Platform;
   provider: "apple" | "google";
@@ -36,6 +42,7 @@ type ProviderValidationResult = {
   transactionId: string;
   originalTransactionId: string;
   expirationDate: Date;
+  lifecycleStatus?: LifecycleStatus;
 };
 
 type CachedAccessToken = {
@@ -66,10 +73,6 @@ const allowedAppleEnvironments = new Set([
   "sandbox",
 ]);
 
-const activeGoogleSubscriptionStates = new Set([
-  "SUBSCRIPTION_STATE_ACTIVE",
-  "SUBSCRIPTION_STATE_IN_GRACE_PERIOD",
-]);
 
 const androidPublisherScope =
   "https://www.googleapis.com/auth/androidpublisher";
@@ -114,6 +117,7 @@ function sendJson(
   });
   response.end(JSON.stringify(body));
 }
+
 
 function readRecord(value: unknown): JsonRecord | null {
   if (
@@ -478,6 +482,9 @@ function firestoreFields(
     originalTransactionId: {
       stringValue: result.originalTransactionId,
     },
+    lifecycleStatus: {
+      stringValue: result.lifecycleStatus,
+    },
     platform: {
       stringValue: result.platform,
     },
@@ -500,6 +507,647 @@ function firestoreFields(
       timestampValue: now,
     },
   };
+}
+
+
+type ReceiptOwnershipSource =
+  | "first_verified_claim"
+  | "legacy_single_owner"
+  | "deleted_owner_transfer";
+
+type ReceiptOwnerState =
+  | {
+      kind: "active";
+      ownerUid: string;
+      updateTime: string;
+    }
+  | {
+      kind: "auth_deleted";
+      ownerUid: string;
+      deletedOwnerUid: string;
+      updateTime: string;
+    };
+
+type LegacyReceiptOwnerState =
+  | { kind: "none" }
+  | { kind: "single"; uid: string }
+  | { kind: "conflict"; uids: string[] };
+
+function receiptOwnershipKey(
+  platform: ProviderValidationResult["platform"],
+  originalTransactionId: string,
+): string {
+  return createHash("sha256")
+    .update(
+      `${platform}:${originalTransactionId}`,
+      "utf8",
+    )
+    .digest("hex");
+}
+
+function receiptOwnerDocumentUrl(
+  ownershipKey: string,
+): string {
+  return [
+    "https://firestore.googleapis.com/v1/projects",
+    encodeURIComponent(projectId()),
+    "databases/(default)/documents",
+    `premiumReceiptOwners/${encodeURIComponent(ownershipKey)}`,
+  ].join("/");
+}
+
+function receiptOwnerCreateUrl(
+  ownershipKey: string,
+): string {
+  return [
+    "https://firestore.googleapis.com/v1/projects",
+    encodeURIComponent(projectId()),
+    "databases/(default)/documents/premiumReceiptOwners",
+    `?documentId=${encodeURIComponent(ownershipKey)}`,
+  ].join("/");
+}
+
+
+function receiptOwnerUpdateUrl(
+  ownershipKey: string,
+  updateTime: string,
+): string {
+  const query = new URLSearchParams();
+
+  for (const field of [
+    "ownerUid",
+    "ownerStatus",
+    "ownershipSource",
+    "schemaVersion",
+    "previousOwnerUid",
+    "deletedOwnerUid",
+    "transferredAt",
+  ]) {
+    query.append("updateMask.fieldPaths", field);
+  }
+
+  query.set(
+    "currentDocument.updateTime",
+    updateTime,
+  );
+
+  return `${receiptOwnerDocumentUrl(ownershipKey)}?${query.toString()}`;
+}
+
+function firestoreStringField(
+  fields:
+    | Record<string, { stringValue?: string }>
+    | undefined,
+  field: string,
+): string | null {
+  const value=fields?.[field]?.stringValue;
+
+  return typeof value === "string" &&
+      value.length > 0
+    ? value
+    : null;
+}
+
+async function readReceiptOwner(
+  token: string,
+  ownershipKey: string,
+): Promise<ReceiptOwnerState | null> {
+  const response=await fetch(
+    receiptOwnerDocumentUrl(ownershipKey),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `receipt owner read failed: ${response.status} ${await response.text()}`,
+    );
+  }
+
+  const document=(await response.json()) as {
+    fields?: Record<
+      string,
+      { stringValue?: string }
+    >;
+    updateTime?: string;
+  };
+
+  const ownerUid=firestoreStringField(
+    document.fields,
+    "ownerUid",
+  );
+
+  if (ownerUid === null) {
+    throw new Error(
+      "receipt owner document missing ownerUid",
+    );
+  }
+
+  const updateTime =
+    typeof document.updateTime === "string" &&
+    document.updateTime.length > 0
+      ? document.updateTime
+      : null;
+
+  if (updateTime === null) {
+    throw new Error(
+      "receipt owner document missing updateTime",
+    );
+  }
+
+  const ownerStatus=firestoreStringField(
+    document.fields,
+    "ownerStatus",
+  );
+
+  // Schema-v1 / historical canonical owner documents have no
+  // ownerStatus. They remain ACTIVE by default.
+  if (
+    ownerStatus === null ||
+    ownerStatus === "active"
+  ) {
+    return {
+      kind: "active",
+      ownerUid,
+      updateTime,
+    };
+  }
+
+  if (ownerStatus === "auth_deleted") {
+    const deletedOwnerUid=firestoreStringField(
+      document.fields,
+      "deletedOwnerUid",
+    );
+
+    if (
+      deletedOwnerUid === null ||
+      deletedOwnerUid !== ownerUid
+    ) {
+      throw new Error(
+        "receipt owner auth_deleted invariant failed",
+      );
+    }
+
+    return {
+      kind: "auth_deleted",
+      ownerUid,
+      deletedOwnerUid,
+      updateTime,
+    };
+  }
+
+  throw new Error(
+    "receipt owner status unsupported",
+  );
+}
+
+async function queryLegacyReceiptOwners(
+  token: string,
+  result: ProviderValidationResult,
+): Promise<LegacyReceiptOwnerState> {
+  const url=[
+    "https://firestore.googleapis.com/v1/projects",
+    encodeURIComponent(projectId()),
+    "databases/(default)/documents:runQuery",
+  ].join("/");
+
+  const response=await fetch(
+    url,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [
+            {
+              collectionId: "subscriptions",
+              allDescendants: true,
+            },
+          ],
+          where: {
+            fieldFilter: {
+              field: {
+                fieldPath:
+                  "originalTransactionId",
+              },
+              op: "EQUAL",
+              value: {
+                stringValue:
+                  result.originalTransactionId,
+              },
+            },
+          },
+        },
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `legacy ownership query failed: ${response.status} ${await response.text()}`,
+    );
+  }
+
+  const rows=(await response.json()) as Array<{
+    document?: {
+      fields?: Record<
+        string,
+        { stringValue?: string }
+      >;
+    };
+  }>;
+
+  const owners=new Set<string>();
+
+  for (const row of rows) {
+    const fields=row.document?.fields;
+
+    const platform=firestoreStringField(
+      fields,
+      "platform",
+    );
+
+    // originalTransactionId can theoretically
+    // collide across providers. Platform must match.
+    if (platform !== result.platform) {
+      continue;
+    }
+
+    const uid=
+      firestoreStringField(
+        fields,
+        "userId",
+      ) ??
+      firestoreStringField(
+        fields,
+        "uid",
+      );
+
+    if (uid !== null) {
+      owners.add(uid);
+    }
+  }
+
+  if (owners.size === 0) {
+    return { kind: "none" };
+  }
+
+  if (owners.size === 1) {
+    const iterator=owners.values().next();
+
+    if (
+      iterator.done ||
+      typeof iterator.value !== "string"
+    ) {
+      throw new Error(
+        "legacy ownership invariant failed",
+      );
+    }
+
+    return {
+      kind: "single",
+      uid: iterator.value,
+    };
+  }
+
+  return {
+    kind: "conflict",
+    uids: Array.from(owners).sort(),
+  };
+}
+
+async function createReceiptOwnerAtomically(
+  token: string,
+  ownershipKey: string,
+  ownerUid: string,
+  result: ProviderValidationResult,
+  source: ReceiptOwnershipSource,
+): Promise<"created" | "already_exists"> {
+  const response=await fetch(
+    receiptOwnerCreateUrl(ownershipKey),
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: {
+          ownerUid: {
+            stringValue: ownerUid,
+          },
+          platform: {
+            stringValue: result.platform,
+          },
+          originalTransactionId: {
+            stringValue:
+              result.originalTransactionId,
+          },
+          ownershipSource: {
+            stringValue: source,
+          },
+          schemaVersion: {
+            integerValue: "1",
+          },
+          createdAt: {
+            timestampValue:
+              new Date().toISOString(),
+          },
+        },
+      }),
+    },
+  );
+
+  if (response.ok) {
+    return "created";
+  }
+
+  // Firestore create-only document semantics:
+  // an existing deterministic document causes
+  // a conflict rather than an overwrite.
+  if (response.status === 409) {
+    return "already_exists";
+  }
+
+  throw new Error(
+    `receipt owner create failed: ${response.status} ${await response.text()}`,
+  );
+}
+
+async function transferDeletedReceiptOwnerAtomically(
+  token: string,
+  ownershipKey: string,
+  priorOwner: ReceiptOwnerState & {
+    kind: "auth_deleted";
+  },
+  newOwnerUid: string,
+): Promise<"transferred" | "precondition_failed"> {
+  const response=await fetch(
+    receiptOwnerUpdateUrl(
+      ownershipKey,
+      priorOwner.updateTime,
+    ),
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: {
+          ownerUid: {
+            stringValue: newOwnerUid,
+          },
+          ownerStatus: {
+            stringValue: "active",
+          },
+          ownershipSource: {
+            stringValue: "deleted_owner_transfer",
+          },
+          schemaVersion: {
+            integerValue: "2",
+          },
+          previousOwnerUid: {
+            stringValue: priorOwner.ownerUid,
+          },
+          deletedOwnerUid: {
+            stringValue: priorOwner.deletedOwnerUid,
+          },
+          transferredAt: {
+            timestampValue:
+              new Date().toISOString(),
+          },
+        },
+      }),
+    },
+  );
+
+  if (response.ok) {
+    return "transferred";
+  }
+
+  const body=await response.text();
+
+  // Firestore REST may surface stale updateTime preconditions as
+  // HTTP 409/412 or a FAILED_PRECONDITION response.
+  if (
+    response.status === 409 ||
+    response.status === 412 ||
+    (
+      response.status === 400 &&
+      body.includes("FAILED_PRECONDITION")
+    )
+  ) {
+    return "precondition_failed";
+  }
+
+  throw new Error(
+    `receipt owner transfer failed: ${response.status} ${body}`,
+  );
+}
+
+type ReceiptOwnershipDependencies = {
+  runtimeAccessToken: () => Promise<string>;
+  readReceiptOwner: (
+    token: string,
+    ownershipKey: string,
+  ) => Promise<ReceiptOwnerState | null>;
+  queryLegacyReceiptOwners: (
+    token: string,
+    result: ProviderValidationResult,
+  ) => Promise<LegacyReceiptOwnerState>;
+  createReceiptOwnerAtomically: (
+    token: string,
+    ownershipKey: string,
+    ownerUid: string,
+    result: ProviderValidationResult,
+    source: ReceiptOwnershipSource,
+  ) => Promise<"created" | "already_exists">;
+  transferDeletedReceiptOwnerAtomically: (
+    token: string,
+    ownershipKey: string,
+    priorOwner: ReceiptOwnerState & {
+      kind: "auth_deleted";
+    },
+    newOwnerUid: string,
+  ) => Promise<"transferred" | "precondition_failed">;
+};
+
+export async function assertReceiptOwnershipWithDependencies(
+  uid: string,
+  result: ProviderValidationResult,
+  dependencies: ReceiptOwnershipDependencies,
+): Promise<void> {
+  const token = await dependencies.runtimeAccessToken();
+
+  const ownershipKey = receiptOwnershipKey(
+    result.platform,
+    result.originalTransactionId,
+  );
+
+  const existingOwner =
+    await dependencies.readReceiptOwner(
+      token,
+      ownershipKey,
+    );
+
+  if (existingOwner !== null) {
+    if (existingOwner.kind === "active") {
+      if (existingOwner.ownerUid !== uid) {
+        throw new HttpError(
+          409,
+          "receipt_owner_conflict",
+        );
+      }
+
+      return;
+    }
+
+    if (existingOwner.ownerUid === uid) {
+      throw new Error(
+        "receipt owner deleted identity cannot reclaim itself",
+      );
+    }
+
+    const transfer =
+      await dependencies.transferDeletedReceiptOwnerAtomically(
+        token,
+        ownershipKey,
+        existingOwner,
+        uid,
+      );
+
+    if (transfer === "transferred") {
+      return;
+    }
+
+    const racedOwner =
+      await dependencies.readReceiptOwner(
+        token,
+        ownershipKey,
+      );
+
+    if (
+      racedOwner !== null &&
+      racedOwner.kind === "active" &&
+      racedOwner.ownerUid === uid
+    ) {
+      return;
+    }
+
+    throw new HttpError(
+      409,
+      "receipt_owner_conflict",
+    );
+  }
+
+  const legacy =
+    await dependencies.queryLegacyReceiptOwners(
+      token,
+      result,
+    );
+
+  if (legacy.kind === "conflict") {
+    throw new HttpError(
+      409,
+      "receipt_owner_conflict",
+    );
+  }
+
+  const canonicalOwnerUid =
+    legacy.kind === "single"
+      ? legacy.uid
+      : uid;
+
+  const source: ReceiptOwnershipSource =
+    legacy.kind === "single"
+      ? "legacy_single_owner"
+      : "first_verified_claim";
+
+  const claim =
+    await dependencies.createReceiptOwnerAtomically(
+      token,
+      ownershipKey,
+      canonicalOwnerUid,
+      result,
+      source,
+    );
+
+  if (claim === "created") {
+    if (canonicalOwnerUid !== uid) {
+      throw new HttpError(
+        409,
+        "receipt_owner_conflict",
+      );
+    }
+
+    return;
+  }
+
+  const racedOwner =
+    await dependencies.readReceiptOwner(
+      token,
+      ownershipKey,
+    );
+
+  if (racedOwner === null) {
+    throw new Error(
+      "receipt ownership race invariant failed",
+    );
+  }
+
+  if (
+    racedOwner.kind !== "active" ||
+    racedOwner.ownerUid !== uid
+  ) {
+    throw new HttpError(
+      409,
+      "receipt_owner_conflict",
+    );
+  }
+}
+
+async function assertReceiptOwnership(
+  uid: string,
+  result: ProviderValidationResult,
+): Promise<void> {
+  await assertReceiptOwnershipWithDependencies(
+    uid,
+    result,
+    {
+      runtimeAccessToken,
+      readReceiptOwner,
+      queryLegacyReceiptOwners,
+      createReceiptOwnerAtomically,
+      transferDeletedReceiptOwnerAtomically,
+    },
+  );
+}
+
+export async function persistAfterReceiptOwnership(
+  uid: string,
+  result: ProviderValidationResult,
+  ownershipCheck: (
+    uid: string,
+    result: ProviderValidationResult,
+  ) => Promise<void>,
+  persist: (
+    uid: string,
+    result: ProviderValidationResult,
+  ) => Promise<void>,
+): Promise<void> {
+  await ownershipCheck(uid, result);
+  await persist(uid, result);
 }
 
 async function persistValidatedEntitlement(
@@ -580,28 +1228,48 @@ function findGoogleLineItem(
   return null;
 }
 
-async function verifyAppleTransaction(
+function appleProviderHttpStatus(error: unknown): number | null {
+  const record = readRecord(error);
+
+  if (record === null) {
+    return null;
+  }
+
+  return (
+    readFiniteNumber(record.status) ??
+    readFiniteNumber(record.statusCode) ??
+    readFiniteNumber(record.httpStatusCode)
+  );
+}
+
+function alternateAppleEnvironment(
+  environment: Environment,
+): Environment {
+  return environment === Environment.PRODUCTION ?
+    Environment.SANDBOX :
+    Environment.PRODUCTION;
+}
+
+async function verifyAppleTransactionInEnvironment(
   productId: string,
   transactionId: string,
-  environment: string,
+  appleEnvironment: Environment,
 ): Promise<ProviderValidationResult | null> {
   const bundleId = requiredEnvironment(
     "FLOW_AI_APPLE_BUNDLE_ID",
   );
   const issuerId = requiredEnvironment(
-    "FLOW_AI_APPLE_ISSUER_ID_NEXT",
+    "FLOW_AI_APPLE_ISSUER_ID",
   );
   const keyId = requiredEnvironment(
-    "FLOW_AI_APPLE_KEY_ID_NEXT",
+    "FLOW_AI_APPLE_KEY_ID",
   );
   const privateKey = normalizePem(
-    requiredEnvironment("FLOW_AI_APPLE_PRIVATE_KEY_P8_NEXT"),
+    requiredEnvironment("FLOW_AI_APPLE_PRIVATE_KEY_P8"),
   );
   const rootCertificates = parseAppleRootCertificates(
     requiredEnvironment("FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM"),
   );
-
-  const appleEnvironment = toAppleEnvironment(environment);
 
   const client = new AppStoreServerAPIClient(
     privateKey,
@@ -665,14 +1333,117 @@ async function verifyAppleTransaction(
     return null;
   }
 
+  const statusResponse = await client.getAllSubscriptionStatuses(
+    originalTransactionId,
+  );
+
+  const matchingItem = statusResponse.data
+    ?.flatMap((group) => group.lastTransactions ?? [])
+    .find(
+      (item) =>
+        item.originalTransactionId === originalTransactionId,
+    );
+
+  if (
+    matchingItem === undefined ||
+    matchingItem.status === undefined
+  ) {
+    return null;
+  }
+
+  if (
+    matchingItem.status === Status.REVOKED ||
+    matchingItem.status === Status.EXPIRED ||
+    matchingItem.status === Status.BILLING_RETRY
+  ) {
+    return null;
+  }
+
+  let lifecycleStatus: LifecycleStatus;
+
+  if (matchingItem.status === Status.ACTIVE) {
+    lifecycleStatus = "active";
+  } else if (
+    matchingItem.status === Status.BILLING_GRACE_PERIOD
+  ) {
+    const signedRenewalInfo = readNonEmptyString(
+      matchingItem.signedRenewalInfo,
+    );
+
+    if (signedRenewalInfo === null) {
+      return null;
+    }
+
+    const renewal =
+        await verifier.verifyAndDecodeRenewalInfo(
+      signedRenewalInfo,
+    );
+
+    const renewalRecord = readRecord(renewal);
+
+    const gracePeriodExpiresDate = readFiniteNumber(
+      renewalRecord?.gracePeriodExpiresDate,
+    );
+
+    if (
+      gracePeriodExpiresDate === null ||
+      gracePeriodExpiresDate <= Date.now()
+    ) {
+      return null;
+    }
+
+    lifecycleStatus = "grace_period";
+  } else {
+    return null;
+  }
+
   return {
     expirationDate: new Date(expiresDate),
+    lifecycleStatus,
     originalTransactionId,
     platform: "ios",
     productId,
     provider: "apple",
     transactionId: decodedTransactionId,
   };
+}
+
+async function verifyAppleTransaction(
+  productId: string,
+  transactionId: string,
+  environment: string,
+): Promise<ProviderValidationResult | null> {
+  const preferredEnvironment = toAppleEnvironment(environment);
+
+  try {
+    return await verifyAppleTransactionInEnvironment(
+      productId,
+      transactionId,
+      preferredEnvironment,
+    );
+  } catch (error) {
+    if (appleProviderHttpStatus(error) !== 404) {
+      throw error;
+    }
+  }
+
+  const fallbackEnvironment = alternateAppleEnvironment(
+    preferredEnvironment,
+  );
+
+  try {
+    return await verifyAppleTransactionInEnvironment(
+      productId,
+      transactionId,
+      fallbackEnvironment,
+    );
+  } catch (error) {
+    if (appleProviderHttpStatus(error) === 404) {
+      return null;
+    }
+
+    throw error;
+  }
 }
 
 async function verifyGoogleSubscription(
@@ -723,7 +1494,6 @@ async function verifyGoogleSubscription(
 
   if (
     subscriptionState === null ||
-    !activeGoogleSubscriptionStates.has(subscriptionState) ||
     lineItem === null ||
     expiryTime === null
   ) {
@@ -739,12 +1509,33 @@ async function verifyGoogleSubscription(
     return null;
   }
 
+  let lifecycleStatus: LifecycleStatus;
+
+  if (
+    subscriptionState === "SUBSCRIPTION_STATE_ACTIVE"
+  ) {
+    lifecycleStatus = "active";
+  } else if (
+    subscriptionState ===
+    "SUBSCRIPTION_STATE_IN_GRACE_PERIOD"
+  ) {
+    lifecycleStatus = "grace_period";
+  } else if (
+    subscriptionState ===
+    "SUBSCRIPTION_STATE_CANCELED"
+  ) {
+    lifecycleStatus = "paid_through_cancellation";
+  } else {
+    return null;
+  }
+
   const subscriptionId = hashIdentifier(
     `google:${packageName}:${purchaseToken}`,
   );
 
   return {
     expirationDate: new Date(expiryMillis),
+    lifecycleStatus,
     originalTransactionId: subscriptionId,
     platform: "android",
     productId,
@@ -831,11 +1622,18 @@ async function handleReceiptValidation(
     return;
   }
 
-  await persistValidatedEntitlement(uid, result);
+  await persistAfterReceiptOwnership(
+    uid,
+    result,
+    assertReceiptOwnership,
+    persistValidatedEntitlement,
+  );
 
   sendJson(response, 200, {
     expirationDate: result.expirationDate.toISOString(),
+    lifecycleStatus: result.lifecycleStatus,
     originalTransactionId: result.originalTransactionId,
+    productId: result.productId,
     transactionId: result.transactionId,
     valid: true,
   });
@@ -1053,11 +1851,25 @@ async function handleRequest(
       return;
     }
 
+    const errorRecord = readRecord(error);
+
     console.error("receipt_service_request_failed", {
       category:
         error instanceof Error ?
           error.name :
           "unknown",
+      code:
+        readNonEmptyString(errorRecord?.code) ??
+        readNonEmptyString(errorRecord?.errorCode) ??
+        readNonEmptyString(errorRecord?.apiError),
+      message:
+        error instanceof Error ?
+          error.message.slice(0, 300) :
+          null,
+      status:
+        readIntegerValue(errorRecord?.status) ??
+        readIntegerValue(errorRecord?.statusCode) ??
+        readIntegerValue(errorRecord?.httpStatusCode),
     });
 
     sendJson(response, 502, {

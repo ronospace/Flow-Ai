@@ -44,6 +44,22 @@ void main() {
     expect(source, contains('idx_daily_tracking_user_date'));
   });
 
+  test('v1 migration releases legacy daily tracking index ownership', () {
+    final upgrade = _futureMethodByName(source, '_upgradeDatabase');
+
+    final rename = upgrade.indexOf(
+      'RENAME TO daily_tracking_legacy_v1_unowned',
+    );
+    final dropIndex = upgrade.indexOf(
+      'DROP INDEX IF EXISTS idx_daily_tracking_user_date',
+    );
+    final recreate = upgrade.indexOf('await _createDailyTrackingTable(txn)');
+
+    expect(rename, greaterThanOrEqualTo(0));
+    expect(dropIndex, greaterThan(rename));
+    expect(recreate, greaterThan(dropIndex));
+  });
+
   test('v1 unowned health rows remain preserved and unowned', () {
     final upgrade = _futureMethodByName(source, '_upgradeDatabase');
 
