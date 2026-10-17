@@ -794,7 +794,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                           .slideY(begin: 0.3, end: 0)
                           .fadeIn(delay: 500.ms),
 
-                      const SizedBox(height: 100), // Bottom spacing
+                      const SizedBox(
+                        height: AppTheme.spaceXl,
+                      ), // Bottom breathing space.
                     ],
                   ),
                 ),

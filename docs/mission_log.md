@@ -8349,3 +8349,101 @@ Next gate:
 **Current gate**
 - BLOCKED intentionally until the current new Android and iOS releases are completed.
 - No Premium visual mutation is authorized before that gate.
+
+## UX-2.2.3 — SETTINGS BOTTOM TOKEN COMPLETION — 2026-10-17
+
+Status: 98% — SETTINGS BOTTOM-SPACING SUBTASK COMPLETE / REMAINING UX-2.2.3 GATES OPEN.
+
+Verified:
+- authoritative main Settings owner remains `lib/features/settings/screens/settings_screen.dart`;
+- `MainShell` remains the persistent bottom-navigation owner;
+- the previous fixed `100px` Settings bottom spacer has been removed;
+- Settings now retains only tokenized visual breathing space via `AppTheme.spaceXl`;
+- this spacing is content breathing room only and does not duplicate bottom-navigation clearance;
+- `AppTheme.spaceXl` remains centrally owned by `lib/core/theme/app_theme.dart`;
+- `test/release_contracts/ux223_shell_bottom_clearance_contract_test.dart` explicitly protects the tokenized Settings bottom-space rule;
+- Settings header contract passes;
+- UX223 shell-bottom-clearance contract passes;
+- targeted analyzer passes with zero issues;
+- `git diff --check` passes.
+
+Preservation:
+- no Account Management spacing was changed;
+- no FAQ FAB clearance was changed;
+- no bottom-navigation ownership was moved into Settings;
+- no screenshot-derived dimensions were introduced;
+- unrelated dirty work was preserved.
+
+Remaining UX-2.2.3 rule:
+- do not mark the parent mission 100% until its remaining responsive-composition gates are independently verified.
+
+## UX-3 — SETTINGS & HEALTH MODAL REDESIGN — FUTURE
+
+Status: 0% — QUEUED AFTER NEXT RELEASE.
+
+Priority rule:
+- do not start UX-3 before the current release is completed;
+- UX-3 is a centralized redesign mission, not a collection of screen-local cosmetic patches.
+
+Observed qualitative issues from physical iPhone review:
+- Settings section cards are visually heavy and vertically inefficient;
+- collapsed and expanded sections need a calmer and more balanced density system;
+- Health Connections becomes visually oversized when expanded;
+- repeated strong gradient/icon treatments create unnecessary visual competition;
+- subtitle wrapping creates uneven row rhythm;
+- Health Data Privacy dialog is taller than necessary and has weak action/content balance;
+- Apple HealthKit information is duplicated across multiple dialog layers;
+- nested modal behavior should be removed where possible;
+- HealthKit dialog hierarchy is overly tall, colorful, and information-heavy;
+- Medical Sources duplicates header hierarchy (`Medical Sources` / `Sources`);
+- Medical Sources search, disclaimer, categories, headings, and cards consume excessive vertical space;
+- source-category controls need deliberate responsive horizontal behavior;
+- source cards need stronger metadata hierarchy and denser presentation.
+
+Required architecture before mutation:
+1. map every Settings dialog, sheet, screen, route and caller;
+2. map Android/iOS platform branches independently;
+3. map typography, spacing, safe-area, scroll and action owners;
+4. audit every HealthKit/privacy claim for factual and compliance correctness;
+5. identify duplicate modal content and duplicate UI ownership;
+6. define centralized responsive modal primitives before screen redesign.
+
+Planned centralized owners:
+- `AppModalShell`;
+- `AppModalHeader`;
+- `AppModalBody`;
+- `AppModalActionBar`;
+- `AppInfoBanner`;
+- centralized Settings section/row density tokens;
+- centralized modal width/height/scroll/safe-area behavior.
+
+Planned work:
+- UX3-1 evidence-first architecture audit;
+- UX3-2 centralized modal system;
+- UX3-3 centralized Settings density system;
+- UX3-4 single authoritative HealthKit flow;
+- UX3-5 compact verified Privacy presentation;
+- UX3-6 Medical Sources information architecture redesign;
+- UX3-7 semantic color/hierarchy cleanup;
+- UX3-8 accessibility, localization, text-scale and responsive verification;
+- UX3-9 physical iPhone + Android E2E.
+
+Design objective:
+- lighter;
+- shorter;
+- calmer;
+- balanced;
+- accessible;
+- semantically colored;
+- no duplicated explanations;
+- no nested modal clutter;
+- no screenshot-derived measurements;
+- shared owners first, screen-level composition second.
+
+Physical closure requirement:
+- verify Settings collapsed/expanded behavior;
+- Privacy;
+- HealthKit;
+- permissions flow;
+- Medical Sources search/categories/source actions;
+- both Android and iPhone.
