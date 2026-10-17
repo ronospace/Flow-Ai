@@ -4077,14 +4077,18 @@ Status: ACTIVE — source work CLOSED WITH EVIDENCE; physical two-device verific
 Every new user-reported defect, suggestion, visual preference, architectural concern or verified engineering finding must receive a stable numbered identifier, status and evidence in this existing mission ledger. Items remain OPEN until implementation plus required automated and physical evidence proves closure. Do not silently drop, merge away or mark an item complete without evidence.
 
 
-#### UX2-F11 — Swipe-selected capsule auto-follow — SOURCE VERIFIED / PHYSICAL RECHECK PENDING
+#### UX2-F11 — Swipe-selected capsule auto-follow — 98% / IPHONE PASS / ANDROID PHYSICAL PENDING
 - Physical/user feedback showed that swiping Track body pages could advance beyond the currently visible horizontal capsules while the selected capsule remained off-screen.
 - Exact source audit proved `TrackingScreen.onPageChanged` correctly updates `_tabController`, while the shared `AppSegmentedSelector` previously had no mechanism to reveal a newly selected off-screen item.
 - Authoritative fix belongs in `lib/core/ui/app_segmented_selector.dart`, not in Track-specific code.
-- The shared selector now automatically scrolls only enough to keep the externally selected capsule visible.
-- Existing selector API, intrinsic label widths, horizontal scrolling, geometry, semantics and Track `PageView` ownership remain unchanged.
-- Release contract protects programmatic/page-driven selection visibility.
-- Physical Android+iPhone verification remains required before closure.
+- Shared selector now centers the selected middle capsule when mathematically reachable and naturally clamps first/last capsules to start/end without artificial side padding.
+- The visible capsule itself is the geometry target; trailing inter-item padding is excluded from centering.
+- Track and Daily Feelings inherit the centralized selector behavior without screen-local centering overrides.
+- Automated gate: 13/13 targeted tests PASS; targeted analyzer reports zero issues.
+- Physical iPhone Release verification: PASS.
+- Physical Android Release verification remains required before closure.
+- Progress: 98%.
+- Exact next gate: physical Android Release verification, then close UX2-F11.
 
 #### UX2-F12 — Top-level page-title typography consistency — SOURCE VERIFIED / PHYSICAL RECHECK PENDING
 - Active-route audit confirmed Settings, Calendar and Insights are live top-level screens.

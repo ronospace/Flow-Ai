@@ -25,6 +25,7 @@ class AppSegmentedSelector extends StatefulWidget {
     required this.onSelected,
     this.icons,
     this.emphasizedIndices = const <int>{},
+    this.centerSelected = true,
   });
 
   final List<String> labels;
@@ -32,6 +33,11 @@ class AppSegmentedSelector extends StatefulWidget {
   final ValueChanged<int> onSelected;
   final List<IconData?>? icons;
   final Set<int> emphasizedIndices;
+
+  /// When true, selection changes move the selected capsule toward the
+  /// viewport center when scroll extents allow it. Edge items naturally
+  /// clamp to the start/end rather than receiving artificial side padding.
+  final bool centerSelected;
 
   @override
   State<AppSegmentedSelector> createState() => _AppSegmentedSelectorState();
@@ -95,7 +101,12 @@ class _AppSegmentedSelectorState extends State<AppSegmentedSelector> {
 
       double? target;
 
-      if (itemLeft < 0) {
+      if (widget.centerSelected) {
+        final itemCenter = itemLeft + (itemBox.size.width / 2);
+        final viewportCenter = viewportWidth / 2;
+
+        target = _scrollController.offset + (itemCenter - viewportCenter);
+      } else if (itemLeft < 0) {
         target = _scrollController.offset + itemLeft;
       } else if (itemRight > viewportWidth) {
         target = _scrollController.offset + (itemRight - viewportWidth);
@@ -150,11 +161,11 @@ class _AppSegmentedSelectorState extends State<AppSegmentedSelector> {
           final icon = widget.icons == null ? null : widget.icons![index];
 
           return Padding(
-            key: _itemKeys[index],
             padding: EdgeInsets.only(
               right: index == widget.labels.length - 1 ? 0 : 8,
             ),
             child: Semantics(
+              key: _itemKeys[index],
               button: true,
               selected: selected,
               label: widget.labels[index],
