@@ -129,10 +129,29 @@ class _PainBodyMapState extends State<PainBodyMap> {
                           final intensity = widget.painAreas[areaId] ?? 0.0;
                           final isActive = intensity > 0;
                           final isSelected = _selectedArea == areaId;
+                          final indicatorSize = isSelected
+                              ? 70.0
+                              : (isActive ? 55.0 : 45.0);
+                          final maxLeft = (constraints.maxWidth - indicatorSize)
+                              .clamp(0.0, double.infinity)
+                              .toDouble();
+                          final maxTop = (constraints.maxHeight - indicatorSize)
+                              .clamp(0.0, double.infinity)
+                              .toDouble();
+                          final left =
+                              (area.position.dx * constraints.maxWidth -
+                                      indicatorSize / 2)
+                                  .clamp(0.0, maxLeft)
+                                  .toDouble();
+                          final top =
+                              (area.position.dy * constraints.maxHeight -
+                                      indicatorSize / 2)
+                                  .clamp(0.0, maxTop)
+                                  .toDouble();
 
                           return Positioned(
-                            left: area.position.dx * constraints.maxWidth - 30,
-                            top: area.position.dy * constraints.maxHeight - 30,
+                            left: left,
+                            top: top,
                             child: _buildPainIndicator(
                               areaId,
                               area,
