@@ -3,6 +3,7 @@
 import 'dart:math' as math;
 
 import 'package:flow_ai/core/theme/app_theme.dart';
+import 'package:flow_ai/features/cycle/services/tracking_pattern_insight_service.dart';
 import 'package:flow_ai/features/cycle/widgets/mood_energy_slider.dart';
 import 'package:flow_ai/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,12 @@ class MoodResponsiveHarness extends StatelessWidget {
           emoji: '🙂',
           color: AppTheme.primaryRose,
           onChanged: (_) {},
+          insight: const TrackingPatternInsight(
+            text: 'Responsive test insight',
+            basis: 'Responsive test basis',
+            historicalCount: 0,
+            historyBacked: false,
+          ),
         ),
       ),
     );

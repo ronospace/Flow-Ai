@@ -13,6 +13,7 @@ import '../../../generated/app_localizations.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/flow_intensity_picker.dart';
 import '../widgets/symptom_selector.dart';
+import '../services/tracking_pattern_insight_service.dart';
 import '../widgets/mood_energy_slider.dart';
 import '../widgets/pain_body_map.dart';
 
@@ -39,6 +40,10 @@ class _TrackingScreenState extends State<TrackingScreen>
   bool _moodObserved = false;
   bool _energyObserved = false;
   bool _painObserved = false;
+  final TrackingPatternInsightService _trackingInsightService =
+      TrackingPatternInsightService();
+  List<Map<String, dynamic>> _trackingInsightHistory =
+      const <Map<String, dynamic>>[];
   final Map<String, double> _painAreas = {};
   String _notes = '';
   static const Map<String, String> _quickNotes = <String, String>{
@@ -145,6 +150,10 @@ class _TrackingScreenState extends State<TrackingScreen>
         requestedDate,
       );
 
+      final insightHistory = await _trackingInsightService.loadPriorHistory(
+        requestedDate,
+      );
+
       if (!mounted ||
           generation != _loadGeneration ||
           !_isSameTrackingDate(requestedDate, _selectedDate)) {
@@ -152,6 +161,8 @@ class _TrackingScreenState extends State<TrackingScreen>
       }
 
       setState(() {
+        _trackingInsightHistory = insightHistory;
+
         if (existingData != null) {
           _flowIntensity = existingData['flow_intensity'] ?? FlowIntensity.none;
 
@@ -854,6 +865,12 @@ class _TrackingScreenState extends State<TrackingScreen>
               },
               emoji: _getMoodEmoji(_mood),
               color: AppTheme.primaryRose,
+              insight: TrackingPatternInsightService.analyze(
+                metric: TrackingInsightMetric.mood,
+                currentValue: _mood,
+                currentObserved: _moodObserved,
+                history: _trackingInsightHistory,
+              ),
             ),
           ),
           const SizedBox(height: 40),
@@ -871,6 +888,12 @@ class _TrackingScreenState extends State<TrackingScreen>
               },
               emoji: _getEnergyEmoji(_energy),
               color: AppTheme.accentMint,
+              insight: TrackingPatternInsightService.analyze(
+                metric: TrackingInsightMetric.energy,
+                currentValue: _energy,
+                currentObserved: _energyObserved,
+                history: _trackingInsightHistory,
+              ),
             ),
           ),
         ],
@@ -922,6 +945,12 @@ class _TrackingScreenState extends State<TrackingScreen>
               color: AppTheme.primaryRose,
               min: 1,
               max: 5,
+              insight: TrackingPatternInsightService.analyze(
+                metric: TrackingInsightMetric.pain,
+                currentValue: _pain,
+                currentObserved: _painObserved,
+                history: _trackingInsightHistory,
+              ),
             ),
           ),
           const SizedBox(height: 40),

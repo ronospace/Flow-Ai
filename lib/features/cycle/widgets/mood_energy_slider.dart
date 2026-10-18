@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/safe_shadows.dart';
+import '../services/tracking_pattern_insight_service.dart';
 import 'dart:math' as math;
 
 class MoodEnergySlider extends StatefulWidget {
@@ -13,6 +14,7 @@ class MoodEnergySlider extends StatefulWidget {
   final Color color;
   final double min;
   final double max;
+  final TrackingPatternInsight insight;
 
   const MoodEnergySlider({
     super.key,
@@ -23,6 +25,7 @@ class MoodEnergySlider extends StatefulWidget {
     required this.color,
     this.min = 1,
     this.max = 5,
+    required this.insight,
   });
 
   @override
@@ -130,44 +133,6 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
     }
   }
 
-  String _getPsychologyInsight(double value) {
-    final type = widget.label.toLowerCase();
-
-    if (type == 'mood') {
-      switch (value.round()) {
-        case 1:
-          return 'Low mood detected. Consider gentle self-care activities and reach out for support if needed.';
-        case 2:
-          return 'Mild mood fluctuation is normal during your cycle. Try breathing exercises or light movement.';
-        case 3:
-          return 'Balanced emotional state. This is a great time for routine activities and planning.';
-        case 4:
-          return 'Positive mood pattern! Your hormones may be supporting emotional stability.';
-        case 5:
-          return 'Excellent mood! Consider journaling about what\'s working well in your routine.';
-        default:
-          return 'Track your mood patterns to understand your cycle better.';
-      }
-    } else if (type == 'energy') {
-      switch (value.round()) {
-        case 1:
-          return 'Low energy is common during certain cycle phases. Prioritize rest and gentle nutrition.';
-        case 2:
-          return 'Moderate fatigue detected. Consider iron-rich foods and adequate sleep.';
-        case 3:
-          return 'Stable energy levels. Your body is maintaining good hormonal balance.';
-        case 4:
-          return 'High energy phase! Great time for challenging activities and exercise.';
-        case 5:
-          return 'Peak energy levels! Your cycle may be in an optimal phase for productivity.';
-        default:
-          return 'Energy tracking helps optimize your daily schedule around your cycle.';
-      }
-    } else {
-      return 'Consistent tracking provides valuable insights into your wellbeing patterns.';
-    }
-  }
-
   List<Color> _getNeuralNetworkColors(double value) {
     final intensity = (value - widget.min) / (widget.max - widget.min);
 
@@ -216,7 +181,6 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
     final currentColor = _getColorForValue(widget.value);
     final levelText = _getLevelText(widget.value);
     final neuralColors = _getNeuralNetworkColors(widget.value);
-    final psychologyInsight = _getPsychologyInsight(widget.value);
 
     return Column(
       children: [
@@ -747,7 +711,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
         const SizedBox(height: 20),
 
-        // REVOLUTIONARY: AI Psychology Insights Panel
+        // History-backed personal pattern insight
         Container(
           constraints: const BoxConstraints(minHeight: 120),
           padding: const EdgeInsets.all(20),
@@ -817,7 +781,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'AI Psychology Insights',
+                          'Personal Pattern Insight',
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -826,7 +790,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Personalized for your cycle',
+                          widget.insight.basis,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: Theme.of(
                               context,
@@ -873,7 +837,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   ),
                 ),
                 child: Text(
-                  psychologyInsight,
+                  widget.insight.text,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                     height: 1.5,
