@@ -2522,3 +2522,51 @@ Exact next gate:
 4. do not reopen the history algorithm without direct failing evidence;
 5. preserve unrelated dirty worktree changes;
 6. no push without Geoffrey's explicit authorization.
+
+
+## Post-release future product missions
+
+### POSTREL-ONBOARDING-1 — Built With You / Flow Ai Is Evolving — 0% — FUTURE
+
+Status:
+- Do not implement during the current release or current monetization work.
+- Start only after monetization work and the new Android/iOS release are completed.
+
+Product intent:
+- Add a new onboarding page around step 4/6.
+- Position Flow Ai as continuously evolving without describing the production app as unfinished or "early development".
+- Preferred framing: "Built with you" / "Flow Ai is evolving".
+- Communicate that users can expect:
+  - new features;
+  - smarter insights;
+  - stronger personalization;
+  - continuous improvements;
+  - privacy-preserving development.
+- Place this before the notification-permission onboarding step.
+- Preserve responsive behavior, accessibility, localization, truthful privacy wording, and existing onboarding state ownership.
+- Require Android + iPhone physical verification before release.
+
+### POSTREL-FEEDBACK-1 — Smart Feedback & Review Engine — 0% — FUTURE
+
+Status:
+- Do not implement during the current release or current monetization work.
+- Start only after monetization work and the new Android/iOS release are completed.
+
+Product intent:
+- Build a centralized usage-aware feedback system rather than showing review prompts blindly.
+- Trigger lightweight sentiment/feedback surveys only after meaningful product-value moments such as:
+  - several real sessions;
+  - repeated daily check-ins;
+  - first useful insight;
+  - several days of meaningful use.
+- Never trigger during:
+  - onboarding;
+  - errors;
+  - purchase/restore;
+  - paywalls;
+  - critical health-data flows.
+- Add cooldowns, dismissal suppression, per-version limits, and eligibility reset after meaningful product updates.
+- Keep internal feedback surveys separate from the native App Store / Google Play review prompt.
+- Native store review prompts should only occur at appropriate positive product moments and must respect platform policies.
+- Persist feedback truthfully and preserve privacy/data-minimization requirements.
+- Require centralized ownership, contracts, analytics review, and Android + iPhone physical verification before release.
