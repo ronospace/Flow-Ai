@@ -2431,3 +2431,41 @@ Workflow rules:
 - analyzer must remain zero-warning;
 - never stage with `git add .` or `git add -A`;
 - never push without Geoffrey's explicit authorization.
+
+## 2026-10-18 — Responsive Mood/Energy commit checkpoint
+
+Canonical branch:
+`release/central-integration-20260720`
+
+Current HEAD:
+`7ae4df9b1df5ff6c33e7e2a2cca0659204b9036f`
+
+Current staged tree:
+`155f2255eaeadc0f06dab46f16eaa546a028db31`
+
+New commits:
+- `ad7de6d test(tracking): align migration contract with schema v3`
+- `7ae4df9 fix(tracking): finalize responsive mood and energy UX`
+
+Verified evidence:
+- migration contract: 7/7 PASS
+- Mood/Energy responsive suite: 4/4 PASS
+- strict responsive geometry matrix: 360 scenarios, 0 failures
+- mount failures: 0
+- boundary failures: 0
+- rendering exceptions: 0
+- maximum horizontal escape: 0.0
+- Mood/Energy targeted analyzer: 0 issues
+- English copy parity verified for `How’re you feeling today?`
+
+Committed Mood/Energy scope:
+- `lib/features/cycle/widgets/mood_energy_slider.dart`
+- `lib/generated/app_localizations_en.dart`
+- `lib/l10n/app_en.arb`
+- `test/features/cycle/widgets/mood_energy_slider_responsive_test.dart`
+
+Current exact next gate:
+- physical iPhone Release verification of Mood/Energy structure, selector row, centered biometric header and visual hierarchy;
+- do not reopen source unless physical evidence shows a defect;
+- Android parity follows only after the current iPhone visual gate;
+- preserve all unrelated dirty worktree files.
