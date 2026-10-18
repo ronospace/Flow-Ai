@@ -130,39 +130,41 @@ Deployment-state clarification — 2026-10-14:
 ## Current active missions — authoritative priority order
 
 
-### TRACK-AUTOSAVE-1 — Track persistence / redundant Save removal
+### TRACK-AUTOSAVE-1 — Track persistence / redundant Save removal — 100% — CLOSED
 
-Status: 87.5% — ACTIVE / ANDROID + IPHONE PHYSICAL PASS / COMMIT GATE OPEN.
+Closure commit:
+- `610a61e6e1ca72455ecdabf3597e262ec0e148e5` — `fix(tracking): finalize Daily Feelings autosave`
 
-Verified evidence:
-- Track owns serialized revision-safe persistence with autosave timer, save chain, edit/saved revisions, immutable snapshots, date-transition flush, lifecycle flush, and Notes Done semantics.
-- Daily Feelings now owns one centralized serialized revision-safe autosave boundary.
-- ten discrete Daily Feelings mutations route through that owner.
-- Daily Feelings Notes remain draft while typing and persist at Done/completed-edit boundaries.
-- Daily Feelings back navigation, date transition, pause, hidden, and detached lifecycle paths flush pending persistence.
-- redundant Daily Feelings manual Save UI is removed.
-- Daily Feelings targeted regression: 15/15 PASS.
-- full cycle regression: 221/221 PASS.
-- Daily Feelings release contracts: 9/9 PASS.
-- full repository analyzer: 0 issues.
-- git diff --check: PASS.
+Verified closure evidence:
+- one serialized revision-safe Daily Feelings autosave authority;
+- ten discrete Daily Feelings mutations route through the centralized persistence boundary;
+- Notes remain Done/completed-edit gated;
+- date changes, back navigation, paused, hidden, and detached lifecycle transitions flush pending persistence;
+- manual Daily Feelings Save CTA removed;
+- targeted Daily Feelings regression: 15/15 PASS;
+- full `test/features/cycle` regression: 221/221 PASS;
+- Daily Feelings release contracts: 9/9 PASS;
+- full repository analyzer: 0 issues;
+- `git diff --check`: PASS;
+- Android physical Release persistence: PASS;
+- iPhone physical Release persistence: PASS;
+- no manual Save button on verified physical flow;
+- implementation was selectively committed with unrelated generated/cache artifacts excluded;
+- no push performed.
 
 Closure gates:
-1. map date-switch, lifecycle, dispose, async-load and manual-save callers — PASS;
-2. finish one serialized revision-safe persistence authority — PASS;
-3. preserve Notes keyboard Done semantics — PASS;
-4. migrate old Save contracts to autosave/Done contracts — PASS;
-5. remove redundant visual Save only after persistence gates pass — PASS;
-6. analyzer + targeted Track persistence tests + broader regression — PASS;
+1. owner/caller/transition audit — PASS;
+2. serialized revision-safe persistence authority — PASS;
+3. Notes Done semantics — PASS;
+4. stale Save-contract migration — PASS;
+5. redundant visual Save removal — PASS;
+6. analyzer + targeted + broader regression — PASS;
 7. physical Android + iPhone verification — PASS;
-8. selectively commit the completed mission and update canonical mission documentation — PENDING.
+8. selective implementation commit + canonical closure documentation — PASS.
 
-Exact next gate:
-- verify the exact current source on physical Android and iPhone Release;
-- confirm no Daily Feelings Save button;
-- change one Daily Feelings value, leave/reopen, confirm persistence;
-- Notes: type, press Done, leave/reopen, confirm persistence;
-- only after both platforms pass: selectively stage, commit, document closure, and advance to REL-INT-1.
+Next mission:
+- `REL-INT-1 — Release Integrity`.
+- Do not reopen TRACK-AUTOSAVE-1 without new direct failing evidence.
 
 ### TRACK-UX-1 — Track responsive Mood / Energy / Pain metric cells
 
