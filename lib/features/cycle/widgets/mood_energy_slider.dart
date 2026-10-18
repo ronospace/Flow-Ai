@@ -257,25 +257,25 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               LayoutBuilder(
                 key: const ValueKey('mood-header-responsive-layout'),
                 builder: (context, constraints) {
-                  final textScale = MediaQuery.textScalerOf(context).scale(1);
-                  final useStackedLayout =
-                      constraints.maxWidth < 420 || textScale > 1.2;
-
                   final title = Column(
                     key: const ValueKey('mood-header-title'),
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         widget.label,
+                        key: const ValueKey('mood-header-title-text'),
+                        textAlign: TextAlign.center,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         'Biometric Analysis',
+                        key: const ValueKey('mood-header-subtitle-text'),
+                        textAlign: TextAlign.center,
                         softWrap: true,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
@@ -342,30 +342,19 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                     ),
                   );
 
-                  if (useStackedLayout) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        title,
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 12,
-                          runSpacing: 8,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [indicator, badge],
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Row(
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(child: title),
-                      const SizedBox(width: 12),
-                      indicator,
-                      const SizedBox(width: 12),
-                      badge,
+                      SizedBox(width: double.infinity, child: title),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        key: const ValueKey('mood-header-meta-group'),
+                        alignment: WrapAlignment.center,
+                        spacing: 12,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [indicator, badge],
+                      ),
                     ],
                   );
                 },
@@ -399,18 +388,21 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
                     return AnimatedBuilder(
                       animation: _waveAnimation,
-                      builder: (context, child) {
-                        return Container(
-                          width: radius + (_waveAnimation.value * 10),
-                          height: radius + (_waveAnimation.value * 10),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: currentColor.withValues(alpha: opacity),
-                              width: 2,
-                            ),
+                      child: Container(
+                        width: radius,
+                        height: radius,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: currentColor.withValues(alpha: opacity),
+                            width: 2,
                           ),
-                        );
+                        ),
+                      ),
+                      builder: (context, child) {
+                        final scale =
+                            1.0 + ((_waveAnimation.value * 10) / radius);
+                        return Transform.scale(scale: scale, child: child);
                       },
                     );
                   }),
@@ -486,113 +478,143 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               const SizedBox(height: 32),
 
               // REVOLUTIONARY: Enhanced Interactive Value Selectors
-              Wrap(
-                spacing: 12,
-                children: List.generate((widget.max - widget.min + 1).round(), (
-                  index,
-                ) {
-                  final indicatorValue = widget.min + index;
-                  final isActive =
-                      widget.value.round() == indicatorValue.round();
-                  final indicatorColor = _getColorForValue(indicatorValue);
+              LayoutBuilder(
+                key: const ValueKey('mood-value-selector-layout'),
+                builder: (context, constraints) {
+                  final selectorCount = (widget.max - widget.min + 1).round();
+                  final slotWidth = constraints.maxWidth / selectorCount;
+                  final activeSize = slotWidth.clamp(34.0, 55.0).toDouble();
+                  final inactiveSize = (activeSize - 10.0)
+                      .clamp(34.0, 45.0)
+                      .toDouble();
 
-                  return GestureDetector(
-                    onTap: () {
-                      widget.onChanged(indicatorValue);
-                      _triggerPulse();
-                      HapticFeedback.mediumImpact();
-                    },
-                    child:
-                        AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.elasticOut,
-                              width: isActive ? 55 : 45,
-                              height: isActive ? 55 : 45,
-                              decoration: BoxDecoration(
-                                gradient: isActive
-                                    ? LinearGradient(
-                                        colors: [
-                                          indicatorColor,
-                                          indicatorColor.withValues(alpha: 0.8),
+                  return Row(
+                    key: const ValueKey('mood-value-selector-row'),
+                    children: List.generate(selectorCount, (index) {
+                      final indicatorValue = widget.min + index;
+                      final isActive =
+                          widget.value.round() == indicatorValue.round();
+                      final indicatorColor = _getColorForValue(indicatorValue);
+                      final indicatorSize = isActive
+                          ? activeSize
+                          : inactiveSize;
+
+                      return Expanded(
+                        child: Center(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              widget.onChanged(indicatorValue);
+                              _triggerPulse();
+                              HapticFeedback.mediumImpact();
+                            },
+                            child:
+                                AnimatedContainer(
+                                      key: ValueKey(
+                                        'mood-value-selector-${indicatorValue.round()}',
+                                      ),
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.elasticOut,
+                                      width: indicatorSize,
+                                      height: indicatorSize,
+                                      decoration: BoxDecoration(
+                                        gradient: isActive
+                                            ? LinearGradient(
+                                                colors: [
+                                                  indicatorColor,
+                                                  indicatorColor.withValues(
+                                                    alpha: 0.8,
+                                                  ),
+                                                ],
+                                              )
+                                            : null,
+                                        color: isActive
+                                            ? null
+                                            : indicatorColor.withValues(
+                                                alpha: 0.15,
+                                              ),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: indicatorColor,
+                                          width: isActive ? 3 : 2,
+                                        ),
+                                        boxShadow: isActive
+                                            ? [
+                                                SafeShadows.safe(
+                                                  color: indicatorColor
+                                                      .withValues(alpha: 0.5),
+                                                  blurRadius: 15.0,
+                                                  offset: const Offset(0, 6),
+                                                  spreadRadius: 2.0,
+                                                ),
+                                                SafeShadows.safe(
+                                                  color: theme
+                                                      .colorScheme
+                                                      .surface
+                                                      .withValues(alpha: 0.8),
+                                                  blurRadius: 5.0,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ]
+                                            : [
+                                                SafeShadows.safe(
+                                                  color: indicatorColor
+                                                      .withValues(alpha: 0.2),
+                                                  blurRadius: 8.0,
+                                                  offset: const Offset(0, 3),
+                                                ),
+                                              ],
+                                      ),
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          if (isActive)
+                                            Container(
+                                                  width: indicatorSize * 0.9,
+                                                  height: indicatorSize * 0.9,
+                                                  decoration: BoxDecoration(
+                                                    color: theme
+                                                        .colorScheme
+                                                        .surface
+                                                        .withValues(alpha: 0.2),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                )
+                                                .animate(
+                                                  onPlay: (controller) =>
+                                                      controller.repeat(),
+                                                )
+                                                .fadeIn(duration: 800.ms)
+                                                .then(delay: 200.ms)
+                                                .fadeOut(duration: 800.ms),
+                                          Text(
+                                            indicatorValue.round().toString(),
+                                            style: TextStyle(
+                                              color: isActive
+                                                  ? theme.colorScheme.onPrimary
+                                                  : indicatorColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: isActive ? 20 : 16,
+                                            ),
+                                          ),
                                         ],
-                                      )
-                                    : null,
-                                color: isActive
-                                    ? null
-                                    : indicatorColor.withValues(alpha: 0.15),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: indicatorColor,
-                                  width: isActive ? 3 : 2,
-                                ),
-                                boxShadow: isActive
-                                    ? [
-                                        SafeShadows.safe(
-                                          color: indicatorColor.withValues(
-                                            alpha: 0.5,
-                                          ),
-                                          blurRadius: 15.0,
-                                          offset: const Offset(0, 6),
-                                          spreadRadius: 2.0,
-                                        ),
-                                        SafeShadows.safe(
-                                          color: theme.colorScheme.surface
-                                              .withValues(alpha: 0.8),
-                                          blurRadius: 5.0,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ]
-                                    : [
-                                        SafeShadows.safe(
-                                          color: indicatorColor.withValues(
-                                            alpha: 0.2,
-                                          ),
-                                          blurRadius: 8.0,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                              ),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  // Background pulse for active
-                                  if (isActive)
-                                    Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: theme.colorScheme.surface
-                                                .withValues(alpha: 0.2),
-                                            shape: BoxShape.circle,
-                                          ),
-                                        )
-                                        .animate(
-                                          onPlay: (controller) =>
-                                              controller.repeat(),
-                                        )
-                                        .fadeIn(duration: 800.ms)
-                                        .then(delay: 200.ms)
-                                        .fadeOut(duration: 800.ms),
-
-                                  // Number display
-                                  Text(
-                                    indicatorValue.round().toString(),
-                                    style: TextStyle(
-                                      color: isActive
-                                          ? theme.colorScheme.onPrimary
-                                          : indicatorColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: isActive ? 20 : 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                            .animate(delay: Duration(milliseconds: index * 100))
-                            .fadeIn()
-                            .scale(begin: const Offset(0.8, 0.8)),
+                                      ),
+                                    )
+                                    .animate(
+                                      delay: Duration(
+                                        milliseconds: index * 100,
+                                      ),
+                                    )
+                                    .fadeIn()
+                                    .scale(begin: const Offset(0.8, 0.8)),
+                          ),
+                        ),
+                      );
+                    }),
                   );
-                }),
+                },
               ),
 
               const SizedBox(height: 32),

@@ -313,4 +313,237 @@ void main() {
       expect(maximumEscape, lessThanOrEqualTo(0.5));
     },
   );
+
+  testWidgets('MoodEnergySlider keeps all five value selectors on one row', (
+    tester,
+  ) async {
+    const widths = <double>[320, 360, 375, 390, 393, 402, 414, 428, 430, 440];
+    const values = <double>[1, 3, 5];
+
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    for (final width in widths) {
+      for (final value in values) {
+        tester.view.physicalSize = Size(width, 1200);
+        tester.view.devicePixelRatio = 1;
+
+        await tester.pumpWidget(
+          buildResponsiveApp(
+            width: width,
+            height: 1200,
+            scale: 1,
+            brightness: Brightness.dark,
+            locale: const Locale('en'),
+            value: value,
+          ),
+        );
+
+        await tester.pump(const Duration(seconds: 2));
+
+        final row = find.byKey(
+          const ValueKey('mood-value-selector-row'),
+          skipOffstage: false,
+        );
+
+        expect(row, findsOneWidget);
+
+        final selectorRects = <Rect>[];
+
+        for (var index = 1; index <= 5; index++) {
+          final selector = find.byKey(
+            ValueKey('mood-value-selector-$index'),
+            skipOffstage: false,
+          );
+
+          expect(
+            selector,
+            findsOneWidget,
+            reason: 'width=$width value=$value selector=$index',
+          );
+
+          selectorRects.add(tester.getRect(selector));
+        }
+
+        final centers = selectorRects.map((rect) => rect.center.dy).toList();
+        final minCenter = centers.reduce(
+          (left, right) => left < right ? left : right,
+        );
+        final maxCenter = centers.reduce(
+          (left, right) => left > right ? left : right,
+        );
+
+        expect(
+          maxCenter - minCenter,
+          lessThanOrEqualTo(0.5),
+          reason:
+              'Selectors wrapped at width=$width value=$value centers=$centers',
+        );
+
+        final rowRect = tester.getRect(row);
+
+        for (final rect in selectorRects) {
+          expect(rect.left, greaterThanOrEqualTo(rowRect.left - 0.5));
+          expect(rect.right, lessThanOrEqualTo(rowRect.right + 0.5));
+        }
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 2));
+      }
+    }
+  });
+
+  testWidgets(
+    'MoodEnergySlider keeps biometric headers centered across phone widths',
+    (tester) async {
+      const widths = <double>[320, 360, 375, 390, 393, 402, 414, 428, 430, 440];
+
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      for (final width in widths) {
+        tester.view.physicalSize = Size(width, 1200);
+        tester.view.devicePixelRatio = 1;
+
+        await tester.pumpWidget(
+          buildResponsiveApp(
+            width: width,
+            height: 1200,
+            scale: 1,
+            brightness: Brightness.dark,
+            locale: const Locale('en'),
+            value: 5,
+          ),
+        );
+
+        await tester.pump(const Duration(seconds: 2));
+
+        final widgetRect = tester.getRect(
+          find.byType(MoodEnergySlider, skipOffstage: false),
+        );
+
+        final titleRect = tester.getRect(
+          find.byKey(const ValueKey('mood-header-title'), skipOffstage: false),
+        );
+
+        final indicatorRect = tester.getRect(
+          find.byKey(
+            const ValueKey('mood-neural-indicator'),
+            skipOffstage: false,
+          ),
+        );
+
+        final badgeRect = tester.getRect(
+          find.byKey(const ValueKey('mood-status-badge'), skipOffstage: false),
+        );
+
+        final titleDelta = (titleRect.center.dx - widgetRect.center.dx).abs();
+
+        final groupCenter = (indicatorRect.left + badgeRect.right) / 2;
+
+        final groupDelta = (groupCenter - widgetRect.center.dx).abs();
+
+        expect(
+          titleDelta,
+          lessThanOrEqualTo(0.5),
+          reason: 'Header title shifted at width=$width',
+        );
+
+        expect(
+          groupDelta,
+          lessThanOrEqualTo(3.0),
+          reason: 'Header indicator group shifted at width=$width',
+        );
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 2));
+      }
+    },
+  );
+
+  testWidgets(
+    'MoodEnergySlider keeps compact biometric header content centered',
+    (tester) async {
+      const widths = <double>[320, 360, 375, 390, 393, 402, 414, 428, 430, 440];
+
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      for (final width in widths) {
+        tester.view.physicalSize = Size(width, 1200);
+        tester.view.devicePixelRatio = 1;
+
+        await tester.pumpWidget(
+          buildResponsiveApp(
+            width: width,
+            height: 1200,
+            scale: 1,
+            brightness: Brightness.dark,
+            locale: const Locale('en'),
+            value: 5,
+          ),
+        );
+
+        await tester.pump(const Duration(seconds: 2));
+
+        final widgetRect = tester.getRect(
+          find.byType(MoodEnergySlider, skipOffstage: false),
+        );
+
+        final titleRect = tester.getRect(
+          find.byKey(
+            const ValueKey('mood-header-title-text'),
+            skipOffstage: false,
+          ),
+        );
+
+        final subtitleRect = tester.getRect(
+          find.byKey(
+            const ValueKey('mood-header-subtitle-text'),
+            skipOffstage: false,
+          ),
+        );
+
+        final metaRect = tester.getRect(
+          find.byKey(
+            const ValueKey('mood-header-meta-group'),
+            skipOffstage: false,
+          ),
+        );
+
+        expect(
+          (titleRect.center.dx - widgetRect.center.dx).abs(),
+          lessThanOrEqualTo(0.5),
+          reason: 'Title text shifted at width=$width',
+        );
+
+        expect(
+          (subtitleRect.center.dx - widgetRect.center.dx).abs(),
+          lessThanOrEqualTo(0.5),
+          reason: 'Subtitle shifted at width=$width',
+        );
+
+        expect(
+          (metaRect.center.dx - widgetRect.center.dx).abs(),
+          lessThanOrEqualTo(0.5),
+          reason: 'Waveform/status group shifted at width=$width',
+        );
+
+        expect(
+          subtitleRect.top - titleRect.bottom,
+          lessThanOrEqualTo(3.0),
+          reason: 'Compact title gap expanded at width=$width',
+        );
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 2));
+      }
+    },
+  );
 }
