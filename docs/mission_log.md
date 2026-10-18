@@ -11174,3 +11174,56 @@ Current exact next gate:
 - do not reopen source unless physical evidence shows a defect;
 - Android parity follows only after the current iPhone visual gate;
 - preserve all unrelated dirty worktree files.
+
+## 2026-10-18 — History-backed Track insight checkpoint
+
+Canonical branch:
+`release/central-integration-20260720`
+
+Current HEAD:
+`cc9293f0404ed7f9d1eb79da984c92c98ef7a4c2`
+
+Current staged tree:
+`57fc26087f790319edf71d1409eb0ac9b6ab1253`
+
+Completed implementation:
+- replaced static value-only `AI Psychology Insights` with `Personal Pattern Insight`;
+- introduced centralized `TrackingPatternInsightService`;
+- uses account-scoped persisted daily tracking history;
+- excludes the currently selected day from prior-history comparison;
+- respects explicit mood/energy/pain observed provenance;
+- fails closed when the current metric is unobserved;
+- requires at least three prior recorded metric days before claiming a personal comparison;
+- correlation language is descriptive only and requires at least five paired recorded mood/energy days;
+- no hormonal, cycle-phase, medical, causal, or fabricated confidence claims are generated;
+- `MoodEnergySlider` remains presentation-only and requires a supplied insight contract.
+
+Verified gates:
+- new history-backed insight tests: 6/6 PASS
+- Mood/Energy responsive suite: 4/4 PASS
+- strict geometry matrix: 360 scenarios / 0 failures
+- Track autosave integrity: 12/12 PASS
+- tracking provenance v3: 11/11 PASS
+- targeted analyzer: 0 issues
+- unsupported Track psychology-claim scan: PASS
+- `git diff --check`: PASS
+
+Physical state:
+- previous iPhone Mood/Energy responsive visual gate passed;
+- new Personal Pattern Insight copy/content still requires physical iPhone verification;
+- Android parity remains after iPhone acceptance.
+
+Active mission state:
+- TRACK-AUTOSAVE-1 — ACTIVE — 37.5%
+- TRACK-UX-1 — ACTIVE — 99%
+- TRACK-UX-2 — ACTIVE — 99%
+- TRACK-UX-3 — ACTIVE — 98%
+- REL-INT-1 — ACTIVE
+
+Exact next gate:
+1. physically verify the new Personal Pattern Insight on iPhone Release;
+2. verify unobserved, insufficient-history, and history-backed states;
+3. then verify Android parity;
+4. do not reopen the history algorithm without direct failing evidence;
+5. preserve unrelated dirty worktree changes;
+6. no push without Geoffrey's explicit authorization.
