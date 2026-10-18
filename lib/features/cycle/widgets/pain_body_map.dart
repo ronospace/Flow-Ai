@@ -20,6 +20,8 @@ class PainBodyMap extends StatefulWidget {
 class _PainBodyMapState extends State<PainBodyMap> {
   String? _selectedArea;
 
+  static const double _verticalCenterCorrection = -0.04;
+
   final Map<String, PainArea> _bodyAreas = {
     'head': PainArea(
       name: 'Head',
@@ -112,59 +114,68 @@ class _PainBodyMapState extends State<PainBodyMap> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Stack(
-                children: [
-                  // Background body silhouette
-                  Positioned.fill(
-                    child: CustomPaint(painter: BodySilhouettePainter()),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppTheme.spaceLg),
+                child: Stack(
+                  children: [
+                    // Background body silhouette
+                    Positioned.fill(
+                      child: CustomPaint(painter: BodySilhouettePainter()),
+                    ),
 
-                  // Pain area indicators
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Stack(
-                        children: _bodyAreas.entries.map((entry) {
-                          final areaId = entry.key;
-                          final area = entry.value;
-                          final intensity = widget.painAreas[areaId] ?? 0.0;
-                          final isActive = intensity > 0;
-                          final isSelected = _selectedArea == areaId;
-                          final indicatorSize = isSelected
-                              ? 70.0
-                              : (isActive ? 55.0 : 45.0);
-                          final maxLeft = (constraints.maxWidth - indicatorSize)
-                              .clamp(0.0, double.infinity)
-                              .toDouble();
-                          final maxTop = (constraints.maxHeight - indicatorSize)
-                              .clamp(0.0, double.infinity)
-                              .toDouble();
-                          final left =
-                              (area.position.dx * constraints.maxWidth -
-                                      indicatorSize / 2)
-                                  .clamp(0.0, maxLeft)
-                                  .toDouble();
-                          final top =
-                              (area.position.dy * constraints.maxHeight -
-                                      indicatorSize / 2)
-                                  .clamp(0.0, maxTop)
-                                  .toDouble();
+                    // Pain area indicators
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Stack(
+                          children: _bodyAreas.entries.map((entry) {
+                            final areaId = entry.key;
+                            final area = entry.value;
+                            final intensity = widget.painAreas[areaId] ?? 0.0;
+                            final isActive = intensity > 0;
+                            final isSelected = _selectedArea == areaId;
+                            final indicatorSize = isSelected
+                                ? 70.0
+                                : (isActive ? 55.0 : 45.0);
+                            final maxLeft =
+                                (constraints.maxWidth - indicatorSize)
+                                    .clamp(0.0, double.infinity)
+                                    .toDouble();
+                            final maxTop =
+                                (constraints.maxHeight - indicatorSize)
+                                    .clamp(0.0, double.infinity)
+                                    .toDouble();
+                            final left =
+                                (area.position.dx * constraints.maxWidth -
+                                        indicatorSize / 2)
+                                    .clamp(0.0, maxLeft)
+                                    .toDouble();
+                            final correctedY =
+                                (area.position.dy + _verticalCenterCorrection)
+                                    .clamp(0.0, 1.0)
+                                    .toDouble();
+                            final top =
+                                (correctedY * constraints.maxHeight -
+                                        indicatorSize / 2)
+                                    .clamp(0.0, maxTop)
+                                    .toDouble();
 
-                          return Positioned(
-                            left: left,
-                            top: top,
-                            child: _buildPainIndicator(
-                              areaId,
-                              area,
-                              intensity,
-                              isActive,
-                              isSelected,
-                            ),
-                          );
-                        }).toList(),
-                      );
-                    },
-                  ),
-                ],
+                            return Positioned(
+                              left: left,
+                              top: top,
+                              child: _buildPainIndicator(
+                                areaId,
+                                area,
+                                intensity,
+                                isActive,
+                                isSelected,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -826,6 +837,12 @@ class PainArea {
 class BodySilhouettePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.translate(
+      0,
+      size.height * _PainBodyMapState._verticalCenterCorrection,
+    );
+
     final paint = Paint()
       ..color = AppTheme.lightGrey.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
@@ -862,6 +879,7 @@ class BodySilhouettePainter extends CustomPainter {
     path.close();
 
     canvas.drawPath(path, paint);
+    canvas.restore();
   }
 
   @override

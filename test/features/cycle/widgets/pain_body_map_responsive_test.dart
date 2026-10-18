@@ -1,4 +1,5 @@
 import 'package:flow_ai/features/cycle/widgets/pain_body_map.dart';
+import 'package:flow_ai/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -106,10 +107,20 @@ void main() {
       find.byKey(const ValueKey('feet-5.0-true')),
     );
 
+    final headRect = tester.getRect(
+      find.byKey(const ValueKey('head-0.0-false')),
+    );
+
     expect(feetRect.left, greaterThanOrEqualTo(mapRect.left));
     expect(feetRect.right, lessThanOrEqualTo(mapRect.right));
     expect(feetRect.top, greaterThanOrEqualTo(mapRect.top));
     expect(feetRect.bottom, lessThanOrEqualTo(mapRect.bottom));
+    final topGap = headRect.top - mapRect.top;
+    final bottomGap = mapRect.bottom - feetRect.bottom;
+
+    expect(bottomGap, greaterThanOrEqualTo(AppTheme.spaceLg));
+    expect(topGap, greaterThanOrEqualTo(AppTheme.spaceLg));
+    expect((topGap - bottomGap).abs(), lessThanOrEqualTo(AppTheme.spaceLg));
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 2));

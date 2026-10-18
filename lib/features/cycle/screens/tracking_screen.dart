@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/constants/app_layout.dart';
+import '../../../core/ui/app_scroll_physics.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
 import '../../../generated/app_localizations.dart';
@@ -64,6 +66,13 @@ class _TrackingScreenState extends State<TrackingScreen>
   int _loadGeneration = 0;
 
   static const Duration _autosaveDelay = Duration(milliseconds: 300);
+
+  static const EdgeInsets _trackTabScrollPadding = EdgeInsets.fromLTRB(
+    AppTheme.spaceLg,
+    AppTheme.spaceXl,
+    AppTheme.spaceLg,
+    AppLayout.bottomNavigationContentGap,
+  );
 
   @override
   void initState() {
@@ -701,10 +710,8 @@ class _TrackingScreenState extends State<TrackingScreen>
             : null;
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceLg,
-            vertical: AppTheme.spaceXl,
-          ),
+          physics: AppScrollPhysics.spring,
+          padding: _trackTabScrollPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -797,28 +804,31 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceLg,
-        vertical: AppTheme.spaceXl,
-      ),
+      physics: AppScrollPhysics.spring,
+      padding: _trackTabScrollPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            localizations.moodAndEnergy,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${localizations.moodAndEnergy}:',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ${localizations.howAreYouFeelingToday}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            localizations.howAreYouFeelingToday,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: MoodEnergySlider(
@@ -850,7 +860,6 @@ class _TrackingScreenState extends State<TrackingScreen>
               color: AppTheme.accentMint,
             ),
           ),
-          const SizedBox(height: 100), // Extra bottom padding
         ],
       ),
     );
@@ -859,28 +868,31 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildPainTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceLg,
-        vertical: AppTheme.spaceXl,
-      ),
+      physics: AppScrollPhysics.spring,
+      padding: _trackTabScrollPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'Pain Level',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Pain Level:',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(
+                  text: ' Rate your pain',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Rate your overall pain level',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: MoodEnergySlider(
@@ -925,32 +937,33 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
     return SingleChildScrollView(
       key: const ValueKey('track-notes-scroll-view'),
+      physics: AppScrollPhysics.spring,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceLg,
-        vertical: AppTheme.spaceXl,
-      ),
+      padding: _trackTabScrollPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Personal Notes',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Personal Notes:',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                TextSpan(
+                  text: ' Add a quick cycle note',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
             ),
           ).animate().fadeIn().slideX(begin: -0.2, end: 0),
 
-          const SizedBox(height: 8),
-
-          Text(
-            'Capture your thoughts, feelings, and observations about your cycle',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ).animate().fadeIn(delay: 100.ms),
-
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
 
           // Notes Input Section
           Padding(
@@ -1099,8 +1112,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                           color: theme.textTheme.bodyMedium?.color,
                         ),
                         decoration: InputDecoration(
-                          hintText:
-                              'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
+                          hintText: 'Anything worth remembering?',
                           hintStyle: TextStyle(
                             color: theme.textTheme.bodyMedium?.color
                                 ?.withValues(alpha: 0.1),
