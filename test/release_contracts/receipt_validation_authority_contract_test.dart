@@ -11,26 +11,18 @@ void main() {
       ).readAsStringSync();
 
       expect(source, contains("data['valid'] == true"));
-      expect(
-        source,
-        contains('lifecycleStatus?.grantsEntitlement == true'),
-      );
+      expect(source, contains('lifecycleStatus?.grantsEntitlement == true'));
       expect(source, contains('expirationDate != null'));
       expect(source, contains('transactionId.isNotEmpty'));
       expect(source, contains('originalTransactionId.isNotEmpty'));
 
-      final grantStart = source.indexOf(
-        'final responseGrantsEntitlement',
-      );
+      final grantStart = source.indexOf('final responseGrantsEntitlement');
       final grantEnd = source.indexOf(';', grantStart);
 
       expect(grantStart, greaterThanOrEqualTo(0));
       expect(grantEnd, greaterThan(grantStart));
 
-      final grantBlock = source.substring(
-        grantStart,
-        grantEnd + 1,
-      );
+      final grantBlock = source.substring(grantStart, grantEnd + 1);
 
       expect(
         grantBlock,

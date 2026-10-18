@@ -8,36 +8,20 @@ void main() {
       'lib/features/premium/services/subscription_service.dart',
     ).readAsStringSync();
 
-    final initializeStart =
-        source.indexOf('Future<void> initialize(String userId)');
+    final initializeStart = source.indexOf(
+      'Future<void> initialize(String userId)',
+    );
     expect(initializeStart, greaterThanOrEqualTo(0));
 
-    expect(
-      source,
-      contains('_restoreOwnedPurchasesOnStartup('),
-    );
+    expect(source, contains('_restoreOwnedPurchasesOnStartup('));
 
-    expect(
-      source,
-      contains('await _iap.restorePurchases()'),
-    );
+    expect(source, contains('await _iap.restorePurchases()'));
 
     // Store ownership alone must never grant Premium.
-    expect(
-      source,
-      contains('validationResult.grantsActiveEntitlement'),
-    );
+    expect(source, contains('validationResult.grantsActiveEntitlement'));
 
-    expect(
-      source,
-      contains('PurchaseStatus.restored'),
-    );
+    expect(source, contains('PurchaseStatus.restored'));
 
-    expect(
-      source,
-      isNot(contains(
-        'UserSubscription.premium(userId)',
-      )),
-    );
+    expect(source, isNot(contains('UserSubscription.premium(userId)')));
   });
 }

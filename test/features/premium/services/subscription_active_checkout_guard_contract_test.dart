@@ -218,4 +218,33 @@ void main() {
     expect(loading, greaterThan(busy));
     expect(serviceCall, greaterThan(loading));
   });
+
+  test(
+    'startup restore never owns the manual restore completer or checkout lock',
+    () {
+      final service = File(
+        'lib/features/premium/services/subscription_service.dart',
+      ).readAsStringSync();
+
+      final startupRestoreStart = service.indexOf(
+        'Future<void> _restoreOwnedPurchasesOnStartup(',
+      );
+      final manualRestoreStart = service.indexOf(
+        'Future<bool> restorePurchases(String userId)',
+      );
+
+      expect(startupRestoreStart, greaterThanOrEqualTo(0));
+      expect(manualRestoreStart, greaterThan(startupRestoreStart));
+
+      final startupRestore = service.substring(
+        startupRestoreStart,
+        manualRestoreStart,
+      );
+
+      expect(startupRestore, contains('await _iap.restorePurchases();'));
+      expect(startupRestore, isNot(contains('_restoreCompleter =')));
+      expect(startupRestore, isNot(contains('Completer<bool>()')));
+      expect(startupRestore, isNot(contains('completer.future.timeout')));
+    },
+  );
 }

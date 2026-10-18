@@ -633,24 +633,16 @@ class SubscriptionService {
       return;
     }
 
-    final completer = Completer<bool>();
-    _restoreCompleter = completer;
-
     try {
+      // Startup restoration is intentionally non-blocking with respect to the
+      // checkout lock. StoreKit 2 can complete restorePurchases() with no
+      // purchaseStream event when there are no current entitlements, while
+      // restored transaction callbacks may also arrive asynchronously after
+      // this Future completes. The active purchaseStream remains responsible
+      // for validating and publishing any restored entitlement.
       await _iap.restorePurchases();
-
-      await completer.future.timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return false;
-        },
-      );
     } catch (error) {
       // Startup restoration is best-effort and remains fail-closed.
-    } finally {
-      if (identical(_restoreCompleter, completer)) {
-        _restoreCompleter = null;
-      }
     }
   }
 
