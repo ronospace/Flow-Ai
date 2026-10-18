@@ -2923,3 +2923,32 @@ Strategy:
 - central cooldown/eligibility owner;
 - verify current Apple and Google review-policy/API requirements at implementation time;
 - deterministic contracts plus physical Android/iPhone verification.
+
+## 2026-10-19 — REL-INT-1 current release worktree closure
+
+Mission:
+- REL-INT-1 release-classification slice: 100% CLOSED.
+- closure gates: 5/5 PASS.
+- permanent REL-INT preservation contract remains ACTIVE.
+
+Verified state:
+- production source/test/platform tree: clean;
+- staged index: empty;
+- zero unmerged paths;
+- no merge/rebase/cherry-pick/revert/bisect operation active;
+- branch: `release/central-integration-20260720`;
+- verified parent HEAD: `44b3f56ba93e5dbe2ea8341546dadb296ce31905`.
+
+Preserved exclusions:
+- `.firebase/hosting.YnVpbGQvd2Vi.cache`;
+- `9d58dded687c`;
+- `Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab`.
+
+Rules preserved:
+- no reset/restore/clean/stash;
+- no blanket staging;
+- no destructive cleanup of unexplained work;
+- classify every new dirty path before mutation/commit.
+
+Next active mission:
+- `MON-PAYWALL-P0 — Premium Feature Enforcement`.
