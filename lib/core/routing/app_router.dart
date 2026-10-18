@@ -148,17 +148,31 @@ class AppRouter {
       GoRoute(
         path: '/auth/choice',
         name: 'auth-choice',
-        builder: (context, state) => const AuthChoiceScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 360),
+          reverseTransitionDuration: const Duration(milliseconds: 260),
+          child: const AuthChoiceScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final fade = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+              reverseCurve: Curves.easeInCubic,
+            );
+
+            return FadeTransition(opacity: fade, child: child);
+          },
+        ),
       ),
       GoRoute(
         path: '/auth/login',
         name: 'auth-login',
-        builder: (context, state) => const AuthScreen(),
+        builder: (context, state) => const AuthScreen(initialIsLogin: true),
       ),
       GoRoute(
         path: '/auth/signup',
         name: 'auth-signup',
-        builder: (context, state) => const AuthScreen(),
+        builder: (context, state) => const AuthScreen(initialIsLogin: false),
       ),
       GoRoute(
         path: '/auth',

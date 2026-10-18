@@ -673,7 +673,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get moodAndEnergy => 'Ánimo y Energía';
 
   @override
-  String get howAreYouFeelingToday => 'How are you feeling today?';
+  String get howAreYouFeelingToday => 'How’re you feeling today?';
 
   @override
   String get painLevel => 'Pain Level';

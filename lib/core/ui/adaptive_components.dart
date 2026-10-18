@@ -290,7 +290,12 @@ class AdaptiveComponents {
               maxLines: maxLines,
               maxLength: maxLength,
               placeholder: hintText,
-              prefix: prefixIcon,
+              prefix: prefixIcon == null
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: prefixIcon,
+                    ),
               suffix: suffixIcon,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -322,51 +327,65 @@ class AdaptiveComponents {
     } else {
       return Padding(
         padding: padding ?? const EdgeInsets.symmetric(vertical: 8),
-        child: TextField(
-          controller: controller,
-          onChanged: onChanged,
-          onSubmitted: onSubmitted,
-          onTap: onTap,
-          obscureText: obscureText,
-          enabled: enabled,
-          readOnly: readOnly,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          maxLines: maxLines,
-          maxLength: maxLength,
-          decoration: InputDecoration(
-            labelText: labelText,
-            hintText: hintText,
-            helperText: helperText,
-            errorText: errorText,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: theme.colorScheme.outline),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: theme.colorScheme.outline),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(
-                color: theme.colorScheme.primary,
-                width: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (labelText != null) ...[
+              Text(
+                labelText,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+            TextField(
+              controller: controller,
+              onChanged: onChanged,
+              onSubmitted: onSubmitted,
+              onTap: onTap,
+              obscureText: obscureText,
+              enabled: enabled,
+              readOnly: readOnly,
+              keyboardType: keyboardType,
+              textInputAction: textInputAction,
+              maxLines: maxLines,
+              maxLength: maxLength,
+              decoration: InputDecoration(
+                hintText: hintText,
+                helperText: helperText,
+                errorText: errorText,
+                prefixIcon: prefixIcon,
+                suffixIcon: suffixIcon,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: theme.colorScheme.outline),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: theme.colorScheme.outline),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.primary,
+                    width: 2,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: theme.colorScheme.error),
+                ),
+                filled: true,
+                fillColor: theme.colorScheme.surface,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
             ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: theme.colorScheme.error),
-            ),
-            filled: true,
-            fillColor: theme.colorScheme.surface,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
+          ],
         ),
       );
     }

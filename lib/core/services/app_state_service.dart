@@ -1,3 +1,4 @@
+import '../identity/active_account_scope.dart';
 import 'app_lock_service.dart';
 import 'auth_service.dart';
 import 'user_preferences_service.dart';
@@ -61,8 +62,10 @@ class AppStateService {
         return '/auth/choice';
       }
 
-      // Check if user has completed onboarding
-      final hasCompletedOnboarding = _preferencesService.onboardingComplete;
+      // Onboarding is owned by the currently authenticated account.
+      final activeUserId = await ActiveAccountScope.instance.requireUserId();
+      final hasCompletedOnboarding = await _preferencesService
+          .isOnboardingCompleteForUser(activeUserId);
 
       if (!hasCompletedOnboarding) {
         return '/onboarding';
@@ -87,6 +90,31 @@ class AppStateService {
     return await _authService.isAuthenticated;
   }
 
+  /// Resolve the canonical destination immediately after authentication.
+  ///
+  /// New accounts receive an explicit account-scoped incomplete state so
+  /// they cannot inherit the legacy device-global onboarding flag.
+  Future<String> getPostAuthRoute({required bool isNewUser}) async {
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
+
+    if (isNewUser) {
+      await _preferencesService.setOnboardingCompleteForUser(
+        activeUserId,
+        false,
+      );
+      return '/onboarding';
+    }
+
+    final hasCompletedOnboarding = await _preferencesService
+        .isOnboardingCompleteForUser(activeUserId);
+
+    return hasCompletedOnboarding ? '/home' : '/onboarding';
+  }
+
   /// Check if user has completed onboarding
   bool hasUserCompletedOnboarding() {
     if (!_isInitialized) {
@@ -100,7 +128,8 @@ class AppStateService {
     if (!_isInitialized) {
       await initialize();
     }
-    await _preferencesService.setOnboardingComplete(true);
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
+    await _preferencesService.setOnboardingCompleteForUser(activeUserId, true);
   }
 
   /// Reset app state (for testing or sign-out)
@@ -114,7 +143,6 @@ class AppStateService {
     AppLockService().reset();
 
     // Do NOT reset onboarding status on sign out
-
   }
 
   /// Get user preferences service

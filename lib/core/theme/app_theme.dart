@@ -54,7 +54,13 @@ class AppTheme {
       ActionIconThemeData(backButtonIconBuilder: _buildBackNavigationIcon);
 
   static Widget _buildBackNavigationIcon(BuildContext context) =>
-      const Icon(Icons.arrow_back_ios_new);
+      const Icon(Icons.chevron_left);
+
+  /// Authoritative simple directional navigation visuals.
+  ///
+  /// Use chevrons only: `<` for backward and `>` for forward.
+  static const IconData navigationBackIcon = Icons.chevron_left;
+  static const IconData navigationForwardIcon = Icons.chevron_right;
 
   /// Authoritative Material typography used by Material feature widgets
   /// rendered under the iOS Cupertino root.

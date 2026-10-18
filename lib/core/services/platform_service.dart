@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../ui/app_scroll_physics.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../utils/app_logger.dart';
@@ -359,13 +360,9 @@ class PlatformService {
     }
   }
 
-  /// Get platform-specific scroll physics
+  /// Shared Flow Ai spring physics across supported platforms.
   ScrollPhysics getAdaptiveScrollPhysics() {
-    if (platformInfo.platform == TargetPlatform.iOS) {
-      return const BouncingScrollPhysics();
-    } else {
-      return const ClampingScrollPhysics();
-    }
+    return AppScrollPhysics.spring;
   }
 
   /// Check if feature is supported on current platform

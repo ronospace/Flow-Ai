@@ -145,7 +145,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                       ),
                     ],
 
-                    const SizedBox(height: 100), // Space for bottom navigation
                   ]),
                 ),
               ),

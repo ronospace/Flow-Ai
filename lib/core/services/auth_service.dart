@@ -1,4 +1,3 @@
-import '../services/app_state_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -470,7 +469,7 @@ class AuthService {
         }
 
         AppLogger.auth('Firebase email account created successfully');
-        return AuthResult.success(user);
+        return AuthResult.success(user, isNewUser: true);
       } on FirebaseAuthException catch (error) {
         AppLogger.warning('Firebase email registration failed: ${error.code}');
         return AuthResult.failure(
@@ -644,7 +643,7 @@ class AuthService {
       } catch (_) {}
       final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
       if (googleUser == null) {
-        return AuthResult.failure('Google sign-in cancelled.');
+        return AuthResult.cancelled('Google sign-in cancelled.');
       }
 
       final GoogleSignInAuthentication googleAuth =
@@ -665,8 +664,8 @@ class AuthService {
         'provider': 'google',
         'lastLogin': DateTime.now().toIso8601String(),
       });
-      await AppStateService().preferences.setOnboardingComplete(true);
-      return AuthResult.success(userCredential.user);
+      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+      return AuthResult.success(userCredential.user, isNewUser: isNewUser);
     } catch (error, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
       return AuthResult.failure(
@@ -809,10 +808,16 @@ class AuthService {
         'lastLogin': DateTime.now().toIso8601String(),
       });
       await _prefs?.setString(_lastLoginMethodKey, 'apple');
-      await AppStateService().preferences.setOnboardingComplete(true);
-      return AuthResult.success(refreshedUser);
-    } catch (e) {
-      return AuthResult.failure('Apple sign-in failed: $e');
+      final isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+      return AuthResult.success(refreshedUser, isNewUser: isNewUser);
+    } on SignInWithAppleAuthorizationException catch (error) {
+      if (error.code == AuthorizationErrorCode.canceled) {
+        return AuthResult.cancelled('Apple sign-in cancelled.');
+      }
+
+      return AuthResult.failure('Apple sign-in failed: ${error.message}');
+    } catch (error) {
+      return AuthResult.failure('Apple sign-in failed: $error');
     }
   }
 
@@ -1151,17 +1156,29 @@ class AuthService {
 /// Authentication result model
 class AuthResult {
   final bool isSuccess;
+  final bool isCancelled;
   final dynamic user;
   final String? error;
+  final bool isNewUser;
 
-  AuthResult._({required this.isSuccess, this.user, this.error});
+  AuthResult._({
+    required this.isSuccess,
+    this.isCancelled = false,
+    this.user,
+    this.error,
+    this.isNewUser = false,
+  });
 
-  factory AuthResult.success(dynamic user) {
-    return AuthResult._(isSuccess: true, user: user);
+  factory AuthResult.success(dynamic user, {bool isNewUser = false}) {
+    return AuthResult._(isSuccess: true, user: user, isNewUser: isNewUser);
   }
 
   factory AuthResult.failure(String error) {
     return AuthResult._(isSuccess: false, error: error);
+  }
+
+  factory AuthResult.cancelled([String? message]) {
+    return AuthResult._(isSuccess: false, isCancelled: true, error: message);
   }
 }
 

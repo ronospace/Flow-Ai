@@ -5,6 +5,43 @@ class AppLayoutMetrics {
   static const double radius = 24;
   static const double gap = 8;
 
+  // Authentication composition.
+  static const double authLogoSize = 84;
+  static const double authCompositionVerticalEdge = 18;
+  static const double authCardMaxWidth = 430;
+  static const double authOuterHorizontal = 24;
+  static const double authOuterBottom = authCompositionVerticalEdge;
+  static const double authCardHorizontal = 18;
+  static const double authCardTop = 18;
+  static const double authCardBottom = 6;
+  static const double authFieldGap = 16;
+  static const double authDividerGap = 18;
+  static const double authSubmitModeGap = 10;
+  static const double authCardBottomContentGap = 14;
+  static const double authHeaderHorizontal = 32;
+  static const double authHeaderTop = authCompositionVerticalEdge;
+  static const double authHeaderBottom = 12;
+  static const double authTallHeightBreakpoint = 860;
+  static const double authHeaderBottomTall = 32;
+
+  static double authHeaderBottomForHeight(double safeHeight) =>
+      safeHeight >= authTallHeightBreakpoint
+      ? authHeaderBottomTall
+      : authHeaderBottom;
+
+  static const double authLogoEntranceScale = 0.78;
+  static const double authCardRadius = 24;
+  static const double authCardShadowBlur = 28;
+  static const double authCardShadowYOffset = 10;
+  static const double authWordmarkLetterSpacing = -0.4;
+  static const double authPrimaryActionHeight = 52;
+  static const double authDividerLabelHorizontal = 14;
+  static const double authDividerLabelFontSize = 13;
+
+  // Coming Soon full-screen composition.
+  static const double comingSoonCompactHeightBreakpoint = 860;
+  static const double comingSoonTightHeightBreakpoint = 700;
+
   // Authoritative responsive breakpoints.
   static const double mobileBreakpoint = 600;
   static const double tabletBreakpoint = 900;

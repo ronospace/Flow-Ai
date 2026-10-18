@@ -7,7 +7,9 @@ import 'package:local_auth/local_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/layout/app_layout_metrics.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/services/app_state_service.dart';
 import '../../../core/services/platform_service.dart';
 import '../../../core/ui/adaptive_components.dart';
 import '../../../core/ui/adaptive_messages.dart';
@@ -18,9 +20,13 @@ import '../widgets/social_login_button.dart';
 import '../widgets/biometric_button.dart';
 import '../../../core/widgets/flow_ai_logo.dart';
 import '../../settings/providers/settings_provider.dart';
+import '../services/auth_provider_coordinator.dart';
+
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, this.initialIsLogin = true});
+
+  final bool initialIsLogin;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -31,20 +37,18 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   SettingsProvider get _settingsProvider => context.read<SettingsProvider>();
 
   late AnimationController _headerController;
-  late AnimationController _formController;
   late AnimationController _socialController;
 
   final LocalAuthentication _localAuth = LocalAuthentication();
   final AuthService _authService = AuthService();
 
-  final PageController _pageController = PageController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _displayNameController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  bool _isLogin = true;
+  late bool _isLogin;
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -60,6 +64,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _isLogin = widget.initialIsLogin;
     _initializeControllers();
     _checkBiometrics();
     _startAnimations();
@@ -70,10 +75,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-    _formController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
     _socialController = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
@@ -82,9 +83,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   void _startAnimations() {
     _headerController.forward();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _formController.forward();
-    });
     Future.delayed(const Duration(milliseconds: 600), () {
       _socialController.forward();
     });
@@ -108,15 +106,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _headerController.dispose();
-    _formController.dispose();
     _socialController.dispose();
-    _pageController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _displayNameController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,295 +126,342 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
-              AppTheme.primaryRose.withValues(alpha: 0.1),
-              AppTheme.primaryPurple.withValues(alpha: 0.05),
-              AppTheme.accentMint.withValues(alpha: 0.08),
+              AppTheme.primaryRose.withValues(alpha: 0.12),
+              AppTheme.primaryPurple.withValues(alpha: 0.045),
+              theme.brightness == Brightness.dark
+                  ? AppTheme.darkBackground
+                  : Colors.white,
             ],
+            stops: const [0.0, 0.42, 1.0],
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              // Header Section
-              _buildHeader(theme, l10n),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final mq = MediaQuery.of(context);
 
-              // Form Section with adaptive scroll physics
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: context.adaptiveScrollPhysics,
-                  children: [_buildAuthForm(theme, l10n)],
+
+
+              final keyboardInset = mq.viewInsets.bottom;
+              final availableHeight = constraints.maxHeight > keyboardInset
+                  ? constraints.maxHeight - keyboardInset
+                  : 0.0;
+
+
+              final authScrollView = SingleChildScrollView(
+                physics: context.adaptiveScrollPhysics,
+                padding: EdgeInsets.only(bottom: keyboardInset),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: availableHeight),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Header Section
+                      _buildHeader(theme, l10n, availableHeight),
+
+                      // Unified authentication hub
+                      _buildAuthForm(theme, l10n),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+
+
+              return authScrollView;
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(32, 22, 32, 24),
-      child: Column(
-        children: [
-          // Flow AI Logo
-          FlowAiLogo(size: 86, showWordmark: false)
-              .animate(controller: _headerController)
-              .scale(begin: const Offset(0.5, 0.5))
-              .fadeIn(),
-
-          const SizedBox(height: 14),
-
-          // App Name
-          Text(
-                'Flow Ai',
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
-                  fontSize: 30,
-                ),
-              )
-              .animate(controller: _headerController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: 200.ms),
-
-          const SizedBox(height: 6),
-
-          // Subtitle
-          Text(
-                'Private cycle support, made for you',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.mediumGrey,
-                  fontSize: 15,
-                ),
-                textAlign: TextAlign.center,
-              )
-              .animate(controller: _headerController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: 400.ms),
-        ],
+  Widget _buildHeader(
+    ThemeData theme,
+    AppLocalizations l10n,
+    double availableHeight,
+  ) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        AppLayoutMetrics.authHeaderHorizontal,
+        AppLayoutMetrics.authHeaderTop,
+        AppLayoutMetrics.authHeaderHorizontal,
+        AppLayoutMetrics.authHeaderBottomForHeight(availableHeight),
+      ),
+      child: KeyedSubtree(
+        child:
+            FlowAiLogo(size: AppLayoutMetrics.authLogoSize, showWordmark: false)
+                .animate(controller: _headerController)
+                .scale(
+                  begin: const Offset(
+                    AppLayoutMetrics.authLogoEntranceScale,
+                    AppLayoutMetrics.authLogoEntranceScale,
+                  ),
+                )
+                .fadeIn(),
       ),
     );
   }
 
   Widget _buildAuthForm(ThemeData theme, AppLocalizations l10n) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          // Tab Selector
-          _buildTabSelector(theme),
-
-          const SizedBox(height: 20),
-
-          // Primary social sign-in section
-          _buildSocialLogin(theme),
-
-          if (_biometricsAvailable && _isLogin) ...[
-            const SizedBox(height: 16),
-            BiometricButton(
-                  availableBiometrics: _availableBiometrics,
-                  onBiometricLogin: _handleBiometricLogin,
-                )
-                .animate(controller: _formController)
-                .slideY(begin: 0.2, end: 0)
-                .fadeIn(),
-          ],
-
-          const SizedBox(height: 20),
-
-          _buildManualDivider(theme),
-
-          const SizedBox(height: 20),
-
-          // Email Field - using adaptive text field
-          AdaptiveComponents.adaptiveTextField(
-                context: context,
-                controller: _emailController,
-                labelText: 'Email address',
-                hintText: 'Enter your email',
-                prefixIcon: const Icon(Icons.email_outlined),
-                keyboardType: TextInputType.emailAddress,
-                enabled: !_isLoading,
-                errorText: _emailError,
-                onChanged: (_) {
-                  if (_emailError != null || _formError != null) {
-                    setState(() {
-                      _emailError = null;
-                      _formError = null;
-                    });
-                  }
-                },
-                textInputAction: TextInputAction.next,
-              )
-              .animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: _isLogin ? 200.ms : 0.ms),
-
-          const SizedBox(height: 16),
-
-          // Display Name Field (Sign Up only) - using adaptive text field
-          if (!_isLogin) ...[
-            AdaptiveComponents.adaptiveTextField(
-                  context: context,
-                  controller: _displayNameController,
-                  labelText: 'Display name',
-                  hintText: 'Enter your display name',
-                  prefixIcon: const Icon(Icons.person_outline),
-                  enabled: !_isLoading,
-                  errorText: _displayNameError,
-                  onChanged: (_) {
-                    if (_displayNameError != null || _formError != null) {
-                      setState(() {
-                        _displayNameError = null;
-                        _formError = null;
-                      });
-                    }
-                  },
-                  textInputAction: TextInputAction.next,
-                )
-                .animate(controller: _formController)
-                .slideY(begin: 0.3, end: 0)
-                .fadeIn(delay: 100.ms),
-
-            const SizedBox(height: 16),
-          ],
-
-          // Password Field - using adaptive text field
-          AdaptiveComponents.adaptiveTextField(
-                context: context,
-                controller: _passwordController,
-                labelText: 'Password',
-                hintText: 'Enter your password',
-                prefixIcon: const Icon(Icons.lock_outline),
-                obscureText: _obscurePassword,
-                enabled: !_isLoading,
-                textInputAction: _isLogin
-                    ? TextInputAction.done
-                    : TextInputAction.next,
-                errorText: _passwordError,
-                onChanged: (_) {
-                  if (_passwordError != null || _formError != null) {
-                    setState(() {
-                      _passwordError = null;
-                      _formError = null;
-                    });
-                  }
-                },
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                    context.hapticFeedback(HapticFeedbackType.selection);
-                  },
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    color: AppTheme.mediumGrey,
-                  ),
-                ),
-              )
-              .animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: _isLogin ? 300.ms : 100.ms),
-
-          // Forgot Password (Login only) - only show after failed login attempt
-          if (_isLogin && _showForgotPassword) ...[
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: _isLoading ? null : _handleForgotPassword,
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  'Forgot Password?',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.primaryRose,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppLayoutMetrics.authOuterHorizontal,
+        0,
+        AppLayoutMetrics.authOuterHorizontal,
+        AppLayoutMetrics.authOuterBottom,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppLayoutMetrics.authCardMaxWidth,
+          ),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              AppLayoutMetrics.authCardHorizontal,
+              AppLayoutMetrics.authCardTop,
+              AppLayoutMetrics.authCardHorizontal,
+              AppLayoutMetrics.authCardBottom,
+            ),
+            decoration: BoxDecoration(
+              color: theme.brightness == Brightness.dark
+                  ? theme.colorScheme.surface
+                  : Colors.white.withValues(alpha: 0.78),
+              borderRadius: BorderRadius.circular(
+                AppLayoutMetrics.authCardRadius,
               ),
-            ).animate(controller: _formController).fadeIn(),
-          ],
-
-          const SizedBox(height: 16),
-
-          // Confirm Password Field (Sign Up only) - using adaptive text field
-          if (!_isLogin) ...[
-            AdaptiveComponents.adaptiveTextField(
-                  context: context,
-                  controller: _confirmPasswordController,
-                  labelText: 'Confirm password',
-                  hintText: 'Re-enter your password',
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  obscureText: _obscureConfirmPassword,
-                  enabled: !_isLoading,
-                  textInputAction: TextInputAction.done,
-                  errorText: _confirmPasswordError,
-                  onChanged: (_) {
-                    if (_confirmPasswordError != null || _formError != null) {
-                      setState(() {
-                        _confirmPasswordError = null;
-                        _formError = null;
-                      });
-                    }
-                  },
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                      context.hapticFeedback(HapticFeedbackType.selection);
-                    },
-                    icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: AppTheme.mediumGrey,
+              border: Border.all(
+                color: theme.brightness == Brightness.dark
+                    ? theme.colorScheme.outline
+                    : Colors.white.withValues(alpha: 0.9),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryPurple.withValues(alpha: 0.06),
+                  blurRadius: AppLayoutMetrics.authCardShadowBlur,
+                  offset: const Offset(
+                    0,
+                    AppLayoutMetrics.authCardShadowYOffset,
+                  ),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Text(
+                    'Flow Ai',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: AppLayoutMetrics.authWordmarkLetterSpacing,
                     ),
                   ),
-                )
-                .animate(controller: _formController)
-                .slideY(begin: 0.3, end: 0)
-                .fadeIn(delay: 200.ms),
+                ),
+                const SizedBox(height: AppLayoutMetrics.gap),
+                _buildSocialLogin(theme),
 
-            const SizedBox(height: 16),
-          ],
+                if (_biometricsAvailable && _isLogin) ...[
+                  const SizedBox(height: AppLayoutMetrics.gap),
+                  BiometricButton(
+                    availableBiometrics: _availableBiometrics,
+                    onBiometricLogin: _handleBiometricLogin,
+                  ).animate().slideY(begin: 0.2, end: 0).fadeIn(),
+                ],
 
-          if (_formError != null) ...[
-            _buildInlineFormError(theme),
-            const SizedBox(height: 16),
-          ],
+                const SizedBox(height: AppLayoutMetrics.authDividerGap),
+                _buildManualDivider(theme),
+                const SizedBox(height: AppLayoutMetrics.authDividerGap),
 
-          // Submit Button - using adaptive button with platform-specific styling
-          AdaptiveComponents.adaptiveButton(
-                context: context,
-                text: _isLoading
-                    ? (_isLogin ? 'Signing In...' : 'Creating Account...')
-                    : (_isLogin ? 'Sign In' : 'Create Account'),
-                onPressed: _isLoading ? null : _handleSubmit,
-                isPrimary: true,
-                width: 260,
-                height: 52,
-                padding: EdgeInsets.zero,
-              )
-              .animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: 500.ms),
+                // Email Field - using adaptive text field
+                AdaptiveComponents.adaptiveTextField(
+                      context: context,
+                      controller: _emailController,
+                      labelText: 'E-mail address:',
+                      hintText: 'Enter your E-mail',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      keyboardType: TextInputType.emailAddress,
+                      enabled: !_isLoading,
+                      errorText: _emailError,
+                      onChanged: (_) {
+                        if (_emailError != null || _formError != null) {
+                          setState(() {
+                            _emailError = null;
+                            _formError = null;
+                          });
+                        }
+                      },
+                      textInputAction: TextInputAction.next,
+                    )
+                    .animate()
+                    .slideY(begin: 0.3, end: 0)
+                    .fadeIn(delay: _isLogin ? 200.ms : 0.ms),
 
-          const SizedBox(height: 24),
-        ],
+                const SizedBox(height: AppLayoutMetrics.authFieldGap),
+
+                // Display Name Field (Sign Up only) - using adaptive text field
+                if (!_isLogin) ...[
+                  AdaptiveComponents.adaptiveTextField(
+                    context: context,
+                    controller: _displayNameController,
+                    labelText: 'Display name',
+                    hintText: 'Enter your display name',
+                    prefixIcon: const Icon(Icons.person_outline),
+                    enabled: !_isLoading,
+                    errorText: _displayNameError,
+                    onChanged: (_) {
+                      if (_displayNameError != null || _formError != null) {
+                        setState(() {
+                          _displayNameError = null;
+                          _formError = null;
+                        });
+                      }
+                    },
+                    textInputAction: TextInputAction.next,
+                  ).animate().slideY(begin: 0.3, end: 0).fadeIn(delay: 100.ms),
+
+                  const SizedBox(height: AppLayoutMetrics.authFieldGap),
+                ],
+
+                // Password Field - using adaptive text field
+                AdaptiveComponents.adaptiveTextField(
+                      context: context,
+                      controller: _passwordController,
+                      labelText: 'Password:',
+                      hintText: 'Enter your password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      obscureText: _obscurePassword,
+                      enabled: !_isLoading,
+                      textInputAction: _isLogin
+                          ? TextInputAction.done
+                          : TextInputAction.next,
+                      errorText: _passwordError,
+                      onChanged: (_) {
+                        if (_passwordError != null || _formError != null) {
+                          setState(() {
+                            _passwordError = null;
+                            _formError = null;
+                          });
+                        }
+                      },
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                          context.hapticFeedback(HapticFeedbackType.selection);
+                        },
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: AppTheme.mediumGrey,
+                        ),
+                      ),
+                    )
+                    .animate()
+                    .slideY(begin: 0.3, end: 0)
+                    .fadeIn(delay: _isLogin ? 300.ms : 100.ms),
+
+                // Forgot Password (Login only) - only show after failed login attempt
+                if (_isLogin && _showForgotPassword) ...[
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: _isLoading ? null : _handleForgotPassword,
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        'Forgot Password?',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppTheme.primaryRose,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ).animate().fadeIn(),
+                ],
+
+                const SizedBox(height: AppLayoutMetrics.authFieldGap),
+
+                // Confirm Password Field (Sign Up only) - using adaptive text field
+                if (!_isLogin) ...[
+                  AdaptiveComponents.adaptiveTextField(
+                    context: context,
+                    controller: _confirmPasswordController,
+                    labelText: 'Confirm password',
+                    hintText: 'Re-enter your password',
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    obscureText: _obscureConfirmPassword,
+                    enabled: !_isLoading,
+                    textInputAction: TextInputAction.done,
+                    errorText: _confirmPasswordError,
+                    onChanged: (_) {
+                      if (_confirmPasswordError != null || _formError != null) {
+                        setState(() {
+                          _confirmPasswordError = null;
+                          _formError = null;
+                        });
+                      }
+                    },
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _obscureConfirmPassword = !_obscureConfirmPassword;
+                        });
+                        context.hapticFeedback(HapticFeedbackType.selection);
+                      },
+                      icon: Icon(
+                        _obscureConfirmPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: AppTheme.mediumGrey,
+                      ),
+                    ),
+                  ).animate().slideY(begin: 0.3, end: 0).fadeIn(delay: 200.ms),
+
+                  const SizedBox(height: AppLayoutMetrics.authFieldGap),
+                ],
+
+                if (_formError != null) ...[
+                  _buildInlineFormError(theme),
+                  const SizedBox(height: AppLayoutMetrics.authFieldGap),
+                ],
+
+                // Submit Button - using adaptive button with platform-specific styling
+                AdaptiveComponents.adaptiveButton(
+                  context: context,
+                  text: _isLoading
+                      ? (_isLogin ? 'Signing In...' : 'Creating Account...')
+                      : (_isLogin ? 'Sign In' : 'Create Account'),
+                  onPressed: _isLoading ? null : _handleSubmit,
+                  isPrimary: true,
+                  width: double.infinity,
+                  height: AppLayoutMetrics.authPrimaryActionHeight,
+                  padding: EdgeInsets.zero,
+                ).animate().slideY(begin: 0.3, end: 0).fadeIn(delay: 500.ms),
+
+                const SizedBox(height: AppLayoutMetrics.authSubmitModeGap),
+
+                _buildAccountModeAction(theme),
+
+                const SizedBox(
+                  height: AppLayoutMetrics.authCardBottomContentGap,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -466,83 +510,42 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     setState(() => _formError = message);
   }
 
-  Widget _buildTabSelector(ThemeData theme) {
-    void selectMode(bool isLogin) {
-      if (_isLoading || _isLogin == isLogin) return;
+  void _switchAuthMode(bool isLogin) {
+    if (_isLoading || _isLogin == isLogin) return;
 
-      setState(() {
-        _isLogin = isLogin;
-        _showForgotPassword = false;
-        _formError = null;
-        _emailError = null;
-        _passwordError = null;
-        _displayNameError = null;
-        _confirmPasswordError = null;
-      });
+    setState(() {
+      _isLogin = isLogin;
+      _showForgotPassword = false;
+      _formError = null;
+      _emailError = null;
+      _passwordError = null;
+      _displayNameError = null;
+      _confirmPasswordError = null;
+    });
 
-      context.hapticFeedback(HapticFeedbackType.selection);
-    }
+    context.hapticFeedback(HapticFeedbackType.selection);
+  }
 
-    Widget segment({required bool value, required String label}) {
-      final selected = _isLogin == value;
+  Widget _buildAccountModeAction(ThemeData theme) {
+    final prefix = _isLogin ? 'New here?' : 'Already have an account?';
+    final action = _isLogin ? 'Create account' : 'Sign in';
 
-      return Expanded(
-        child: Semantics(
-          button: true,
-          selected: selected,
-          label: label,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _isLoading ? null : () => selectMode(value),
-              borderRadius: BorderRadius.circular(11),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                curve: Curves.easeOutCubic,
-                height: 48,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: selected
-                      ? theme.colorScheme.primary
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: selected
-                        ? theme.colorScheme.onPrimary
-                        : theme.colorScheme.onSurface,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          prefix,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.68),
           ),
         ),
-      );
-    }
-
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 332),
-        child: Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: theme.colorScheme.outlineVariant),
-          ),
-          child: Row(
-            children: [
-              segment(value: true, label: 'Sign In'),
-              segment(value: false, label: 'Sign Up'),
-            ],
-          ),
+        TextButton(
+          onPressed: _isLoading ? null : () => _switchAuthMode(!_isLogin),
+          child: Text(action),
         ),
-      ),
-    ).animate(controller: _formController).slideY(begin: -0.3, end: 0).fadeIn();
+      ],
+    );
   }
 
   Widget _buildManualDivider(ThemeData theme) {
@@ -556,12 +559,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppLayoutMetrics.authDividerLabelHorizontal,
+          ),
           child: Text(
-            'Or use email',
+            'Or use E-mail',
             style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
-              fontSize: 13,
+              fontSize: AppLayoutMetrics.authDividerLabelFontSize,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -574,50 +579,31 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           ),
         ),
       ],
-    ).animate(controller: _formController).fadeIn(delay: 100.ms);
+    ).animate().fadeIn(delay: 100.ms);
   }
 
   Widget _buildSocialLogin(ThemeData theme) {
+    final isIOS = PlatformService().platformInfo.platform == TargetPlatform.iOS;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Social Login Buttons
-        if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
-          Row(
-            children: [
-              Expanded(
-                child: SocialLoginButton(
-                  icon: Icons.apple,
-                  label: 'Apple',
-                  onPressed: _isLoading ? null : _handleAppleSignIn,
-                  backgroundColor: Colors.black,
-                  iconColor: Colors.white,
-                  textColor: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: SocialLoginButton(
-                  icon: Icons.g_mobiledata,
-                  label: 'Google',
-                  onPressed: _isLoading ? null : _handleGoogleSignIn,
-                  backgroundColor: Colors.white,
-                  iconColor: const Color(0xFF4285F4),
-                ),
-              ),
-            ],
+        if (isIOS)
+          SocialLoginButton(
+            icon: Icons.apple,
+            label: 'Continue with Apple',
+            onPressed: _isLoading ? null : _handleAppleSignIn,
+            backgroundColor: Colors.black,
+            iconColor: Colors.white,
+            textColor: Colors.white,
           )
         else
-          Center(
-            child: SizedBox(
-              width: 260,
-              child: SocialLoginButton(
-                icon: Icons.g_mobiledata,
-                label: 'Google',
-                onPressed: _isLoading ? null : _handleGoogleSignIn,
-                backgroundColor: Colors.white,
-                iconColor: const Color(0xFF4285F4),
-              ),
-            ),
+          SocialLoginButton(
+            icon: Icons.g_mobiledata,
+            label: 'Continue with Google',
+            onPressed: _isLoading ? null : _handleGoogleSignIn,
+            backgroundColor: Colors.white,
+            iconColor: const Color(0xFF4285F4),
           ),
       ],
     );
@@ -703,9 +689,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to main app
         if (mounted) {
-          final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
+          await _navigateAfterAuth(result);
         }
       } else {
         await _showBiometricError(
@@ -730,11 +714,28 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _setFormError(message);
   }
 
+  Future<void> _navigateAfterAuth(AuthResult result) async {
+    final route = await AppStateService().getPostAuthRoute(
+      isNewUser: result.isNewUser,
+    );
+
+    if (!mounted) return;
+
+    if (route == '/home') {
+      final pending = PendingDeepLinkService.consumePendingRoute();
+      _router.go(pending ?? '/home');
+      PendingDeepLinkService.clearPendingRoute();
+      return;
+    }
+
+    _router.go(route);
+  }
+
   Future<void> _handleSubmit() async {
     if (_isLoading) return;
 
     final emailError = _emailController.text.trim().isEmpty
-        ? 'Enter your email address.'
+        ? 'Enter your E-mail address.'
         : null;
     final passwordError = _passwordController.text.isEmpty
         ? 'Enter your password.'
@@ -770,9 +771,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
 
     try {
+      late final AuthResult result;
+
       if (_isLogin) {
         // Handle login
-        final result = await _authService.signInWithEmail(
+        result = await _authService.signInWithEmail(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -802,13 +805,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             _showForgotPassword = false; // Reset when switching to login
           });
           _showErrorMessage(
-            'An account with this email already exists. Please sign in instead.',
+            'An account with this E-mail already exists. Please sign in instead.',
           );
           return; // Exit early
         }
 
         // Handle sign up
-        final result = await _authService.signUpWithEmail(
+        result = await _authService.signUpWithEmail(
           email: _emailController.text.trim(),
           password: _passwordController.text,
           displayName: _displayNameController.text.trim(),
@@ -831,9 +834,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       Future.delayed(const Duration(milliseconds: 1000));
       if (!mounted) return;
 
-      final pending = PendingDeepLinkService.consumePendingRoute();
-      _router.go(pending ?? '/home');
-      PendingDeepLinkService.clearPendingRoute();
+      await _navigateAfterAuth(result);
     } catch (e) {
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
       _showErrorMessage(_formatAuthError(errorMessage, isLogin: _isLogin));
@@ -847,7 +848,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _handleGoogleSignIn() async {
-    if (_isLoading) return;
+    await _handleProviderSignIn(AuthProviderType.google);
+  }
+
+  Future<void> _handleAppleSignIn() async {
+    await _handleProviderSignIn(AuthProviderType.apple);
+  }
+
+  Future<void> _handleProviderSignIn(AuthProviderType provider) async {
+    if (_isLoading) {
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -855,90 +866,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
 
     try {
-      // Perform Google Sign-In
-      final result = await _authService.signInWithGoogle();
-
-      if (!mounted) return;
-
-      if (result.isSuccess) {
-        HapticFeedback.lightImpact();
-
-        // Sync user data
-        try {
-          // _settingsProvider captured above
-          await _settingsProvider.forceUserDataSync();
-        } catch (syncError) {}
-
-        Future.delayed(const Duration(milliseconds: 500));
-
-        // Navigate to main app
-        if (mounted) {
-          final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
-        }
-      } else {
-        _setFormError(
-          result.error ??
-              'We could not complete Google sign-in. Please try again.',
-        );
-      }
-    } catch (e) {
-      _setFormError('We could not complete Google sign-in. Please try again.');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _handleAppleSignIn() async {
-    if (_isLoading) {
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      if (!mounted) return;
-
-      // Perform Apple Sign-In
-      final result = await _authService.signInWithApple();
-
-      if (!mounted) return;
-
-      if (result.isSuccess) {
-        HapticFeedback.lightImpact();
-
-        // Sync user data
-        try {
-          // _settingsProvider captured above
-          await _settingsProvider.forceUserDataSync();
-
-          if (!mounted) return;
-        } catch (syncError) {}
-
-        Future.delayed(const Duration(milliseconds: 500));
-
-        if (!mounted) return;
-
-        // Navigate to main app
-        if (mounted) {
-          final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
-        }
-      } else {
-        _showErrorMessage(result.error ?? 'Apple sign-in failed');
-      }
-    } catch (e) {
-      _showErrorMessage(
-        'We could not complete Apple sign-in. Please try again.',
+      final result = await AuthProviderCoordinator().authenticate(
+        context: context,
+        provider: provider,
       );
+
+      if (!mounted || result.isSuccess || result.isCancelled) {
+        return;
+      }
+
+      _setFormError(result.error ?? 'Authentication could not be completed.');
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      _setFormError('Authentication could not be completed. Please try again.');
     } finally {
       if (mounted) {
         setState(() {
@@ -1029,7 +972,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     const SizedBox(height: 12),
 
                     Text(
-                      'Enter your email address and we\'ll send you a link to reset your password.',
+                      'Enter your E-mail address and we\'ll send you a link to reset your password.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGrey,
                         height: 1.5,
@@ -1042,7 +985,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     // Email Input
                     AuthTextField(
                       controller: resetEmailController,
-                      hintText: 'Enter your email',
+                      hintText: 'Enter your E-mail',
                       prefixIcon: Icons.email_outlined,
                       keyboardType: TextInputType.emailAddress,
                       enabled: !isResetting,

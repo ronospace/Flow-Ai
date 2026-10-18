@@ -28,6 +28,60 @@ class AppLayout {
   /// Curve used when Calendar returns to the stable landing point.
   static const Curve calendarLandingSpringBackCurve = Curves.easeInOutCubic;
 
+  /// Authoritative onboarding page-transition duration.
+  static const Duration onboardingPageTransitionDuration = Duration(
+    milliseconds: 300,
+  );
+
+  /// Authoritative onboarding page-transition curve.
+  static const Curve onboardingPageTransitionCurve = Curves.easeInOut;
+
+  /// Authoritative onboarding page physics.
+  ///
+  /// PageScrollPhysics preserves page snapping while BouncingScrollPhysics
+  /// provides the same centralized edge spring-back behavior on both
+  /// supported mobile platforms.
+  static const ScrollPhysics onboardingPagePhysics = PageScrollPhysics(
+    parent: BouncingScrollPhysics(),
+  );
+
+  /// The long Setup step owns a vertical scroll view. Disabling horizontal
+  /// finger paging there prevents gesture-arena competition with that
+  /// vertical scroller while programmatic onboarding navigation remains
+  /// available.
+  static const ScrollPhysics onboardingSetupPagePhysics =
+      NeverScrollableScrollPhysics();
+
+  /// Minimum horizontal release velocity required to navigate the Setup step.
+  ///
+  /// Matches the established horizontal-swipe threshold used elsewhere in
+  /// the app.
+  static const double onboardingSetupSwipeVelocityThreshold = 120.0;
+
+  /// Authoritative vertical scrolling behavior for the long onboarding
+  /// setup step.
+  static const ScrollPhysics onboardingSetupScrollPhysics =
+      BouncingScrollPhysics();
+
+  /// Setup reuses the established production spring-back motion contract.
+  static const double onboardingSetupLandingTolerance =
+      calendarLandingSpringBackTolerance;
+
+  static const Duration onboardingSetupLandingSpringBackDuration =
+      calendarLandingSpringBackDuration;
+
+  static const Curve onboardingSetupLandingSpringBackCurve =
+      calendarLandingSpringBackCurve;
+
+  /// The fixed onboarding navigation owns the lower action spacing, so the
+  /// setup scroller must not add a second bottom inset.
+  static const EdgeInsets onboardingSetupScrollPadding = EdgeInsets.fromLTRB(
+    24,
+    24,
+    24,
+    0,
+  );
+
   /// Insets for a screen-owned action placed above the app shell.
   ///
   /// The app shell already owns persistent-navigation and system-safe-area

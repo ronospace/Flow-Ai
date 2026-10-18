@@ -176,11 +176,11 @@ class PremiumFeaturesPreview extends StatelessWidget {
             mainAxisSpacing: 16,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 0.85,
+            childAspectRatio: 0.78,
             children: [
               PremiumFeaturePreviewCard(
                 title: 'AI Health Coach',
-                description: 'Personal health guidance powered by advanced AI',
+                description: 'Personal health guidance powered by AI',
                 icon: Icons.psychology_rounded,
                 color: AppTheme.primaryPurple,
                 estimatedDate: 'Q4 2026',
@@ -189,7 +189,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
               ),
               PremiumFeaturePreviewCard(
                 title: 'Partner Connect',
-                description: 'Securely share cycle data with trusted partners',
+                description: 'Share cycle insights with someone you trust',
                 icon: Icons.favorite_rounded,
                 color: AppTheme.primaryRose,
                 estimatedDate: 'NEW',
@@ -197,7 +197,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
               ),
               PremiumFeaturePreviewCard(
                 title: 'Healthcare Portal',
-                description: 'Export data for medical appointments',
+                description: 'Prepare health data for appointments',
                 icon: Icons.medical_services_rounded,
                 color: AppTheme.secondaryBlue,
                 estimatedDate: 'NEW',
@@ -205,7 +205,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
               ),
               PremiumFeaturePreviewCard(
                 title: 'Advanced Analytics',
-                description: 'Deep insights with predictive modeling',
+                description: 'See deeper patterns and predictions',
                 icon: Icons.analytics_rounded,
                 color: AppTheme.accentMint,
                 estimatedDate: 'NEW',

@@ -48,13 +48,14 @@ import 'package:flow_ai/core/theme/system_ui_overlay_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'core/identity/active_account_scope.dart';
 import 'core/services/auth_service.dart';
+import 'core/ui/app_scroll_physics.dart';
 
 const bool ENABLE_PD = false;
 
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+    return AppScrollPhysics.spring;
   }
 }
 

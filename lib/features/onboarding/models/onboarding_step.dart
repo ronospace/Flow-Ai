@@ -28,37 +28,14 @@ enum OnboardingStepType {
 class OnboardingData {
   static List<OnboardingStep> get steps => [
     const OnboardingStep(
-      title: 'Welcome to Flow Ai',
-      description: 'Your intelligent period and health tracking companion',
-      imagePath: 'assets/images/onboarding/welcome.png',
-      highlights: [
-        'Track your cycle with AI-powered insights',
-        'Monitor symptoms and mood patterns',
-        'Get personalized health recommendations',
-      ],
-      type: OnboardingStepType.welcome,
-    ),
-    const OnboardingStep(
-      title: 'Powerful Features',
-      description: 'Everything you need for comprehensive health tracking',
-      imagePath: 'assets/images/onboarding/features.png',
-      highlights: [
-        'Smart cycle predictions',
-        'Symptom tracking & analysis',
-        'Health insights dashboard',
-        'Secure data encryption',
-      ],
-      type: OnboardingStepType.features,
-    ),
-    const OnboardingStep(
       title: 'Your Privacy Matters',
       description: 'Your health data stays private and secure',
       imagePath: 'assets/images/onboarding/privacy.png',
       highlights: [
-        'End-to-end encryption',
-        'Data stored locally on your device',
-        'No sharing without your permission',
-        'GDPR & HIPAA compliant',
+        'Permissions stay under your control',
+        'Security safeguards help protect your data',
+        'Manage your data and preferences in Settings',
+        'Review our Privacy Policy for full details',
       ],
       type: OnboardingStepType.privacy,
     ),

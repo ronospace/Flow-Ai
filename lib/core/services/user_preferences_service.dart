@@ -15,6 +15,10 @@ class UserPreferencesService {
   static const String _keyBiometrics = 'biometrics_enabled';
   static const String _keyUserProfile = 'user_profile';
   static const String _keyOnboardingComplete = 'onboarding_complete';
+  static const String _keyOnboardingCompleteAccountPrefix =
+      'onboarding_complete_account_';
+  static const String _keyOnboardingLegacyClaimedUserId =
+      'onboarding_complete_legacy_claimed_user_id';
   static const String _keyPrivacySettings = 'privacy_settings';
   static const String _keyHealthGoals = 'health_goals';
   static const String _keyReminderSettings = 'reminder_settings';
@@ -85,6 +89,73 @@ class UserPreferencesService {
 
   Future<void> setOnboardingComplete(bool complete) async {
     await _prefs.setBool(_keyOnboardingComplete, complete);
+  }
+
+  String _onboardingKeyForUser(String userId) {
+    final normalizedUserId = userId.trim();
+    if (normalizedUserId.isEmpty) {
+      throw ArgumentError.value(
+        userId,
+        'userId',
+        'A verified account identifier is required for onboarding state.',
+      );
+    }
+
+    return '$_keyOnboardingCompleteAccountPrefix$normalizedUserId';
+  }
+
+  Future<bool> isOnboardingCompleteForUser(
+    String userId, {
+    bool migrateLegacy = true,
+  }) async {
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    final key = _onboardingKeyForUser(userId);
+
+    if (_prefs.containsKey(key)) {
+      return _prefs.getBool(key) ?? false;
+    }
+
+    // One-time compatibility migration for installations that completed
+    // onboarding before onboarding state became account scoped.
+    //
+    // Historical storage contains no owner UID, so only the first verified
+    // returning account may claim that legacy completion state. This prevents
+    // subsequent accounts on the same device inheriting another user's state.
+    if (migrateLegacy && onboardingComplete) {
+      final legacyClaimedUserId = _prefs
+          .getString(_keyOnboardingLegacyClaimedUserId)
+          ?.trim();
+
+      if (legacyClaimedUserId == null || legacyClaimedUserId.isEmpty) {
+        await _prefs.setString(
+          _keyOnboardingLegacyClaimedUserId,
+          userId.trim(),
+        );
+        await _prefs.setBool(key, true);
+        return true;
+      }
+
+      if (legacyClaimedUserId == userId.trim()) {
+        await _prefs.setBool(key, true);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  Future<void> setOnboardingCompleteForUser(
+    String userId,
+    bool complete,
+  ) async {
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    await _prefs.setBool(_onboardingKeyForUser(userId), complete);
   }
 
   // User profile

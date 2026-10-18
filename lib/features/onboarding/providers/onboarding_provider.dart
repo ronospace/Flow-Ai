@@ -1,3 +1,4 @@
+import '../../../core/identity/active_account_scope.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../models/onboarding_step.dart';
@@ -48,7 +49,11 @@ class OnboardingProvider extends ChangeNotifier {
     try {
       _isCompleted = true;
       if (_preferencesService != null) {
-        await _preferencesService!.setOnboardingComplete(true);
+        final activeUserId = await ActiveAccountScope.instance.requireUserId();
+        await _preferencesService!.setOnboardingCompleteForUser(
+          activeUserId,
+          true,
+        );
         await _preferencesService!.setFirstLaunch(false);
       } else {}
     } catch (e) {
@@ -130,7 +135,11 @@ class OnboardingProvider extends ChangeNotifier {
   // Reset onboarding state
   Future<void> resetOnboarding() async {
     if (_preferencesService != null) {
-      await _preferencesService!.setOnboardingComplete(false);
+      final activeUserId = await ActiveAccountScope.instance.requireUserId();
+      await _preferencesService!.setOnboardingCompleteForUser(
+        activeUserId,
+        false,
+      );
       await _preferencesService!.setFirstLaunch(true);
     }
     _currentStep = 0;

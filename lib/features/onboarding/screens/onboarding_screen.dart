@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 import '../providers/onboarding_provider.dart';
 import '../models/onboarding_step.dart';
 import '../widgets/onboarding_page.dart';
 import '../widgets/setup_form.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/constants/app_layout.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import 'package:go_router/go_router.dart';
 import '../../../generated/app_localizations.dart';
@@ -86,12 +86,37 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           final dx = details.globalPosition.dx;
                           if (dx < width * 0.22 && !provider.isFirstStep) {
                             _previousStep(provider);
-                          } else if (dx > width * 0.78) {
+                          } else if (dx > width * 0.78 &&
+                              provider.currentStepData.type !=
+                                  OnboardingStepType.permissions) {
                             _nextStep(provider);
+                          }
+                        },
+                        onHorizontalDragEnd: (details) {
+                          if (provider.currentStepData.type !=
+                              OnboardingStepType.setup) {
+                            return;
+                          }
+
+                          final velocity = details.primaryVelocity ?? 0;
+                          if (velocity.abs() <
+                              AppLayout.onboardingSetupSwipeVelocityThreshold) {
+                            return;
+                          }
+
+                          if (velocity < 0) {
+                            _nextStep(provider);
+                          } else {
+                            _previousStep(provider);
                           }
                         },
                         child: PageView.builder(
                           controller: _pageController,
+                          physics:
+                              provider.currentStepData.type ==
+                                  OnboardingStepType.setup
+                              ? AppLayout.onboardingSetupPagePhysics
+                              : AppLayout.onboardingPagePhysics,
                           onPageChanged: (index) {
                             provider.setCurrentStep(index);
                             _animationController.reset();
@@ -117,7 +142,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     ),
                     // Navigation buttons
-                    _buildNavigationButtons(provider, theme, localizations),
+                    if (provider.currentStepData.type !=
+                        OnboardingStepType.permissions)
+                      _buildNavigationButtons(provider, theme, localizations),
                   ],
                 ),
                 // Loading overlay
@@ -187,7 +214,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     AppLocalizations localizations,
   ) {
     if (step.type == OnboardingStepType.setup) {
-      return SetupForm(onSave: (data) => _handleSetupSave(provider, data));
+      return SetupForm(
+        onChanged: (data) => _handleSetupAutosave(provider, data),
+      );
     }
 
     return OnboardingPage(
@@ -231,7 +260,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   if (!provider.isLastStep) ...[
                     const SizedBox(width: 8),
                     Icon(
-                      Icons.arrow_forward_rounded,
+                      AppTheme.navigationForwardIcon,
                       color: theme.colorScheme.onPrimary,
                     ),
                   ],
@@ -248,19 +277,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (provider.isLastStep) {
       _completeOnboarding(provider);
     } else {
-      provider.nextStep();
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      _pageController.animateToPage(
+        provider.currentStep + 1,
+        duration: AppLayout.onboardingPageTransitionDuration,
+        curve: AppLayout.onboardingPageTransitionCurve,
       );
     }
   }
 
   void _previousStep(OnboardingProvider provider) {
-    provider.previousStep();
-    _pageController.previousPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+    if (provider.isFirstStep) return;
+
+    _pageController.animateToPage(
+      provider.currentStep - 1,
+      duration: AppLayout.onboardingPageTransitionDuration,
+      curve: AppLayout.onboardingPageTransitionCurve,
     );
   }
 
@@ -333,18 +364,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     OnboardingStep step,
   ) async {
     if (step.data?['permission'] == 'notifications') {
-      final granted = await provider.requestNotificationPermission();
-      if (granted && mounted) {
-        final localizations = AppLocalizations.of(context);
-        HapticFeedback.lightImpact();
-        _showSuccessMessage(
-          '${localizations.notifications} ${localizations.success.toLowerCase()}!',
-        );
-      }
+      await provider.requestNotificationPermission();
+      if (!mounted) return;
+
+      _nextStep(provider);
     }
   }
 
-  Future<void> _handleSetupSave(
+  Future<void> _handleSetupAutosave(
     OnboardingProvider provider,
     Map<String, dynamic> data,
   ) async {
@@ -355,23 +382,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         trackingGoals: List<String>.from(data['goals'] ?? []),
         reminderSettings: Map<String, bool>.from(data['reminders'] ?? {}),
       );
-
-      if (mounted) {
-        final localizations = AppLocalizations.of(context);
-        HapticFeedback.lightImpact();
-        _showSuccessMessage('${localizations.success}!');
-      }
     } catch (error) {
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         _showErrorMessage('${localizations.error}: $error');
       }
     }
-  }
-
-  /// Helper method to show success messages (works with both Material and Cupertino)
-  void _showSuccessMessage(String message) {
-    AdaptiveMessages.showSuccess(context, message);
   }
 
   /// Helper method to show error messages (works with both Material and Cupertino)

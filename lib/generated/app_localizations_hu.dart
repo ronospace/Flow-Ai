@@ -673,7 +673,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get moodAndEnergy => 'Mood & Energy';
 
   @override
-  String get howAreYouFeelingToday => 'How are you feeling today?';
+  String get howAreYouFeelingToday => 'How’re you feeling today?';
 
   @override
   String get painLevel => 'Pain Level';

@@ -36,7 +36,7 @@ class _BiometricButtonState extends State<BiometricButton> {
         },
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          width: 260,
+          width: double.infinity,
           height: 46,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(

@@ -48,7 +48,7 @@ class CalendarLegend extends StatelessWidget {
                     context,
                     'Menstrual',
                     AppTheme.primaryRose,
-                    '🩸',
+                    Icons.water_drop_rounded,
                   ),
                 ),
                 Flexible(
@@ -56,7 +56,7 @@ class CalendarLegend extends StatelessWidget {
                     context,
                     'Follicular',
                     AppTheme.accentMint,
-                    '🌱',
+                    Icons.eco_rounded,
                   ),
                 ),
               ],
@@ -71,7 +71,7 @@ class CalendarLegend extends StatelessWidget {
                     context,
                     'Ovulation',
                     AppTheme.secondaryBlue,
-                    '🥚',
+                    Icons.egg_rounded,
                   ),
                 ),
                 Flexible(
@@ -79,7 +79,7 @@ class CalendarLegend extends StatelessWidget {
                     context,
                     'Luteal',
                     AppTheme.primaryPurple,
-                    '🌙',
+                    Icons.nightlight_round,
                   ),
                 ),
               ],
@@ -90,9 +90,17 @@ class CalendarLegend extends StatelessWidget {
           // Additional info with improved flow intensity indicators
           Row(
             children: [
-              _buildFlowIntensityIndicator('Light Flow', '💧', 8),
+              _buildFlowIntensityIndicator(
+                'Light Flow',
+                Icons.water_drop_outlined,
+                AppTheme.secondaryBlue,
+              ),
               const Spacer(),
-              _buildFlowIntensityIndicator('Heavy Flow', '🔴', 12),
+              _buildFlowIntensityIndicator(
+                'Heavy Flow',
+                Icons.water_drop_rounded,
+                AppTheme.primaryRose,
+              ),
             ],
           ),
 
@@ -126,7 +134,7 @@ class CalendarLegend extends StatelessWidget {
     BuildContext context,
     String label,
     Color color,
-    String emoji,
+    IconData icon,
   ) {
     final theme = Theme.of(context);
     return Row(
@@ -144,9 +152,7 @@ class CalendarLegend extends StatelessWidget {
             ),
             shape: BoxShape.circle,
           ),
-          child: Center(
-            child: Text(emoji, style: const TextStyle(fontSize: 10)),
-          ),
+          child: Center(child: Icon(icon, color: color, size: 12)),
         ),
         const SizedBox(width: 6),
         Flexible(
@@ -156,7 +162,7 @@ class CalendarLegend extends StatelessWidget {
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
             ),
-            overflow: TextOverflow.ellipsis,
+            softWrap: true,
           ),
         ),
       ],
@@ -188,7 +194,13 @@ class CalendarLegend extends StatelessWidget {
                 : null,
           ),
           child: hasRobotIcon
-              ? const Center(child: Text('🤖', style: TextStyle(fontSize: 8)))
+              ? const Center(
+                  child: Icon(
+                    Icons.auto_awesome_rounded,
+                    size: 9,
+                    color: AppTheme.secondaryBlue,
+                  ),
+                )
               : null,
         ),
         const SizedBox(width: 6),
@@ -207,7 +219,11 @@ class CalendarLegend extends StatelessWidget {
     );
   }
 
-  Widget _buildFlowIntensityIndicator(String label, String emoji, double size) {
+  Widget _buildFlowIntensityIndicator(
+    String label,
+    IconData icon,
+    Color color,
+  ) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -215,16 +231,11 @@ class CalendarLegend extends StatelessWidget {
           width: 16,
           height: 16,
           decoration: BoxDecoration(
-            color: AppTheme.primaryRose.withValues(alpha: 0.1),
+            color: color.withValues(alpha: 0.12),
             shape: BoxShape.circle,
-            border: Border.all(
-              color: AppTheme.primaryRose.withValues(alpha: 0.3),
-              width: 1,
-            ),
+            border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
           ),
-          child: Center(
-            child: Text(emoji, style: TextStyle(fontSize: size)),
-          ),
+          child: Center(child: Icon(icon, size: 11, color: color)),
         ),
         const SizedBox(width: 6),
         Flexible(

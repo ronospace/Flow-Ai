@@ -1464,7 +1464,7 @@ abstract class AppLocalizations {
   /// No description provided for @howAreYouFeelingToday.
   ///
   /// In en, this message translates to:
-  /// **'How are you feeling today?'**
+  /// **'How’re you feeling today?'**
   String get howAreYouFeelingToday;
 
   /// No description provided for @painLevel.

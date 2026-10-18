@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../layout/app_layout_metrics.dart';
 import '../theme/app_theme.dart';
 import '../widgets/modern_button.dart';
 
@@ -32,7 +33,8 @@ class ComingSoonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final isCompactHeight = size.height < 860;
+    final isCompactHeight =
+        size.height < AppLayoutMetrics.comingSoonCompactHeightBreakpoint;
 
     return Container(
       decoration: BoxDecoration(
@@ -84,7 +86,8 @@ class ComingSoonWidget extends StatelessWidget {
     Size screenSize,
     bool isCompactHeight,
   ) {
-    final illustrationSize = screenSize.height < 700
+    final illustrationSize =
+        screenSize.height < AppLayoutMetrics.comingSoonTightHeightBreakpoint
         ? 112.0
         : isCompactHeight
         ? 132.0
@@ -236,7 +239,9 @@ class ComingSoonWidget extends StatelessWidget {
     bool isCompactHeight,
   ) {
     final theme = Theme.of(context);
-    final isCompact = isCompactHeight || screenSize.height < 700;
+    final isCompact =
+        isCompactHeight ||
+        screenSize.height < AppLayoutMetrics.comingSoonTightHeightBreakpoint;
     final maxFeatures = isCompact ? 3 : featureList!.length;
 
     return Container(

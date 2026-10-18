@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../../../core/constants/app_layout.dart';
 
 class SetupForm extends StatefulWidget {
-  final Function(Map<String, dynamic>) onSave;
+  final Future<void> Function(Map<String, dynamic>) onChanged;
 
-  const SetupForm({super.key, required this.onSave});
+  const SetupForm({super.key, required this.onChanged});
 
   @override
   State<SetupForm> createState() => _SetupFormState();
 }
 
 class _SetupFormState extends State<SetupForm> {
-  final _formKey = GlobalKey<FormState>();
+  Future<void> _saveChain = Future<void>.value();
+  final ScrollController _setupScrollController = ScrollController();
+  bool _isSpringingBackToSetupLanding = false;
 
   // Form data
   int _cycleLength = 28;
@@ -42,74 +44,110 @@ class _SetupFormState extends State<SetupForm> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _queueAutosave();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _setupScrollController.dispose();
+    super.dispose();
+  }
+
+  void _requestSetupLandingSpringBack() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _springBackToSetupLanding();
+      }
+    });
+  }
+
+  void _springBackToSetupLanding() {
+    if (!_setupScrollController.hasClients || _isSpringingBackToSetupLanding) {
+      return;
+    }
+
+    final position = _setupScrollController.position;
+    final landingOffset = position.maxScrollExtent;
+
+    if (position.pixels <=
+        landingOffset + AppLayout.onboardingSetupLandingTolerance) {
+      return;
+    }
+
+    _isSpringingBackToSetupLanding = true;
+
+    _setupScrollController
+        .animateTo(
+          landingOffset,
+          duration: AppLayout.onboardingSetupLandingSpringBackDuration,
+          curve: AppLayout.onboardingSetupLandingSpringBackCurve,
+        )
+        .whenComplete(() {
+          _isSpringingBackToSetupLanding = false;
+        });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title
-            Text(
-              'Setup Your Profile',
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Help us personalize your experience',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Cycle Length
-            _buildCycleLengthSection(theme),
-            const SizedBox(height: 24),
-
-            // Period Length
-            _buildPeriodLengthSection(theme),
-            const SizedBox(height: 24),
-
-            // Tracking Goals
-            _buildTrackingGoalsSection(theme),
-            const SizedBox(height: 24),
-
-            // Reminder Settings
-            _buildReminderSettingsSection(theme),
-            const SizedBox(height: 24),
-            const SizedBox.shrink(),
-            const SizedBox(height: 32),
-
-            // Save Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _saveSetup,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Save Preferences',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+    return Listener(
+      onPointerUp: (_) => _requestSetupLandingSpringBack(),
+      onPointerCancel: (_) => _requestSetupLandingSpringBack(),
+      child: NotificationListener<ScrollEndNotification>(
+        onNotification: (notification) {
+          if (notification.metrics.axis == Axis.vertical) {
+            _requestSetupLandingSpringBack();
+          }
+          return false;
+        },
+        child: SingleChildScrollView(
+          controller: _setupScrollController,
+          physics: AppLayout.onboardingSetupScrollPhysics,
+          padding: AppLayout.onboardingSetupScrollPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Text(
+                'Setup Your Profile',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                'Help us personalize your experience',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Cycle Length
+              _buildCycleLengthSection(theme),
+              const SizedBox(height: 24),
+
+              // Period Length
+              _buildPeriodLengthSection(theme),
+              const SizedBox(height: 24),
+
+              // Tracking Goals
+              _buildTrackingGoalsSection(theme),
+              const SizedBox(height: 24),
+
+              // Reminder Settings
+              _buildReminderSettingsSection(theme),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
@@ -156,6 +194,7 @@ class _SetupFormState extends State<SetupForm> {
                       _cycleLength = value.round();
                     });
                   },
+                  onChangeEnd: (_) => _queueAutosave(),
                 ),
               ),
               const SizedBox(width: 16),
@@ -224,6 +263,7 @@ class _SetupFormState extends State<SetupForm> {
                       _periodLength = value.round();
                     });
                   },
+                  onChangeEnd: (_) => _queueAutosave(),
                 ),
               ),
               const SizedBox(width: 16),
@@ -298,6 +338,7 @@ class _SetupFormState extends State<SetupForm> {
                     _selectedGoals.remove(goal['id']);
                   }
                 });
+                _queueAutosave();
               },
               backgroundColor: theme.colorScheme.surface,
               selectedColor: theme.colorScheme.primary,
@@ -349,6 +390,7 @@ class _SetupFormState extends State<SetupForm> {
                 setState(() {
                   _reminderSettings[entry.key] = value;
                 });
+                _queueAutosave();
               },
               activeTrackColor: Colors.blue,
               activeThumbColor: Colors.blue,
@@ -389,18 +431,18 @@ class _SetupFormState extends State<SetupForm> {
     }
   }
 
-  void _saveSetup() {
-    if (_formKey.currentState?.validate() ?? false) {
-      HapticFeedback.lightImpact();
+  Map<String, dynamic> _currentPreferences() {
+    return <String, dynamic>{
+      'cycleLength': _cycleLength,
+      'periodLength': _periodLength,
+      'goals': List<String>.from(_selectedGoals),
+      'reminders': Map<String, bool>.from(_reminderSettings),
+    };
+  }
 
-      final data = {
-        'cycleLength': _cycleLength,
-        'periodLength': _periodLength,
-        'goals': _selectedGoals.toList(),
-        'reminders': _reminderSettings,
-      };
+  void _queueAutosave() {
+    final snapshot = _currentPreferences();
 
-      widget.onSave(data);
-    }
+    _saveChain = _saveChain.then((_) => widget.onChanged(snapshot));
   }
 }

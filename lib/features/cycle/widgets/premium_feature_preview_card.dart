@@ -71,19 +71,17 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Flexible(
-                      child: Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                          fontSize: 12,
-                        ),
+                    Text(
+                      title,
+                      maxLines: 2,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onSurface,
+                        fontSize: 13,
+                        height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 5),
                     Expanded(
                       flex: 2,
                       child: Text(
@@ -92,8 +90,8 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
-                          height: 1.2,
-                          fontSize: 10,
+                          height: 1.28,
+                          fontSize: 11,
                         ),
                       ),
                     ),

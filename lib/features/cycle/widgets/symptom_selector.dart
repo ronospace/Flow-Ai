@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../core/ui/app_scroll_physics.dart';
 
 class SymptomSelector extends StatefulWidget {
   final Set<String> selectedSymptoms;
@@ -116,6 +117,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     return CustomScrollView(
       key: const PageStorageKey<String>('symptom-selector-scroll'),
       primary: false,
+      physics: AppScrollPhysics.spring,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         if (widget.selectedSymptoms.isNotEmpty) ...[

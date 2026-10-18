@@ -46,16 +46,44 @@ void main() {
   });
 
   test(
-    'all sign-in paths await identity synchronization before navigation',
+    'all sign-in authorities await identity synchronization before navigation',
     () {
       final screen = File(
         'lib/features/auth/screens/auth_screen.dart',
       ).readAsStringSync();
+      final coordinator = File(
+        'lib/features/auth/services/auth_provider_coordinator.dart',
+      ).readAsStringSync();
 
+      const screenSync = 'await _settingsProvider.forceUserDataSync();';
+      const providerSync =
+          'await context.read<SettingsProvider>().forceUserDataSync();';
+
+      // Credential and biometric authentication remain owned by AuthScreen.
+      expect(occurrences(screen, screenSync), 2);
+
+      // Apple and Google share one centralized provider success authority.
       expect(
-        occurrences(screen, 'await _settingsProvider.forceUserDataSync();'),
-        4,
+        coordinator.contains(
+          'AuthProviderType.apple => await _authService.signInWithApple()',
+        ),
+        isTrue,
       );
+      expect(
+        coordinator.contains(
+          'AuthProviderType.google => await _authService.signInWithGoogle()',
+        ),
+        isTrue,
+      );
+      expect(occurrences(coordinator, providerSync), 1);
+
+      final providerSyncIndex = coordinator.indexOf(providerSync);
+      final providerRouteIndex = coordinator.indexOf(
+        'AppStateService().getPostAuthRoute(',
+      );
+
+      expect(providerSyncIndex, greaterThanOrEqualTo(0));
+      expect(providerRouteIndex, greaterThan(providerSyncIndex));
     },
   );
 

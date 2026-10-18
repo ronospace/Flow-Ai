@@ -2481,3 +2481,125 @@ Exact next gate:
 - audit and close the next coherent dirty group using existing history/evidence before mutation;
 - record every task closure in all three canonical continuation documents before moving on.
 
+
+### RECOVERY-P0-AUTH-STATIC-CLOSURE-2026-10-19
+
+- RECOVERY-P0 Auth static recovery verified.
+- Auth diagnostic-only instrumentation removed: TYPOGRAPHY_GATE, AUTH_GEOMETRY, AUTH_LAYOUT, KEYBOARD_GATE and geometry-report keys/helpers.
+- Accepted AuthProviderCoordinator, provider-processing, cancellation restoration, post-auth routing, responsive layout metrics and keyboard behavior preserved.
+- Targeted Auth regression: 36/36 passed.
+- Targeted analyzer: 0 issues.
+- Page-3 restored closed-state contracts previously passed 17/17 with analyzer 0 issues.
+- Track/cycle remained byte-identical throughout recovery.
+- Staged checkpoint tree after Auth static recovery: REDACTED_STRING
+- No Release build was performed during this static cleanup.
+- Exact next RECOVERY-P0 gate: physical Android + iPhone verification of the recovered Auth/onboarding state before closure.
+
+### SCALING-GUARDRAILS-2026-10-19
+
+Verified recovery checkpoint principles for future Flow Ai scaling:
+
+- Preserve centralized ownership. Shared Android/iOS behavior belongs in shared owners unless direct platform evidence proves a required divergence.
+- `AppLayoutMetrics` remains the authoritative owner for authentication geometry; do not scatter new screen-local layout constants.
+- `AuthProviderCoordinator` remains the authoritative provider execution, Settings synchronization, post-auth routing and pending-deep-link boundary.
+- `AppStateService` remains the canonical startup/post-auth route decision owner.
+- Onboarding remains the verified four-page flow:
+  1. Your Privacy Matters
+  2. Enable Notifications
+  3. Setup Your Profile
+  4. All Set!
+- Setup Page 3 preserves the recovered interaction contract: vertical setup scrolling, controlled spring-back to the landing point, and deliberate horizontal release navigation.
+- Do not replace Page 3 with the rejected raw-pointer/min-distance/axis-dominance architecture without new physical evidence and explicit approval.
+- `AppScrollPhysics` remains the shared production spring owner where already adopted. Do not globally replace feature-specific verified motion contracts merely for uniformity.
+- Track/cycle is a frozen verified domain during unrelated work. Do not mutate it opportunistically.
+- Preserve revision-safe serialized persistence boundaries; text fields commit on completed edit/submit semantics rather than uncontrolled persistence on every keystroke.
+- Screenshots are qualitative references only. Geometry, breakpoints and device measurements must come from source/runtime/device evidence.
+- Android and iOS must be verified independently on physical Release builds after shared UI or platform integration changes.
+- Analyzer policy remains zero warnings/issues for touched production scope.
+- Tests must describe accepted production behavior; never mutate production source merely to satisfy a later stale regression-lock contract.
+- Any unexpected test/build/runtime failure stops mutation until root cause is mapped from source ownership, callers, Git history, contracts and runtime evidence.
+- Before a new mission starts, normalize verified intentional work explicitly. Generated caches, binaries and transient artifacts remain outside source commits.
+- Never use blanket reset, checkout, clean, stash or broad staging against a dirty production worktree.
+- Never push automatically. Local commit does not authorize remote publication.
+- Keep `docs/mission_log.md`, `docs/continuation_prompt.md`, and `docs/mission_plan_current.md` synchronized whenever a gate closes.
+- Future scaling should extend existing authoritative owners instead of introducing parallel services, duplicated state, duplicated geometry or competing gesture systems.
+- Release artifacts must always be rebuilt from the exact committed and verified source checkpoint; never reuse a stale binary as release evidence.
+
+Recovery evidence at this checkpoint:
+- Page 3 recovered contract tests: 17/17 passed.
+- Auth cleanup regression: 36/36 passed.
+- Targeted analyzers: zero issues.
+- Auth diagnostic instrumentation removed from production source.
+- Track/cycle preserved through the recovery operation.
+- Current physical state was owner-reviewed as acceptable; any future contradictory physical evidence reopens the relevant numbered gate rather than silently changing this checkpoint.
+
+### FLOW-AI-SCALING-GUARDRAILS-2026-10-19
+
+This recovery checkpoint is the normalized production baseline for future Flow Ai scaling.
+
+Architecture:
+- Extend authoritative shared owners instead of creating parallel services, duplicated state, duplicated geometry, or competing gesture systems.
+- Keep Android and iOS behavior shared unless direct platform evidence proves divergence is required.
+- AppLayoutMetrics remains the centralized authentication geometry owner.
+- AuthProviderCoordinator remains provider execution, Settings synchronization, post-auth routing, and pending-deep-link authority.
+- AppStateService remains startup and post-auth route-decision authority.
+- AppScrollPhysics remains the shared spring owner where already adopted.
+
+Authentication:
+- Preserve direct Apple/Google provider execution.
+- Preserve the dedicated provider-processing presentation before native provider UI.
+- Preserve cancellation restoration to the exact originating chooser.
+- Preserve canonical post-auth routing.
+- Temporary measurement/debug instrumentation must be removed once its verification gate closes.
+
+Onboarding:
+- Canonical flow remains four pages:
+  1. Your Privacy Matters
+  2. Enable Notifications
+  3. Setup Your Profile
+  4. All Set!
+- Page 3 preserves vertical form scrolling, controlled landing spring-back, and deliberate horizontal navigation.
+- Do not restore the rejected raw-pointer/min-distance/axis-dominance architecture without new evidence and explicit approval.
+- Preserve the verified setup autosave API and state synchronization.
+
+Persistence:
+- Text fields persist on completed edit/submit/Done semantics rather than uncontrolled writes on every keystroke.
+- Toggle, slider, and discrete chip changes may autosave through the authoritative revision-safe persistence boundary.
+- Preserve serialized revision-safe persistence and stale-write protection.
+
+Platform/UI scaling:
+- Screenshots are qualitative references only.
+- Geometry, viewport, spacing, breakpoints, keyboard behavior, and device metrics must come from source/runtime/device evidence.
+- Verify Android and iOS independently on physical Release builds after platform-sensitive or shared UI changes.
+- Preserve responsive behavior across different device sizes and text scales.
+
+Engineering safety:
+- Never use broad reset, checkout, stash, clean, or broad staging against an active production worktree.
+- Stage only explicitly verified intentional paths.
+- Keep generated caches, binaries, and transient artifacts outside source commits.
+- Unexpected test/build/runtime failures stop mutation until root cause is mapped.
+- Root-cause audits must verify authoritative owners, callers, dependencies, Git history, contracts, configuration, and runtime/device evidence.
+- Never mutate production source merely to satisfy a stale test contract.
+- Analyzer tolerance for touched production scope remains zero issues.
+- Never push automatically.
+
+Mission continuity:
+- docs/mission_log.md remains the canonical evidence ledger.
+- docs/continuation_prompt.md preserves full handoff state.
+- docs/mission_plan_current.md preserves mission priority and exact next gate.
+- Record every task closure with evidence before moving to the next gate.
+- Keep Track/cycle frozen during unrelated missions unless fresh contradictory evidence explicitly reopens it.
+
+Release discipline:
+- Build release artifacts only from the exact committed and verified source checkpoint.
+- Never treat an older APK/AAB/IPA as evidence for newer source.
+- Require physical Android and iPhone verification for release-sensitive UI/platform changes.
+
+Verified checkpoint evidence:
+- Page 3 recovered contracts: 17/17 passed.
+- Auth final targeted regression: 36/36 passed.
+- Targeted analyzers: zero issues.
+- Temporary Auth diagnostics removed.
+- Centralized Auth layout and keyboard behavior preserved.
+- Track/cycle preserved through recovery.
+- Recovery commit parent: 012d3087a80e14a237d5ca50d40133df36a8cc02.

@@ -18,55 +18,62 @@ class OnboardingPage extends StatelessWidget {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight:
-              MediaQuery.of(context).size.height -
-              200, // Account for navigation bars
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20), // Top spacing
-            // Illustration
-            _buildIllustration(theme),
-            const SizedBox(height: 32),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const pagePadding = 24.0;
+        final availableContentHeight =
+            (constraints.maxHeight - (pagePadding * 2)).clamp(
+              0.0,
+              double.infinity,
+            );
 
-            // Title
-            Text(
-              step.title,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-              textAlign: TextAlign.center,
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(pagePadding),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: availableContentHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20), // Top spacing
+                // Illustration
+                _buildIllustration(theme),
+                const SizedBox(height: 32),
+
+                // Title
+                Text(
+                  step.title,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+
+                // Description
+                Text(
+                  step.description,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+
+                // Highlights
+                _buildHighlights(theme),
+
+                // Permission-specific content
+                if (step.type == OnboardingStepType.permissions)
+                  _buildPermissionContent(theme, localizations),
+
+                const SizedBox(height: 20), // Bottom spacing
+              ],
             ),
-            const SizedBox(height: 16),
-
-            // Description
-            Text(
-              step.description,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                height: 1.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-
-            // Highlights
-            _buildHighlights(theme),
-
-            // Permission-specific content
-            if (step.type == OnboardingStepType.permissions)
-              _buildPermissionContent(theme, localizations),
-
-            const SizedBox(height: 20), // Bottom spacing
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
