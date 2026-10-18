@@ -6,6 +6,29 @@
 > All release triage, automation and future work must use this block first.
 > Do not infer current state from older historical ACTIVE/OPEN entries.
 
+
+### GOV-1 — Mission traceability operating contract
+
+Status: PERMANENT / ACTIVE.
+
+Rules:
+- every accepted user request, finding, defect, blocker, deferred item, physical verification result and follow-up action must be recorded in this ledger in the same work cycle;
+- every unfinished item must have a stable numbered mission/subtask ID;
+- every active item must record factual status, evidence, blocker, progress percentage where meaningful, and exact next gate;
+- never rely on chat memory alone for release-critical state;
+- never leave a mission hanging or silently drop an accepted item;
+- when an item closes, remove it from the active queue but preserve its evidence in historical closure;
+- when evidence contradicts an earlier assumption, reconcile the ledger explicitly instead of overwriting history silently;
+- source/runtime evidence outranks screenshots for measurements; screenshots remain qualitative visual evidence only.
+
+
+Deployment-state clarification — 2026-10-14:
+- historical App Store / Google Play submissions and prior deployment evidence remain historical facts and must not be erased;
+- the current corrected/final release candidate has NOT been uploaded, submitted, approved, or deployed to the stores;
+- local builds, physical-device installs/launches, audits and screenshots must never be recorded as store deployment;
+- final physical verification and current-candidate store submission/deployment remain separate explicit gates;
+- no current-candidate upload/submission/deployment may occur without explicit owner authorization.
+
 ## Permanent operating rules
 
 1. Canonical repository:
@@ -72,6 +95,28 @@
     use `Flow Ai` for product-facing text unless an existing literal identifier
     or historical filename requires another spelling.
 
+14. Percentage / revalidation discipline:
+    - never invent or casually reduce/increase release-category percentages;
+    - the last gate-backed percentage remains the verified baseline until a
+      defined revalidation gate produces a replacement value;
+    - fresh regression evidence immediately creates/reopens a numbered mission
+      and may BLOCK release closure even while the previous category percentage
+      remains the historical verified baseline;
+    - never present a historical baseline as proof that a newly reported runtime
+      regression is resolved;
+    - judgment-based mission progress must always be marked `EST.`;
+    - percentage increases require evidence that closes an explicit gate.
+
+15. Unfinished-action continuity:
+    - every accepted action, defect, regression, blocker, investigation and
+      deferred gate must remain explicitly recorded in this ledger;
+    - every unresolved item must retain a stable mission/sub-mission ID,
+      current status, evidence, exact blocker and exact next gate;
+    - never silently omit an unfinished action from future engineering cycles;
+    - before beginning another mission, either close the current gate with
+      evidence or explicitly document why it remains ACTIVE/BLOCKED/WAITING;
+    - chat is never the sole record of unfinished production work.
+
 ## Current release progress
 
 - General: 99% — release engineering substantially complete; Android submitted-artifact drift and store review remain.
@@ -83,6 +128,1311 @@
 - FINAL RELEASE: 99.5% EST. — local Android+iOS release chains pass; Apple/Google store-side completion remains.
 
 ## Current active missions — authoritative priority order
+
+
+### TRACK-AUTOSAVE-1 — Track persistence / redundant Save removal
+
+Status: 68% EST. — ACTIVE / PARTIAL AUTOSAVE IMPLEMENTATION PRESENT / CLOSURE GATES OPEN.
+
+Verified evidence:
+- Track owns `_autosaveTimer`, serialized `_saveChain`, edit/saved revisions, and immutable save snapshots.
+- current manual Save UI remains reachable through `_buildSaveActionArea()` / `_buildSaveButton()`.
+- Notes already uses keyboard Done/edit-completion semantics.
+- Save-related legacy contracts still explicitly require manual Save visibility.
+- physical Android and iPhone both still show the Save action during the incomplete migration.
+
+Blockers:
+- date-switch flush is not yet proven;
+- lifecycle/dispose flush is not yet proven;
+- stale async-load generation protection is not yet proven;
+- manual Save has not yet been migrated through the final authoritative persistence boundary;
+- Save-specific tests still encode the old UX contract;
+- failure/dirty-state retention and duplicate-write safety require final verification.
+
+Exact next gate:
+1. map date-switch, lifecycle, dispose, async-load and manual-save callers;
+2. finish one serialized revision-safe persistence authority;
+3. preserve Notes keyboard Done semantics;
+4. migrate old Save contracts to autosave/Done contracts;
+5. remove redundant visual Save only after persistence gates pass;
+6. analyzer + targeted Track persistence tests + broader regression;
+7. physical Android + iPhone verification;
+8. selectively commit the completed mission.
+
+### TRACK-UX-1 — Track responsive Mood / Energy / Pain metric cells
+
+Status: 25% EST. — ACTIVE / ROOT CAUSE VERIFIED / PRODUCTION PATCH PENDING.
+
+Verified evidence:
+- Mood, Energy and Pain share `MoodEnergySlider`.
+- the 1–5 selector currently uses a `Wrap` with fixed 12px spacing.
+- inactive cells are fixed at 45x45 and the active cell at 55x55.
+- Track adds outer screen padding and additional slider horizontal padding.
+- physical iPhone evidence shows the five cells wrapping to a second row.
+- existing responsive tests detect overflow/escape but do not require all five metric cells to remain on one row.
+
+Design requirement:
+- all five values remain centered and visually balanced on supported widths;
+- geometry adapts from exact available constraints rather than screenshot-derived dimensions;
+- active-state emphasis must not change row count or cause horizontal overflow;
+- Android and iOS remain independently verified.
+
+Exact next gate:
+1. derive usable selector width from actual LayoutBuilder constraints;
+2. define responsive circle/gap geometry at the shared `MoodEnergySlider` owner;
+3. add deterministic one-row/cell-boundary regression assertions;
+4. test supported widths, text scales, themes, locales and values;
+5. analyzer + diff check;
+6. physical iPhone + Android verification.
+
+### TRACK-UX-2 — Track compact section title / subtitle hierarchy
+
+Status: 20% EST. — ACTIVE / OWNER VERIFIED / DESIGN PATCH PENDING.
+
+Verified evidence:
+- Track currently renders section title and subtitle as separate vertical Text widgets.
+- examples include `Mood & Energy` + `How are you feeling today?` and `Pain Level` + `Rate your overall pain level`.
+- the current two-line structure consumes avoidable vertical space on compact devices.
+
+Accepted direction:
+- prefer a compact inline hierarchy such as `Mood & Energy · How are you feeling today?` when constraints allow;
+- use a middle dot rather than brackets;
+- allow a deliberate compact second line when one line cannot fit;
+- never shrink typography into unreadability solely to force one line;
+- preserve localization and accessibility scaling.
+
+Exact next gate:
+1. map every Track section heading/subtitle pair;
+2. determine whether a shared Track section-header owner already exists;
+3. centralize the responsive title/subtitle composition;
+4. add wrapping/text-scale/localization contracts;
+5. physical Android + iPhone verification.
+
+### TRACK-UX-3 — Track insight copy hierarchy / compact presentation
+
+Status: 30% EST. — ACTIVE / COPY OWNER VERIFIED / PRESENTATION PATCH PENDING.
+
+Verified evidence:
+- Mood/Energy insight copy is owned by `mood_energy_slider.dart`.
+- current psychology insight is rendered as one undifferentiated body Text.
+- current example is `Positive mood pattern! Your hormones may be supporting emotional stability.`
+
+Accepted presentation:
+- short headline first;
+- concise supporting sentence on the next line;
+- avoid dense paragraph blocks inside compact insight cards;
+- example structure:
+  `Positive mood pattern!`
+  `Your hormones may be supporting emotional stability.`
+- preserve factual/health wording discipline; do not strengthen medical claims during visual cleanup.
+
+Exact next gate:
+1. classify existing insight strings into headline + supporting copy without changing meaning;
+2. centralize text hierarchy in the existing insight card owner;
+3. verify wrapping at compact widths and large text scales;
+4. preserve dark/light contrast;
+5. analyzer + targeted responsive tests;
+6. physical Android + iPhone verification.
+
+### TRACK-PHYS-1 — Track springback + selected-capsule physical closure
+
+Status: 100% — CLOSED / TWO-DEVICE PHYSICAL PASS.
+
+Verified:
+- iPhone Track springback physically passes;
+- Android Track springback physically passes;
+- selected segmented-capsule positioning physically passes on iPhone;
+- selected segmented-capsule positioning physically passes on Android;
+- no uninstall/reinstall requirement is needed to explain these UI behaviors once a binary containing the current source is actually installed.
+
+Closure rule:
+- remove springback and selected-capsule physical verification from the active Track queue;
+- do not reopen without new contradictory runtime evidence.
+
+
+### UX-7 — First-run / Auth / Onboarding production UX
+
+Status: ACTIVE — evidence-backed multi-surface release UX mission.
+
+#### UX-7.1 — Launch intro
+
+Status: ACTIVE / STATIC + ANDROID PHYSICAL EVIDENCE AVAILABLE / FULL TWO-DEVICE CLOSURE OPEN.
+
+Evidence:
+- canonical launch logo integrated;
+- Playfair Display headline system integrated;
+- three-story launch narrative retained;
+- Android Release physical gate passed;
+- accessibility text-scale overflow was reproduced and corrected.
+
+Exact next gate:
+- current iPhone Release verification after latest shared UX mutations.
+
+#### UX-7.2 — Auth visual integrity / dark mode
+
+Status: ACTIVE / STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- redundant subtitle removed;
+- `Flow Ai` title changed to theme-aware `colorScheme.onSurface`;
+- hard-coded white auth background/form-shell owners replaced with dark-theme-aware owners;
+- auth contracts pass;
+- analyzer passes.
+
+Blocker:
+- latest visual state not yet physically approved on both Android and iPhone Release builds.
+
+Exact next gate:
+- rebuild Release on both devices and verify dark/light auth composition physically.
+
+##### UX-7.2.1 — Auth-card responsive composition / brand hierarchy
+
+Status: ACTIVE / PLATFORM MEASUREMENT AND CENTRALIZATION OPEN.
+
+Accepted production requirement:
+- screenshots are qualitative references only and never measurement sources;
+- all dimensions come from repository/runtime/device commands;
+- Android and iOS measurements and centralization are handled independently;
+- responsive layout must support different device sizes and text scales;
+- credential auth card must contain canonical `Flow Ai` branding;
+- sign-in hierarchy must be: Flow Ai branding -> platform-valid provider -> eligible biometric -> email/password -> credential CTA -> account-mode action;
+- Android credential sign-in includes Google before fingerprint;
+- iOS provider hierarchy must remain platform-correct and separately verified;
+- vertical composition must be balanced across available viewport instead of concentrated at the top;
+- shared centralized owners must be preferred over scattered device-specific constants.
+
+Current evidence:
+- Android physical display/runtime geometry has been measured by commands;
+- current AuthScreen layout constants and social/biometric owners have been mapped;
+- `_buildSocialLogin` was proven previously to exist without a render call;
+- exact responsive mutation remains intentionally deferred until direct-provider physical verification is complete.
+
+Exact next gate:
+- complete direct-provider physical verification;
+- perform final iOS/Android runtime layout measurement audit;
+- centralize responsive card composition;
+- add cross-size widget contracts;
+- verify iPhone + Android Release physically.
+
+
+Auth follow-on clarification — 2026-10-14:
+- credential/email authentication presentation still requires the owner-requested UX-7.2.1 redesign;
+- do not redesign it until Apple/Google provider physical verification is closed;
+
+
+Numbered credential follow-on queue — 2026-10-14:
+
+- UX-7.2.1.1 — Credential authentication-card redesign
+  - Status: QUEUED / provider-auth closure dependency.
+  - Evidence: owner-requested credential presentation redesign remains open.
+  - Progress: 25% EST.
+  - Blocker: complete UX-7.3.3 provider physical closure first.
+  - Next gate: re-open responsive credential composition map after UX-7.3.3.2–4 close.
+
+- UX-7.2.1.2 — Email/password leading-icon alignment
+  - Status: MAPPED / QUEUED.
+  - Evidence: AuthScreen email/password use `AdaptiveComponents.adaptiveTextField`; iOS owner is `CupertinoTextField`; `prefixIcon` is passed directly through `prefix:`; field padding is horizontal 16 / vertical 12; no dedicated iOS prefix inset/constraint owner is currently present.
+  - Progress: 35% EST.
+  - Blocker: no mutation until provider-auth closure and exact cross-platform field ownership is reconciled.
+  - Next gate: measure iOS and Android field composition from source/runtime evidence and centralize icon inset at the correct shared owner; do not derive spacing from screenshots.
+
+- **UX-7.2.1.3 — Canonical authentication E-mail terminology**
+  - Status: SOURCE + CONTRACT PASS / PHYSICAL OPEN.
+  - Evidence: production authentication UI still contains `Continue with email`, `Or use email`, `Email address`, and `Enter your email`.
+  - Owner requirement: authentication copy must use `E-mail`.
+  - Progress: 40% EST.
+  - Blocker: none for source normalization.
+  - Exact next gate: normalize authentication presentation copy, update affected contracts, run auth regression + analyzer, then verify on physical iPhone and Android Release.
+
+- **UX-7.2.1.4 — Credential leading-icon alignment**
+  - Status: SOURCE + CONTRACT PASS / PHYSICAL OPEN.
+  - Evidence: iOS `AdaptiveComponents.adaptiveTextField` renders `CupertinoTextField.prefix: prefixIcon` directly; the same field owns horizontal content padding of 16 logical pixels.
+  - Owner requirement: E-mail/password/display-name leading icons must have deliberate left inset and must not sit against the field boundary.
+  - Progress: 70% EST.
+  - Blocker: none for centralized iOS source correction.
+  - Exact next gate: reuse the existing authoritative 16 logical-pixel field inset for the iOS prefix presentation, preserve Android until Android evidence proves otherwise, then run contracts/analyzer and physical verification.
+
+
+
+- **UX-7.2.1.5 — Android credential hierarchy / Google provider placement**
+  - Status: ACTIVE / PHYSICAL GAP PROVEN.
+  - Evidence: Android E-mail credential surface currently renders Fingerprint + E-mail fields but no Google provider action.
+  - Required hierarchy: Flow Ai logo → Google → Fingerprint when eligible → `Or use E-mail` → E-mail/password fields → primary credential CTA → account-mode switch.
+  - Progress: 30% EST.
+  - Blocker: `_buildSocialLogin` exists but its live ownership/callers and duplication risk must be proven before enabling it.
+  - Exact next gate: map `_buildSocialLogin`, all provider handlers/callers, platform branches and responsive contracts; implement one centralized Android credential composition only after duplicate-provider risk is ruled out.
+
+
+
+- **UX-7.2.1.6 — Professional credential composition / visual balance**
+
+  - Verified static gate — 2026-10-14:
+    - approved hierarchy is provider → biometric → E-mail → primary CTA → account switch;
+    - provider, biometric and primary CTA share the card content width;
+    - dedicated credential composition contract passes;
+    - reconciled legacy provider-entry contracts pass;
+    - full auth contract regression passes;
+    - auth responsive regression passes;
+    - analyzer passes with zero issues;
+  - Status: ANDROID PHYSICAL FAIL / VERTICAL COMPOSITION REOPENED.
+  - Progress: 80% EST.
+  - Exact next gate: fresh Android Release verification, then iPhone Release parity.
+
+  - Static evidence — 2026-10-14:
+    - provider → biometric → E-mail → credential CTA → account switch hierarchy implemented;
+    - provider, biometric and credential CTA now share the card content width;
+    - dedicated composition contract passes;
+    - two legacy contracts that forbade social providers on the credential surface were reconciled to the approved hierarchy;
+    - full auth regression passes;
+    - responsive regression passes;
+    - analyzer passes with zero issues;
+  - Status: STATIC IMPLEMENTATION PASS / PHYSICAL TWO-DEVICE VERIFICATION OPEN.
+  - Progress: 80% EST.
+  - Exact next gate: fresh Android Release verification first, then iPhone credential parity.
+  - Status: ACTIVE / FULL MAP AUDIT REQUIRED BEFORE UI MUTATION.
+  - Evidence: physical Android Release credential surface is functionally correct but owner rejects current positioning, spacing, balance and overall professional composition.
+  - Scope: logo-to-card relationship, card width/height behavior, provider hierarchy, biometric placement, divider placement, E-mail/password field geometry, REDACTED_STRING icons, CTA width, account-mode action, vertical rhythm, responsive behavior, dark/light parity and Android/iOS platform differences.
+  - Progress: 10% EST.
+  - Blocker: exact current owners, component intrinsic dimensions, device constraints, historical intent and responsive contracts must be fully mapped before changing layout constants.
+  - Exact next gate: complete source/caller/history/device/test geometry audit; identify one centralized responsive composition owner and only then design/mutate.
+
+  - Android physical correction — 2026-10-14:
+    - previous visual PASS assessment was incorrect and is superseded;
+    - composition is visibly top-heavy;
+    - Flow Ai logo sits too high relative to the auth card;
+    - auth card also sits too high in the available viewport;
+    - excessive unused vertical space remains below the card;
+    - centering/balance must be corrected from runtime geometry, not screenshot-derived measurements.
+  - Progress: 65% EST.
+  - Exact next gate: capture runtime viewport, safe-area, logo bounds, card bounds, content height and remaining free-space geometry on Android Release; then centralize vertical composition.
+
+
+  - Audit execution note — 2026-10-14:
+    - vertical-geometry audit stopped before source instrumentation because the `rg` expression was malformed;
+    - no auth source mutation occurred in that failed cycle;
+    - runtime geometry capture did not run;
+    - next gate remains exact Android runtime geometry capture before layout mutation.
+
+
+- **UX-7.2.1.7 — Flow Ai wordmark inside credential card**
+  - Status: ACTIVE / AUDIT BEFORE MUTATION.
+  - Requirement: `Flow Ai` must appear inside the same credential-card border immediately before the provider actions, not outside beneath the standalone logo.
+  - Exact next gate: map typography owner and card composition before implementation.
+
+- **UX-7.2.1.8 — Times Roman credential typography**
+  - Status: BLOCKED / EXACT FONT ASSET ABSENT.
+  - Requirement: credential-card `Flow Ai` presentation must use the requested Times Roman family; no guessed font-family declaration.
+  - Exact next gate: prove whether an appropriate Times-family font asset is already bundled/licensed/configured and identify its exact Flutter family name.
+
+  - Evidence: `assets/fonts` contains only PlayfairDisplay and `pubspec.yaml` registers only `PlayfairDisplay`; no Times/Times New Roman asset is present.
+  - Blocker: exact requested cross-platform Times Roman typography cannot be truthfully implemented until a legally obtained Times-family font asset is added to the repository.
+
+- **UX-7.2.1.9 — Auth logo scale and vertical balance**
+  - Status: ACTIVE / NORMAL-HEIGHT BALANCE PASS / LOGO PROPORTION PHYSICAL VERIFICATION OPEN.
+  - Requirement: standalone Flow Ai logo must be materially more prominent and the logo/card composition must be vertically balanced across available space.
+  - Platforms: Android and iOS must be measured independently.
+  - Exact next gate: preserve verified centered composition and independently verify whether centralized `authLogoSize=84` is proportionate on both physical platforms; any size mutation requires machine/runtime evidence and two-device responsive re-verification.
+
+- **UX-7.2.1.10 — Provider/biometric compact rhythm**
+  - Status: ACTIVE / SOURCE OWNER MAPPED.
+  - Requirement: provider-to-biometric spacing must be smaller than E-mail-to-password field spacing.
+  - Platforms: preserve platform provider hierarchy — Android Google; iOS Apple then Google.
+  - Exact next gate: prove current spacing owners and centralize the relationship with a contract rather than independent magic numbers.
+
+
+
+- **UX-7.2.1.11 — Centralized authentication layout metrics**
+  - Status: ACTIVE / DOUBLE-VERIFIED OWNER MAPPED.
+  - Evidence: `AppLayoutMetrics` is the existing shared geometry owner; auth currently duplicates screen-local geometry values.
+  - Rule: centralize existing auth geometry without changing visual behavior; vertical rebalance remains blocked on exact runtime geometry.
+  - Progress: 40% EST.
+  - Exact next gate: move current auth-owned geometry constants into `AppLayoutMetrics`, prove source parity, run contracts/analyzer, then capture runtime card/logo bounds.
+
+
+  - Corrected contract reconciliation — 2026-10-14:
+    - three centralized assertions were already correct: field gap, Apple/Google gap, and card width;
+    - only the standalone logo assertion still referenced literal `84`;
+    - logo contract now verifies both `AppLayoutMetrics.authLogoSize` consumption and centralized value `84`;
+    - targeted auth contracts pass;
+    - full auth regression passes;
+    - responsive auth regression passes;
+    - analyzer passes with zero issues.
+  - Status: CENTRALIZATION STATIC PASS / PHYSICAL VERTICAL BALANCE OPEN.
+  - Progress: 85% EST.
+  - Exact next gate: measure Android logo/card/viewport geometry, then iOS independently, before any vertical-balance mutation.
+
+
+- **UX-7.2.1.12 — Platform-exclusive credential providers**
+  - Status: ACTIVE / DOUBLE-VERIFICATION REQUIRED.
+  - Requirement: iOS credential card exposes Apple only; Google must not render there. Android credential card exposes Google only.
+  - Biometric remains Face ID on iOS and Fingerprint/available biometric on Android.
+  - Scope: credential AuthScreen only; do not silently alter AuthChoice provider architecture.
+  - Exact next gate: prove current provider owner and affected contracts, then implement one centralized platform branch.
+
+
+  - UX-7.2.1.12 verification — 2026-10-14:
+    - AuthScreen platform owner remains `PlatformService`;
+    - iOS credential provider branch renders Apple only;
+    - Android credential provider branch renders Google only;
+    - biometric remains independently platform-resolved;
+    - obsolete Apple→Google credential gap owner removed;
+    - targeted/full auth contracts and analyzer passed.
+
+- **UX-7.2.1.13 — Times Roman Flow Ai credential wordmark**
+  - Status: ACTIVE / FONT AUTHORITY VERIFICATION REQUIRED.
+  - Requirement: the `Flow Ai` wordmark immediately inside the credential card uses Times Roman typography.
+  - Rule: do not fake Times Roman with Playfair, generic serif, or an unverified fallback.
+  - Exact next gate: prove an exact Times-family font source/family available to the production app before mutation.
+
+
+  - Font-audit execution note — 2026-10-14:
+    - first Swift helper failed because `swiftc` combined an iPhone Simulator sysroot with a macOS compilation target;
+    - failure occurred before the physical iPhone Release gate;
+    - no auth typography mutation was applied from that failed audit;
+    - next gate is direct runtime/font-file evidence from installed iOS Simulator runtime plus Android system-font evidence.
+
+
+- **UX-7.2.1.14 — Responsive auth vertical composition and polish**
+  - Status: ACTIVE / STATIC GATE PASS / NORMAL-HEIGHT TWO-DEVICE BALANCE PASS / KEYBOARD-CONSTRAINED PHYSICAL GATE OPEN.
+  - Requirement: logo + credential card must form one visually balanced composition, centered professionally when vertical space permits while remaining scroll-safe on smaller devices.
+  - Android qualitative evidence: current composition remains top-heavy with excessive unused lower space.
+  - Measurement rule: screenshots are qualitative only; all geometry changes require runtime bounds.
+  - Centralization rule: final geometry must live in shared `AppLayoutMetrics`, with platform-specific values only where Android/iOS runtime evidence proves they are required.
+  - Progress: 90% EST.
+  - Exact next gate: physically verify keyboard-visible and constrained-height scrolling on Android and iPhone Release without overflow, clipping, inaccessible fields, or broken composition.
+
+
+  - Android physical runtime geometry — 2026-10-14:
+    - safe area: 411.43 × 867.05 logical px;
+    - logo top: 50.38; logo height: 84.00; logo bottom: 134.38;
+    - credential card top: 146.38; card height with biometrics: 513.00; card bottom: 659.38;
+    - free space above cluster: 18.00;
+    - logo→card gap: 12.00;
+    - free space below cluster: 240.05;
+    - complete logo+card cluster height: 609.00;
+    - therefore Android imbalance is machine-verified, not screenshot-derived.
+    - no vertical-balance value may be finalized until iPhone runtime geometry is captured independently.
+
+
+
+  - iPhone geometry capture attempt — 2026-10-14:
+    - physical iPhone 12 Pro Release build completed, installed and launched successfully;
+    - geometry instrumentation source was present before launch;
+    - no `AUTH_GEOMETRY platform=ios` runtime line was captured in the Flutter Release console;
+    - therefore iPhone geometry remains unverified and no vertical-balance mutation is authorized;
+    - next gate: prove instrumentation call reachability and Release logging behavior, then capture exact device geometry.
+
+
+  - Release logging audit continuation — 2026-10-14:
+    - prior Flutter framework-source lookup incorrectly resolved the SDK root as `/opt/homebrew`;
+    - `devicectl device process launch --console` is available and can bridge physical-app stdout directly;
+    - absence of auth log strings in the AOT executable alone is not accepted as proof that `debugPrint` is disabled;
+    - exact Flutter framework implementation plus direct physical console capture are required before changing instrumentation.
+
+
+  - Current Android/iOS physical visual evidence — 2026-10-14:
+    - Android credential surface visibly shows Google + Fingerprint;
+    - iOS credential surface visibly shows Apple + Face ID;
+    - Android credential composition remains qualitatively top-heavy with substantial unused lower space;
+    - iOS credential composition consumes visibly more vertical space;
+    - Android credential fields appear placeholder-only while iOS renders external E-mail address / Password labels plus placeholders;
+    - screenshots are qualitative evidence only and are not used for dimensions, spacing, breakpoints, or geometry constants;
+    - exact Android runtime geometry remains authoritative; exact iPhone runtime geometry remains required before vertical-balance mutation.
+
+
+  - iPhone geometry forensic result — 2026-10-14:
+    - exact current iOS Release AOT binary contains both `AUTH_LAYOUT viewport=` and `AUTH_GEOMETRY platform=` literals;
+    - stale/uninstrumented iOS build is therefore excluded as the cause of missing runtime geometry output;
+    - current Flutter SDK selects CoreDevice `devicectl + lldb` logging as primary on Xcode 26+ with unified Dart logging as fallback;
+    - exact iPhone geometry remains unverified; no vertical-balance mutation permitted.
+
+- **UX-7.2.1.15 — Credential divider invariant**
+  - Status: ACTIVE / DEFECT MACHINE-CONFIRMED.
+  - Evidence: `_buildManualDivider(theme)` is currently inside a second `_biometricsAvailable && _isLogin` condition.
+  - Defect: `Or use E-mail` disappears in Sign Up and login when biometrics are unavailable.
+  - Requirement: provider → optional biometric → divider → E-mail credentials on every credential surface.
+  - Exact next gate: remove only the redundant biometric condition, add contract, run full auth regression/analyzer.
+
+
+  - Static closure verification — 2026-10-14:
+    - stale CTA literal contract reconciled to `AppLayoutMetrics.authPrimaryActionHeight`;
+    - centralized value remains exactly `52`;
+    - biometric width contract remains unchanged;
+    - credential composition contract passes;
+    - divider invariant contract passes;
+    - full auth contract regression passes;
+    - auth responsive regression passes;
+    - analyzer passes with zero issues.
+  - Status: STATIC PASS / FINAL TWO-DEVICE PHYSICAL VERIFICATION OPEN.
+  - Progress: 95% EST.
+
+
+- **UX-7.2.1.16 — Cross-platform credential field presentation consistency**
+  - Status: ACTIVE / OWNER AUDIT.
+  - Requirement: determine whether Android placeholder-only fields versus iOS external field labels are intentional, platform-owned behavior or unintended divergence.
+  - Evidence: current physical screenshots show different field presentation while provider/biometric exclusivity is correct.
+  - Measurement rule: screenshots establish qualitative presentation only; no dimensions are derived from them.
+  - Centralization rule: any correction must be owned by the shared credential/input component or proven platform-specific owner, never duplicated screen-local constants.
+  - Progress: 15% EST.
+  - Exact next gate: map field builders, adaptive/platform branches, callers, history and tests before mutation.
+
+
+  - Owner-audit result — 2026-10-14:
+    - `AuthScreen` passes the same E-mail/password label and hint contract into the centralized `AdaptiveComponents.adaptiveTextField`;
+    - the observed Android/iOS presentation difference originates inside that shared adaptive owner and follows its Material-versus-iOS rendering paths;
+    - therefore the physical difference is intentional centralized adaptive behavior, not duplicated credential-screen logic;
+    - no UI mutation is required for this finding;
+    - AuthChoice compact/expanded provider presentation is also source-consistent and remains preserved.
+  - Status: ACTIVE / CENTRAL FIELD PARITY IMPLEMENTED / TWO-DEVICE PHYSICAL VERIFICATION OPEN. / INTENTIONAL ADAPTIVE PLATFORM BEHAVIOR.
+  - Progress: 100% VERIFIED.
+
+#### UX-7.3 — Direct Apple / Google provider journey
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Current production architecture:
+- Stage A retains the canonical health story, logo and story progress;
+- iOS Stage A actions are `Continue with Apple` + generic `Continue`;
+- Android Stage A actions are `Continue with Google` + generic `Continue`;
+- generic `Continue` changes only the authentication action area;
+- the story presentation remains visible after generic Continue;
+- expanded iOS actions are Apple / Google / Email;
+- expanded Android actions are Google / Email;
+- Apple / Google invoke the shared AuthProviderCoordinator directly;
+- provider selection does not push an intermediate AuthScreen;
+- provider cancellation is explicitly distinguished from authentication failure;
+- Email alone routes into credential AuthScreen;
+- canonical post-auth routing remains `AppStateService.getPostAuthRoute()`;
+- pending deep-link ownership remains unchanged.
+
+Static evidence:
+- direct-provider contract passes 6/6;
+- normalized legacy contracts pass 24/24;
+- full auth regression passes 43/43;
+- analyzer passes;
+- obsolete `/auth/login?provider=...` architecture is absent;
+- obsolete `initialProvider` AuthScreen ownership is absent.
+
+Exact next gate:
+- iPhone Release Apple direct launch / cancel;
+- iPhone expanded Google direct launch / cancel;
+- Email opens AuthScreen only when explicitly selected;
+- Android Release Google direct launch / cancel;
+- then continue UX-7.2.1 responsive auth-card implementation.
+
+##### UX-7.3.1 — Auth runtime animation / platform-primary integrity
+
+Status: STATIC ROOT-CAUSE FIX PASS / ANDROID RELEASE PHYSICAL REVALIDATION OPEN.
+
+Progress: 70% EST.
+
+Evidence:
+- fresh physical Android screenshot shows Flutter framework error overlay on the compact email-auth surface;
+- runtime error is `Interval` assertion failure with invalid normalized animation bounds (`end <= 1.0` and `begin <= 1.0`);
+- error occurs while building/ticking Flutter `Animate` / `AnimationController`;
+- owner screenshot also shows Android story stage rendering only generic `Continue`, despite the latest static source gate requiring `Continue with Google` + generic `Continue`;
+- supplied terminal session launched `flutter run` in DEBUG mode, not Release;
+- therefore this run cannot close any Release physical gate;
+- source/analyzer success does not supersede fresh runtime failure evidence.
+
+Blockers:
+- exact animation owner producing invalid Interval bounds is not yet isolated;
+- Android source-vs-installed-runtime divergence for platform-primary CTA is not yet classified;
+- no fresh Release build has been verified after root cause correction.
+
+Exact next gate:
+- map every externally controlled auth animation, delay and duration;
+- inspect flutter_animate timing construction and controller duration;
+- prove Android platform service initialization before AuthChoice build;
+- compare worktree source, generated kernel/build timestamps and installed package;
+- mutate only after first broken owner is proven;
+- rebuild Android Release after correction.
+
+
+Accepted interaction clarification — 2026-10-14:
+- Android initial story state: `Continue with Google` + generic `Continue`;
+- iOS initial story state: `Continue with Apple` + generic `Continue`;
+- tapping generic `Continue` must NOT replace, hide or collapse the canonical story presentation;
+- logo, rotating story copy and story progress remain in the same presentation region;
+- only the authentication action area changes;
+- Android expanded state: Google + Email;
+- iOS expanded state: Apple + Google + Email;
+- selecting a provider launches that provider journey;
+- selecting Email opens the compact biometric/email credential surface;
+- story persistence correction is static-gated;
+- runtime animation assertion remains independently ACTIVE until physical Release evidence proves it resolved.
+
+
+Root-cause reconciliation and correction — 2026-10-14:
+- current worktree has exactly 8 `_formController` Animate consumers;
+- HEAD and staged index have exactly 9;
+- the historical ninth consumer was `_buildTabSelector`, intentionally removed with the large Sign In / Sign Up segmented control;
+- current eight consumers were measured at total effect timelines of 300 ms, 400 ms, 500 ms and 800 ms;
+- flutter_animate 4.5.2 explicitly requires identical total durations when one external controller is shared across Animate instances;
+- flutter_animate writes each Animate instance duration into the shared external controller;
+- heterogeneous shared `_formController` ownership is therefore invalid and matches the observed runtime Interval assertion class;
+- exactly the 8 current `_formController` Animate consumers were converted to independent internal Animate controllers;
+- `_formController` declaration, initialization, delayed forward and disposal owners were removed after all consumers were detached;
+- AuthChoice story/provider behavior was not changed;
+- story persistence remains intact;
+- dedicated regression contract passes;
+- auth regression suite passes;
+- analyzer passes.
+
+Exact remaining gate:
+- Android physical RELEASE build only;
+- verify zero red-screen / Interval assertion;
+- initial screen: Google + Continue;
+- tapping Continue retains logo + rotating story + progress and changes actions to Google + Email;
+- Email opens compact biometric/email credential surface;
+- then repeat platform-equivalent checks on iPhone Release.
+
+##### UX-7.3.2 — Direct-provider launch integrity
+
+Status: STATIC GATE PASS / IPHONE RELEASE PHYSICAL VERIFICATION OPEN.
+
+Evidence:
+- `/auth/login?provider=...` was proven to have exactly one production caller in AuthChoiceScreen;
+- provider query state was proven to have exactly one production owner in app_router.dart;
+- four stale release contracts encoding the intermediate-provider architecture were identified and normalized;
+- AuthChoice now invokes a shared AuthProviderCoordinator directly;
+- Apple / Google selection no longer pushes a visible AuthScreen before provider authentication;
+- `/auth/login` remains intact for its independent settings/app-lock caller;
+- AuthScreen `initialProvider`, post-frame provider autolaunch and provider-route failure-return ownership were removed;
+- AuthResult now distinguishes cancellation from failure;
+- Google cancellation is explicitly classified;
+- Apple cancellation uses the verified `AuthorizationErrorCode.canceled` package contract;
+- provider success retains SettingsProvider synchronization;
+- `AppStateService.getPostAuthRoute()` remains canonical;
+- pending deep-link consumption remains canonical;
+- Email remains an explicit separate choice;
+- dedicated direct-provider contract passes 6/6;
+- normalized legacy contracts pass 24/24;
+- full auth regression passes 43/43;
+- analyzer passes with zero issues;
+- old provider-query architecture absence gate passes.
+
+Exact next gate:
+- iPhone Release: Apple must open native Apple authentication directly;
+- no intermediate AuthScreen may appear;
+- Apple cancellation must return quietly to the originating AuthChoice state;
+- expanded Google must launch directly;
+- explicit Email alone must open credential AuthScreen;
+- after iPhone passes, repeat Google direct-launch/cancellation on Android Release.
+
+##### UX-7.3.3 — Provider pre-auth transition / native-sheet background integrity
+
+Owner interaction requirement — 2026-10-14:
+- after Apple or Google is selected, launch-story content must stop rendering completely;
+- provider authentication is a distinct presentation phase, not an overlay/cross-fade on the story;
+- the native provider UI may show only the dedicated processing surface underneath;
+- no duplicate provider CTA and no credential fields may appear in that processing phase;
+- cancellation restores the exact originating primary or expanded chooser;
+- implementation owner is the top-level mutually exclusive `AuthChoiceScreen` presentation state.
+
+
+Status: ACTIVE / CENTRALIZED PROVIDER-PROCESSING STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Physical iPhone Apple verification — 2026-10-14:
+- tapping `Continue with Apple` removes the launch-story presentation completely;
+- the native Sign in with Apple sheet now sits over the dedicated provider-processing presentation;
+- no launch headline, supporting story copy, progress dots or chooser CTA is visible beneath the Apple sheet;
+- provider-processing copy is `Connecting to Apple` / `Complete sign-in in the Apple window.`;
+- this closes the previously observed story-under-native-sheet visual regression for the iPhone Apple path;
+- Apple cancellation restoration still requires explicit final confirmation;
+- iPhone Google and Android Google parity remain open.
+
+
+Progress: 25% EST.
+
+Accepted physical evidence — 2026-10-14:
+- iPhone Release shows canonical Flow Ai story presentation;
+- tapping `Continue with Apple` opens the native Sign in with Apple sheet directly;
+- the launch-story presentation remains visibly underneath the native Apple sheet;
+- owner confirms this differs from the preferred production interaction;
+- desired result is to transition away from the story before native provider authentication;
+- the previously rejected duplicate provider-only Apple/Google page must NOT return;
+- current explicit Apple / Google cancellation semantics must remain;
+- current AuthProviderCoordinator post-auth authority must remain.
+
+Historical recovery evidence:
+- Git history search around 2026-10-13 18:22 produced no committed matching transition;
+- reflog search produced no recoverable matching transition;
+- zsh extended-history search produced `AUTH_HISTORY_HITS=0`;
+- current editor-history audit found `OCT13_AUTH_HISTORY_HITS=0` for 17:00–21:00;
+- 14 unreachable auth-related Git blobs were classified;
+- none proves `/auth/login?provider`, `initialProvider`, `_handleInitialProvider`, current direct coordinator ownership, or the rejected provider-only copy as the exact accepted ~18:22 presentation;
+- editor-history snapshots and unreachable Git blobs produced `EDITOR_GIT_OBJECT_MATCH_COUNT=0`;
+- nearest available editor snapshots are materially outside the target 2026-10-13 time window;
+- therefore the exact ~18:22 implementation is not recoverable from durable Git, reflog, shell history, editor history, or dangling-object evidence;
+- no historical implementation may be claimed as recovered.
+
+Preserved current authority:
+- AuthProviderCoordinator remains the provider orchestration owner;
+- AuthResult explicit cancellation state remains;
+- Apple `AuthorizationErrorCode.canceled` classification remains;
+- Google cancellation classification remains;
+- SettingsProvider synchronization remains;
+- AppStateService.getPostAuthRoute() remains canonical;
+- PendingDeepLinkService ownership remains canonical;
+- analyzer passes with zero issues;
+- branch / HEAD / staged tree remain preserved.
+
+Current implementation evidence — 2026-10-14:
+- `AuthChoiceScreen` is the proven transient presentation-state owner;
+- provider tap sets one `_activeProvider` state before coordinator invocation;
+- one Flutter frame is committed before native Apple/Google authentication starts;
+- provider-processing presentation replaces the rotating story and chooser actions;
+- processing presentation contains no duplicate Apple/Google CTA and no email/password surface;
+- `_showAllMethods` is preserved across provider execution, so cancellation/failure restores the originating primary or expanded chooser;
+- explicit `AuthResult.isCancelled` semantics remain unchanged;
+- `AuthProviderCoordinator` remains provider execution, Settings sync, post-auth routing and pending-deep-link authority;
+- dedicated provider-processing transition/cancellation contract passes;
+- full current auth contract regression passes;
+- AuthChoice responsive regression passes;
+- analyzer passes with zero issues.
+
+Physical Release evidence — 2026-10-14:
+- iPhone Apple provider-processing state renders before native authentication;
+- physical screenshot proves the prior 260 ms AnimatedSwitcher was still transitioning when the native Apple sheet appeared;
+- outgoing launch story remained visibly underneath the processing presentation;
+- therefore the static gate did not satisfy provider-sheet background integrity;
+- cancellation restored the chooser successfully;
+- root cause is synchronization: provider launch followed one `endOfFrame`, while the authoritative AnimatedSwitcher transition lasts 260 ms;
+- transition duration is now centralized as `_providerTransitionDuration`;
+- native provider invocation now waits for that same transition duration after the first committed processing frame;
+- dedicated synchronization contract and auth regressions pass;
+- analyzer passes with zero issues.
+
+Blocker:
+- corrected transition synchronization requires physical iPhone Apple revalidation, followed by iPhone Google and Android Google parity.
+
+Exact next gate:
+- physically verify iPhone Release Apple from the initial chooser;
+- confirm no launch headline, supporting story copy, story progress dots, or chooser CTA remains behind the native Apple sheet;
+- cancel Apple and confirm exact originating chooser restoration;
+- verify expanded iPhone Google parity;
+- verify Android Release Google parity and confirm the prior Interval assertion/red-screen regression remains absent;
+- after provider physical gates pass, resume UX-7.2.1 credential-card hierarchy.
+
+
+
+Numbered physical closure queue — 2026-10-14:
+
+- UX-7.3.3.1 — iPhone Apple provider-processing presentation
+  - Status: PHYSICAL PASS.
+  - Evidence: launch story is absent beneath native Apple authentication; dedicated `Connecting to Apple` processing state is visible instead.
+  - Blocker: none for this subtask.
+  - Progress: 100%.
+  - Next gate: none; retain as closure evidence.
+
+- UX-7.3.3.2 — iPhone Apple cancellation restoration
+  - Status: OPEN.
+  - Evidence required: cancel native Apple sheet and verify exact originating primary/expanded chooser state returns with no credential-form fallback.
+  - Progress: 70% EST.
+  - Next gate: physical iPhone Release cancellation check.
+
+- UX-7.3.3.3 — iPhone Google provider parity
+  - Status: OPEN.
+  - Evidence required: expanded Google selection removes story, shows dedicated processing state, opens Google provider UI, and cancellation restores expanded chooser.
+  - Progress: 55% EST.
+  - Next gate: physical iPhone Release Google launch/cancel.
+
+- UX-7.3.3.4 — Android Google provider parity / runtime integrity
+  - Status: OPEN.
+  - Evidence required: initial Google + Continue, no Interval assertion/red screen, expanded Google + Email, dedicated provider-processing state, native Google launch/cancel, exact chooser restoration.
+  - Progress: 45% EST.
+  - Next gate: physical Android Release verification.
+
+
+
+
+Android physical visual evidence — 2026-10-14:
+- initial Android auth presentation visibly shows canonical health story;
+- initial actions visibly show `Continue with Google` + generic `Continue`;
+- no Flutter red-screen / Interval assertion is visible in supplied Android evidence;
+- E-mail credential surface visibly shows `Use Fingerprint`;
+- canonical user-facing `Or use E-mail` and `E-mail address` terminology is visible;
+- E-mail/password leading icons are visually inset from the field border rather than sitting directly against the left edge;
+- fresh uninstall/reinstall provenance still requires terminal proof if not already captured;
+- Google native provider launch/cancel parity still requires explicit physical confirmation.
+
+#### UX-7.4 — Onboarding consolidation
+
+Status: ACTIVE / SIX-TO-FOUR STATIC GATE PASS / PHYSICAL VERIFICATION OPEN.
+
+Evidence:
+- Welcome and Powerful Features proven presentation-only;
+- live step model reduced from 6 to 4;
+- four-step contract passes after test-harness correction;
+- preserved steps: Privacy, Notifications, Setup, Complete.
+
+Exact next gate:
+- verify four-step flow physically on Android + iPhone Release.
+
+#### UX-7.5 — Privacy / compliance wording integrity
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- forensic privacy audit completed;
+- `End-to-end encryption` classified UNSUPPORTED as a product-wide claim;
+- `Data stored locally on your device` classified UNSUPPORTED as an absolute claim because the app has network/cloud integrations;
+- `No sharing without your permission` classified UNSUPPORTED as an absolute claim;
+- `GDPR & HIPAA compliant` classified UNSUPPORTED because repository compliance checks themselves require HIPAA/privacy review;
+- local AES/security and encrypted-backup code exists, but does not establish product-wide end-to-end encryption or regulatory certification;
+- unsupported onboarding claims removed;
+- replacement wording is bounded to permissions, safeguards, settings control and Privacy Policy disclosure.
+
+Exact next gate:
+- verify corrected Privacy screen physically in Android + iPhone Release as part of UX-7.9.
+
+#### UX-7.6 — Notification onboarding flow
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- dedicated `Enable Notifications` CTA is the permission-step progression owner;
+- generic bottom Next is suppressed on the permission step;
+- right-edge progression is suppressed on the permission step;
+- permission request authority remains `OnboardingProvider.requestNotificationPermission()`;
+- granted result retains existing success feedback;
+- granted or declined OS result progresses once to Setup;
+- notification preference is still enabled only when permission is actually granted.
+
+Evidence gate:
+- dedicated UX-7.6 contract passes;
+- onboarding regression contracts pass;
+- analyzer passes.
+
+Exact next gate:
+- physical Android + iPhone Release verification under UX-7.9.
+
+#### UX-7.7 — Splash / old branding migration
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- forensic splash audit completed;
+- `/splash` remains the canonical initial route;
+- `AppStateService().getInitialRoute()` remains the destination authority;
+- `/auth/choice` remains the exception fallback;
+- prior fixed 4-second startup dwell was replaced by readiness-driven startup timing;
+- legacy heart logo removed from the live splash;
+- `AI-Powered Menstrual Health` removed;
+- `Preparing your personalized experience...` removed;
+- canonical `FlowAiLogo` now owns the splash mark;
+- splash presentation now uses the shared dark/light-aware Flow Ai background system;
+- legacy continuous gradient/particle animation complexity removed;
+- navigation and account-state behavior were not changed.
+- route resolution now runs concurrently with a 900 ms minimum brand transition;
+- circular pink loading indicator is intentionally retained.
+
+Evidence gate:
+- dedicated splash branding contract passes;
+- first-run regression contracts pass;
+- analyzer passes.
+
+Exact next gate:
+- Android + iPhone Release physical verification under UX-7.9.
+
+##### UX-7.7.1 — Native boot / loading-layer integrity
+
+Physical native-boot defect — 2026-10-14:
+- cold/open app launch briefly shows the Flow Ai logo inside an unattractive square/boxed presentation before the clean Flutter logo state;
+- owner rejects this visual transition;
+- classify under UX-7.7.1 native boot / loading-layer integrity;
+- defer mutation until current authentication work is closed;
+- exact native launch asset/layer owner must be re-audited before changing artwork.
+
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- iOS native launch artwork is synchronized to the canonical Flow Ai logo;
+- circular pink Flutter loading indicator is retained;
+- artificial 4-second Flutter dwell is removed;
+- route resolution runs concurrently with a 900 ms minimum brand transition;
+- splash branding and startup continuity contracts pass;
+- first-run regression contracts pass;
+- analyzer passes;
+- fresh physical iPhone screenshots prove startup currently presents three distinct visual stages;
+- stage 1 shows a legacy purple/atom-style native launch mark on a white background;
+- stage 2 shows canonical Flow Ai branding with the desired circular pink loading indicator;
+- stage 3 shows the launch story and repeats the canonical logo;
+- owner explicitly approves retaining circular loading behavior;
+- remaining defect is native-brand mismatch plus unnecessary startup dwell, not the circular loader itself;
+- owner reports an additional old launch/loading presentation may still appear before the current first-run/auth experience;
+- prior Flutter SplashScreen owned `Preparing your personalized experience...` and a linear progress indicator;
+- Flutter splash presentation was already migrated under UX-7.7;
+- native iOS/Android launch layers have not yet been classified in this mission.
+
+Exact next gate:
+- fresh iPhone Release cold-launch verification;
+- verify canonical native logo -> canonical circular-loader splash -> launch story;
+- verify no legacy purple/atom artwork and no artificial 4-second dwell;
+- Android Release parity under UX-7.9.
+
+
+Current implementation decision:
+- retain circular pink Flutter loading indicator;
+- canonicalize iOS native launch artwork;
+- replace artificial 4-second Flutter dwell with concurrent route resolution plus a 900 ms minimum brand transition;
+- preserve `AppStateService().getInitialRoute()` as authoritative route owner.
+
+Exact next gate:
+- startup continuity contract + splash regressions + analyzer;
+- then fresh iPhone Release cold-launch verification followed by Android Release parity.
+
+Numbered native-boot defect — 2026-10-14:
+
+- UX-7.7.1.1 — Boxed Flow Ai logo flash during cold/open launch
+  - Status: QUEUED.
+  - Evidence: owner physically observes an unattractive square/boxed Flow Ai logo presentation before the clean Flutter logo state.
+  - Progress: 15% EST.
+  - Blocker: auth remains higher priority.
+  - Next gate: after auth closes, audit iOS native LaunchImage/asset catalog, launch storyboard/configuration, Flutter splash owner, exact asset transparency/background, build artifacts and cold-launch sequence before mutation.
+
+
+
+  - Physical iPhone evidence — 2026-10-14:
+    - launch logo still renders with an unwanted dark/black rectangular backing around the artwork;
+    - this is a native launch presentation defect, distinct from the Flutter auth-screen logo;
+    - screenshot used only for qualitative defect confirmation.
+
+
+  - Forensic execution note — 2026-10-14:
+    - storyboard/hash audit completed;
+    - Python pixel inspection stopped because Pillow/PIL is not installed;
+    - no launch asset or storyboard mutation occurred after that failure;
+    - next gate uses native macOS image APIs for exact pixel/alpha evidence; no dependency installation required.
+
+
+  - Root-cause proof — 2026-10-14:
+    - all iOS LaunchImage 1x/2x/3x PNGs are fully opaque;
+    - their corner pixels are near-black;
+    - measured dark-border coverage is approximately 41.77%, 44.93%, and 45.78%;
+    - therefore the unwanted dark launch rectangle is embedded in the launch images, not introduced by the white LaunchScreen background;
+    - `assets/images/flow_ai_launch_logo.png` has the same opaque dark-border defect and is not an acceptable replacement;
+    - `assets/images/flow_ai_logo.png` is transparent but is 512×152, so its suitability as the standalone launch mark remains unproven;
+    - storyboard separately declares LaunchImage as 168×185 while the actual 1x image is 168×168.
+  - Status: ROOT CAUSE PROVEN / REPLACEMENT SOURCE AUTHORITY AUDIT ACTIVE.
+  - Exact next gate: identify and verify the canonical transparent standalone Flow Ai mark before generating any iOS launch assets.
+
+
+  - Status reconciliation — 2026-10-14:
+    - historical `QUEUED / auth remains higher priority` state is superseded by current evidence;
+    - UX-7.2.1.14 remains the higher-priority active auth mission; exact pre-fix geometry is captured and post-fix two-device balance verification is now open;
+    - UX-7.7.1.1 is therefore ACTIVE IN PARALLEL for read-only/source-authority forensics;
+    - no launch mutation may leapfrog UX-7.2.1.14 or proceed without replacement-source authority.
+  - Current status: ACTIVE PARALLEL FORENSIC / ROOT CAUSE PROVEN / REPLACEMENT SOURCE UNPROVEN.
+  - Progress: 55% EST.
+
+
+  - Master-source audit continuation — 2026-10-14:
+    - `docs/ICON_DESIGN.md` documents `assets/icons/flowai_icon.svg` as the master source;
+    - that exact SVG path is absent from the current working tree;
+    - therefore the document alone cannot establish current canonical source authority;
+    - replacement launch assets remain blocked until current or historical SVG/source provenance and the actual launcher-icon ownership chain are proven.
+
+
+  - Brand-source authority reconciliation — 2026-10-14:
+    - stale documentation/generator path `assets/icons/flowai_icon.svg` is absent;
+    - current rebranding source includes `assets/icons/flow_ai_icon.svg`;
+    - active launcher configuration resolves to repository-root `flow_ai_icon.png`;
+    - current iOS AppIcon 1024 is byte-different from `assets/icons/flow_ai_icon.png`, `assets/icons/ios/icon_1024.png`, and `assets/images/app_icon.png`;
+    - authority therefore remains unresolved until root PNG provenance, current SVG relationship, and iOS AppIcon provenance are proven;
+    - no launch-image mutation is permitted before that proof.
+
+#### UX-7.8 — Canonical logo propagation
+
+Status: STATIC GATE PASS / PHYSICAL RELEASE VERIFICATION OPEN.
+
+Evidence:
+- canonical `flow_ai_launch_logo.png` has one Dart owner: `FlowAiLogo`;
+- AuthChoiceScreen delegates to `FlowAiLogo`;
+- AuthScreen delegates to `FlowAiLogo`;
+- SplashScreen delegates to `FlowAiLogo`;
+- stale contract that incorrectly required duplicated literal brand text in AuthChoice was corrected;
+- canonical branding identity remains owned centrally by `FlowAiLogo`;
+- `WelcomeStepScreen` and `InteractiveOnboardingScreen` remain LEGACY-DEAD;
+- dead legacy screens were not mutated.
+
+Evidence gate:
+- canonical-logo contract passes;
+- first-run regression contracts pass;
+- analyzer passes.
+
+Exact next gate:
+- physical Android + iPhone Release logo continuity verification under UX-7.9.
+
+#### UX-7.9 — Final first-run physical E2E
+
+Status: WAITING ON UX-7.2 THROUGH UX-7.8.
+
+Required gate:
+- fresh-install Android Release;
+- fresh-install iPhone Release;
+- launch story;
+- Apple path;
+- Google path;
+- email path;
+- four-step onboarding;
+- permission flow;
+- completion -> Home;
+- dark + light appearance verification where applicable;
+- analyzer and targeted contracts remain zero-failure.
+
+
+
+- 2026-10-14 iPhone exact-geometry capture: temporary insertion-only root OverlayEntry exposes values from the existing RenderBox reporter in Release. Pre-existing AuthScreen lines and AppLayoutMetrics references are preserved; no vertical-balance/layout metric mutation. Remove after capture.
+
+- 2026-10-14 exact iPhone Release geometry CAPTURED from the temporary machine-generated RenderBox overlay:
+  - platform=iOS, login=true, biometrics=true
+  - safe=390.00x763.00
+  - safeTop=47.00, safeBottom=810.00
+  - logoTop=65.00, logoH=84.00, logoBottom=149.00
+  - cardTop=161.00, cardH=569.00, cardBottom=730.00
+  - freeAbove=18.00, logoCardGap=12.00, freeBelow=80.00
+  - clusterH=665.00
+  - exact centered vertical correction from current geometry: (80.00 - 18.00) / 2 = 31.00 logical px downward.
+- Previously captured Android Release geometry with biometrics=true remains:
+  - safe=411.43x867.05
+  - freeAbove=18.00, logoCardGap=12.00, freeBelow=240.05
+  - clusterH=609.00
+  - exact centered correction: (240.05 - 18.00) / 2 = 111.025 logical px downward.
+- Cross-platform conclusion: one fixed vertical offset is invalid. Final correction must be responsive from available safe-height/content geometry while preserving scrolling/small-height behavior.
+- Temporary on-device geometry overlay removed immediately after successful capture; no production diagnostic retained.
+- UX-7.7.1.1 remains active in parallel: latest iPhone cold-launch screenshot qualitatively reconfirms the boxed native launch-logo defect; no launch-asset mutation performed.
+
+- Static regression follow-up — 2026-10-14:
+  - responsive-centering source structure is present and targeted analyzer passes with zero issues;
+  - auth regression suite reached 90 passing tests with one failure in `authenticated_first_name_contract_test.dart`;
+  - failing assertion expected 4 sign-in identity-synchronization matches and observed 2;
+  - UX-7.2.1.14 must not be declared static-gate complete until this failure is classified as pre-existing/stale-contract or repaired if genuinely regressed;
+  - no rollback or authentication-logic mutation is authorized before source/history comparison.
+
+- Auth regression classification continuation — 2026-10-14:
+  - current AuthScreen contains exactly 2 `await _settingsProvider.forceUserDataSync();` calls;
+  - the exact pre-UX-7.2.1.14 AuthScreen backup also contains exactly 2;
+  - therefore the failing `expected 4 / actual 2` assertion pre-existed the responsive-layout mutation and is not evidence of a UX-7.2.1.14 auth-logic regression;
+  - final stale-contract repair remains gated on tracing current provider synchronization ownership and the historical commit that reduced/moved the original four call sites.
+
+- Stale identity-sync contract repaired — 2026-10-14:
+  - historical contract incorrectly required four `forceUserDataSync()` calls inside `AuthScreen`;
+  - current production ownership is two AuthScreen synchronization points for credential/biometric flows plus one centralized `AuthProviderCoordinator` synchronization point shared by Apple and Google;
+  - coordinator source proves both Apple and Google authentication feed the shared success path;
+  - provider identity synchronization occurs before canonical post-auth route resolution;
+  - no production authentication logic was changed for this repair;
+  - isolated identity contract, full auth regression, and targeted analyzer pass after reconciliation;
+  - UX-7.2.1.14 static gate is therefore PASS; physical Release verification on iPhone and Android remains open.
+
+- Post-fix physical balance review — 2026-10-14:
+  - Android and iPhone credential-screen screenshots were reviewed qualitatively after the responsive-centering implementation;
+  - both still present visibly excessive unused space below the auth composition and therefore do not yet satisfy the clean/balanced/no-unplanned-dead-space requirement;
+  - screenshots are qualitative evidence only and no spacing measurement is derived from them;
+  - static gate remains PASS: 91 auth tests passed, targeted analyzer is zero-issue, and responsive structural owners pass;
+  - physical UX-7.2.1.14 remains OPEN;
+  - next gate is exact post-fix runtime geometry on both physical platforms, especially `freeAbove` versus `freeBelow`, before any additional layout-value mutation.
+
+- Post-fix geometry diagnostic — 2026-10-14:
+  - temporary root `OverlayEntry` added strictly as a machine-value transport for physical Release verification;
+  - it reuses the existing RenderBox geometry reporter and does not participate in AuthScreen layout;
+  - protected responsive-layout owner counts are unchanged;
+  - diagnostic reports exact `freeAbove`, `freeBelow`, balance delta, logo bounds, card bounds, logo→card gap and cluster height;
+  - remove immediately after Android+iPhone post-fix geometry capture.
+
+- Android post-fix physical balance — 2026-10-14:
+  - machine-generated Release geometry reports `safe=411.43x867.05`;
+  - `freeAbove=129.02`;
+  - `freeBelow=129.02`;
+  - `delta=0.00`;
+  - `logoTop=161.40`, `logoBottom=245.40`;
+  - `cardTop=257.40`, `cardBottom=770.40`;
+  - `logoCardGap=12.00`;
+  - `clusterH=609.00`;
+  - Android vertical composition is therefore exactly balanced for this physical Release state;
+  - UX-7.2.1.14 remains OPEN until post-fix iPhone geometry is captured independently.
+
+- Standing logo-proportion requirement — 2026-10-14:
+  - standalone auth logo must remain visually proportionate to the available screen and surrounding composition;
+  - it must not be arbitrarily oversized or undersized;
+  - screenshots provide qualitative review only;
+  - any numeric logo-size mutation requires source/runtime evidence and two-platform responsive verification.
+
+- Standing credential wordmark typography requirement — 2026-10-14:
+  - `Flow Ai` wordmark remains required inside the credential card;
+  - target typography is Times New Roman / Times Roman;
+  - no generic-serif substitution may be presented as exact Times New Roman;
+  - implementation remains blocked until exact cross-platform font authority is verified or an appropriate licensed bundled asset is supplied;
+  - final wordmark size/weight/spacing must remain proportionate to the credential composition on Android and iPhone.
+
+- iPhone post-fix physical balance — 2026-10-14:
+  - machine-generated Release geometry reports `safe=390.00x763.00`;
+  - `freeAbove=49.00`;
+  - `freeBelow=49.00`;
+  - `delta=0.00`;
+  - `logoTop=96.00`, `logoBottom=180.00`;
+  - `cardTop=192.00`, `cardBottom=761.00`;
+  - `logoCardGap=12.00`;
+  - `clusterH=665.00`;
+  - iPhone normal-height vertical composition is therefore exactly balanced.
+- Two-device normal-height balance gate — PASS:
+  - Android: `freeAbove=129.02`, `freeBelow=129.02`, `delta=0.00`;
+  - iPhone: `freeAbove=49.00`, `freeBelow=49.00`, `delta=0.00`;
+  - no platform-specific vertical offset is required for the verified normal-height states.
+- Temporary post-fix geometry overlay removed after successful Android+iPhone capture.
+- UX-7.2.1.14 remains OPEN:
+  - keyboard-visible/constrained-height scrolling has not yet been physically verified on both platforms;
+  - no closure is permitted until that exact physical gate passes.
+
+- Status reconciliation — 2026-10-14:
+  - historical `PHYSICAL FAIL` applied to the earlier top-heavy composition and is superseded for normal-height vertical balance;
+  - Android post-fix balance: `freeAbove=129.02`, `freeBelow=129.02`, `delta=0.00`;
+  - iPhone post-fix balance: `freeAbove=49.00`, `freeBelow=49.00`, `delta=0.00`;
+  - centralized standalone logo owner remains `authLogoSize=84`;
+  - logo proportion remains independently OPEN and is not closed by balance geometry.
+
+- Platform hierarchy reconciliation — 2026-10-14:
+  - historical `iOS Apple then Google` credential wording is superseded;
+  - current credential provider owner in `AuthScreen`: iOS Apple only, Android Google only;
+  - current biometric label/icon owner in `biometric_button.dart`: iOS Face ID, Android Fingerprint;
+  - provider→biometric spacing remains centrally `AppLayoutMetrics.gap`; E-mail→password spacing remains `authFieldGap`;
+  - physical rhythm/polish remains subject to the final auth physical gate.
+
+- Current-state reconciliation — 2026-10-14:
+  - earlier top-heavy Android and missing-iPhone-geometry entries are retained as historical evidence only;
+  - current normal-height Android and iPhone geometry is exactly balanced;
+  - current remaining UX-7.2.1.14 gate is keyboard-visible/constrained-height physical verification only;
+  - no further normal-height spacing mutation is permitted without new contradictory machine evidence.
+
+- Keyboard/constrained-height diagnostic — 2026-10-14:
+  - temporary root overlay activates only while `viewInsets.bottom > 0`;
+  - reports exact safe height, keyboard inset and resulting available height;
+  - no production auth layout metric or spacing owner is changed;
+  - physical gate requires Android and iPhone Release with keyboard visible, scrolling functional, fields/CTA reachable, and no overflow or clipping;
+  - diagnostic must be removed immediately after both physical captures.
+
+- Keyboard diagnostic transport reconciliation — 2026-10-14:
+  - Android and iPhone Release artifacts both contained the `KEYBOARD_GATE` literal and both diagnostic builds were installed;
+  - the temporary root `OverlayEntry` nevertheless did not render visibly during physical keyboard-open states;
+  - stale-build hypothesis is therefore rejected by binary/install evidence;
+  - failed `OverlayEntry` transport was removed;
+  - replacement diagnostic is an in-tree `StackFit.expand` overlay that does not participate in sizing of the existing `SingleChildScrollView`;
+  - production auth spacing/layout values remain unchanged;
+  - UX-7.2.1.14 remains OPEN pending exact Android+iPhone keyboard values plus physical CTA/field reachability.
+
+- Keyboard physical evidence continuation — 2026-10-14:
+  - fresh Android and iPhone Release screenshots both show the software keyboard open on the credential screen;
+  - E-mail/Password controls remain visible in the captured constrained states;
+  - Android captured state shows the Sign In CTA only partially above the keyboard;
+  - iPhone captured state does not include the Sign In CTA in the visible viewport;
+  - neither platform rendered the temporary `KEYBOARD_GATE` strip despite the repaired diagnostic Release being installed;
+  - no keyboard inset or available-height values may therefore be inferred from screenshots;
+  - UX-7.2.1.14 remains OPEN pending exact diagnostic ownership audit plus physical proof that the lower CTA is scroll-reachable on both platforms.
+
+- Keyboard diagnostic ownership audit — 2026-10-14:
+  - repaired diagnostic Release is physically installed on Android and iPhone;
+  - both platforms visibly enter software-keyboard constrained states;
+  - `KEYBOARD_GATE` still does not render;
+  - current diagnostic condition depends exclusively on inherited `MediaQuery.of(context).viewInsets.bottom`;
+  - AuthScreen is wrapped by `AdaptiveComponents.adaptiveScaffold`: Android uses Material `Scaffold`; iOS uses `CupertinoPageScaffold`;
+  - exact Flutter framework handling of inherited `viewInsets` across those scaffold boundaries is now the active forensic gate;
+  - no keyboard metric, layout value, or platform offset may be changed until framework-source evidence resolves ownership.
+
+- Keyboard inset ownership root cause — 2026-10-14:
+  - exact installed Flutter 3.41.6 framework source resolves the missing diagnostic;
+  - Android Material `Scaffold`, with default `resizeToAvoidBottomInset=true`, resizes its body from the ambient keyboard inset and passes `removeBottomInset: true`; its body wrapper then calls `removeViewInsets(removeBottom: true)`;
+  - iOS `CupertinoPageScaffold` likewise consumes `existingMediaQuery.viewInsets.bottom` as bottom padding and exposes descendant `viewInsets.bottom=0`;
+  - therefore AuthScreen's descendant `MediaQuery.of(context).viewInsets.bottom` is expected to be zero after the parent scaffold consumes the keyboard obstruction;
+  - the prior diagnostic condition was observing the wrong MediaQuery boundary;
+  - production responsive layout ownership is unchanged;
+  - diagnostic now reads `MediaQueryData.fromView(View.of(context)).viewInsets.bottom` strictly for physical measurement and separately reports the consumed child inset;
+  - no root-view value is used to drive production spacing, offsets, or sizing.
+
+- REOPENED — cross-platform credential field visual parity — 2026-10-14:
+  - latest physical Android/iPhone review shows the final visible field presentation is not equivalent;
+  - iOS visibly uses persistent external `E-mail address` / `Password` labels with placeholders inside the fields;
+  - Android visibly uses Material floating labels, producing a different hierarchy and a Password label/outline collision in the observed focused state;
+  - product requirement is now explicit: Android and iOS may retain platform-specific native implementations, but the final visual hierarchy, alignment and readability must be equivalent;
+  - persistent field labels must not be removed merely because placeholders exist; placeholders disappear after input and are not a replacement for stable field identity;
+  - target visual contract: persistent external field label + in-field placeholder on both platforms, with platform-native rendering retained underneath where appropriate;
+  - mutation is gated on proving the centralized `AdaptiveComponents.adaptiveTextField` ownership/caller scope and ensuring no unrelated screens are unintentionally changed.
+
+- Central credential-field parity implementation — 2026-10-14:
+  - caller audit proves `AdaptiveComponents.adaptiveTextField` is used only by `AuthScreen`;
+  - iOS branch remains unchanged: persistent external label + `CupertinoTextField` placeholder;
+  - Android retains native Material `TextField` behavior but no longer uses floating `InputDecoration.labelText`;
+  - Android now renders the same visible hierarchy: persistent external label + in-field hint;
+  - existing E-mail, Password, Display name and Confirm password label/hint copy is unchanged;
+  - helper/error handling, prefix/suffix icons, obscured password behavior and Material focus/error borders remain owned by the existing central field component;
+  - UX-7.2.1.16 remains OPEN until physical Android and iPhone Release verification confirms equivalent readability/alignment in normal and focused states.
+
+- Cross-platform visual-density gate — 2026-10-14:
+  - owner reports Android still appears to contain more unused vertical space than iPhone;
+  - prior geometry proved exact centering but different content-cluster heights, so equal `freeAbove/freeBelow` alone is insufficient to establish equivalent visual density;
+  - Android field hierarchy has since changed to external labels, which changes card/content height;
+  - no Android-specific offset, compression or spacing mutation is authorized until new post-field-parity physical geometry is captured independently on Android and iPhone;
+  - active comparison values are exact safe height, logo height, card height, cluster height, free-above/free-below and logo→card gap;
+  - screenshots remain qualitative only.
+
+### REL-INT-1 — Release worktree integrity / change accountability
+
+Status: ACTIVE / WORKTREE CLASSIFICATION OPEN.
+
+Progress: 35% EST.
+
+Purpose:
+- maintain one accountable release worktree without destructive cleanup;
+- ensure every tracked/untracked path belongs to an active mission, deliberate artifact, or documented cleanup action;
+- preserve branch, HEAD and staged tree until commit authorization is explicitly given;
+- prevent accidental loss of active release work.
+
+Rules:
+- no `git reset`;
+- no `git restore`;
+- no `git clean`;
+- no blanket `git add .`;
+- no stash;
+- no branch switch;
+- no commit without explicit owner authorization;
+- generated artifacts must not be confused with product source;
+- unresolved or unexplained files remain visible until classified.
+
+Current known worktree domains:
+- auth/provider;
+- onboarding/splash;
+- canonical branding assets;
+- cycle premium UI;
+- release contracts/tests;
+- mission ledger;
+- generated/build artifacts.
+
+Exact next gate:
+- classify every dirty and untracked path;
+- identify accidental/generated files that should later be ignored or removed;
+- identify all source/test files that belong to active missions;
+- prove zero conflicts / merge state;
+- prove branch / HEAD / staged-tree preservation;
+- keep this mission ACTIVE until owner authorizes final staging/commit cleanup.
+
+### APPLE-IAP-P0.1 — iOS purchase interaction regression
+
+Status: 5% EST. — ACTIVE / NEW PHYSICAL IPHONE REGRESSION REPORTED / ROOT CAUSE NOT YET ESTABLISHED.
+
+Progress: 5% EST.
+
+New evidence — 2026-10-12:
+
+- owner reports Monthly / Annual Premium purchase interaction does not actually respond as expected, especially on physical iPhone;
+- this is fresh evidence and therefore legitimately reopens runtime verification without invalidating older historical tests;
+- prior `Monthly -> Yearly selected-state interaction: PASS` proves plan selection UI only;
+- prior `Start Premium loading feedback: PASS` proves loading feedback only;
+- neither result proves physical tap -> StoreKit purchase-sheet launch;
+- existing source contract proving `_subscribe(...)` delegation is structural, not a physical StoreKit runtime gate.
+
+Required forensic chain:
+
+1. subscription-card hit target / gesture ownership;
+2. selected-plan state mutation and rebuild;
+3. Start Premium CTA enabled/disabled/loading ownership;
+4. selected product ID passed into provider;
+5. provider purchase action lock / `_purchaseActionInProgress`;
+6. `SubscriptionService.purchaseSubscription`;
+7. product catalog identity and StoreKit product mapping;
+8. `InAppPurchase` availability;
+9. `PurchaseParam` construction;
+10. store purchase API invocation;
+11. iOS StoreKit delegate / pending transaction state;
+12. `purchaseStream` subscription and event handling;
+13. cancellation / pending / error semantics;
+14. receipt validation after store transaction;
+15. entitlement publication after validation;
+16. physical release-mode iPhone purchase-sheet launch;
+17. Android parity check after iOS root cause is resolved.
+
+Do not:
+
+- fabricate Premium entitlement;
+- bypass receipt validation;
+- weaken durable ownership;
+- clear transactions blindly;
+- change product IDs without store evidence;
+- mark this closed from source tests alone.
+
+Audit evidence — 2026-10-12:
+
+- targeted Premium purchase/paywall suite: `26/26 PASS`;
+- Flutter widget test proves Monthly -> Yearly and Yearly -> Monthly selected-state changes;
+- dedicated iOS widget test proves plan-card pointer/tap callbacks and selected-state mutation;
+- source purchase chain reaches `SubscriptionService.purchaseSubscription`;
+- authoritative store owner constructs `PurchaseParam(productDetails: product)`;
+- authoritative store owner calls `_iap.buyNonConsumable(purchaseParam: purchaseParam)`;
+- source captures the returned `launched` boolean and fails visibly when false;
+- these source/widget results do NOT prove a physical iPhone StoreKit purchase sheet launches;
+- owner-reported physical iPhone non-response therefore remains unresolved;
+- no purchase implementation mutation was performed during this audit;
+- branch / HEAD / staged-tree preservation gate passed.
+
+Failed/aborted trace attempt — 2026-10-12:
+
+- physical devices were successfully enumerated;
+- physical iPhone ID verified as `00008101-00050C191E44001E`;
+- automated Python parsing of `flutter devices --machine` failed with a local quoting/SyntaxError;
+- resulting Flutter broken-pipe output is secondary to that parser failure;
+- app launch, StoreKit and checkout were not reached;
+- no product source was mutated;
+- this failure does not establish any checkout root cause.
+
+Current blocker:
+
+- first broken runtime edge between physical Start Premium interaction and StoreKit
+  purchase-sheet presentation has not yet been isolated.
+
+Exact next gate:
+
+- instrument and trace the existing release-mode iPhone checkout chain without changing
+  purchase authority: card selection -> Start Premium -> durable identity gate ->
+  provider -> service -> `buyNonConsumable` launch request/return -> StoreKit response;
+- capture physical-device logs proving the first missing/failing edge;
+- only after that evidence may a purchase mutation be designed.
+
+
+### MON-ADS-1 — Ad coverage / yield forensic audit
+
+Status: 0% EST. — ACTIVE / BUSINESS-PERFORMANCE CONCERN ACCEPTED / FORENSIC AUDIT REQUIRED BEFORE MUTATION.
+
+Progress: 0% EST.
+
+Evidence accepted:
+
+- physical screenshots confirm production ads currently render on at least Home and Insights;
+- AdMob screenshot shows approximately 3.78K ad requests, 1.68K impressions, 83.48% match rate, EUR 1.69 eCPM and EUR 2.84 estimated earnings for the displayed 7-day comparison;
+- Android contributes materially more ad earnings than iOS in the displayed app-performance panel;
+- Google Play screenshots show 5.18K device acquisitions and 3.63K monthly active devices for the displayed 28-day period;
+- low earnings alone do not prove a particular code defect.
+
+Requirements:
+
+- map every production ad owner, unit ID, placement, eligible route/screen, lifecycle and load trigger;
+- map banner/interstitial/rewarded/native ownership if present;
+- verify production vs test IDs on Android and iOS;
+- verify AdMob app IDs and platform manifests/config;
+- verify UMP/CMP consent gating and non-personalized behavior;
+- preserve Premium ad suppression and entitlement authority;
+- inspect frequency caps, retry/backoff, caching, disposal, page transitions and duplicate-load prevention;
+- map request -> loaded -> impression -> click analytics where available;
+- identify screens with no monetization and determine which are appropriate for ads;
+- maximize policy-safe eligible coverage without blindly putting ads on every page;
+- do not place ads where they interfere with authentication, sensitive health entry, purchases, permissions, destructive actions or store-policy expectations;
+- verify physical Android and iPhone release behavior before closure;
+- do not mutate ad logic until root cause / coverage gaps are evidenced.
+
+Exact next gate:
+
+- complete full source/config/caller/route/consent/Premium/platform/runtime contract map and identify exact coverage gaps or lifecycle defects.
+
+
 
 ### 1. APPLE-IAP-P0 — App Store review
 
@@ -235,6 +1585,289 @@ Remaining FINAL-E2E gates:
 3. exact corrected iOS upload + processing + build attachment;
 4. current Google review/replacement release decision;
 5. final store-state reconciliation.
+
+### UX-LAUNCH-CLEAN-1 — True fresh-install launch verification
+
+Status: ACTIVE.
+
+Requirement:
+
+- all launch / pre-auth / onboarding runtime verification must start from a true fresh installation;
+- do not validate initial states by rerunning over an existing installed app with persisted preferences/session state;
+- build release first, then remove the installed app, reinstall, and verify the complete initial launch path;
+- on iOS, explicitly audit whether authentication/keychain state survives uninstall/reinstall before claiming a clean first-launch gate;
+- record physical-device evidence for the actual first screen, auth choice, onboarding entry, step order and completion behavior.
+
+Next gate:
+
+- audit persisted auth/keychain ownership, then perform a release-mode uninstall/reinstall on the physical iPhone and capture the real first-launch path.
+
+
+Root-cause evidence — native-assets BuildMode cache:
+
+- running Flutter 3.41.6 does not contain Flutter commit
+  `9b274c552982dc2f406a3331b213690b150b955c`,
+  `[native assets] Fix caching on BuildMode switching`;
+- affected Flutter implementation installs iOS native assets into a shared
+  `build/native_assets/ios` location across build modes;
+- the upstream fix moves installed native assets to the build target/output
+  directory, preventing Debug/Release signing-state reuse;
+- Flow Ai reproduced the defect: Debug objective_c.framework was Apple
+  Development signed while Release/native-assets copies were ad-hoc signed;
+- controlled validation preserves the old generated artifact, removes only
+  the evidenced iOS native-asset output from the active build path, performs
+  a signed Release rebuild, and requires nested signature verification before
+  physical installation;
+- first launch remains blocked until iOS auth/keychain persistence is audited;
+  installation alone must not be treated as first-launch verification.
+
+
+
+Read-only physical iOS keychain probe:
+
+- verified same-bundle/same-team native probe was installed only after the
+  production Flow Ai app was removed;
+- probe performed `SecItemCopyMatching` metadata/count queries only;
+  it did not call `SecItemDelete`, sign out Firebase, or mutate keychain state;
+- accessible keychain counts: generic-password=2, internet-password=0, certificate=0, key=0, identity=0;
+- total accessible items observed: 2;
+- production Flow Ai release was reinstalled afterward and remains unopened;
+- if accessible keychain state is present, the next gate is targeted
+  identification of Firebase-owned items before any deletion;
+- if no accessible items are present, first-launch runtime verification may
+  proceed without a destructive sanitizer.
+
+
+
+Targeted iOS authentication Keychain sanitization:
+
+- physical read-only probe identified exactly two surviving generic-password
+  items after uninstall/reinstall;
+- service `firebase_auth_1:000000000000:ios:0000000000000000000000`
+  is owned by Firebase Auth;
+- service `auth` is owned by GoogleSignIn/GTMAppAuth; GoogleSignIn 8.0.0
+  defines `kGTMAppAuthKeychainName = @"auth"` and restores/saves auth state
+  through that Keychain item;
+- targeted cleaner is allowed to delete only those two exact services after
+  verifying exactly one item per service and the expected
+  `9FY62NTL53.com.flowai.health` access group;
+- no broad Keychain wipe is permitted;
+- after successful deletion both exact services must query empty;
+- verified production Flow Ai is then reinstalled and must remain unopened
+  until the final physical first-launch gate.
+
+
+### 4. UX-ENTRY-1 — Pre-auth launch / brand story
+
+Status: 94% EST. — ACTIVE / FIXED TYPOGRAPHY GEOMETRY VERIFIED / PHYSICAL RELEASE VISUAL GATE OPEN.
+
+Accepted requirements:
+
+- use one canonical production Flow Ai icon as the primary pre-auth brand mark;
+- no duplicate icon + `Flow Ai` wordmark composition on the clean landing surface;
+- restrained, short story copy with stable layout and no generic startup slogan;
+- use Microsoft Copilot only as an interaction-principle reference — never copy branding, assets, colors, text or Microsoft authentication;
+- screenshots are human visual evidence only; exact geometry must come from source, shared tokens, device constraints and release runtime;
+- perform deep owner/caller/history/theme/platform/accessibility/localization audit before mutation.
+
+Verified typography / positioning evidence — 2026-10-13:
+
+- clean landing owns one 82px Flow Ai logo with no duplicate wordmark;
+- rotating headline owns a fixed 82px layout zone;
+- headline typography is 36px, 1.08 line-height, weight 700, tracking -1.1;
+- Apple system-font measurement proves 36px fits all audited content widths from 272pt through 382pt;
+- at the physical-iPhone 342pt content width, both long headlines measure 77.76px high inside the fixed 82px zone;
+- 38px is unsafe because two-line height measures 82.08px, while 37px and below pass;
+- therefore 36px is intentionally retained rather than blindly shrinking typography;
+- centered AnimatedSwitcher stack prevents headline-height changes from moving the surrounding logo, description or authentication controls;
+- Flutter widget-font measurements were rejected as typography sizing authority after conflicting with native Apple system-font metrics.
+
+Next gate:
+
+- analyzer and targeted auth contracts must remain green;
+- rebuild a correctly signed iOS Release;
+- install on the physical iPhone and visually confirm all three rotating headline states keep identical logo and authentication-control coordinates.
+
+
+### 5. UX-ENTRY-2 — Progressive identity chooser
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- iOS initial identity surface: `Continue with Apple` + `Continue`;
+- Android initial identity surface: `Continue with Google` + `Continue`;
+- generic `Continue` progressively reveals only valid additional methods;
+- no premature Sign In / Sign Up segmented-control burden;
+- Email owns detailed credential UI;
+- no Microsoft authentication.
+
+Next gate:
+
+- complete UX-ENTRY-1 forensic ownership gate, then map chooser state ownership and platform dispatch.
+
+
+### 6. UX-ENTRY-3 — Provider-direct authentication behavior
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- Google CTA dispatches directly to Google auth;
+- Apple CTA dispatches directly to Apple auth;
+- Email alone reveals email/password UI;
+- provider cancellation returns to the clean chooser without stale credential UI or catastrophic-error treatment;
+- preserve centralized Firebase/authentication ownership.
+
+Next gate:
+
+- map exact AuthService/AuthScreen/provider dispatch, cancellation semantics, route ownership and existing auth contracts.
+
+
+### 7. UX-ENTRY-4 — Biometric eligibility / returning-user path
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- biometric auth is not a generic identity provider;
+- fresh/unknown installs must not imply biometrics can discover an account;
+- expose biometrics only when verified account/session/local eligibility makes the flow meaningful;
+- use actual supported biometric type/label per platform.
+
+Next gate:
+
+- trace AuthService, biometric services, Firebase session state, account-scoped preference state and local_auth capability.
+
+
+### 8. UX-ONB-1 — Onboarding content hierarchy
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- audit whether all current onboarding stages deserve to exist;
+- one question/decision per page;
+- avoid feature-brochure onboarding;
+- keep only necessary post-auth personalization and contextually timed permissions.
+
+Next gate:
+
+- map all current onboarding steps, consumers, persisted state, routing and permission ownership.
+
+
+### 9. UX-ONB-2 — Onboarding typography / responsive geometry
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- audit central typography before local sizing;
+- do not infer measurements from screenshots;
+- derive geometry from source, safe areas, logical device dimensions, text scale, keyboard, CTA occupancy and scroll extent;
+- prevent unintended Android/iOS hierarchy drift.
+
+Next gate:
+
+- map app_theme.dart, text themes, font assets, spacing/geometry owners and platform overrides.
+
+
+### 10. UX-ONB-3 — Central forward-navigation affordance
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- standard onboarding forward affordance is `>`;
+- do not use arrow_forward / arrow_forward_rounded / arrow_forward_ios / chevron_right / navigate_next for this standard CTA;
+- centralize glyph, spacing, typography, dimensions, semantics, state and feedback at one shared owner;
+- do not alter unrelated disclosure/trend/navigation arrows.
+
+Next gate:
+
+- map current onboarding CTA/button owners and every forward-navigation consumer before centralization.
+
+
+### 11. UX-ONB-4 — Page transition / landing behavior
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- resolve PageView + secondary animation interaction from evidence;
+- every page must settle at its natural landing position;
+- no residual translation, double-motion, stale unintended scroll offset or jarring bounce;
+- respect Reduce Motion.
+
+Next gate:
+
+- trace PageController, PageView, SlideTransition, animation controller reset, scroll controllers, PageStorage, keyboard and SafeArea interactions.
+
+
+### 12. UX-ONB-5 — Setup/profile hierarchy and bottom clearance
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- eliminate unjustified competing primary actions such as `Save Preferences` + persistent `Next`;
+- simplify first-run setup;
+- preserve account-scoped state;
+- guarantee keyboard/safe-area/scroll bottom clearance.
+
+Next gate:
+
+- map SetupForm ownership, persisted fields, validation, save semantics, persistent CTA and scroll geometry.
+
+
+### 13. UX-ONB-6 — Privacy/security copy truth
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- verify every privacy/security claim against actual Firebase/cloud/local/encryption/security-rule architecture;
+- never claim local-only storage, E2EE, HIPAA/GDPR compliance or sharing guarantees without repository/legal evidence;
+- preserve existing privacy truth contracts and strengthen them where necessary.
+
+Next gate:
+
+- map Firestore/Storage/local persistence, encryption boundaries, analytics, health storage, security rules and existing privacy contracts.
+
+
+### 14. UX-ONB-7 — Two-device release verification
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- release-mode verification only;
+- physical Android + physical iPhone;
+- verify launch, brand, wrapping, provider ordering/expansion/direct dispatch/cancellation, biometrics, email path, onboarding motion, setup scroll, keyboard, CTA, `>` affordance, clipping/overflow and practical text scaling.
+
+Next gate:
+
+- execute only after source/contracts/analyzer gates for the shared UX implementation pass.
+
+
+### 15. UX-REG-1 — Final UX regression reconciliation
+
+Status: 0% EST. — QUEUED.
+
+Accepted requirements:
+
+- run targeted -> subsystem -> full regression gates;
+- reconcile auth, onboarding, privacy, account scope, monetization, Health, routing and release artifact integrity;
+- preserve Apple/Google store blockers and do not upload/resubmit/deploy/commit without explicit owner authorization.
+
+Next gate:
+
+- close all preceding UX missions and then execute full release reconciliation.
+
+
+### UX release-order rationale
+
+This UX family is being completed before replacement store-artifact upload/submission because the current corrected local release artifacts predate the accepted entry/auth/onboarding redesign. Uploading those artifacts first would knowingly create immediate artifact drift and force another store replacement. Existing APPLE-IAP-P0, GPLAY-HC-P0.5 and FINAL-E2E evidence remains authoritative and must not be weakened or reopened without fresh evidence.
 
 ### FINAL-E2E.A — Android submitted-artifact drift
 
@@ -4073,22 +5706,66 @@ Status: ACTIVE — source work CLOSED WITH EVIDENCE; physical two-device verific
 - **UX2-F10 — Exact-measurement rule — ACTIVE RULE**
   Never estimate font sizes, dimensions, spacing differences, percentages or geometry. Use exact source values, widget measurements or physical evidence; otherwise state that the value is not yet measured.
 
+#### UX-2 physical-screen coherence pass — 2026-10-13
+
+Status: ACTIVE / SOURCE + TARGETED CONTRACT GATES PASSED / PHYSICAL RELEASE REVALIDATION OPEN.
+
+Evidence:
+
+- Home Premium preview titles now allow two lines at readable 13px typography;
+- Premium descriptions retain the established two-line Expanded(flex: 2) geometry;
+- long Premium description copy was tightened instead of shrinking typography;
+- Premium grid vertical room remains at childAspectRatio 0.78 and passed targeted responsive validation;
+- Calendar legend now uses a coherent Material icon language for phase, flow and AI indicators instead of mixed emoji glyphs;
+- Auth entry respects disableAnimations / accessibleNavigation;
+- reduced-motion mode suppresses automatic headline rotation and removes headline/action transition duration;
+- approved entry geometry remains unchanged at an 82px headline zone and 36px headline typography;
+- generated localization files were not modified;
+- Premium fit/responsive/interaction, Calendar geometry, Auth entry and analyzer gates passed.
+
+Exact next gate:
+
+- build signed iOS Release;
+- physically verify Home Premium cards at normal text scale;
+- physically verify Calendar legend;
+- verify all three normal-motion entry headlines retain identical logo/CTA coordinates;
+- enable iOS Reduce Motion and prove the entry headline remains static;
+- then perform Android physical parity before UX-2 closure.
+
+#### UX-2 signed iOS Release gate — 2026-10-13
+
+Status: ACTIVE / SIGNED IOS RELEASE BUILT + INSTALLED / PHYSICAL VISUAL CONFIRMATION OPEN.
+
+Evidence:
+
+- Premium, Calendar and Auth entry targeted contracts passed;
+- full analyzer returned zero issues;
+- stale generated Runner products were invalidated without touching source/native-asset authority;
+- iOS Release rebuilt successfully;
+- Runner outer signature and nested framework signature gates passed;
+- objective_c native-asset identity remained consistent through the final app bundle;
+- signed Release installed in place on the physical iPhone and launched successfully.
+
+Exact next gate:
+
+- inspect Home Premium cards for title/description truncation or excessive card height;
+- inspect Calendar legend for coherent phase/flow/AI icon language and label fit;
+- inspect all three normal-motion entry headlines for identical logo and CTA coordinates;
+- enable iOS Reduce Motion and confirm the first entry headline remains static with no automatic rotation;
+- capture any visual defect before further mutation.
+
 #### UX-2 capture discipline
 Every new user-reported defect, suggestion, visual preference, architectural concern or verified engineering finding must receive a stable numbered identifier, status and evidence in this existing mission ledger. Items remain OPEN until implementation plus required automated and physical evidence proves closure. Do not silently drop, merge away or mark an item complete without evidence.
 
 
-#### UX2-F11 — Swipe-selected capsule auto-follow — 98% / IPHONE PASS / ANDROID PHYSICAL PENDING
+#### UX2-F11 — Swipe-selected capsule auto-follow — SOURCE VERIFIED / PHYSICAL RECHECK PENDING
 - Physical/user feedback showed that swiping Track body pages could advance beyond the currently visible horizontal capsules while the selected capsule remained off-screen.
 - Exact source audit proved `TrackingScreen.onPageChanged` correctly updates `_tabController`, while the shared `AppSegmentedSelector` previously had no mechanism to reveal a newly selected off-screen item.
 - Authoritative fix belongs in `lib/core/ui/app_segmented_selector.dart`, not in Track-specific code.
-- Shared selector now centers the selected middle capsule when mathematically reachable and naturally clamps first/last capsules to start/end without artificial side padding.
-- The visible capsule itself is the geometry target; trailing inter-item padding is excluded from centering.
-- Track and Daily Feelings inherit the centralized selector behavior without screen-local centering overrides.
-- Automated gate: 13/13 targeted tests PASS; targeted analyzer reports zero issues.
-- Physical iPhone Release verification: PASS.
-- Physical Android Release verification remains required before closure.
-- Progress: 98%.
-- Exact next gate: physical Android Release verification, then close UX2-F11.
+- The shared selector now automatically scrolls only enough to keep the externally selected capsule visible.
+- Existing selector API, intrinsic label widths, horizontal scrolling, geometry, semantics and Track `PageView` ownership remain unchanged.
+- Release contract protects programmatic/page-driven selection visibility.
+- Physical Android+iPhone verification remains required before closure.
 
 #### UX2-F12 — Top-level page-title typography consistency — SOURCE VERIFIED / PHYSICAL RECHECK PENDING
 - Active-route audit confirmed Settings, Calendar and Insights are live top-level screens.
@@ -8354,6 +10031,928 @@ Next gate:
 - BLOCKED intentionally until the current new Android and iOS releases are completed.
 - No Premium visual mutation is authorized before that gate.
 
+
+### **UX-2.1 — Android cross-screen responsive density parity**
+
+- Status: ACTIVE / ROOT-CAUSE AUDIT.
+- Requirement: Android and iOS may use platform-specific implementations and measurements, but comparable screens must produce an intentionally equivalent professional visual density, hierarchy and use of available space.
+- Scope: app-wide; not limited to AuthScreen.
+- Evidence — 2026-10-14:
+  - post-field-parity Auth Release geometry:
+    - Android safe height `867.05`, card height `573.00`, cluster height `669.00`, freeAbove/freeBelow `99.02/99.02`;
+    - iOS safe height `763.00`, card height `569.00`, cluster height `665.00`, freeAbove/freeBelow `49.00/49.00`;
+  - Android card and cluster are not smaller than iOS; they are slightly taller;
+  - both platforms are mathematically centered;
+  - the taller Android viewport therefore creates substantially greater unused vertical space around a nearly identical-height composition;
+  - owner also reports similar Android density/presentation differences on other screens, so an AuthScreen-local vertical offset is prohibited as a root fix.
+- Rules:
+  - screenshots are qualitative evidence only;
+  - no dimensions or breakpoints may be inferred from screenshots;
+  - Android and iOS must be measured independently;
+  - audit shared theme, typography, density, responsive breakpoints, adaptive components, scaffold/safe-area ownership and platform-specific layout policies before mutation;
+  - prefer one centralized responsive policy over screen-local Android fixes;
+  - platform-specific behavior is permitted only where machine/runtime evidence proves it is required.
+- Exact next gate: map and classify all app-wide platform/responsive/density owners and identify whether the recurring Android presentation difference is caused by viewport policy, theme density, typography scaling, platform adaptive components, hard-coded screen metrics or another verified shared owner before any cross-app mutation.
+
+- Responsive-owner audit correction — 2026-10-14:
+  - completed `POST_PARITY_GEOMETRY` diagnostic removal is verified and retained;
+  - first `_determineScreenSize()` assertion falsely matched the word `MediaQuery` inside a source comment and stopped before later audit stages;
+  - executable-body re-audit strips comments and proves `_determineScreenSize()` reads no MediaQuery, View, physical/logical size, shortest side or device-pixel-ratio value;
+  - current executable policy returns `ScreenSize.medium` for every mobile platform;
+  - this is now classified separately from its actual UI caller reach: a defective/placeholder classifier is not automatically the cause of visual-density differences unless active callers consume it;
+  - `AppLayoutMetrics` remains the separate real dimensional responsive owner using MediaQuery-width breakpoints;
+  - platform typography/theme caller reach remains under the same root audit;
+  - no Android-specific scaling, offset, or layout mutation is authorized from the classifier defect alone.
+
+- Caller-impact classification — 2026-10-14:
+  - non-dimensional `PlatformService.screenSize` remains a real technical defect, but current production caller mapping does not support it as the primary cross-screen density cause;
+  - its only active visual consumer is `AdaptiveComponents` button icon sizing through three `getAdaptiveIconSize()` calls;
+  - `getAdaptiveFontScale()` has no external production caller;
+  - `PlatformConfig.getAdaptiveSpacing()` has no production caller;
+  - therefore no global responsive repair may be justified by that classifier alone;
+  - Auth post-parity machine geometry instead proves the immediate density mechanism: Android content is slightly taller, not smaller, but occupies materially less of its taller safe viewport;
+  - active root gate is now cross-screen vertical-composition ownership: determine where fixed-height/fixed-spacing content is centered or otherwise under-utilizes taller Android viewports and whether one centralized height-aware composition policy can replace repeated screen-local behavior;
+  - centralized iOS/Android typography remains a parallel shared-owner audit because its caller reach spans multiple real screens;
+  - no Android scale transform, screen-local offset, arbitrary stretch, or screenshot-derived dimension is authorized.
+
+- Vertical-composition root-audit narrowing — 2026-10-14:
+  - Auth machine evidence proves the recurring Android concern is not content shrinkage but lower viewport utilization on a taller logical viewport;
+  - broad scan found 39 files containing vertical centering, but that raw count includes child widgets/loading states and cannot itself justify an app-wide mutation;
+  - active gate is therefore classification of genuine full-screen composition owners;
+  - existing evidence already shows multiple independent height-aware formulas (`AuthScreen`, `AuthChoice`, onboarding/entry surfaces and `ComingSoonWidget`) rather than one proven authoritative full-screen vertical-composition owner;
+  - `AuthChoice` independently uses `constraints.maxHeight - 56`; `ComingSoonWidget` independently uses `size.height * 0.68` plus compact-height branching;
+  - before mutation, determine whether equivalent full-screen centered-scroll behavior is duplicated enough to justify a centralized height-aware composition primitive in core layout;
+  - no global scaling, arbitrary stretching, Android-only offset, or conversion of scroll/content screens to fill-height layouts is authorized.
+
+- Static-gate interruption — 2026-10-14:
+  - full-screen owner audit classified 15 full-screen candidates and 24 child/state-centered files;
+  - exact duplicated centered-scroll/minHeight pattern currently appears in five files: three partner surfaces plus AuthChoice and AuthScreen;
+  - no global layout primitive has been introduced from this count alone;
+  - static analysis then stopped the cycle on one `AuthChoiceScreen` warning: private `_ProviderButton` is unreferenced;
+  - because analyzer zero-warning tolerance is mandatory, UX-2.1 cannot proceed to mutation until this warning is classified by current caller scope and Git history;
+  - ledger narrowing written before the analyzer stop is intentionally preserved;
+  - no Android-specific offset, global scaling, or cross-screen layout mutation occurred.
+
+- AuthChoice dead-code cleanup verification correction — 2026-10-14:
+  - `_ProviderButton` removal was preserved after the first post-cleanup assertion stopped;
+  - apparent `MainAxisAlignment.center` count change `5 -> 4` is fully explained by the deleted dead `_ProviderButton` class itself, whose internal `Row` owned exactly one such token;
+  - no live AuthChoice center/layout owner was removed;
+  - provider call sites, provider coordinator, Apple/Google actions, E-mail path, processing state and both `constraints.maxHeight - 56` height-policy sites remain unchanged;
+  - cleanup is therefore classified as dead-code-only, subject to analyzer and auth regression completion;
+  - no Android responsive or density behavior changed in this cleanup.
+
+- Central height-policy gate — 2026-10-14:
+  - dead AuthChoice provider code blocker is cleared: pure deletion, targeted analyzer zero issues, and 91 auth tests pass;
+  - verified Auth geometry remains Android `77.16%` safe-height utilization versus iOS `87.16%`;
+  - Android content itself is slightly taller, therefore the visual difference is caused by fixed-size/fixed-spacing composition occupying a smaller fraction of the taller viewport;
+  - active root question is now whether `AppLayoutMetrics` lacks a central safe-height classification while feature screens independently implement compact/tall thresholds and proportional height formulas;
+  - full-screen candidates must be semantically classified before introducing any shared primitive;
+  - content-driven dashboards/lists must not be stretched merely to consume height;
+  - only centered entry/empty/onboarding/auth-style compositions are candidates for a shared height-aware viewport policy;
+  - any future central policy must be based on available safe height, not operating-system name, and must preserve compact-height scrolling;
+  - no calculated target ratio or derived height from this audit is itself an authorized production constant.
+
+- Height-policy semantic-scope gate — 2026-10-14:
+  - `AppLayoutMetrics` has authoritative width breakpoints but no central available/safe-height classifier;
+  - structural scan reduced genuine full-screen centered viewport matches to `AuthScreen`, `AuthChoiceScreen`, and `EnhancedDailyFeelingsTracker`;
+  - structural similarity alone is insufficient: tracker semantics must be separated from entry/auth composition before any shared primitive is introduced;
+  - `AuthScreen` and `AuthChoiceScreen` both use SafeArea + viewport constraints + scroll + minimum-height centered composition, but they currently implement that pattern independently;
+  - AuthScreen additionally owns keyboard-constrained available height while AuthChoice uses independent fixed `56` subtraction and a local `<700` height breakpoint;
+  - verified Android/iOS evidence supports safe available height as the responsive input; operating-system identity is not itself the cause;
+  - next gate is to prove the semantic reusable scope and exact central owner contract before mutation;
+  - no height threshold, utilization target or proportional expansion is authorized merely from the current two-device measurements.
+
+- Cross-screen root-scope reconciliation — 2026-10-14:
+  - `EnhancedDailyFeelingsTracker` is removed from the auth-style full-screen height-policy candidate set: its `SliverFillRemaining` is loading-state ownership and its other centered columns are local header/grid internals;
+  - the currently proven centered safe-height composition duplication is therefore AuthScreen + AuthChoiceScreen, not an app-wide layout primitive;
+  - AuthScreen/AuthChoice still justify a shared auth-entry height contract, but that alone cannot explain the owner's repeated Android-small/dense observation across unrelated screens;
+  - app-wide investigation therefore returns to the other verified shared owner: centralized platform typography/theme policy and any platform-conditioned UI sizing;
+  - no global Android scale or auth-derived utilization ratio may be propagated to unrelated screens;
+  - root cause must be separated into (a) auth safe-height composition and (b) any independently proven cross-screen typography/density policy before mutation.
+
+- Physical typography-runtime gate — 2026-10-15:
+  - centralized source audit proves iOS Material feature widgets receive explicit larger semantic headline/title sizes while Android receives the base Material TextTheme;
+  - semantic theme usage reaches many production feature screens, so this owner has genuine app-wide visual reach;
+  - Android physical system font scale is `1.1`, therefore source constants alone are insufficient to claim the exact rendered cross-platform magnitude;
+  - temporary `TYPOGRAPHY_GATE` logging is non-layout instrumentation only and reports effective ThemeData semantic font sizes plus MediaQuery text scaling on each physical Release device;
+  - no production typography constant, screen spacing, Android scale transform or platform offset is changed by this diagnostic;
+  - mutation remains blocked until Android and iPhone runtime values are captured and reconciled with source/history intent.
+
+
+
+- Keyboard-constrained physical evidence — 2026-10-15:
+  - Android Release overlay: viewportH `504.38`, root keyboard `377.52`, descendant keyboard inset `0.00`, available height `504.38`;
+  - iPhone Release overlay: viewportH `462.00`, root keyboard `335.00`, descendant keyboard inset `0.00`, available height `462.00`;
+  - both parent scaffold implementations have already resized/consumed keyboard obstruction before AuthScreen receives its LayoutBuilder viewport;
+  - descendant `MediaQuery.viewInsets.bottom == 0` is expected under current scaffold ownership while the keyboard is visible;
+  - AuthScreen must not subtract the root keyboard inset again from the already-resized viewport;
+  - screenshots transported machine-generated overlay values only; no screenshot-derived dimensions were used.
+
+- Physical-device availability update — 2026-10-15:
+  - current Android Release APK built successfully and remains available locally;
+  - Samsung `RF8NA1QJR7H` is not currently connected or discoverable by ADB/Flutter;
+  - Android physical verification is therefore temporarily blocked on device availability only, not on build failure;
+  - iPhone `00008101-00050C191E44001E` is currently available wirelessly;
+  - work continues with the iPhone physical gate now;
+  - Android verification remains open and must resume from install/physical verification without unnecessary rebuild when the device reconnects.
+
+- Fresh iPhone keyboard physical verification — 2026-10-15:
+  - current rebuilt physical iPhone Release again reports machine overlay values:
+    - viewportH `462.00`;
+    - root keyboard `335.00`;
+    - descendant keyboard inset `0.00`;
+    - available height `462.00`;
+  - this independently reconfirms that CupertinoPageScaffold has already consumed/resized for the keyboard before AuthScreen receives its viewport;
+  - E-mail credential content remains visible in the keyboard-constrained state;
+  - Sign In CTA is not visible in the captured viewport;
+  - this screenshot does not prove the CTA inaccessible because scrolling reachability was not demonstrated;
+  - exact remaining iPhone gate is physical proof that the lower Password field and Sign In CTA are reachable by scrolling while the keyboard remains open;
+  - no layout, spacing, height, or platform-specific mutation is authorized from this screenshot.
+
+- Android device-return update — 2026-10-15:
+  - Samsung `RF8NA1QJR7H` is again physically connected and authorized;
+  - the already-built current Release APK was installed without rebuilding;
+  - the prior device-availability blocker is superseded;
+  - Android physical credential-label, keyboard, and typography-runtime gates are active again;
+  - no source/UI mutation was required to restore this gate.
+
+- Android device-return / Release install — 2026-10-15:
+  - Samsung `RF8NA1QJR7H` is connected and authorized again;
+  - the already-built current Android Release APK was installed successfully;
+  - no Android rebuild was required;
+  - prior Android device-availability blocker is superseded;
+  - Android physical credential-label, keyboard-constrained, and typography-runtime gates are active again.
+
+- Fresh Android keyboard physical verification — 2026-10-15:
+  - current physical Android Release reports:
+    - viewportH `504.38`;
+    - root keyboard `377.52`;
+    - descendant keyboard inset `0.00`;
+    - available height `504.38`;
+  - Google / Fingerprint / divider / E-mail / Password remain visible in the captured constrained state;
+  - the Sign In CTA is only partially visible at the lower edge of the captured viewport;
+  - this does not prove the CTA inaccessible because scroll reachability has not yet been physically demonstrated;
+  - exact remaining Android gate is to scroll with keyboard open and prove the full Sign In CTA is reachable without overflow or clipping;
+  - no layout mutation is authorized from this screenshot.
+
+**UX-7.2.1.17 — Credential label punctuation parity**
+- Status: COMPLETE / TWO-DEVICE PHYSICAL PASS
+- Requirement:
+  - external credential title must render `E-mail address:`;
+  - external password title must render `Password:`;
+  - placeholders remain unchanged;
+  - both Android and iOS must inherit the same punctuation through the shared credential-field owner;
+  - no spacing, typography, field geometry, authentication logic, validation, provider logic or biometric behavior may change as part of this task.
+- Progress: 100% — source, contracts, analyzer, full auth regression, and physical Android + iPhone verification all pass.
+- Exact next gate:
+  1. prove current label ownership and counts;
+  2. mutate only the two external labels;
+  3. analyzer + auth tests;
+  4. physical Android + iPhone verification.
+
+- Interrupted regression state — 2026-10-15:
+  - approved source labels are `E-mail address:` and `Password:`;
+  - source analyzer passed;
+  - first full auth regression exposed six stale E-mail-based contract anchors, which were reconciled;
+  - second full auth regression finished `+88 -3`;
+  - the remaining three failures are stale `Password` expectations in:
+    1. `auth_credential_balance_contract_test.dart`;
+    2. `auth_provider_only_entry_contract_test.dart`;
+    3. `auth_two_stage_entry_contract_test.dart`;
+  - because the command ran under `set -e`, subsequent ledger reconciliation, Release rebuild/install, mission-order print, and final preservation section did not execute;
+  - exact next gate is literal-only reconciliation of those three Password contracts followed by full auth regression.
+
+- Password contract reconciliation — 2026-10-15:
+  - the three remaining stale Password expectations were changed to the approved `Password:` title;
+  - diffs were limited to exact Password contract literals/index anchors;
+  - full auth regression passed after reconciliation;
+  - authentication behavior, provider ordering, biometric behavior, field spacing, validation, and routing were not changed by this task;
+  - physical Android + iPhone label verification remains the closure gate.
+
+- Physical-device availability update — 2026-10-15:
+  - current Android Release APK built successfully and remains available locally;
+  - Samsung `RF8NA1QJR7H` is not currently connected or discoverable by ADB/Flutter;
+  - Android physical verification is therefore temporarily blocked on device availability only, not on build failure;
+  - iPhone `00008101-00050C191E44001E` is currently available wirelessly;
+  - work continues with the iPhone physical gate now;
+  - Android verification remains open and must resume from install/physical verification without unnecessary rebuild when the device reconnects.
+
+- iPhone physical credential-label verification — 2026-10-15:
+  - current physical iPhone Release visibly renders `E-mail address:`;
+  - current physical iPhone Release visibly renders `Password:`;
+  - iOS credential hierarchy remains Apple -> Face ID -> `Or use E-mail` -> credential fields;
+  - screenshot evidence is used only for visible wording/hierarchy confirmation and not for measurements;
+  - iPhone side is PASS;
+  - Android side remains OPEN because Samsung `RF8NA1QJR7H` is currently disconnected;
+  - UX-7.2.1.17 must remain open until Android also passes.
+
+- Android device-return update — 2026-10-15:
+  - Samsung `RF8NA1QJR7H` is again physically connected and authorized;
+  - the already-built current Release APK was installed without rebuilding;
+  - the prior device-availability blocker is superseded;
+  - Android physical credential-label, keyboard, and typography-runtime gates are active again;
+  - no source/UI mutation was required to restore this gate.
+
+- Android device-return / Release install — 2026-10-15:
+  - Samsung `RF8NA1QJR7H` is connected and authorized again;
+  - the already-built current Android Release APK was installed successfully;
+  - no Android rebuild was required;
+  - prior Android device-availability blocker is superseded;
+  - Android physical credential-label, keyboard-constrained, and typography-runtime gates are active again.
+
+- Android physical credential-label verification — 2026-10-15:
+  - current physical Android Release visibly renders `E-mail address:`;
+  - current physical Android Release visibly renders `Password:`;
+  - Android hierarchy remains Google -> Fingerprint -> `Or use E-mail` -> credential fields;
+  - screenshot evidence is used only for visible wording/hierarchy confirmation and not for measurements.
+- Final UX-7.2.1.17 closure — 2026-10-15:
+  - iPhone physical labels = PASS;
+  - Android physical labels = PASS;
+  - approved punctuation is now physically verified on both release devices;
+  - mission is COMPLETE.
+
+- Final two-device physical closure — 2026-10-15:
+  - iPhone current Release visibly renders `E-mail address:` and `Password:`;
+  - Android current Release visibly renders `E-mail address:` and `Password:`;
+  - iOS hierarchy remains Apple -> Face ID -> `Or use E-mail` -> credentials;
+  - Android hierarchy remains Google -> Fingerprint -> `Or use E-mail` -> credentials;
+  - screenshots are used only for visible wording/hierarchy confirmation and not for measurements;
+  - UX-7.2.1.17 is COMPLETE and leaves the active queue.
+
+**UX-2.2 — Cross-platform responsive composition parity**
+- Status: PLANNED / REQUIRED
+- Priority: immediately after UX-2.1 root-cause closure.
+- Scope:
+  - Auth / credential surfaces;
+  - AuthChoice entry and provider-processing surfaces;
+  - Premium / subscription / paywall surfaces;
+  - other genuine centralized full-screen compositions discovered by audit.
+- Product contract:
+  - centralized UI ownership must also be responsive ownership;
+  - Android and iOS must achieve equivalent professional hierarchy, density, balance, and use of available screen space;
+  - identical fixed card/container heights must not be forced across materially different verified viewports;
+  - taller devices must not accumulate excessive dead space;
+  - smaller devices must not become compressed, cluttered, or force excessive content into one visual frame;
+  - responsive behavior must be driven by verified available width/height and safe-area constraints, not operating-system name alone;
+  - screenshots may identify qualitative imbalance only; all production measurements, thresholds and breakpoints require source/runtime evidence;
+  - no arbitrary platform offsets, scale transforms, screenshot-derived dimensions, or duplicated screen-local magic numbers;
+  - every affected shared surface requires physical Android + iPhone verification before closure.
+- Progress: 0% — planned gate, no production mutation yet.
+- Exact next gate: complete UX-2.1 root audit, then map shared responsive composition owners and verified physical viewport behavior.
+
+**UX-2.2.1 — Auth responsive vertical composition parity**
+- Status: QUEUED
+- Parent: UX-2.2
+- Scope: AuthScreen credential composition and AuthChoice entry/processing composition.
+- Current evidence:
+  - Android Auth uses materially less of its taller verified safe viewport while the content cluster itself is not smaller;
+  - AuthScreen and AuthChoice share centered scroll/min-height composition semantics but currently own height behavior independently;
+  - AuthScreen is keyboard-aware;
+  - AuthChoice owns local `constraints.maxHeight - 56` and `<700` behavior.
+- Required result:
+  - compact / normal / tall behavior must remain professionally balanced across differing device heights;
+  - equivalent hierarchy and density on Android and iPhone;
+  - compact-height scrolling and keyboard safety preserved.
+- Progress: 0% — queued; root measurements already collected under UX-2.1 but no responsive production mutation authorized.
+- Exact next gate:
+  1. close UX-2.1 typography/root-cause classification;
+  2. define central auth safe-height contract from verified runtime constraints;
+  3. implement through shared owner;
+  4. analyzer/tests;
+  5. physical Android + iPhone pass.
+
+# 19. UX-2.2.2 — PREMIUM / SUBSCRIPTION RESPONSIVE COMPOSITION PARITY
+
+Status:
+
+CLOSED / 100%
+
+Authoritative reconciliation:
+
+- this mission duplicated responsive work already completed under MON13/14-C4 and MON13/14-C5;
+- Premium responsive layout is physically accepted on Android and iPhone;
+- Android Premium Active and Free states fit the verified default viewport;
+- Premium scroll/spring parity is physically accepted on Android and iPhone;
+- full Premium regression previously passed 88/88;
+- analyzer previously passed with zero issues;
+- no Android/iOS geometry fork was introduced;
+- Premium geometry remains frozen for this release unless a reproducible regression is proven;
+- purchase, restore, entitlement, receipt validation, StoreKit and Play Billing behavior remain outside this reconciliation and are untouched.
+
+Decision:
+
+- do not reopen Premium responsive composition from stale QUEUED / 0% records;
+- UX-2.2.2 is closed by existing authoritative physical and regression evidence;
+- continue with UX-2.2.3 App-wide responsive composition owner audit.
+
+---
+
+**UX-2.2.3 — App-wide responsive composition owner audit**
+- Status: FUTURE
+- Parent: UX-2.2
+- Scope: genuine shared full-screen composition owners outside Auth and Premium.
+- Contract:
+  - content-driven dashboards/lists must not be stretched merely to fill height;
+  - loading states, grid internals and local centered children must not be misclassified as full-screen composition owners;
+  - centralize only where semantic ownership is genuinely shared.
+- Progress: 0% — future.
+- Exact next gate: run only after UX-2.2.1 and UX-2.2.2 establish the reusable responsive contract.
+
+- iPhone typography console-capture continuation — 2026-10-15:
+  - plain application launch is proven successful;
+  - exact supported `devicectl --console` + `--log-output` capture was executed;
+  - no `TYPOGRAPHY_GATE` line was observed in the captured output;
+  - this is not evidence about typography values;
+  - next gate is to classify whether AuthScreen runtime stdout is absent, Release logging is suppressed/redirected, or console attachment behaves differently over the current wireless transport;
+  - no typography mutation authorized.
+
+- Android physical typography runtime capture — 2026-10-15:
+  - `10-15 11:04:21.500 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:24.263 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:24.686 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:24.767 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:27.519 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:27.939 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:28.038 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:30.793 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:31.211 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:31.293 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:32.812 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:34.048 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:34.437 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthScreen platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:34.483 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:34.677 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthChoice platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - `10-15 11:04:34.700 28065 28065 I flutter : TYPOGRAPHY_GATE surface=AuthScreen platform=android textScale=1.100 headlineLarge=22.0 headlineMedium=20.0 headlineSmall=18.0 titleLarge=16.0 titleMedium=14.0 titleSmall=14.0 bodyLarge=16.0 bodyMedium=14.0 bodySmall=12.0`
+  - values come from the physically installed Android Release;
+  - no typography or responsive source mutation was performed;
+  - iPhone physical runtime typography evidence still requires successful transport before centralized typography correction is authorized.
+
+- iPhone typography `flutter logs` capture — 2026-10-15:
+  - `flutter logs` was attached to the connected physical iPhone;
+  - no `TYPOGRAPHY_GATE` line was observed;
+  - this is not evidence about iPhone typography values;
+  - Android physical runtime evidence remains valid;
+  - no typography mutation is authorized;
+  - next gate is a different non-layout physical transport for iPhone runtime values.
+
+- iPhone typography visual-transport diagnostic — 2026-10-15:
+  - stdout transport via `devicectl --console` and `flutter logs` produced no Flow Ai `TYPOGRAPHY_GATE` line;
+  - existing AuthScreen non-layout diagnostic Stack ownership is proven;
+  - temporary iOS-only `TYPOGRAPHY_GATE` visual overlay was added through that same `Positioned` + `IgnorePointer` Stack owner;
+  - overlay reports raw ThemeData semantic font sizes and `TextScaler.scale(fontSize)` values independently;
+  - it does not drive layout, spacing, typography, authentication, or responsive behavior;
+  - Android rendering is not given the typography overlay;
+  - diagnostic must be removed immediately after physical iPhone capture and UX-2.1 reconciliation.
+
+- iPhone physical typography visual-gate capture — 2026-10-15:
+  - physical current iPhone Release visibly reports:
+    - `platform=iOS`;
+    - `scale1=1.000`;
+    - headlineLarge raw/scaled = `32.0/32.00`;
+    - headlineMedium raw/scaled = `28.0/28.00`;
+    - headlineSmall raw/scaled = `24.0/24.00`;
+    - titleLarge raw/scaled = `22.0/22.00`;
+    - titleMedium raw/scaled = `16.0/16.00`;
+    - titleSmall raw/scaled = `14.0/14.00`;
+    - bodyLarge raw/scaled = `16.0/16.00`;
+    - bodyMedium raw/scaled = `14.0/14.00`;
+    - bodySmall raw/scaled = `12.0/12.00`;
+  - keyboard-open physical capture reports the same typography values;
+  - keyboard-open machine overlay remains `viewportH=462.00`, `rootKeyboard=335.00`, `childKeyboard=0.00`, `available=462.00`;
+  - screenshots are accepted only as transport of machine-generated diagnostic values, not as a source of inferred dimensions;
+  - iPhone physical typography runtime gate is PASS;
+  - no production typography/layout mutation is authorized yet because Android actual-font-size scaling still requires exact physical measurement.
+
+- Android actual-font-size TextScaler physical capture — 2026-10-15:
+  - `TYPOGRAPHY_GATE surface=AuthScreen platform=android scale1=1.100 HL=22.0/24.20 HM=20.0/22.00 HS=18.0/19.80 TL=16.0/17.60 TM=14.0/15.40 TS=14.0/15.40 BL=16.0/17.60 BM=14.0/15.40 BS=12.0/13.20`
+  - these are physical Release runtime values from Samsung `RF8NA1QJR7H`;
+  - values report both raw ThemeData semantic size and `TextScaler.scale(fontSize)`;
+  - iPhone equivalent physical values are already captured;
+  - next gate is exact cross-platform reconciliation before any production typography mutation.
+
+- Cross-platform typography physical reconciliation — 2026-10-15:
+  - iPhone physical effective sizes:
+    - headlines `32 / 28 / 24`;
+    - titles `22 / 16 / 14`;
+    - bodies `16 / 14 / 12`;
+  - Android physical effective sizes:
+    - headlines `24.20 / 22.00 / 19.80`;
+    - titles `17.60 / 15.40 / 15.40`;
+    - bodies `17.60 / 15.40 / 13.20`;
+  - Android system TextScaler is `1.100`; iPhone is `1.000`;
+  - Android headings and major titles remain materially smaller than iPhone after scaling;
+  - Android body styles are larger than iPhone after scaling;
+  - therefore one global Android scale factor is disproven as the correct fix;
+  - correction must preserve semantic hierarchy and be applied through verified central typography owners;
+  - temporary iPhone visual typography overlay was removed after successful capture;
+  - log-only typography diagnostic remains temporarily for final verification.
+
+- UX-2.1 Android post-mutation physical runtime failure — 2026-10-15:
+  - current physical Android Release reports `scale1=1.100`;
+  - effective values are `HL 35.20`, `HM 30.80`, `HS 26.40`, `TL 24.20`, `TM 17.60`, `TS 15.40`, `BL 17.60`, `BM 15.40`, `BS 13.20`;
+  - verified iPhone effective reference remains `32/28/24`, `22/16/14`, `16/14/12`;
+  - current Android central raw mutation therefore overshoots every semantic tier measured;
+  - current mutation is NOT accepted as final;
+  - no corrective patch is authorized until theme history, semantic callers and release contracts are reconciled;
+  - mathematical raw candidates derived from the measured Android scaler are evidence aids only and must not be applied blindly;
+  - `AppPageTypography.title()` remains separately owned and must not be changed without its own failing physical gate;
+  - next gate: exact owner/history/contract classification followed by a narrowly scoped central correction.
+
+- UX-2.1 intensive root-cause resolution — 2026-10-15:
+  - Android OS `font_scale=1.1` was independently verified by Android system settings;
+  - Flutter runtime `TextScaler` independently reports `1.100`;
+  - the failed Android raw-token mutation produced `32/28/24`, `22/16/14`, `16/14/12`, and its entire rendered overshoot was exactly explained by the Android `1.10` accessibility scaler;
+  - normalization by the measured scaler proved the mutation merely made Android raw semantics equal to the intentionally larger iOS raw semantics;
+  - canonical mission history explicitly states the architecture: iOS uses exact measured larger Material typography while Android retains the established compact Flow Ai Material typography;
+  - therefore the failed Android raw-token equalization contradicted the existing verified platform typography contract;
+  - no production accessibility suppression or global TextScaler override was found;
+  - root correction restores Android base headline/title semantics to `22/20/18`, `16/14/14` while preserving body `16/14/12`;
+  - iOS `_iosMaterialTextTheme` remains `32/28/24`, `22/16/14`, `16/14/12`;
+  - `AppPageTypography.title()` remains Android `20`, iOS `22`;
+  - no screen-local font constants, transforms, global scale hacks, accessibility suppression, body-token changes, or monetization changes were introduced;
+  - corrected Android physical Release runtime must report the restored compact raw semantics plus the device-owned `1.10` accessibility scaling;
+  - next gate after runtime PASS: representative Android/iPhone cross-screen physical hierarchy verification before UX-2.1 closure.
+
+
+- UX-2.1 iOS diagnostic artifact reconciliation — 2026-10-15:
+  - physical iPhone screenshot showed the removed `IOS_TYPOGRAPHY_VISUAL_GATE`;
+  - current AuthScreen/AuthChoice source contains no visual typography overlay owner;
+  - current source retains only log-only `TYPOGRAPHY_GATE`, while `KEYBOARD_GATE` remains intentionally active for the separate keyboard gate;
+  - the previously installed iOS Release artifact had been built at 10:49:27, before AuthScreen/AuthChoice source changes at 11:44:02 / 11:38:04;
+  - the stale AOT binary still contained `IOS_TYPOGRAPHY_VISUAL_GATE`, directly explaining the physical contradiction;
+  - root cause = stale iOS build/install artifact, not current source;
+  - no source typography/layout patch was required for this failure;
+  - a fresh iOS Release was built from current source and must contain zero `IOS_TYPOGRAPHY_VISUAL_GATE` strings while retaining log-only `TYPOGRAPHY_GATE` and intentional `KEYBOARD_GATE`;
+  - fresh artifact was installed and launched on physical iPhone;
+  - next physical gate: confirm the bottom typography visual overlay is absent, while the keyboard overlay remains only when the keyboard is open;
+  - UX-2.1 representative Home/Calendar/Insights/Settings/Premium two-device hierarchy gate remains open after artifact reconciliation.
+
+
+- UX-7.2.1.14 keyboard diagnostic presentation cleanup — 2026-10-15:
+  - physical Android and iPhone screenshots confirmed the shared `KEYBOARD_GATE` visual diagnostic remained visible whenever the keyboard was open;
+  - this was not a stale-artifact failure: the current shared AuthScreen intentionally owned the visual diagnostic;
+  - previously captured machine evidence remains Android `viewportH=504.38 rootKeyboard=377.52 childKeyboard=0.00 available=504.38` and iOS `viewportH=462.00 rootKeyboard=335.00 childKeyboard=0.00 available=462.00`;
+  - the visual overlay was removed only after exact owner/source-shape revalidation;
+  - equivalent `KEYBOARD_GATE` telemetry remains log-only;
+  - auth scroll, keyboard inset, `availableHeight`, `ConstrainedBox`, and production layout calculations were not changed;
+  - `TYPOGRAPHY_GATE` remains log-only and the removed iOS visual typography overlay remains absent;
+  - UX-7.2.1.14 itself remains OPEN until physical keyboard-open scrolling proves the complete Sign In CTA is reachable on both Android and iPhone with no overflow/clipping;
+  - next gate: physical two-device keyboard reachability without any diagnostic UI covering the product interface.
+
+
+- UX-7.2.1.14 Android physical-device connectivity blocker — 2026-10-15:
+  - macOS `system_profiler SPUSBDataType` does not expose the Samsung / SM-N770F / RF8NA1QJR7H;
+  - `adb devices -l` contains no Android device;
+  - restarting the ADB server does not restore the device;
+  - `flutter devices` exposes iPhone, macOS, and Chrome only;
+  - blocker classification = physical USB/device-link layer below ADB and Flutter;
+  - no production source, layout, auth, build, or store mutation is authorized from this failure;
+  - Android UX-7.2.1.14 physical reachability gate is BLOCKED until macOS again detects the Samsung and ADB reports `RF8NA1QJR7H` as an authorized device;
+  - iPhone UX-7.2.1.14 verification continues independently while Android is blocked.
+
+- **UX-7.2.1.14 Android USB blocker CLEARED — 2026-10-15**:
+  - RF8NA1QJR7H is again exposed by ADB as an authorized Android device;
+  - Flutter also exposed SM N770F / RF8NA1QJR7H after reconnection;
+  - previous physical USB blocker is historical and no longer active;
+  - Android keyboard-scroll reachability verification resumes immediately;
+  - no production patch was made to clear the blocker.
+
+- **UX-7.2.1.14 Android keyboard reachability PASS — 2026-10-15**:
+  - credential AuthScreen verified with two EditText nodes and Sign In CTA;
+  - keyboard-open viewport stabilizes at 504.38 logical px with rootKeyboard 377.52 logical px;
+  - Sign In moves from the keyboard-clipped position to a stable reached position after one upward scroll;
+  - source CTA height = 52 logical px; Android density 420 dpi = 2.625 scale, giving 136.5 physical px, so UIAutomator bounds of 136/137 px are equivalent integer rounding;
+  - reached Sign In CTA is fully above the machine-derived keyboard boundary;
+  - repeated additional swipes keep the same terminal scroll position;
+  - dismissing the keyboard restores valid AuthScreen geometry;
+  - Android half of UX-7.2.1.14 is PASS;
+  - iPhone physical reachability half remains OPEN;
+  - no production source/layout/auth patch was required.
+
+- **UX-7.2.1.14 COMPLETE — two-device keyboard reachability — 2026-10-15**:
+  - Android physical device SM-N770F / RF8NA1QJR7H = PASS;
+  - Android machine evidence proved keyboard resize, real scroll movement, stable maximum scroll position, complete Sign In CTA reachability above the keyboard boundary, and valid layout restoration after keyboard dismissal;
+  - Android source CTA height owner remains AppLayoutMetrics.authPrimaryActionHeight = 52 logical px; no production patch was required;
+  - iPhone 12 Pro / 00008101-00050C191E44001E = PHYSICAL PASS;
+  - iPhone physical test with the keyboard open proved the credential composition scrolls from the upper provider/credential region to the lower reached state where the complete Sign In CTA and Create account action are reachable;
+  - this iPhone keyboard is not rendered into the captured screenshot, so keyboard visibility inside the screenshot is not a valid physical gate on this device;
+  - iPhone keyboard dismissal returns the AuthScreen to a valid unclipped form state;
+  - direct Flutter logs and devicectl console did not expose KEYBOARD_GATE/AUTH_GEOMETRY telemetry for the installed iOS Release candidate, so those logging transports are not required for closure after the physical reachability result;
+  - prior verified iOS resize evidence remains consistent with the physical result;
+  - no auth/layout production mutation was required;
+  - UX-7.2.1.14 is COMPLETE on Android and iPhone.
+
+- **UX-2.2.1 Auth responsive composition — static gates PASS — 2026-10-15**:
+  - central safe-height responsive contract is implemented in AppLayoutMetrics;
+  - authTallHeightBreakpoint = 860 logical px;
+  - authHeaderBottom remains 12 logical px below 860;
+  - authHeaderBottomTall = 32 logical px at and above 860;
+  - responsive delta = 20 logical px;
+  - AuthScreen passes LayoutBuilder availableHeight into the centralized spacing owner;
+  - no platform-name branch, Transform.translate, global scaling, typography mutation, field resizing, or CTA resizing is used;
+  - keyboard-height states below 860 retain compact 12 logical px header-bottom spacing;
+  - focused responsive contract is green;
+  - existing auth regression contracts are green;
+  - analyzer is zero-warning for touched production/test owners;
+  - the initial post-patch contract failure was test-only: dart formatting split the ternary expression across lines while the test expected one exact single-line string;
+  - the test was corrected to validate the semantic expression independently of formatting;
+  - physical Android and iPhone Release geometry verification remains OPEN and is the exact next gate;
+  - no store action is authorized.
+
+- **UX-2.2.1 COMPLETE — two-device responsive Auth composition — 2026-10-15**:
+  - static gates remain PASS: focused responsive contract 3/3, full auth regression 26/26, analyzer zero issues;
+  - central responsive owner remains AppLayoutMetrics.authHeaderBottomForHeight(availableHeight);
+  - breakpoint = 860 logical px;
+  - compact header-bottom spacing = 12 logical px;
+  - tall header-bottom spacing = 32 logical px;
+  - responsive delta = 20 logical px;
+  - Android physical Release SM-N770F / RF8NA1QJR7H = PASS;
+  - Android installed candidate = Flow Ai 2.2.4 / versionCode 1790713306;
+  - Android machine runtime proved safe height 867.05 uses logoCardGap = 32.00 and clusterH = 689.00;
+  - Android machine runtime also proved heights below 860 use logoCardGap = 12.00;
+  - the runtime transition across the 860 boundary is therefore PASS;
+  - iPhone 12 Pro / 00008101-00050C191E44001E = PHYSICAL PASS;
+  - iPhone installed candidate = Flow Ai 2.2.4 / bundle version 1790713306;
+  - iPhone normal E-mail Sign In composition was physically verified with keyboard closed and remained valid without clipping or overflow;
+  - iPhone verified safe-height reference 763.00 remains below the 860 threshold and therefore retains compact 12 logical px spacing;
+  - previous two-device keyboard reachability gate remains PASS;
+  - no platform-specific branch, Transform.translate, global scale, typography mutation, field resizing, or CTA resizing was introduced;
+  - no additional production patch is required;
+  - UX-2.2.1 is COMPLETE on Android and iPhone;
+  - no store action was performed.
+
+- **UX-7.7.1.1 iOS intended-logo launch correction — build/install PASS — 2026-10-15**:
+  - Android remained untouched;
+  - preserved assets/images/flow_ai_launch_logo.png byte-for-byte;
+  - preserved intended pink Flow Ai artwork and white rounded tile;
+  - image 4.3.0 RGB source was explicitly converted with Image.convert(numChannels: 4);
+  - threshold 210 removed only border-connected dark exterior pixels;
+  - zero white-tile overlap;
+  - zero pink-art overlap;
+  - zero very-light overlap;
+  - all four generated PNG corners verified alpha 0;
+  - generated 1x/2x/3x iOS LaunchImage assets contain alpha;
+  - native Light background is #FFF8F9;
+  - native Dark background is #0F0F0F;
+  - storyboard compile passed;
+  - fresh iOS Release build passed;
+  - fresh physical iPhone candidate installed and launched;
+  - remaining gate: physical Light/Dark cold-launch verification;
+  - Light PASS: no black exterior box/corners and clean light transition;
+  - Dark PASS: no black exterior box/corners and no white native flash;
+  - no store action authorized.
+
+### UX-7.7.1.1 iOS native launch centralization — build/install PASS — 2026-10-15
+- Android native launch remains background-only and untouched.
+- iOS LaunchScreen native logo layer removed.
+- iOS LaunchScreen and Main FlutterViewController native backgrounds use LaunchBackground.
+- Shared Flutter SplashScreen -> FlowAiLogo is now the sole launch-brand/logo owner across Android and iOS.
+- iOS release build 1790713308 installed and launched.
+- Physical light/dark verification pending.
+- Store action: none.
+
+### UX-7.7.1.2 Historical shared splash restoration — superseded — 2026-10-15
+- Historical visual source: bc86109038d5fdfa0edd8f873dae7499f1571002 (2026-03-13).
+- Restored moving rose/purple/blue/mint gradient, eight floating particles, pulsing brand card, Flow Ai title, tagline, and animated loading treatment.
+- Preserved current shared FlowAiLogo owner, AppStateService routing, /auth/choice fallback, and 900 ms minimum transition.
+- Native Android/iOS launch remains background-only; shared Flutter splash remains sole brand/logo owner.
+- Android native resources untouched.
+- Physical Android/iPhone verification pending.
+
+### UX-7.7.1.2 Shared splash restoration — ACTIVE — 2026-10-15
+- Historical animated Flow Ai splash restored from tracked production history.
+- Current AppStateService route authority, /auth/choice fallback, 900 ms minimum transition, and FlowAiLogo ownership preserved.
+- iOS native launch black-border blocker physically resolved.
+- Android native launch remains untouched.
+- Previous splash_branding_contract_test.dart was untracked, absent from HEAD/all refs, and is not authoritative release history.
+- Analyzer: PASS.
+- Physical Android + iPhone verification remains the next gate.
+
+### UX-7.7.1 launch/splash reconciliation — 2026-10-15
+
+#### UX-7.7.1.1 — iOS boxed native-launch logo
+Status: 100% — CLOSED / PHYSICAL PASS.
+- Physical owner feedback confirmed the unwanted black border was removed.
+- Root correction: iOS native LaunchScreen is background-only.
+- Native iOS launch no longer duplicates the branded logo.
+- Android native launch resources were not changed.
+- Visible branding remains owned centrally by Flutter `SplashScreen -> FlowAiLogo`.
+- Store action: NONE.
+
+#### UX-7.7.1.2 — Shared Flutter splash presentation
+Status: ACTIVE — MINIMAL PRESENTATION RESTORED / STATIC + IOS RELEASE BUILD-INSTALL PASS / FINAL PHYSICAL ACCEPTANCE OPEN.
+- The attempted historical animated rose/purple/blue/mint splash was owner-reviewed and rejected for current production use.
+- Owner-selected target is the previously verified minimal splash presentation.
+- Restored exact verified structure:
+  - `AppTheme.backgroundGradient(isDark)`;
+  - canonical `FlowAiLogo(size: 120, showWordmark: false)`;
+  - `Flow Ai` PlayfairDisplay wordmark;
+  - circular loading indicator;
+  - 650 ms fade/scale entrance;
+  - 900 ms minimum brand transition.
+- Current `AppStateService().getInitialRoute()` route authority preserved.
+- `/auth/choice` fallback preserved.
+- No `flutter_animate`, moving particles, historical tagline, personalized-experience copy, or linear loader remains.
+- iOS native background-only launch architecture remains preserved.
+- Exact next gate: owner physical confirmation of build 1790713310; then shared Android Release parity verification under UX-7.9.
+
+### Immediate execution order — current
+1. UX-7.7.1.2 — physical owner confirmation of restored minimal splash on iPhone build 1790713310.
+2. UX-7.9 — Android Release parity for shared splash/logo continuity.
+3. Resume highest-priority ACTIVE mission from the authoritative mission ledger.
+4. Preserve Apple/Google store-side waiting states; no upload/action without explicit authorization.
+5. Keep REL-INT-1 active until final owner-authorized repository cleanup/staging.
+
+### UX-7.7.1.4 — Android native/system splash logo — 2026-10-15
+Status: ACTIVE / ROOT CORRECTION IMPLEMENTED / TWO-DEVICE PHYSICAL GATE OPEN.
+Evidence:
+- physical Samsung SM-N770F runs Android 13 / API 33;
+- application launcher icon is @mipmap/launcher_icon;
+- no Android 12+ values-v31 launch override previously existed;
+- Android 12+ system splash therefore exposed application launcher branding before Flutter;
+- dedicated values-v31 and values-night-v31 LaunchTheme now use a transparent splash animated icon;
+- application launcher icon itself remains unchanged;
+- iOS native launch remains unchanged.
+Exact next gate:
+- verify Android cold launch no longer shows an extra native logo before the shared Flutter splash.
+
+### UX-7.7.2 — Splash-to-landing transition — 2026-10-15
+Status: ACTIVE / CENTRAL ROUTE CROSS-FADE IMPLEMENTED / PHYSICAL GATE OPEN.
+Evidence:
+- /splash and /auth/choice previously used plain GoRoute builders;
+- no route-level transition existed between the shared splash and landing screen;
+- /auth/choice now owns a centralized 360 ms ease-out fade transition;
+- AuthChoiceScreen visual structure and its existing internal story animations remain unchanged.
+Exact next gate:
+- verify splash -> auth-choice visually fades rather than hard-swaps on both Android and iPhone.
+
+## AUTHORITATIVE RELEASE RECONCILIATION — 2026-10-15
+
+### Current top-level status
+
+- General: 40%
+- Monetization: 48%
+- Identity & Cloud: 98%
+- Wellness/Health: 100% — CLOSED
+- Final Release: 85%
+
+These values supersede older 99% / 100% / 99.5% summary snapshots for current continuation purposes. Historical entries remain chronology only.
+
+### Canonical repository preservation
+
+- Repo: `/Users/ronos/flow_ai_professional_release_20260701`
+- Branch: `release/central-integration-20260720`
+- Protected HEAD: `476ad41b4e6932861b078941d4d00f90cf36b0c9`
+- Protected staged tree: `fcc659531400701088be984562a5f885136f6cfc`
+- No branch switch, reset, restore, clean, stash, blanket staging, commit, push, store upload or store submission was performed.
+
+### Current build/install truth
+
+- Source version: `2.2.4+1790713306`
+- Physical Android `RF8NA1QJR7H` / Samsung SM-N770F / Android 13 API 33:
+  - installed Flow Ai `2.2.4 (1790713306)`
+- Physical iPhone `00008101-00050C191E44001E` / iPhone 12 Pro:
+  - installed Flow Ai `2.2.4 (1790713312)`
+- iPhone therefore runs a newer explicit build number than the current pubspec default; do not conflate installed artifact build number with source default.
+
+### UX-7.7 launch/splash reconciliation
+
+#### UX-7.7.1.1 — iOS boxed native-launch logo
+
+Status: 100% — CLOSED / PHYSICAL PASS.
+
+Verified:
+- iOS native LaunchScreen is background-only;
+- no native `LaunchImage` image layer is required;
+- black-border/native-logo regression is physically GONE;
+- white native flash is physically GONE;
+- Flutter `SplashScreen -> FlowAiLogo` remains the shared visible branding owner.
+
+#### UX-7.7.1.2 — Shared Flutter splash presentation
+
+Status: PHYSICAL PASS FOR CURRENT MINIMAL PRESENTATION.
+
+Current accepted presentation:
+- `AppTheme.backgroundGradient(isDark)`;
+- `FlowAiLogo(size: 120, showWordmark: false)`;
+- `Flow Ai`;
+- circular progress indicator;
+- concurrent `AppStateService().getInitialRoute()` resolution;
+- 900 ms minimum brand transition;
+- `/auth/choice` fallback.
+
+The rejected historical animated particles/tagline splash must not be restored.
+
+#### UX-7.7.1.4 — Android native/system splash logo
+
+Status: 100% — CLOSED / PHYSICAL PASS.
+
+Verified:
+- Android 12+ native splash correction uses the dedicated transparent system-splash icon owner;
+- launcher icon itself remains unchanged;
+- physical Android cold launch confirms the unwanted extra launcher-logo flash is GONE.
+
+#### UX-7.7.2 — Splash-to-landing transition
+
+Status: 100% — PHYSICAL PASS FOR CURRENT TWO-DEVICE GATE.
+
+Verified:
+- `/auth/choice` owns the centralized route cross-fade;
+- Android cold launch visually completed correctly;
+- iPhone cold launch visually completed correctly;
+- owner reported everything OK on both devices.
+
+### Startup continuity contract reconciliation
+
+`test/release_contracts/startup_continuity_contract_test.dart` now truthfully requires:
+- no `image="LaunchImage"`;
+- no `<imageView`;
+- `systemBackgroundColor` native launch background;
+- `launchScreen="YES"`.
+
+Verification:
+- targeted startup continuity test: 5/5 PASS;
+- `flutter analyze`: PASS / zero issues;
+- full `flutter test`: 938/938 PASS;
+- `git diff --check`: PASS;
+- branch / HEAD / staged-tree preservation: PASS.
+
+### UX-7.9 — current launch-parity portion
+
+The launch/logo-continuity portion is physically PASS on Android and iPhone.
+
+Do not interpret this as automatic closure of every broader UX-7.9 fresh-install/auth/onboarding/store/E2E requirement. Remaining UX-7.9 gates must be reconciled separately from exact evidence.
+
+### Immediate continuation rule
+
+Do not reopen the resolved launch-logo, native white-flash, historical animated-splash, or startup-continuity-contract defects without new contradictory physical/source evidence.
+
+Next engineering work must resume from the highest-priority still-open authoritative mission after exact active-queue percentage/status reconciliation.
+
+
+## APPLE-IAP-P0.1 — authoritative reconciliation — 2026-10-16
+
+### Purchase-launch regression
+
+Status: 100% — CLOSED / PHYSICAL CLEAN RELEASE IPHONE VERIFIED.
+
+Verified root cause:
+- StoreKit 2 startup restore can complete without emitting a purchaseStream event when there are no current entitlements.
+- Flow Ai previously assigned the startup restore to `_restoreCompleter`.
+- checkout therefore remained blocked waiting for a restore callback that StoreKit 2 was not required to emit.
+- startup restoration now remains receipt-validated through the existing purchase stream but no longer owns the explicit Restore Purchases / checkout lock.
+
+Verification:
+- targeted checkout-guard suite: 10/10 PASS;
+- Premium suite: 154/154 PASS;
+- `flutter analyze`: 0 issues;
+- `git diff --check`: PASS;
+- temporary `[IAP-TRACE]` diagnostics removed;
+- clean physical iPhone Release build: `2.2.4 (1790713315)`;
+- installed bundle: `com.flowai.health`;
+- native Apple purchase sheet opened after `Start Premium`: PASS;
+- branch / HEAD / staged-tree preservation: PASS.
+
+Security preserved:
+- no fabricated entitlement;
+- no receipt-validation bypass;
+- no account-ownership weakening;
+- no product-ID change;
+- no hardcoded storefront price;
+- explicit user-triggered Restore Purchases continues to use `_restoreCompleter`.
+
+### APPLE-IAP-PRICE-P0 — storefront pricing correction
+
+Status: 10% EST. — OPEN / STORE CONFIGURATION REQUIRED.
+
+Physical evidence:
+- Apple Sandbox purchase sheet for `Flow Ai Premium Monthly` currently displays `14,99 € per month`.
+- the purchase sheet is native Apple UI and explicitly states the transaction is for testing purposes.
+
+Authoritative source audit:
+- canonical product IDs remain:
+  - `flow_ai_premium_monthly`
+  - `flow_ai_premium_yearly`
+- production Flow Ai converts store `ProductDetails.rawPrice`, `currencyCode`, and `price`;
+- production Premium UI renders `product.priceString`;
+- therefore displayed localized pricing is store-owned, not Flutter-owned;
+- no production source mutation must hardcode the requested prices.
+
+Owner-approved commercial target:
+- Apple Monthly: `4.99` per month;
+- Apple Yearly: `39.99` per year;
+- Android Monthly: `2.99` per month;
+- Android Yearly: `29.99` per year;
+- Yearly remains the discounted annual option on both platforms.
+
+Current blocker:
+- authoritative App Store Connect price schedule for Monthly and Yearly has not yet been verified/changed to the target values.
+- Android Google Play pricing target is independently defined as `2.99` monthly and `29.99` yearly and must be physically verified from the real Play catalog.
+
+Exact next gate:
+1. open App Store Connect subscription pricing for `flow_ai_premium_monthly`;
+2. change the base/storefront pricing to the tier resolving to the intended `4.99` monthly target;
+3. open `flow_ai_premium_yearly`;
+4. change Apple annual pricing to the tier resolving to the intended `39.99` annual target;
+5. verify Google Play `flow_ai_premium_monthly` resolves from the real store to the localized equivalent of `2.99` monthly;
+6. verify Google Play `flow_ai_premium_yearly` resolves from the real store to the localized equivalent of `29.99` yearly;
+7. save the schedules;
+8. allow store propagation;
+9. relaunch Flow Ai and re-query the real store catalogs;
+10. physically verify Apple Monthly and Yearly localized prices;
+11. physically verify Android Monthly and Yearly localized prices;
+12. do not close this pricing mission from source tests alone.
+
+Release rule:
+- purchase-launch regression is CLOSED;
+- Apple pricing is a separate OPEN store-configuration gate;
+- historical Apple App Review/IAP-submission work remains separately unresolved and must not be marked closed by this runtime fix.
+
+## APPLE-IAP-PRICE-P0 AUTHORITATIVE CLOSURE — 2026-10-17
+
+Status: 100% — CLOSED / PHYSICAL APPLE STOREFRONT PRICE PASS.
+
+Verified physical iPhone evidence:
+- Flow Ai Premium paywall resolves Apple-localized Germany storefront prices as:
+  - Monthly: `5,99 €`;
+  - Yearly: `44,99 €`;
+- native Apple In-App Purchase sheet independently resolves:
+  - `Flow Ai Premium Monthly` → `5,99 € per month`;
+  - `Flow Ai Premium Yearly` → `44,99 € per year`;
+- native Apple sheet identifies the transaction as a testing purchase, confirming the real StoreKit purchase path is being exercised without charging the tester;
+- displayed prices match the previously verified App Store Connect Germany storefront prices.
+
+Production ownership remains unchanged:
+- canonical product IDs remain `flow_ai_premium_monthly` and `flow_ai_premium_yearly`;
+- Flow Ai continues to consume store-provided `ProductDetails.rawPrice`, `currencyCode`, and `price`;
+- Premium UI continues to render store-provided `priceString`;
+- no storefront price is hardcoded in production;
+- no entitlement, receipt-validation, account-ownership, purchase, or restore logic was weakened or bypassed.
+
+Commercial pricing note:
+- owner-approved Apple base targets remain `4.99` monthly and `39.99` yearly;
+- Germany storefront localization currently resolves those configured products to `5,99 €` monthly and `44,99 €` yearly;
+- localized storefront pricing remains Apple-owned.
+
+Closure rule:
+- `APPLE-IAP-PRICE-P0` leaves the active/blocker queue;
+- earlier OPEN / 10% / `14,99 €` / `99,99 €` entries are historical chronology only and must not override this closure;
+- do not reopen unless new Apple storefront, App Store Connect, or physical native-sheet evidence contradicts this verified state;
+- Google Play pricing remains a separate Android verification concern.
+
+## UX-2.1 AUTHORITATIVE CLOSURE — 2026-10-16
+
+Status: 100% — CLOSED / TWO-DEVICE PHYSICAL HIERARCHY PASS.
+
+Verified:
+- root-cause audit established that the recurring Android concern was viewport utilization / composition rather than global content shrinkage;
+- centralized Android typography correction remained intact;
+- no screenshot-derived dimensions, platform scale hacks, screen-local vertical offsets, or arbitrary responsive constants were introduced;
+- representative physical hierarchy verification is complete on Android and iPhone for:
+  - Home;
+  - Calendar;
+  - Insights;
+  - Settings;
+  - Premium;
+- supplied physical screenshots show no new qualitative clipping, truncation, overflow, broken title hierarchy, or release-blocking density defect across the representative gate;
+- Premium pricing differences remain store-owned and are tracked separately under APPLE-IAP-PRICE-P0 / Google Play pricing verification;
+- no production mutation was required for this final physical closure.
+
+Closure rule:
+- UX-2.1 leaves the active queue;
+- historical ACTIVE / ROOT-CAUSE AUDIT entries remain chronology only and must not override this closure;
+- do not reopen UX-2.1 without new contradictory physical or machine evidence.
+
+Next engineering gate:
+- reconcile the latest authoritative UX-2.2 child status before mutation;
+- continue the highest-priority still-open UX-2.2 responsive-composition mission;
+- preserve monetization logic, store billing, receipt validation, entitlement ownership, and unrelated dirty work.
+
+### UX-SPRING-1 — Track cross-platform spring centralization — 2026-10-17
+
+Status: 85% EST. — SOURCE + CONTRACT PASS / TWO-DEVICE PHYSICAL GATE OPEN.
+
+- shared owner: `lib/core/ui/app_scroll_physics.dart`;
+- Flow, Symptoms, Mood, Pain and Notes now use the centralized spring physics owner;
+- shared physics is `BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())`;
+- Android adaptive clamping override has been removed in favor of the shared owner;
+- analyzer and targeted Track/Symptom spring contracts must remain green;
+- exact next gate: fresh iPhone Release build physical verification, then Android physical parity verification;
+- do not close until both physical platforms pass.
+
+### UX-SPRING-1 — runtime root-cause refinement — 2026-10-17
+
+Status: 72% EST. — SHARED PHYSICS RUNTIME VERIFIED / TRACK-SPECIFIC PHYSICAL DEFECT OPEN.
+
+Verified:
+- `AppScrollPhysics.spring` is `BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())`;
+- runtime widget probe on short content physically moved the scroll position to approximately `-138.85` and settled back to `0.0`;
+- therefore the shared spring physics itself is functional;
+- the earlier long-content control was invalid because its synthetic pointer targeted the content center at y=700, outside the effective hit surface; its hit path contained only the test root;
+- physical iPhone build 1790713322 still shows no effective spring response on the reported Track pages;
+- remaining root-cause scope is Track-specific gesture/hit ownership and child interaction competition, not another physics rewrite;
+- no further production spring mutation is authorized until the gesture owners are mapped exactly.
+
 ## UX-2.2.3 — SETTINGS BOTTOM TOKEN COMPLETION — 2026-10-17
 
 Status: 98% — SETTINGS BOTTOM-SPACING SUBTASK COMPLETE / REMAINING UX-2.2.3 GATES OPEN.
@@ -8451,3 +11050,89 @@ Physical closure requirement:
 - permissions flow;
 - Medical Sources search/categories/source actions;
 - both Android and iPhone.
+
+## 2026-10-18 — Tracking provenance / export-integrity checkpoint
+
+Canonical repository:
+`/Users/ronos/flow_ai_professional_release_20260701`
+
+Canonical branch:
+`release/central-integration-20260720`
+
+Committed HEAD:
+`767f131d907df489b2e2e04bfce40994cbb9f361`
+
+Committed index tree:
+`a4dfb0cbe69c686dadde873be11efc8dd859c0e8`
+
+Commit:
+`767f131 fix(tracking): preserve provenance and export integrity`
+
+Committed scope:
+- `lib/core/database/database_service.dart`
+- `lib/core/models/daily_tracking_data.dart`
+- `lib/core/services/cloud_sync_service.dart`
+- `lib/core/services/data_export_service.dart`
+- `lib/core/services/export_import_service.dart`
+- `lib/features/cycle/screens/tracking_screen.dart`
+- `test/release_contracts/data_export_serialization_integrity_contract_test.dart`
+- `test/release_contracts/tracking_metric_provenance_v3_contract_test.dart`
+
+Verified release-integrity evidence:
+- tracking provenance contract: 11/11 PASS
+- data-export serialization contract: 4/4 PASS
+- account-migration contract: 7/7 PASS
+- premium-export contract: 4/4 PASS
+- Settings export production-purity contract: 4/4 PASS
+- Track autosave integrity: 12/12 PASS
+- Track keyboard-aware save: 2/2 PASS
+- Track Notes editor: 5/5 PASS
+- Track Notes save latch: 2/2 PASS
+- full `test/features/cycle` suite: 215/215 PASS
+- Mood/Energy responsive matrix: 360 scenarios, 0 failures
+- Symptoms responsive matrix: 384 scenarios, 0 failures
+- targeted analyzer: 0 issues
+- `git diff --check`: PASS
+
+Production corrections now committed:
+- daily-tracking schema v3 persists explicit mood/energy/pain observed provenance;
+- full-state tracking writes preserve truthful intentional clears;
+- local backup/restore preserves provenance, pain, symptom severity and pain areas;
+- restore flow enum handling is zero-based and bounds checked;
+- asynchronous backup/import database writes are awaited;
+- live Settings/Analytics export serializes typed `CycleData` and parsed tracking values at the export boundary;
+- nested DateTime/Enum/Map/Iterable export values are normalized before JSON encoding;
+- PDF/CSV cycle consumers now use the normalized `CycleData.toJson()` key contract;
+- legacy imported tracking flow indices are bounds checked before enum access.
+
+Preservation safeguards:
+- no broad staging/reset was used;
+- unrelated dirty worktree remains intentionally untouched;
+- no push has been performed;
+- source/device/platform work outside this committed scope must not be reverted or staged implicitly.
+
+Active mission state:
+- TRACK-AUTOSAVE-1 — ACTIVE — 37.5%
+- TRACK-UX-1 — ACTIVE — 99%
+- TRACK-UX-2 — ACTIVE — 99%
+- TRACK-UX-3 — ACTIVE — 91%
+- REL-INT-1 — ACTIVE
+- monetization remains first-class release work after current Track/release-integrity closure.
+
+Exact next gate:
+1. preserve commit `767f131` as the provenance/export-integrity baseline;
+2. do not reopen these fixes unless a new failing gate provides direct evidence;
+3. continue the remaining Track/Release Integrity mission from the current dirty worktree without broad cleanup;
+4. before the next mutation, map exact authoritative owners/callers/tests for that single target;
+5. after any failure, stop mutation and perform root-cause audit before corrective work;
+6. keep `docs/mission_log.md` canonical and update continuation/handoff documents as mission state changes.
+
+Workflow rules:
+- evidence first; never guess paths, owners, platform behavior or test names;
+- discover existing files/tests before invoking them;
+- centralize shared behavior at authoritative owners;
+- treat Android and iOS separately only where evidence proves platform-specific behavior;
+- screenshots are qualitative evidence only;
+- analyzer must remain zero-warning;
+- never stage with `git add .` or `git add -A`;
+- never push without Geoffrey's explicit authorization.
