@@ -160,7 +160,7 @@ class ExportImportService {
             .toList();
 
         for (final cycle in cycles) {
-          _databaseService.insertCycle(cycle);
+          await _databaseService.insertCycle(cycle);
           importedCycles++;
         }
       }
@@ -198,7 +198,7 @@ class ExportImportService {
 
         for (final tracking in trackingList) {
           final date = _parseDate(tracking['date'] ?? tracking['recordedAt']);
-          _databaseService.saveDailyTracking(
+          await _databaseService.saveDailyTracking(
             date: date,
             flowIntensity: _parseFlow(
               tracking['flowIntensity'] ?? tracking['flow_intensity'],
@@ -292,12 +292,12 @@ class ExportImportService {
       int importedTracking = 0;
 
       for (final cycle in cycles) {
-        _databaseService.insertCycle(cycle);
+        await _databaseService.insertCycle(cycle);
         importedCycles++;
       }
 
       for (final tracking in trackingData) {
-        _databaseService.saveDailyTracking(date: tracking.date);
+        await _databaseService.saveDailyTracking(date: tracking.date);
         importedTracking++;
       }
 
@@ -621,7 +621,7 @@ class ExportImportService {
           dailyData: const {},
         );
 
-        _databaseService.insertCycle(cycle);
+        await _databaseService.insertCycle(cycle);
         imported++;
       } catch (e) {
         skipped++;
@@ -656,7 +656,25 @@ class ExportImportService {
           updatedAt: DateTime.now(),
         );
 
-        _databaseService.saveDailyTracking(date: tracking.date);
+        await _databaseService.saveDailyTracking(
+          date: tracking.date,
+          flowIntensity:
+              tracking.flowIntensity != null &&
+                  tracking.flowIntensity! >= 0 &&
+                  tracking.flowIntensity! < FlowIntensity.values.length
+              ? FlowIntensity.values[tracking.flowIntensity!]
+              : FlowIntensity.none,
+          symptoms: tracking.symptoms,
+          symptomSeverity: tracking.symptomSeverity,
+          mood: tracking.mood?.toDouble(),
+          energy: tracking.energy?.toDouble(),
+          pain: tracking.pain?.toDouble(),
+          moodObserved: tracking.mood != null,
+          energyObserved: tracking.energy != null,
+          painObserved: tracking.pain != null,
+          painAreas: tracking.painAreas,
+          notes: tracking.notes ?? '',
+        );
         imported++;
       } catch (e) {
         skipped++;

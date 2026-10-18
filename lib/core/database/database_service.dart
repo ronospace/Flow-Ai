@@ -27,14 +27,14 @@ class DatabaseService {
 
       return await openDatabase(
         path,
-        version: 2,
+        version: 3,
         onCreate: _createTables,
         onUpgrade: _upgradeDatabase,
       );
     } catch (e) {
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 2,
+        version: 3,
         onCreate: _createTables,
         onUpgrade: _upgradeDatabase,
       );
@@ -99,6 +99,9 @@ class DatabaseService {
         mood REAL,
         energy REAL,
         pain REAL,
+        mood_observed INTEGER NOT NULL DEFAULT 0,
+        energy_observed INTEGER NOT NULL DEFAULT 0,
+        pain_observed INTEGER NOT NULL DEFAULT 0,
         pain_areas TEXT, -- JSON map of area -> intensity
         notes TEXT,
         created_at TEXT NOT NULL,
@@ -373,6 +376,35 @@ class DatabaseService {
         await _createDailyTrackingTable(txn);
       });
     }
+    if (oldVersion < 3) {
+      await db.transaction((txn) async {
+        final columns = await txn.rawQuery('PRAGMA table_info(daily_tracking)');
+        final names = columns
+            .map((column) => column['name'] as String?)
+            .whereType<String>()
+            .toSet();
+
+        if (!names.contains('mood_observed')) {
+          await txn.execute(
+            'ALTER TABLE daily_tracking '
+            'ADD COLUMN mood_observed INTEGER NOT NULL DEFAULT 0',
+          );
+        }
+        if (!names.contains('energy_observed')) {
+          await txn.execute(
+            'ALTER TABLE daily_tracking '
+            'ADD COLUMN energy_observed INTEGER NOT NULL DEFAULT 0',
+          );
+        }
+        if (!names.contains('pain_observed')) {
+          await txn.execute(
+            'ALTER TABLE daily_tracking '
+            'ADD COLUMN pain_observed INTEGER NOT NULL DEFAULT 0',
+          );
+        }
+      });
+    }
+
     // Handle database migrations here when schema changes
     // For now, we'll just recreate tables (in production, use proper migrations)
     if (oldVersion < newVersion) {
@@ -568,6 +600,9 @@ class DatabaseService {
     double? mood,
     double? energy,
     double? pain,
+    bool? moodObserved,
+    bool? energyObserved,
+    bool? painObserved,
     Map<String, double>? painAreas,
     String? notes,
   }) async {
@@ -575,23 +610,44 @@ class DatabaseService {
     final db = await database;
     final dateStr = date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
 
+    final existingRows = await db.query(
+      'daily_tracking',
+      where: 'user_id = ? AND date = ?',
+      whereArgs: [activeUserId, dateStr],
+      limit: 1,
+    );
+    final existing = existingRows.isEmpty
+        ? const <String, dynamic>{}
+        : Map<String, dynamic>.from(existingRows.first);
+
+    final now = DateTime.now().toIso8601String();
     final data = <String, dynamic>{
       'id': '${activeUserId}_${dateStr}_tracking',
       'user_id': activeUserId,
       'date': dateStr,
-      'created_at': DateTime.now().toIso8601String(),
-      'updated_at': DateTime.now().toIso8601String(),
+      'created_at': existing['created_at'] ?? now,
+      'updated_at': now,
+      'flow_intensity':
+          flowIntensity == null || flowIntensity == FlowIntensity.none
+          ? null
+          : flowIntensity.name,
+      'symptoms': symptoms == null || symptoms.isEmpty
+          ? null
+          : symptoms.join(','),
+      'symptom_severity': symptomSeverity == null || symptomSeverity.isEmpty
+          ? null
+          : _mapToJson(symptomSeverity),
+      'mood': moodObserved == true ? mood : null,
+      'energy': energyObserved == true ? energy : null,
+      'pain': painObserved == true ? pain : null,
+      'mood_observed': moodObserved == true ? 1 : 0,
+      'energy_observed': energyObserved == true ? 1 : 0,
+      'pain_observed': painObserved == true ? 1 : 0,
+      'pain_areas': painAreas == null || painAreas.isEmpty
+          ? null
+          : _mapToJson(painAreas),
+      'notes': notes == null || notes.isEmpty ? null : notes,
     };
-
-    if (flowIntensity != null) data['flow_intensity'] = flowIntensity.name;
-    if (symptoms != null) data['symptoms'] = symptoms.join(',');
-    if (symptomSeverity != null)
-      data['symptom_severity'] = _mapToJson(symptomSeverity);
-    if (mood != null) data['mood'] = mood;
-    if (energy != null) data['energy'] = energy;
-    if (pain != null) data['pain'] = pain;
-    if (painAreas != null) data['pain_areas'] = _mapToJson(painAreas);
-    if (notes != null) data['notes'] = notes;
 
     await db.insert(
       'daily_tracking',

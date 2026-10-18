@@ -36,6 +36,9 @@ class _TrackingScreenState extends State<TrackingScreen>
   double _mood = 3.0;
   double _energy = 3.0;
   double _pain = 1.0;
+  bool _moodObserved = false;
+  bool _energyObserved = false;
+  bool _painObserved = false;
   final Map<String, double> _painAreas = {};
   String _notes = '';
   static const Map<String, String> _quickNotes = <String, String>{
@@ -170,6 +173,9 @@ class _TrackingScreenState extends State<TrackingScreen>
           _mood = existingData['mood']?.toDouble() ?? 3.0;
           _energy = existingData['energy']?.toDouble() ?? 3.0;
           _pain = existingData['pain']?.toDouble() ?? 1.0;
+          _moodObserved = existingData['mood_observed'] == 1;
+          _energyObserved = existingData['energy_observed'] == 1;
+          _painObserved = existingData['pain_observed'] == 1;
 
           _painAreas.clear();
           if (existingData['pain_areas'] != null) {
@@ -195,6 +201,9 @@ class _TrackingScreenState extends State<TrackingScreen>
           _mood = 3.0;
           _energy = 3.0;
           _pain = 1.0;
+          _moodObserved = false;
+          _energyObserved = false;
+          _painObserved = false;
           _painAreas.clear();
           _notes = '';
           _committedNotes = '';
@@ -341,6 +350,9 @@ class _TrackingScreenState extends State<TrackingScreen>
       mood: _mood,
       energy: _energy,
       pain: _pain,
+      moodObserved: _moodObserved,
+      energyObserved: _energyObserved,
+      painObserved: _painObserved,
       painAreas: Map<String, double>.from(_painAreas),
       notes: _committedNotes,
       selectedQuickNotes: Set<String>.from(_selectedQuickNotes),
@@ -408,18 +420,17 @@ class _TrackingScreenState extends State<TrackingScreen>
 
       await databaseService.saveDailyTracking(
         date: snapshot.date,
-        flowIntensity: snapshot.flowIntensity != FlowIntensity.none
-            ? snapshot.flowIntensity
-            : null,
-        symptoms: snapshot.symptoms.isNotEmpty ? snapshot.symptoms : null,
-        symptomSeverity: snapshot.symptomSeverity.isNotEmpty
-            ? snapshot.symptomSeverity
-            : null,
-        mood: snapshot.mood,
-        energy: snapshot.energy,
-        pain: snapshot.pain,
-        painAreas: snapshot.painAreas.isNotEmpty ? snapshot.painAreas : null,
-        notes: fullNotes,
+        flowIntensity: snapshot.flowIntensity,
+        symptoms: snapshot.symptoms,
+        symptomSeverity: snapshot.symptomSeverity,
+        mood: snapshot.moodObserved ? snapshot.mood : null,
+        energy: snapshot.energyObserved ? snapshot.energy : null,
+        pain: snapshot.painObserved ? snapshot.pain : null,
+        moodObserved: snapshot.moodObserved,
+        energyObserved: snapshot.energyObserved,
+        painObserved: snapshot.painObserved,
+        painAreas: snapshot.painAreas,
+        notes: fullNotes ?? '',
       );
 
       if (revision > _savedRevision) {
@@ -837,6 +848,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               onChanged: (value) {
                 setState(() {
                   _mood = value;
+                  _moodObserved = true;
                 });
                 _markUnsavedChanges();
               },
@@ -853,6 +865,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               onChanged: (value) {
                 setState(() {
                   _energy = value;
+                  _energyObserved = true;
                 });
                 _markUnsavedChanges();
               },
@@ -901,6 +914,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               onChanged: (value) {
                 setState(() {
                   _pain = value;
+                  _painObserved = true;
                 });
                 _markUnsavedChanges();
               },
@@ -1350,6 +1364,9 @@ class _TrackingSaveSnapshot {
     required this.mood,
     required this.energy,
     required this.pain,
+    required this.moodObserved,
+    required this.energyObserved,
+    required this.painObserved,
     required this.painAreas,
     required this.notes,
     required this.selectedQuickNotes,
@@ -1362,6 +1379,9 @@ class _TrackingSaveSnapshot {
   final double mood;
   final double energy;
   final double pain;
+  final bool moodObserved;
+  final bool energyObserved;
+  final bool painObserved;
   final Map<String, double> painAreas;
   final String notes;
   final Set<String> selectedQuickNotes;

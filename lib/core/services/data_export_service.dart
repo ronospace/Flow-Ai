@@ -148,7 +148,49 @@ class DataExportService {
     }
   }
 
-  /// Fetch all data for date range
+  dynamic _jsonSafeValue(dynamic value) {
+    if (value == null || value is String || value is num || value is bool) {
+      return value;
+    }
+
+    if (value is DateTime) {
+      return value.toIso8601String();
+    }
+
+    if (value is Enum) {
+      return value.name;
+    }
+
+    if (value is Map) {
+      return value.map<String, dynamic>(
+        (key, nestedValue) =>
+            MapEntry(key.toString(), _jsonSafeValue(nestedValue)),
+      );
+    }
+
+    if (value is Iterable) {
+      return value.map(_jsonSafeValue).toList(growable: false);
+    }
+
+    throw StateError('Unsupported export value type: ${value.runtimeType}');
+  }
+
+  String _exportNotesText(dynamic notes) {
+    if (notes == null) return '';
+    if (notes is String) return notes;
+
+    if (notes is Map && notes['text'] != null) {
+      return notes['text'].toString();
+    }
+
+    return notes.toString();
+  }
+
+  /// Fetch all data for date range.
+  ///
+  /// Database/domain readers intentionally return rich objects for runtime
+  /// analytics. Export serialization is normalized here instead of changing
+  /// those shared contracts.
   Future<Map<String, dynamic>> _fetchDataForRange(
     ExportDateRange dateRange,
   ) async {
@@ -162,9 +204,18 @@ class DataExportService {
       dateRange.endDate,
     );
 
+    final exportCycles = cycles
+        .map((cycle) => cycle.toJson())
+        .map((cycle) => _jsonSafeValue(cycle) as Map<String, dynamic>)
+        .toList(growable: false);
+
+    final exportTracking = trackingData
+        .map((row) => _jsonSafeValue(row) as Map<String, dynamic>)
+        .toList(growable: false);
+
     return {
-      'cycles': cycles,
-      'tracking': trackingData,
+      'cycles': exportCycles,
+      'tracking': exportTracking,
       'exportDate': DateTime.now().toIso8601String(),
       'startDate': dateRange.startDate.toIso8601String(),
       'endDate': dateRange.endDate.toIso8601String(),
@@ -315,10 +366,12 @@ class DataExportService {
               return [
                 DateFormat(
                   'MMM d, yyyy',
-                ).format(DateTime.parse(cycle['start_date'])),
-                '${cycle['length'] ?? 'N/A'} days',
-                cycle['flow_intensity'] ?? 'N/A',
-                cycle['notes'] ?? '-',
+                ).format(DateTime.parse(cycle['startDate'])),
+                '${cycle['cycleLength'] ?? 'N/A'} days',
+                cycle['flowIntensity'] ?? 'N/A',
+                _exportNotesText(cycle['notes']).isEmpty
+                    ? '-'
+                    : _exportNotesText(cycle['notes']),
               ];
             }).toList(),
           ),
@@ -388,13 +441,13 @@ class DataExportService {
       for (final cycle in cycles) {
         final startDate = DateFormat(
           'yyyy-MM-dd',
-        ).format(DateTime.parse(cycle['start_date']));
-        final endDate = cycle['end_date'] != null
-            ? DateFormat('yyyy-MM-dd').format(DateTime.parse(cycle['end_date']))
+        ).format(DateTime.parse(cycle['startDate']));
+        final endDate = cycle['endDate'] != null
+            ? DateFormat('yyyy-MM-dd').format(DateTime.parse(cycle['endDate']))
             : 'N/A';
-        final length = cycle['length'] ?? 'N/A';
-        final flow = cycle['flow_intensity'] ?? 'N/A';
-        final notes = (cycle['notes'] ?? '').replaceAll(',', ';');
+        final length = cycle['cycleLength'] ?? 'N/A';
+        final flow = cycle['flowIntensity'] ?? 'N/A';
+        final notes = _exportNotesText(cycle['notes']).replaceAll(',', ';');
 
         csvBuffer.writeln('$startDate,$endDate,$length,$flow,"$notes"');
       }

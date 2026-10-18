@@ -67,7 +67,7 @@ class CloudSyncService {
 
     try {
       // Simulate local backup instead of cloud sync
-      _createLocalBackup();
+      await _createLocalBackup();
 
       _lastSyncTime = DateTime.now();
       _preferencesService.setLastSyncTime(_lastSyncTime!);
@@ -85,7 +85,7 @@ class CloudSyncService {
   }
 
   Future<void> bidirectionalSync() async {
-    syncToCloud(force: true);
+    await syncToCloud(force: true);
   }
 
   // Data encryption/decryption (still functional for local use)
@@ -107,11 +107,54 @@ class CloudSyncService {
   }
 
   // Local backup operations
+  Map<String, double> _decodeTrackingMap(dynamic raw) {
+    if (raw == null) {
+      return const <String, double>{};
+    }
+
+    final decoded = jsonDecode(raw as String) as Map<String, dynamic>;
+    return decoded.map(
+      (key, value) => MapEntry(key, (value as num).toDouble()),
+    );
+  }
+
   Future<void> _createLocalBackup() async {
     try {
+      final cycles = await _databaseService.getAllCycles();
+      final trackingRows = await _databaseService.getAllTrackingData();
+
+      final tracking = trackingRows.map((row) {
+        final date = DateTime.parse(row['date'] as String);
+        final flowName = row['flow_intensity'] as String?;
+
+        return DailyTrackingData(
+          date: date,
+          flowIntensity: flowName == null
+              ? null
+              : FlowIntensity.values.byName(flowName).index,
+          mood: (row['mood'] as num?)?.round(),
+          energy: (row['energy'] as num?)?.round(),
+          pain: (row['pain'] as num?)?.round(),
+          moodObserved: row['mood_observed'] == 1,
+          energyObserved: row['energy_observed'] == 1,
+          painObserved: row['pain_observed'] == 1,
+          symptoms:
+              (row['symptoms'] as String?)
+                  ?.split(',')
+                  .where((value) => value.isNotEmpty)
+                  .toList() ??
+              const <String>[],
+          symptomSeverity: _decodeTrackingMap(row['symptom_severity']),
+          painAreas: _decodeTrackingMap(row['pain_areas']),
+          notes: row['notes'] as String?,
+          createdAt: DateTime.parse(row['created_at'] as String),
+          updatedAt: DateTime.parse(row['updated_at'] as String),
+        ).toMap();
+      }).toList();
+
       final backupData = {
-        'cycles': _databaseService.getAllCycles(),
-        'tracking': _databaseService.getAllTrackingData(),
+        'cycles': cycles.map((cycle) => cycle.toJson()).toList(),
+        'tracking': tracking,
         'preferences': _preferencesService.getAllPreferences(),
         'createdAt': DateTime.now().toIso8601String(),
       };
@@ -145,7 +188,7 @@ class CloudSyncService {
             .toList();
 
         for (final cycle in cycles) {
-          _databaseService.updateCycle(cycle);
+          await _databaseService.updateCycle(cycle);
         }
       }
 
@@ -156,14 +199,28 @@ class CloudSyncService {
             .toList();
 
         for (final data in trackingData) {
-          _databaseService.saveDailyTracking(
+          final flowIndex = data.flowIntensity;
+          final restoredFlow =
+              flowIndex != null &&
+                  flowIndex >= 0 &&
+                  flowIndex < FlowIntensity.values.length
+              ? FlowIntensity.values[flowIndex]
+              : null;
+
+          await _databaseService.saveDailyTracking(
             date: data.date,
-            flowIntensity: data.flowIntensity == null
-                ? null
-                : FlowIntensity.values[data.flowIntensity! - 1],
+            flowIntensity: restoredFlow,
             symptoms: data.symptoms,
+            symptomSeverity: data.symptomSeverity.isEmpty
+                ? null
+                : data.symptomSeverity,
             mood: data.mood?.toDouble(),
             energy: data.energy?.toDouble(),
+            pain: data.pain?.toDouble(),
+            moodObserved: data.moodObserved,
+            energyObserved: data.energyObserved,
+            painObserved: data.painObserved,
+            painAreas: data.painAreas.isEmpty ? null : data.painAreas,
             notes: data.notes,
           );
         }
@@ -180,11 +237,11 @@ class CloudSyncService {
 
   // Stub methods for Firebase features
   Future<void> createBackup() async {
-    _createLocalBackup();
+    await _createLocalBackup();
   }
 
   Future<void> restoreFromBackup(String backupId) async {
-    restoreFromLocalBackup();
+    await restoreFromLocalBackup();
   }
 
   void enableAutoSync({Duration interval = const Duration(hours: 6)}) {}
