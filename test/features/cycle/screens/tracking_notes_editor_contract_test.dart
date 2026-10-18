@@ -81,7 +81,7 @@ void main() {
     expect(notes, contains('label: AppLocalizations.of(context).notesTab'));
   });
 
-  test('every changed Notes value marks tracking state unsaved', () {
+  test('every changed Notes value marks UI state dirty without persisting', () {
     final onChangedStart = notes.indexOf('onChanged: (value) {');
 
     if (onChangedStart < 0) {
@@ -97,8 +97,9 @@ void main() {
     final onChangedBlock = notes.substring(onChangedStart, onTapOutsideStart);
 
     expect(onChangedBlock, contains('_notes = value;'));
-
-    expect(onChangedBlock, contains('_markUnsavedChanges();'));
+    expect(onChangedBlock, contains('_notesDraftDirty'));
+    expect(onChangedBlock, contains('_hasUnsavedChanges'));
+    expect(onChangedBlock, isNot(contains('_markUnsavedChanges();')));
 
     expect(
       notes,

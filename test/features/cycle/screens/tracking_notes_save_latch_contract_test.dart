@@ -7,20 +7,19 @@ void main() {
     'lib/features/cycle/screens/tracking_screen.dart',
   ).readAsStringSync();
 
-  test('Notes latches editing before keyboard visibility changes', () {
-    expect(source, contains('bool _notesEditorActive = false;'));
-    expect(source, contains('onTap: _beginNotesEditing,'));
-    expect(source, contains('onEditingComplete: _finishNotesEditing,'));
+  test('Notes editing retains explicit Done completion', () {
+    expect(source, contains('final FocusNode _notesFocusNode'));
+    expect(source, contains('onTap: _beginNotesEditing'));
+    expect(source, contains('onEditingComplete: _finishNotesEditing'));
+    expect(source, contains('_notesFocusNode.unfocus();'));
   });
 
-  test('Save remains hidden throughout Notes editing', () {
-    expect(source, contains('_notesEditorActive || _notesFocusNode.hasFocus'));
-    expect(source, contains('!_isNotesEditing &&'));
-    expect(source, contains('!_isKeyboardVisible &&'));
-  });
-
-  test('Save button is removed from painting while hidden', () {
-    expect(source, contains('Offstage('));
-    expect(source, contains('offstage: !_showSaveAction'));
+  test('Notes Done flushes through serialized autosave authority', () {
+    expect(
+      source,
+      contains('_flushPendingAutosave(showFailureFeedback: true)'),
+    );
+    expect(source, contains('Future<void> _saveChain = Future<void>.value()'));
+    expect(source, contains('await _saveChain;'));
   });
 }

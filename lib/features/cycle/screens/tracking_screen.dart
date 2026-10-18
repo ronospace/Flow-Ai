@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
-import '../../../core/constants/app_layout.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
 import '../../../generated/app_localizations.dart';
-import '../../../core/widgets/modern_button.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/flow_intensity_picker.dart';
 import '../widgets/symptom_selector.dart';
@@ -24,7 +22,7 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<TrackingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   late PageController _pageController;
 
@@ -38,7 +36,19 @@ class _TrackingScreenState extends State<TrackingScreen>
   double _pain = 1.0;
   final Map<String, double> _painAreas = {};
   String _notes = '';
-  final Set<String> _selectedQuickNotes = {}; // Multi-select state
+  static const Map<String, String> _quickNotes = <String, String>{
+    'Sleep quality': '🌙',
+    'Food cravings': '🍎',
+    'Hydration': '💧',
+    'Exercise': '🏃‍♀️',
+    'Energy levels': '😴',
+    'Stress management': '🧘‍♀️',
+  };
+  static const String _quickTagsMarker = '🏷️ Quick Tags:';
+
+  final Set<String> _selectedQuickNotes = {};
+  String _committedNotes = '';
+  bool _notesDraftDirty = false;
 
   final TextEditingController _notesController = TextEditingController();
   final FocusNode _notesFocusNode = FocusNode();
@@ -47,10 +57,18 @@ class _TrackingScreenState extends State<TrackingScreen>
   bool _isSaving = false;
   bool _recentlySaved = false;
   Timer? _savedStateTimer;
+  Timer? _autosaveTimer;
+  Future<void> _saveChain = Future<void>.value();
+  int _editRevision = 0;
+  int _savedRevision = 0;
+  int _loadGeneration = 0;
+
+  static const Duration _autosaveDelay = Duration(milliseconds: 300);
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _notesFocusNode.addListener(_handleNotesFocusChanged);
     _tabController = TabController(length: 5, vsync: this);
     _pageController = PageController();
@@ -72,6 +90,15 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   @override
   void dispose() {
+    _autosaveTimer?.cancel();
+    _commitNotesDraftForPersistence();
+
+    if (_hasUnsavedChanges) {
+      _queueAutosave();
+    }
+
+    _loadGeneration++;
+    WidgetsBinding.instance.removeObserver(this);
     _savedStateTimer?.cancel();
     _tabController.dispose();
     _pageController.dispose();
@@ -81,25 +108,49 @@ class _TrackingScreenState extends State<TrackingScreen>
     super.dispose();
   }
 
-  void _loadExistingData() async {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.detached:
+        unawaited(_flushPendingAutosave());
+        return;
+
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+        return;
+    }
+  }
+
+  Future<void> _loadExistingData() async {
+    final requestedDate = _selectedDate;
+    final generation = ++_loadGeneration;
+
     try {
-      // Load existing tracking data for the selected date from database
       final databaseService = DatabaseService();
       final existingData = await databaseService.getDailyTracking(
-        _selectedDate,
+        requestedDate,
       );
 
-      if (existingData != null) {
-        setState(() {
+      if (!mounted ||
+          generation != _loadGeneration ||
+          !_isSameTrackingDate(requestedDate, _selectedDate)) {
+        return;
+      }
+
+      setState(() {
+        if (existingData != null) {
           _flowIntensity = existingData['flow_intensity'] ?? FlowIntensity.none;
 
-          // Load symptoms
-          _symptoms.clear();
-          if (existingData['symptoms'] != null) {
-            _symptoms.addAll(List<String>.from(existingData['symptoms']));
-          }
+          _symptoms
+            ..clear()
+            ..addAll(
+              existingData['symptoms'] == null
+                  ? const <String>[]
+                  : List<String>.from(existingData['symptoms']),
+            );
 
-          // Load symptom severity
           _symptomSeverity.clear();
           if (existingData['symptom_severity'] != null) {
             _symptomSeverity.addAll(
@@ -107,12 +158,10 @@ class _TrackingScreenState extends State<TrackingScreen>
             );
           }
 
-          // Load mood, energy, pain
           _mood = existingData['mood']?.toDouble() ?? 3.0;
           _energy = existingData['energy']?.toDouble() ?? 3.0;
           _pain = existingData['pain']?.toDouble() ?? 1.0;
 
-          // Load pain areas
           _painAreas.clear();
           if (existingData['pain_areas'] != null) {
             _painAreas.addAll(
@@ -120,24 +169,17 @@ class _TrackingScreenState extends State<TrackingScreen>
             );
           }
 
-          // Load notes
-          _notes = existingData['notes'] ?? '';
-          _notesController.text = _notes;
+          final storedNotes = existingData['notes'] as String? ?? '';
+          final decodedNotes = _decodeStoredNotes(storedNotes);
+          _notes = decodedNotes.notes;
+          _committedNotes = decodedNotes.notes;
+          _notesDraftDirty = false;
+          _notesController.text = decodedNotes.notes;
 
-          // Load selected quick notes if stored
-          _selectedQuickNotes.clear();
-          if (existingData['quick_notes'] != null) {
-            _selectedQuickNotes.addAll(
-              List<String>.from(existingData['quick_notes']),
-            );
-          }
-
-          // Reset unsaved changes since we just loaded
-          _hasUnsavedChanges = false;
-        });
-      } else {
-        // Reset to defaults if no data exists for this date
-        setState(() {
+          _selectedQuickNotes
+            ..clear()
+            ..addAll(decodedNotes.quickNotes);
+        } else {
           _flowIntensity = FlowIntensity.none;
           _symptoms.clear();
           _symptomSeverity.clear();
@@ -146,14 +188,62 @@ class _TrackingScreenState extends State<TrackingScreen>
           _pain = 1.0;
           _painAreas.clear();
           _notes = '';
+          _committedNotes = '';
+          _notesDraftDirty = false;
           _notesController.text = '';
           _selectedQuickNotes.clear();
-          _hasUnsavedChanges = false;
-        });
-      }
-    } catch (e) {
-      // Handle database errors gracefully
+        }
+
+        _hasUnsavedChanges = false;
+        _recentlySaved = false;
+      });
+    } catch (_) {
+      // Preserve the current screen state when a database read fails.
     }
+  }
+
+  bool _isSameTrackingDate(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  ({String notes, Set<String> quickNotes}) _decodeStoredNotes(
+    String storedNotes,
+  ) {
+    final marker = '\n\n$_quickTagsMarker ';
+    final markerIndex = storedNotes.lastIndexOf(marker);
+
+    if (markerIndex < 0) {
+      final standalonePrefix = '$_quickTagsMarker ';
+      if (!storedNotes.startsWith(standalonePrefix)) {
+        return (notes: storedNotes, quickNotes: <String>{});
+      }
+
+      final tags = storedNotes
+          .substring(standalonePrefix.length)
+          .split(',')
+          .map((tag) => tag.trim())
+          .where((tag) => tag.isNotEmpty)
+          .toSet();
+
+      if (tags.isEmpty || !tags.every(_quickNotes.containsKey)) {
+        return (notes: storedNotes, quickNotes: <String>{});
+      }
+
+      return (notes: '', quickNotes: tags);
+    }
+
+    final tags = storedNotes
+        .substring(markerIndex + marker.length)
+        .split(',')
+        .map((tag) => tag.trim())
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+
+    if (tags.isEmpty || !tags.every(_quickNotes.containsKey)) {
+      return (notes: storedNotes, quickNotes: <String>{});
+    }
+
+    return (notes: storedNotes.substring(0, markerIndex), quickNotes: tags);
   }
 
   void _handleNotesFocusChanged() {
@@ -178,128 +268,191 @@ class _TrackingScreenState extends State<TrackingScreen>
     });
   }
 
+  bool _commitNotesDraftForPersistence() {
+    if (!_notesDraftDirty) {
+      return false;
+    }
+
+    if (_committedNotes == _notes) {
+      _notesDraftDirty = false;
+      return false;
+    }
+
+    _committedNotes = _notes;
+    _notesDraftDirty = false;
+    _editRevision++;
+    _hasUnsavedChanges = true;
+    _recentlySaved = false;
+    _savedStateTimer?.cancel();
+
+    return true;
+  }
+
   void _finishNotesEditing() {
-    if (mounted && _notesEditorActive) {
+    final notesChanged = _commitNotesDraftForPersistence();
+
+    if (mounted && (_notesEditorActive || notesChanged)) {
       setState(() {
         _notesEditorActive = false;
       });
     }
 
     _notesFocusNode.unfocus();
+
+    unawaited(_flushPendingAutosave(showFailureFeedback: true));
   }
 
   void _markUnsavedChanges() {
-    if (!_hasUnsavedChanges) {
+    _editRevision++;
+
+    if (!_hasUnsavedChanges || _recentlySaved) {
       setState(() {
         _hasUnsavedChanges = true;
-        _recentlySaved =
-            false; // Clear recent saved state when new changes are made
+        _recentlySaved = false;
       });
     }
-    // Cancel the saved state timer if it's running
+
     _savedStateTimer?.cancel();
+    _scheduleAutosave();
   }
 
-  Future<void> _saveTrackingData() async {
-    // Prevent multiple simultaneous saves
-    if (_isSaving) return;
-
-    HapticFeedback.lightImpact();
-
-    // Set loading state
-    setState(() {
-      _isSaving = true;
+  void _scheduleAutosave() {
+    _autosaveTimer?.cancel();
+    _autosaveTimer = Timer(_autosaveDelay, () {
+      _queueAutosave();
     });
+  }
+
+  _TrackingSaveSnapshot _captureTrackingSnapshot() {
+    return _TrackingSaveSnapshot(
+      date: _selectedDate,
+      flowIntensity: _flowIntensity,
+      symptoms: List<String>.from(_symptoms),
+      symptomSeverity: Map<String, double>.from(_symptomSeverity),
+      mood: _mood,
+      energy: _energy,
+      pain: _pain,
+      painAreas: Map<String, double>.from(_painAreas),
+      notes: _committedNotes,
+      selectedQuickNotes: Set<String>.from(_selectedQuickNotes),
+    );
+  }
+
+  void _queueAutosave() {
+    if (!_hasUnsavedChanges) return;
+
+    final revision = _editRevision;
+    final snapshot = _captureTrackingSnapshot();
+
+    _saveChain = _saveChain.then(
+      (_) => _persistTrackingSnapshot(snapshot, revision, showFeedback: false),
+    );
+  }
+
+  Future<bool> _flushPendingAutosave({bool showFailureFeedback = false}) async {
+    _autosaveTimer?.cancel();
+    _commitNotesDraftForPersistence();
+
+    final targetRevision = _editRevision;
+
+    if (_hasUnsavedChanges) {
+      _queueAutosave();
+    }
+
+    await _saveChain;
+
+    final saved = _savedRevision >= targetRevision;
+
+    if (!saved && showFailureFeedback && mounted) {
+      await AdaptiveMessages.showError(
+        context,
+        'Could not save tracking. Please try again.',
+      );
+    }
+
+    return saved;
+  }
+
+  Future<void> _persistTrackingSnapshot(
+    _TrackingSaveSnapshot snapshot,
+    int revision, {
+    required bool showFeedback,
+  }) async {
+    if (mounted) {
+      setState(() {
+        _isSaving = true;
+      });
+    }
 
     try {
       final databaseService = DatabaseService();
-      // Append quick notes tags to notes if selected
-      final quickNotesText = _selectedQuickNotes.isEmpty
+
+      final quickNotesText = snapshot.selectedQuickNotes.isEmpty
           ? ''
-          : '\n\n🏷️ Quick Tags: ${_selectedQuickNotes.join(', ')}';
-      final fullNotes = _notes.isNotEmpty || _selectedQuickNotes.isNotEmpty
-          ? (_notes + quickNotesText).trim()
+          : '\n\n$_quickTagsMarker '
+                '${snapshot.selectedQuickNotes.join(', ')}';
+
+      final fullNotes =
+          snapshot.notes.isNotEmpty || snapshot.selectedQuickNotes.isNotEmpty
+          ? (snapshot.notes + quickNotesText).trim()
           : null;
 
-      // Save daily tracking data to database
       await databaseService.saveDailyTracking(
-        date: _selectedDate,
-        flowIntensity: _flowIntensity != FlowIntensity.none
-            ? _flowIntensity
+        date: snapshot.date,
+        flowIntensity: snapshot.flowIntensity != FlowIntensity.none
+            ? snapshot.flowIntensity
             : null,
-        symptoms: _symptoms.isNotEmpty ? _symptoms.toList() : null,
-        symptomSeverity: _symptomSeverity.isNotEmpty ? _symptomSeverity : null,
-        mood: _mood,
-        energy: _energy,
-        pain: _pain,
-        painAreas: _painAreas.isNotEmpty ? _painAreas : null,
+        symptoms: snapshot.symptoms.isNotEmpty ? snapshot.symptoms : null,
+        symptomSeverity: snapshot.symptomSeverity.isNotEmpty
+            ? snapshot.symptomSeverity
+            : null,
+        mood: snapshot.mood,
+        energy: snapshot.energy,
+        pain: snapshot.pain,
+        painAreas: snapshot.painAreas.isNotEmpty ? snapshot.painAreas : null,
         notes: fullNotes,
-        // quickNotes are already embedded in fullNotes above
       );
 
-      // Success haptic feedback
-      HapticFeedback.heavyImpact();
+      if (revision > _savedRevision) {
+        _savedRevision = revision;
+      }
 
       if (mounted) {
+        final isCurrentRevision = revision == _editRevision;
+
         setState(() {
-          _hasUnsavedChanges = false;
           _isSaving = false;
-          _recentlySaved = true;
+          _hasUnsavedChanges = !isCurrentRevision || _notesDraftDirty;
+          _recentlySaved = isCurrentRevision && showFeedback;
         });
 
-        // Set timer to clear the "recently saved" state after 1 second (faster feedback)
-        _savedStateTimer?.cancel();
-        _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
-          if (mounted) {
-            setState(() {
-              _recentlySaved = false;
-            });
-          }
-        });
+        if (isCurrentRevision && showFeedback) {
+          _savedStateTimer?.cancel();
+          _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
+            if (mounted) {
+              setState(() {
+                _recentlySaved = false;
+              });
+            }
+          });
+        }
       }
     } catch (e) {
-      // Handle save errors
-
       if (mounted) {
         setState(() {
           _isSaving = false;
+          _hasUnsavedChanges = true;
         });
 
-        // Error haptic feedback
-        HapticFeedback.heavyImpact();
-
-        await AdaptiveMessages.showError(
-          context,
-          'Could not save tracking. Please try again.',
-        );
+        if (showFeedback) {
+          HapticFeedback.heavyImpact();
+          await AdaptiveMessages.showError(
+            context,
+            'Could not save tracking. Please try again.',
+          );
+        }
       }
     }
-  }
-
-  bool get _isKeyboardVisible => MediaQuery.viewInsetsOf(context).bottom > 0;
-
-  bool get _isNotesEditing => _notesEditorActive || _notesFocusNode.hasFocus;
-
-  bool get _showSaveAction =>
-      !_isNotesEditing &&
-      !_isKeyboardVisible &&
-      (_hasUnsavedChanges || _isSaving || _recentlySaved);
-
-  Widget _buildSaveActionArea() {
-    return AnimatedSize(
-      key: const ValueKey('track-save-action-area'),
-      duration: AppTheme.motionFast,
-      curve: Curves.easeInOut,
-      alignment: Alignment.bottomCenter,
-      child: Offstage(
-        offstage: !_showSaveAction,
-        child: Padding(
-          key: const ValueKey('track-save-action-padding'),
-          padding: AppLayout.bottomActionPadding,
-          child: _buildSaveButton(),
-        ),
-      ),
-    );
   }
 
   @override
@@ -340,9 +493,6 @@ class _TrackingScreenState extends State<TrackingScreen>
                   ],
                 ),
               ),
-
-              // Participates in layout instead of covering tab content.
-              _buildSaveActionArea(),
             ],
           ),
         ),
@@ -968,8 +1118,15 @@ class _TrackingScreenState extends State<TrackingScreen>
 
                           setState(() {
                             _notes = value;
+                            _notesDraftDirty = _notes != _committedNotes;
+                            _hasUnsavedChanges =
+                                _hasUnsavedChanges || _notesDraftDirty;
+                            if (_notesDraftDirty) {
+                              _recentlySaved = false;
+                            }
                           });
-                          _markUnsavedChanges();
+
+                          _savedStateTimer?.cancel();
                         },
                         onTapOutside: (_) {
                           FocusScope.of(context).unfocus();
@@ -1005,14 +1162,9 @@ class _TrackingScreenState extends State<TrackingScreen>
             child: Wrap(
               spacing: 12,
               runSpacing: 12,
-              children: [
-                _buildQuickNote('🌙', 'Sleep quality'),
-                _buildQuickNote('🍎', 'Food cravings'),
-                _buildQuickNote('💧', 'Hydration'),
-                _buildQuickNote('🏃‍♀️', 'Exercise'),
-                _buildQuickNote('😴', 'Energy levels'),
-                _buildQuickNote('🧘‍♀️', 'Stress management'),
-              ],
+              children: _quickNotes.entries
+                  .map((entry) => _buildQuickNote(entry.value, entry.key))
+                  .toList(growable: false),
             ),
           ).animate().fadeIn(delay: 400.ms),
         ],
@@ -1116,62 +1268,6 @@ class _TrackingScreenState extends State<TrackingScreen>
     );
   }
 
-  Widget _buildSaveButton() {
-    String buttonText;
-    IconData buttonIcon;
-    List<Color>? gradientColors;
-    bool isEnabled;
-    bool isLoading = false;
-
-    if (_isSaving) {
-      buttonText = 'Saving...';
-      buttonIcon = Icons.hourglass_empty_rounded;
-      gradientColors = [AppTheme.mediumGrey, AppTheme.mediumGrey];
-      isEnabled = false;
-      isLoading = true;
-    } else if (_recentlySaved) {
-      buttonText = 'Updated';
-      buttonIcon = Icons.check_rounded;
-      gradientColors = [
-        AppTheme.successGreen.withValues(alpha: 0.55),
-        AppTheme.accentMint.withValues(alpha: 0.35),
-      ];
-      isEnabled = false;
-    } else if (_hasUnsavedChanges) {
-      buttonText = 'Save Changes';
-      buttonIcon = Icons.save_rounded;
-      gradientColors = [
-        AppTheme.primaryRose,
-        AppTheme.primaryPurple,
-      ]; // Elegant gradient
-      isEnabled = true;
-    } else {
-      buttonText = 'Saved';
-      buttonIcon = Icons.done_rounded;
-      gradientColors = [
-        AppTheme.accentMint.withValues(alpha: 0.32),
-        AppTheme.accentMint.withValues(alpha: 0.18),
-      ];
-      isEnabled = false;
-    }
-
-    return AnimatedContainer(
-      duration: AppTheme.motionFast,
-      curve: AppTheme.motionCurve,
-      child: ModernButton(
-        key: const ValueKey('track-save-button'),
-        text: buttonText,
-        onPressed: isEnabled ? _saveTrackingData : null,
-        icon: buttonIcon,
-        type: ModernButtonType.primary,
-        size: ModernButtonSize.medium,
-        isExpanded: true,
-        isLoading: isLoading,
-        gradientColors: gradientColors,
-      ),
-    );
-  }
-
   Future<void> _showDatePicker() async {
     final theme = Theme.of(context);
     final picked = await showDatePicker(
@@ -1191,12 +1287,21 @@ class _TrackingScreenState extends State<TrackingScreen>
       },
     );
 
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-      _loadExistingData();
+    if (picked == null || _isSameTrackingDate(picked, _selectedDate)) {
+      return;
     }
+
+    final saved = await _flushPendingAutosave(showFailureFeedback: true);
+
+    if (!mounted || !saved) {
+      return;
+    }
+
+    setState(() {
+      _selectedDate = picked;
+    });
+
+    await _loadExistingData();
   }
 
   String _getMoodEmoji(double mood) {
@@ -1222,4 +1327,30 @@ class _TrackingScreenState extends State<TrackingScreen>
     if (pain <= 4) return '😖';
     return '😫';
   }
+}
+
+class _TrackingSaveSnapshot {
+  const _TrackingSaveSnapshot({
+    required this.date,
+    required this.flowIntensity,
+    required this.symptoms,
+    required this.symptomSeverity,
+    required this.mood,
+    required this.energy,
+    required this.pain,
+    required this.painAreas,
+    required this.notes,
+    required this.selectedQuickNotes,
+  });
+
+  final DateTime date;
+  final FlowIntensity flowIntensity;
+  final List<String> symptoms;
+  final Map<String, double> symptomSeverity;
+  final double mood;
+  final double energy;
+  final double pain;
+  final Map<String, double> painAreas;
+  final String notes;
+  final Set<String> selectedQuickNotes;
 }

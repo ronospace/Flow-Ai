@@ -7,27 +7,22 @@ void main() {
     'lib/features/cycle/screens/tracking_screen.dart',
   ).readAsStringSync();
 
-  test('Save is hidden while Notes owns focus or keyboard is visible', () {
-    expect(source, contains('final FocusNode _notesFocusNode'));
-    expect(source, contains('_notesFocusNode.hasFocus'));
-    expect(source, contains('MediaQuery.viewInsetsOf(context).bottom > 0'));
-    expect(source, contains('!_isNotesEditing'));
-    expect(source, contains('!_isKeyboardVisible'));
-  });
-
-  test('Notes keyboard uses Done and dismisses focus', () {
+  test('Notes keyboard uses Done as persistence boundary', () {
     expect(source, contains('keyboardType: TextInputType.text'));
     expect(source, contains('textInputAction: TextInputAction.done'));
     expect(source, isNot(contains('textInputAction: TextInputAction.newline')));
-    expect(source, contains('onEditingComplete: _finishNotesEditing,'));
-    expect(source, contains('_notesFocusNode.unfocus();'));
-  });
-
-  test('Save appears only for dirty state after editing finishes', () {
+    expect(source, contains('onEditingComplete: _finishNotesEditing'));
     expect(
       source,
-      contains('(_hasUnsavedChanges || _isSaving || _recentlySaved)'),
+      contains('_flushPendingAutosave(showFailureFeedback: true)'),
     );
-    expect(source, contains('_hasUnsavedChanges = false;'));
+  });
+
+  test('Track no longer exposes redundant manual Save UI', () {
+    expect(source, isNot(contains('_showSaveAction')));
+    expect(source, isNot(contains('_buildSaveActionArea')));
+    expect(source, isNot(contains('_buildSaveButton')));
+    expect(source, isNot(contains('track-save-button')));
+    expect(source, isNot(contains('Save Changes')));
   });
 }
