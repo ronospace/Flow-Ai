@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../../../core/ui/adaptive_messages.dart';
@@ -23,19 +23,24 @@ class EnhancedDailyFeelingsTracker extends StatefulWidget {
 
 class _EnhancedDailyFeelingsTrackerState
     extends State<EnhancedDailyFeelingsTracker>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final FeelingsDatabaseService _databaseService =
       FeelingsDatabaseService.instance;
   final FeelingsAnalyticsService _analyticsService =
       FeelingsAnalyticsService.instance;
 
   late AnimationController _animationController;
-  late AnimationController _saveController;
   late TabController _tabController;
   late final TextEditingController _notesController;
 
+  Timer? _autosaveTimer;
+  Future<void> _saveChain = Future<void>.value();
+  int _editRevision = 0;
+  int _savedRevision = 0;
+  int _queuedRevision = 0;
+  static const Duration _autosaveDelay = Duration(milliseconds: 300);
+
   DateTime _selectedDate = DateTime.now();
-  DailyFeelingsEntry? _currentEntry;
 
   // Tracking state
   Map<MoodCategory, double> _moodScores = {};
@@ -43,27 +48,25 @@ class _EnhancedDailyFeelingsTrackerState
   Map<String, int> _symptoms = {};
   Map<String, String> _customTags = {};
   String _notes = '';
+  String _committedNotes = '';
+  bool _notesDraftDirty = false;
+  late String _entryId;
   double? _overallWellbeing;
 
   // UI state
   bool _isLoading = true;
-  bool _isSaving = false;
   bool _hasUnsavedChanges = false;
-  bool _notesEditCommitted = true;
 
   @override
   void initState() {
     super.initState();
 
     _selectedDate = widget.selectedDate ?? DateTime.now();
+    _entryId = DateTime.now().microsecondsSinceEpoch.toString();
+    WidgetsBinding.instance.addObserver(this);
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _saveController = AnimationController(
-      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
 
@@ -75,11 +78,31 @@ class _EnhancedDailyFeelingsTrackerState
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _autosaveTimer?.cancel();
+    _commitNotesDraftForPersistence();
+    if (_hasUnsavedChanges) {
+      _queueAutosave();
+    }
     _animationController.dispose();
-    _saveController.dispose();
     _tabController.dispose();
     _notesController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.detached:
+        _commitNotesDraftForPersistence();
+        unawaited(_flushPendingAutosave());
+        break;
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+        break;
+    }
   }
 
   /// Initialize the feelings tracker
@@ -102,16 +125,20 @@ class _EnhancedDailyFeelingsTrackerState
 
     if (entry != null) {
       setState(() {
-        _currentEntry = entry;
+        _entryId = entry.id;
         _moodScores = Map.from(entry.moodScores);
         _energyLevels = Map.from(entry.energyLevels);
         _symptoms = Map.from(entry.symptoms);
         _customTags = Map.from(entry.customTags);
         _notes = entry.notes;
+        _committedNotes = entry.notes;
+        _notesDraftDirty = false;
         _notesController.text = entry.notes;
         _overallWellbeing = entry.overallWellbeing;
+        _editRevision = 0;
+        _savedRevision = 0;
+        _queuedRevision = 0;
         _hasUnsavedChanges = false;
-        _notesEditCommitted = true;
       });
     } else {
       _initializeEmptyEntry();
@@ -121,59 +148,146 @@ class _EnhancedDailyFeelingsTrackerState
   /// Initialize an empty entry without fabricating user measurements.
   void _initializeEmptyEntry() {
     setState(() {
-      _currentEntry = null;
+      _entryId = DateTime.now().microsecondsSinceEpoch.toString();
       _moodScores = {};
       _energyLevels = {};
       _symptoms = {};
       _customTags = {};
       _notes = '';
+      _committedNotes = '';
+      _notesDraftDirty = false;
       _notesController.clear();
       _overallWellbeing = null;
+      _editRevision = 0;
+      _savedRevision = 0;
+      _queuedRevision = 0;
       _hasUnsavedChanges = false;
-      _notesEditCommitted = true;
     });
   }
 
-  /// Save current entry
-  Future<void> _saveEntry() async {
-    if (_isSaving) return;
+  void _registerMutation() {
+    _editRevision++;
+    _hasUnsavedChanges = true;
+    _scheduleAutosave();
+  }
 
-    setState(() => _isSaving = true);
-    _saveController.forward();
+  bool _commitNotesDraftForPersistence() {
+    if (!_notesDraftDirty) {
+      return false;
+    }
 
+    if (_notes == _committedNotes) {
+      _notesDraftDirty = false;
+      return false;
+    }
+
+    _committedNotes = _notes;
+    _notesDraftDirty = false;
+    _editRevision++;
+    _hasUnsavedChanges = true;
+    return true;
+  }
+
+  void _scheduleAutosave() {
+    _autosaveTimer?.cancel();
+    _autosaveTimer = Timer(_autosaveDelay, _queueAutosave);
+  }
+
+  DailyFeelingsEntry _captureSaveSnapshot() {
+    return DailyFeelingsEntry(
+      id: _entryId,
+      date: _selectedDate,
+      moodScores: Map<MoodCategory, double>.from(_moodScores),
+      energyLevels: Map<EnergyType, double>.from(_energyLevels),
+      symptoms: Map<String, int>.from(_symptoms),
+      customTags: Map<String, String>.from(_customTags),
+      notes: _committedNotes,
+      overallWellbeing: _overallWellbeing,
+      timestamp: DateTime.now(),
+    );
+  }
+
+  void _queueAutosave() {
+    if (!_hasUnsavedChanges) {
+      return;
+    }
+
+    final revision = _editRevision;
+
+    if (revision <= _queuedRevision) {
+      return;
+    }
+
+    _queuedRevision = revision;
+    final snapshot = _captureSaveSnapshot();
+
+    _saveChain = _saveChain.then(
+      (_) => _persistSaveSnapshot(snapshot, revision),
+    );
+  }
+
+  Future<void> _persistSaveSnapshot(
+    DailyFeelingsEntry snapshot,
+    int revision,
+  ) async {
     try {
-      final entry = DailyFeelingsEntry(
-        id:
-            _currentEntry?.id ??
-            DateTime.now().millisecondsSinceEpoch.toString(),
-        date: _selectedDate,
-        moodScores: Map.from(_moodScores),
-        energyLevels: Map.from(_energyLevels),
-        symptoms: Map.from(_symptoms),
-        customTags: Map.from(_customTags),
-        notes: _notes,
-        overallWellbeing: _overallWellbeing,
-        timestamp: DateTime.now(),
-      );
+      await _databaseService.saveEntry(snapshot);
+      await _analyticsService.processNewEntry(snapshot);
 
-      await _databaseService.saveEntry(entry);
-
-      // Trigger analytics processing
-      await _analyticsService.processNewEntry(entry);
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
-        _currentEntry = entry;
-        _hasUnsavedChanges = false;
-        _notesEditCommitted = true;
+        if (revision > _savedRevision) {
+          _savedRevision = revision;
+        }
+
+        _hasUnsavedChanges = _savedRevision < _editRevision || _notesDraftDirty;
       });
-    } catch (e) {
+
+      if (_savedRevision < _editRevision) {
+        _queueAutosave();
+      }
+    } catch (_) {
       if (mounted) {
+        setState(() {
+          _hasUnsavedChanges = true;
+        });
         AdaptiveMessages.showError(context, 'Failed to save feelings');
       }
-    } finally {
-      setState(() => _isSaving = false);
-      _saveController.reset();
     }
+  }
+
+  Future<bool> _flushPendingAutosave({bool showFailureFeedback = false}) async {
+    _autosaveTimer?.cancel();
+    _commitNotesDraftForPersistence();
+    _queueAutosave();
+
+    final targetRevision = _editRevision;
+
+    await _saveChain;
+
+    final saved = _savedRevision >= targetRevision;
+
+    if (!saved && showFailureFeedback && mounted) {
+      AdaptiveMessages.showError(
+        context,
+        'Could not save feelings. Please try again.',
+      );
+    }
+
+    return saved;
+  }
+
+  Future<void> _handleBack() async {
+    final saved = await _flushPendingAutosave(showFailureFeedback: true);
+
+    if (!mounted || !saved) {
+      return;
+    }
+
+    await Navigator.of(context).maybePop();
   }
 
   @override
@@ -214,9 +328,6 @@ class _EnhancedDailyFeelingsTrackerState
           ],
         ],
       ),
-
-      // Floating save button
-      floatingActionButton: _buildSaveButton(),
     );
   }
 
@@ -230,7 +341,7 @@ class _EnhancedDailyFeelingsTrackerState
       automaticallyImplyLeading: false,
       leading: IconButton(
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        onPressed: () => Navigator.of(context).maybePop(),
+        onPressed: () => unawaited(_handleBack()),
         icon: const Icon(Icons.chevron_left, color: Colors.white, size: 32),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -471,7 +582,7 @@ class _EnhancedDailyFeelingsTrackerState
                         onSelected: (value) {
                           setState(() {
                             _overallWellbeing = value;
-                            _hasUnsavedChanges = true;
+                            _registerMutation();
                           });
                         },
                       )
@@ -483,7 +594,7 @@ class _EnhancedDailyFeelingsTrackerState
                         onChanged: (value) {
                           setState(() {
                             _overallWellbeing = value;
-                            _hasUnsavedChanges = true;
+                            _registerMutation();
                           });
                         },
                       ),
@@ -687,7 +798,7 @@ class _EnhancedDailyFeelingsTrackerState
                     onSelected: (newValue) {
                       setState(() {
                         _moodScores[category] = newValue;
-                        _hasUnsavedChanges = true;
+                        _registerMutation();
                       });
                     },
                   )
@@ -699,7 +810,7 @@ class _EnhancedDailyFeelingsTrackerState
                     onChanged: (newValue) {
                       setState(() {
                         _moodScores[category] = newValue;
-                        _hasUnsavedChanges = true;
+                        _registerMutation();
                       });
                     },
                   ),
@@ -808,7 +919,7 @@ class _EnhancedDailyFeelingsTrackerState
                     onSelected: (newValue) {
                       setState(() {
                         _energyLevels[type] = newValue;
-                        _hasUnsavedChanges = true;
+                        _registerMutation();
                       });
                     },
                   )
@@ -820,7 +931,7 @@ class _EnhancedDailyFeelingsTrackerState
                     onChanged: (newValue) {
                       setState(() {
                         _energyLevels[type] = newValue;
-                        _hasUnsavedChanges = true;
+                        _registerMutation();
                       });
                     },
                   ),
@@ -991,7 +1102,7 @@ class _EnhancedDailyFeelingsTrackerState
                   onDeleted: () {
                     setState(() {
                       _customTags.remove(entry.key);
-                      _hasUnsavedChanges = true;
+                      _registerMutation();
                     });
                   },
                 ),
@@ -1042,7 +1153,7 @@ class _EnhancedDailyFeelingsTrackerState
                     onPressed: () {
                       setState(() {
                         _customTags[tag] = 'suggested';
-                        _hasUnsavedChanges = true;
+                        _registerMutation();
                       });
                     },
                   ),
@@ -1196,15 +1307,16 @@ class _EnhancedDailyFeelingsTrackerState
                 onChanged: (value) {
                   setState(() {
                     _notes = value;
-                    _hasUnsavedChanges = true;
-                    _notesEditCommitted = false;
+                    _notesDraftDirty = _notes != _committedNotes;
                   });
                 },
                 onSubmitted: (_) {
-                  setState(() {
-                    _notesEditCommitted = true;
-                  });
+                  _commitNotesDraftForPersistence();
+                  if (mounted) {
+                    setState(() {});
+                  }
                   FocusScope.of(context).unfocus();
+                  unawaited(_flushPendingAutosave(showFailureFeedback: true));
                 },
               ),
             ],
@@ -1322,102 +1434,6 @@ class _EnhancedDailyFeelingsTrackerState
             ],
           ),
         ).animate().fadeIn(delay: 1400.ms).slideY(begin: 0.2),
-      ),
-    );
-  }
-
-  /// Build save button
-  Widget _buildSaveButton() {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final enabled = _hasUnsavedChanges && !_isSaving;
-    final isDark = theme.brightness == Brightness.dark;
-
-    if (!_hasUnsavedChanges || !_notesEditCommitted) {
-      return const SizedBox.shrink();
-    }
-
-    final radius = BorderRadius.circular(28);
-    final glassColor = isDark
-        ? Colors.white.withValues(alpha: 0.10)
-        : Colors.white.withValues(alpha: 0.64);
-    final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.20)
-        : Colors.white.withValues(alpha: 0.78);
-
-    return Semantics(
-      button: true,
-      enabled: enabled,
-      label: _isSaving ? 'Saving feelings' : 'Save feelings',
-      child: ClipRRect(
-        borderRadius: radius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: enabled ? _saveEntry : null,
-              borderRadius: radius,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                curve: Curves.easeOutCubic,
-                height: 56,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: glassColor,
-                  borderRadius: radius,
-                  border: Border.all(color: borderColor),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(
-                        alpha: isDark ? 0.24 : 0.10,
-                      ),
-                      blurRadius: 24,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 140),
-                      child: _isSaving
-                          ? SizedBox(
-                              key: const ValueKey('daily-feelings-saving'),
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: scheme.onSurface,
-                              ),
-                            )
-                          : Icon(
-                              Icons.check_rounded,
-                              key: const ValueKey('daily-feelings-save-ready'),
-                              size: 21,
-                              color: scheme.onSurface,
-                            ),
-                    ),
-                    const SizedBox(width: 10),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 140),
-                      child: Text(
-                        _isSaving ? 'Saving…' : 'Save',
-                        key: ValueKey(_isSaving),
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: scheme.onSurface,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.1,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -1597,7 +1613,7 @@ class _EnhancedDailyFeelingsTrackerState
       } else {
         _symptoms[symptom] = 1;
       }
-      _hasUnsavedChanges = true;
+      _registerMutation();
     });
   }
 
@@ -1622,7 +1638,7 @@ class _EnhancedDailyFeelingsTrackerState
                 if (newTag.isNotEmpty) {
                   setState(() {
                     _customTags[newTag] = 'custom';
-                    _hasUnsavedChanges = true;
+                    _registerMutation();
                   });
                 }
                 Navigator.pop(context);
@@ -1644,6 +1660,12 @@ class _EnhancedDailyFeelingsTrackerState
     );
 
     if (picked != null && picked != _selectedDate) {
+      final saved = await _flushPendingAutosave(showFailureFeedback: true);
+
+      if (!mounted || !saved) {
+        return;
+      }
+
       setState(() {
         _selectedDate = picked;
       });

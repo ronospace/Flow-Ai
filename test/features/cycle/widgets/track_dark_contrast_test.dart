@@ -108,7 +108,10 @@ void main() {
     expect(source, contains('_notesController.dispose();'));
     expect(source, contains('_notesController.text = entry.notes;'));
     expect(source, contains('_notesController.clear();'));
-    expect(source, contains('_currentEntry = null;'));
+    expect(
+      source,
+      contains('_entryId = DateTime.now().microsecondsSinceEpoch.toString();'),
+    );
 
     expect(source, contains('controller: _notesController'));
     expect(source, isNot(contains('TextEditingController(text: _notes)')));

@@ -7,33 +7,38 @@ void main() {
     'lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart',
   ).readAsStringSync();
 
-  test('Daily Feelings Save appears without an artificial delay', () {
-    expect(source, isNot(contains('scale(delay: 1600.ms)')));
-    expect(source, isNot(contains('delay: 1600.ms')));
+  test('Daily Feelings removes the manual Save CTA', () {
+    expect(source, isNot(contains('floatingActionButton:')));
+    expect(source, isNot(contains('_buildSaveButton(')));
+    expect(source, isNot(contains('_saveEntry(')));
+    expect(source, isNot(contains('Save feelings')));
   });
 
-  test('Save uses one existing persistence action', () {
-    expect(source, contains('onTap: enabled ? _saveEntry : null'));
-    expect(RegExp(r'Future<void> _saveEntry\(\)').allMatches(source).length, 1);
+  test('Daily Feelings uses one serialized revision-safe autosave owner', () {
+    expect(source, contains('Future<void> _saveChain = Future<void>.value();'));
+    expect(source, contains('int _editRevision = 0;'));
+    expect(source, contains('int _savedRevision = 0;'));
+    expect(source, contains('int _queuedRevision = 0;'));
+    expect(source, contains('void _registerMutation()'));
+    expect(source, contains('void _scheduleAutosave()'));
+    expect(source, contains('void _queueAutosave()'));
+    expect(source, contains('Future<bool> _flushPendingAutosave'));
   });
 
-  test('Save feedback uses a frosted glass surface', () {
-    expect(source, contains('BackdropFilter('));
-    expect(source, contains('ImageFilter.blur(sigmaX: 18, sigmaY: 18)'));
-    expect(source, contains('ClipRRect('));
+  test('Daily Feelings flushes date back and lifecycle boundaries', () {
+    expect(source, contains('WidgetsBindingObserver'));
+    expect(source, contains('didChangeAppLifecycleState'));
+    expect(source, contains('AppLifecycleState.paused'));
+    expect(source, contains('AppLifecycleState.hidden'));
+    expect(source, contains('AppLifecycleState.detached'));
+    expect(source, contains('Future<void> _handleBack() async'));
   });
 
-  test('Save gives immediate saving feedback', () {
-    expect(source, contains("'Saving…'"));
-    expect(source, contains("'Save'"));
-    expect(source, contains('daily-feelings-saving'));
-    expect(source, contains('daily-feelings-save-ready'));
-  });
-
-  test('Done-gated Save behavior remains intact', () {
-    expect(
-      source,
-      contains('if (!_hasUnsavedChanges || !_notesEditCommitted)'),
-    );
+  test('Daily Feelings keeps Notes Done-gated', () {
+    expect(source, contains("String _committedNotes = '';"));
+    expect(source, contains('bool _notesDraftDirty = false;'));
+    expect(source, contains('textInputAction: TextInputAction.done'));
+    expect(source, contains('_commitNotesDraftForPersistence()'));
+    expect(source, contains('onSubmitted: (_)'));
   });
 }

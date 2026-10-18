@@ -33,18 +33,19 @@ void main() {
     expect(theme, contains('segmentedTabUnselectedColor(ThemeData theme)'));
     expect(theme, contains('brightness == Brightness.dark'));
   });
-  test('Notes uses Done-gated Save UX', () {
+  test('Notes uses Done-gated autosave UX', () {
     final source = File(
       'lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart',
     ).readAsStringSync();
 
     expect(source, contains('textInputAction: TextInputAction.done'));
-    expect(source, contains('_notesEditCommitted = false;'));
+    expect(source, contains('bool _notesDraftDirty = false;'));
     expect(source, contains('onSubmitted: (_)'));
     expect(source, contains('FocusScope.of(context).unfocus();'));
+    expect(source, contains('_commitNotesDraftForPersistence();'));
     expect(
       source,
-      contains('if (!_hasUnsavedChanges || !_notesEditCommitted)'),
+      contains('_flushPendingAutosave(showFailureFeedback: true)'),
     );
     expect(source, isNot(contains('Feelings saved successfully')));
     expect(source, contains('Failed to save feelings'));

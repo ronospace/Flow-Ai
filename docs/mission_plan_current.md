@@ -2603,3 +2603,191 @@ Verified checkpoint evidence:
 - Centralized Auth layout and keyboard behavior preserved.
 - Track/cycle preserved through recovery.
 - Recovery commit parent: 012d3087a80e14a237d5ca50d40133df36a8cc02.
+
+## 2026-10-19 — Daily Feelings autosave / Save removal verification checkpoint
+
+Mission:
+- TRACK-AUTOSAVE-1 — 87.5% — ACTIVE.
+- authoritative closure denominator: 8 gates.
+- verified gates: 7/8.
+- remaining: selective commit/documented closure.
+
+Verified implementation:
+- Daily Feelings manual Save CTA removed.
+- one centralized serialized revision-safe autosave owner.
+- ten discrete user mutations route through the centralized persistence boundary.
+- Notes remain draft while typing and persist on Done/completed-edit.
+- pending state flushes before date changes and back navigation.
+- pending state flushes on paused, hidden, and detached lifecycle transitions.
+- stale Save-specific contracts migrated to autosave/Done contracts.
+- no Android/iOS-specific persistence fork introduced; shared Flutter owner remains authoritative.
+
+Verified gates:
+- targeted Daily Feelings regression: 15/15 PASS.
+- full test/features/cycle regression: 221/221 PASS.
+- Daily Feelings release contracts: 9/9 PASS.
+- Mood/Energy responsive matrix: 360 scenarios / 0 failures.
+- Symptoms responsive matrix: 384 scenarios / 0 failures.
+- full repository analyzer: 0 issues.
+- git diff --check: PASS.
+- staged index remains empty.
+
+Preservation:
+- `.firebase/hosting.YnVpbGQvd2Vi.cache` remains excluded.
+- `9d58dded687c` remains excluded.
+- `Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab` remains excluded/stale and must not be reused.
+- no push.
+- no broad staging/reset/stash/clean.
+
+Exact next gate:
+1. physical Android Release verification;
+2. physical iPhone Release verification;
+3. confirm no Save CTA and persistence after leave/reopen;
+4. confirm Notes Done persistence;
+5. selectively stage only verified Daily Feelings source/tests/docs;
+6. commit and record exact commit/hash;
+7. remove TRACK-AUTOSAVE-1 from active queue only after closure.
+
+## Future mission — POSTREL-AUTOSAVE-STATUS-1 — Daily Feelings autosave status capsule
+
+Priority:
+- 0% — FUTURE / POST-RELEASE.
+- Do not interrupt current release, Release Integrity, or monetization work.
+
+Intent:
+- introduce a compact persistence-status capsule in Daily Feelings after the current release;
+- use Track's existing `Saved` capsule as the conceptual UX reference;
+- never reintroduce a manual Save button;
+- persistence feedback must reflect the real serialized autosave authority.
+
+Required audit before implementation:
+- locate the authoritative Track Saved-capsule component/state owner;
+- locate Daily Feelings autosave completion/error state;
+- determine whether a reusable centralized status component already exists;
+- inspect theme/geometry ownership, callers, tests, history, accessibility, localization, and responsive constraints;
+- do not duplicate component or persistence ownership.
+
+Required behavior:
+- truthful saving/saved/error state only;
+- no mocked or timer-only success;
+- Notes remain Done/completed-edit gated;
+- discrete controls retain revision-safe autosave;
+- failure must stay visible/recoverable where appropriate;
+- Android and iOS must be verified independently on physical Release builds.
+
+Design direction:
+- compact, polished status capsule inspired by Track's existing Saved indicator;
+- qualitative visual reference only;
+- exact dimensions must come from source/runtime evidence;
+- centralized theme, typography, geometry, dark/light behavior, text scaling, localization, and responsive support.
+
+Closure gates:
+1. ownership/system audit;
+2. centralized component decision;
+3. implementation;
+4. deterministic state contracts;
+5. analyzer zero issues;
+6. regression;
+7. Android physical Release PASS;
+8. iPhone physical Release PASS;
+9. selective commit and documentation.
+
+## Future mission — POSTREL-DAILY-FEELINGS-SYMPTOMS-1 — Daily Feelings symptom-entry UX
+
+Priority:
+- 0% — FUTURE / POST-RELEASE.
+- Do not interrupt current release, Release Integrity, or monetization work.
+
+Intent:
+- improve Daily Feelings symptom entry using the existing Health `+ Add Symptom` UX as a conceptual reference;
+- preserve the current Daily Feelings Symptoms tab;
+- make richer symptom entry simple without creating duplicate storage or Save behavior.
+
+Required audit:
+- locate the authoritative Health Symptom Tracker component, model, service, persistence owner, analytics callers, and tests;
+- locate the Daily Feelings Symptoms state/persistence owner;
+- prove whether both surfaces already share the same underlying symptom representation;
+- inspect Git history, callers, exports, account scoping, analytics, responsive behavior, theme/geometry ownership, accessibility, and localization;
+- do not implement until the shared-data boundary is proven.
+
+Required behavior:
+- one authoritative symptom data model/persistence path;
+- no duplicate symptom database or conflicting local state;
+- Daily Feelings integration must use its revision-safe autosave authority;
+- no manual Save reintroduced;
+- symptom selections/additions must survive leave/reopen and date transitions truthfully;
+- Android and iPhone must be independently verified on physical Release builds.
+
+Design direction:
+- compact `+ Add Symptom` affordance integrated into Daily Feelings Symptoms;
+- Health Symptom Tracker is qualitative visual reference only;
+- centralize shared geometry/theme/component ownership where evidence supports reuse;
+- support light/dark mode, responsive widths, text scaling, accessibility, localization, Android, and iPhone.
+
+Closure gates:
+1. ownership/data-model audit;
+2. shared persistence proof;
+3. centralization decision;
+4. implementation;
+5. persistence/autosave contracts;
+6. analyzer zero issues;
+7. Health + cycle regression;
+8. Android physical PASS;
+9. iPhone physical PASS;
+10. selective commit and documentation.
+
+## Future mission — POSTREL-ONBOARDING-7PAGE-1 — Seven-page compact onboarding
+
+Priority:
+- 0% — FUTURE / POST-RELEASE.
+- Reconcile with existing POSTREL-ONBOARDING-1 before implementation.
+
+Proposed single onboarding architecture:
+1. Privacy.
+2. Notifications.
+3. Basic profile.
+4. Personalization/context.
+5. What would you like to track?
+6. Quick personalization survey.
+7. All Set.
+
+Page 5:
+- dedicated tracking-preference page;
+- remove tracking choices from the currently crowded mixed page;
+- compact responsive presentation with no normal-device vertical-scroll dependency;
+- exact geometry must be derived from runtime constraints and centralized tokens;
+- preserve accessibility, localization and text scaling.
+
+Page 6:
+- short optional personalization survey;
+- use only questions that materially improve personalization;
+- prefer one question/state at a time rather than one long form;
+- keep onboarding fast and non-clumsy;
+- persist through authoritative profile/preferences ownership.
+
+Required audit:
+- current PageView/navigation owner;
+- onboarding persistence/completion owner;
+- current profile/tracking/reminder state;
+- permission timing;
+- existing POSTREL-ONBOARDING-1 scope;
+- Android/iPhone responsive constraints and keyboard behavior.
+
+Physical Android + iPhone Release verification required.
+
+## Future mission — POSTREL-REVIEW-PROMPT-1 — Contextual ratings/reviews
+
+Priority:
+- 0% — FUTURE / POST-RELEASE.
+
+Rule:
+- no App Store or Google Play rating request inside onboarding.
+
+Strategy:
+- request a public review only after a genuine positive product-value milestone;
+- keep internal personalization survey/feedback separate from store reviews;
+- dismissible and non-blocking;
+- no review gating or rating manipulation;
+- central cooldown/eligibility owner;
+- verify current Apple and Google review-policy/API requirements at implementation time;
+- deterministic contracts plus physical Android/iPhone verification.
