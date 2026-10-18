@@ -2570,3 +2570,49 @@ Product intent:
 - Native store review prompts should only occur at appropriate positive product moments and must respect platform policies.
 - Persist feedback truthfully and preserve privacy/data-minimization requirements.
 - Require centralized ownership, contracts, analytics review, and Android + iPhone physical verification before release.
+
+## 2026-10-18 — REL-INT-1 Gradle migrator closure
+
+Canonical branch:
+`release/central-integration-20260720`
+
+Closure commit:
+`afd83371c10d3786315da433b89b0d0b2e609c38`
+
+Closed task:
+- Flutter Gradle migrator compatibility flags reconciled and committed.
+
+Verified evidence:
+- Flutter 3.44.6 migration source requires:
+  - `android.builtInKotlin=false`
+  - `android.newDsl=false`
+- clean-HEAD Android release verification without the dirty flags caused Flutter to print `Upgrading gradle.properties` and re-add both flags automatically;
+- reconstructed Android release build succeeded;
+- committed file set was exactly:
+  - `android/gradle.properties`
+- committed change was exactly 4 inserted lines;
+- no unrelated file was staged or committed.
+
+Commit:
+`afd83371c10d3786315da433b89b0d0b2e609c38`
+`fix(android): persist Flutter Gradle migration flags`
+
+Preservation:
+- unrelated dirty working-tree work remains untouched;
+- stale `Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab` remains untouched and must never be reused;
+- no push authorized.
+
+REL-INT-1 state:
+- remains ACTIVE;
+- current onboarding working tree is the intended 4-page flow:
+  1. Your Privacy Matters
+  2. Enable Notifications
+  3. Setup Your Profile
+  4. All Set!
+- older committed HEAD history contains the obsolete 6-page variant and must not be used as the current onboarding truth.
+
+Exact next gate:
+- continue REL-INT-1 reconciliation from the preserved working tree;
+- audit and close the next coherent dirty group using existing history/evidence before mutation;
+- record every task closure in all three canonical continuation documents before moving on.
+
