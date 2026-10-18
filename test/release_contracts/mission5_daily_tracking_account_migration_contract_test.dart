@@ -32,8 +32,8 @@ void main() {
     'lib/core/database/database_service.dart',
   ).readAsStringSync();
 
-  test('daily tracking v2 schema is account isolated', () {
-    expect('version: 2,'.allMatches(source).length, 2);
+  test('daily tracking v3 schema remains account isolated', () {
+    expect('version: 3,'.allMatches(source).length, 2);
 
     expect(source, contains('user_id TEXT NOT NULL'));
 
