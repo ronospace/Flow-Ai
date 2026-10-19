@@ -16,9 +16,13 @@ class SubscriptionService {
   factory SubscriptionService() => _instance;
   SubscriptionService._internal();
 
-  final InAppPurchase _iap = InAppPurchase.instance;
+  // Native billing is intentionally lazy so entitlement-only consumers
+  // do not initialize StoreKit/Google Play Billing platform channels.
+  InAppPurchase get _iap => InAppPurchase.instance;
+
   final ReceiptValidationService _receiptValidationService =
       ReceiptValidationService();
+
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   Completer<bool>? _restoreCompleter;
 
@@ -54,6 +58,13 @@ class SubscriptionService {
       hasDurableMonetizationIdentity &&
       _currentSubscription?.userId == _activeUserId &&
       (_currentSubscription?.isPremium ?? false);
+
+  void _publishCurrentEntitlement() {
+    final subscription = _currentSubscription;
+    if (subscription != null && !_entitlementController.isClosed) {
+      _entitlementController.add(subscription);
+    }
+  }
 
   bool canOwnMonetizationFor(String userId) {
     return _receiptValidationService.canOwnMonetizationFor(userId);
@@ -105,6 +116,7 @@ class SubscriptionService {
 
     // Fail closed immediately. Never expose the previous account's Premium.
     _currentSubscription = UserSubscription.free(normalizedUserId);
+    _publishCurrentEntitlement();
 
     await previousPurchaseSubscription?.cancel();
 
@@ -665,6 +677,7 @@ class SubscriptionService {
 
     if (!_isAvailable) {
       _currentSubscription = UserSubscription.free(normalizedUserId);
+      _publishCurrentEntitlement();
       return false;
     }
 
@@ -705,6 +718,7 @@ class SubscriptionService {
 
       if (!entitlementIsPremium && !previouslyVerifiedPremium) {
         _currentSubscription = UserSubscription.free(normalizedUserId);
+        _publishCurrentEntitlement();
       }
 
       return entitlementIsPremium || previouslyVerifiedPremium;
@@ -712,6 +726,7 @@ class SubscriptionService {
       if (_isActiveIdentity(normalizedUserId, generation) &&
           !previouslyVerifiedPremium) {
         _currentSubscription = UserSubscription.free(normalizedUserId);
+        _publishCurrentEntitlement();
       }
 
       return false;
@@ -757,6 +772,7 @@ class SubscriptionService {
     if (!_receiptValidationService.canValidateSubscriptionStatus ||
         !_receiptValidationService.isAuthenticatedUser(userId)) {
       _currentSubscription = UserSubscription.free(userId);
+      _publishCurrentEntitlement();
       return _BackendSubscriptionResolution.notActive;
     }
 
@@ -764,6 +780,7 @@ class SubscriptionService {
     final storedSubscription = prefs.getString('user_subscription');
     if (storedSubscription == null || storedSubscription.trim().isEmpty) {
       _currentSubscription = UserSubscription.free(userId);
+      _publishCurrentEntitlement();
       return _BackendSubscriptionResolution.notActive;
     }
 
@@ -771,6 +788,7 @@ class SubscriptionService {
       final decoded = jsonDecode(storedSubscription);
       if (decoded is! Map<String, dynamic>) {
         _currentSubscription = UserSubscription.free(userId);
+        _publishCurrentEntitlement();
         return _BackendSubscriptionResolution.notActive;
       }
 
@@ -783,6 +801,7 @@ class SubscriptionService {
           subscriptionId == null ||
           subscriptionId.trim().isEmpty) {
         _currentSubscription = UserSubscription.free(userId);
+        _publishCurrentEntitlement();
         return _BackendSubscriptionResolution.notActive;
       }
 
@@ -808,6 +827,7 @@ class SubscriptionService {
             originalTransactionId == null ||
             originalTransactionId.isEmpty) {
           _currentSubscription = UserSubscription.free(userId);
+          _publishCurrentEntitlement();
           return _BackendSubscriptionResolution.notActive;
         }
 
@@ -841,6 +861,7 @@ class SubscriptionService {
 
       if (backendStatus?.active == false) {
         _currentSubscription = UserSubscription.free(userId);
+        _publishCurrentEntitlement();
         return _BackendSubscriptionResolution.notActive;
       }
 
@@ -853,9 +874,11 @@ class SubscriptionService {
       }
 
       _currentSubscription = UserSubscription.free(userId);
+      _publishCurrentEntitlement();
       return _BackendSubscriptionResolution.notActive;
     } catch (e) {
       _currentSubscription = UserSubscription.free(userId);
+      _publishCurrentEntitlement();
       return _BackendSubscriptionResolution.notActive;
     }
   }
@@ -866,16 +889,26 @@ class SubscriptionService {
         (_currentSubscription?.canAccessFeature(feature) ?? false);
   }
 
-  /// Increment AI insights usage
+  /// Increment AI insights usage for the currently active account.
   Future<void> incrementInsightsUsage() async {
+    final userId = _activeUserId;
+    if (userId == null) return;
+
+    await incrementInsightsUsageForUser(userId);
+  }
+
+  /// Increment AI insights usage only if the account that started the
+  /// operation is still the authoritative active account.
+  Future<void> incrementInsightsUsageForUser(String expectedUserId) async {
     final userId = _activeUserId;
     final generation = _identityGeneration;
     final subscription = _currentSubscription;
 
     if (userId == null ||
+        userId != expectedUserId ||
         subscription == null ||
-        subscription.userId != userId ||
-        !_isActiveIdentity(userId, generation)) {
+        subscription.userId != expectedUserId ||
+        !_isActiveIdentity(expectedUserId, generation)) {
       return;
     }
 
@@ -883,7 +916,15 @@ class SubscriptionService {
       aiInsightsUsed: subscription.aiInsightsUsed + 1,
     );
 
-    await _saveSubscription(userId, generation);
+    await _saveSubscription(expectedUserId, generation);
+
+    if (!_isActiveIdentity(expectedUserId, generation)) return;
+
+    final updatedSubscription = _currentSubscription;
+    if (updatedSubscription != null &&
+        updatedSubscription.userId == expectedUserId) {
+      _publishCurrentEntitlement();
+    }
   }
 
   /// Get remaining free insights

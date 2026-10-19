@@ -23,24 +23,10 @@ void main() {
     expect(feelings, contains('value: sliderValue!'));
   });
 
-  test('health AI failure fails closed before local fallback', () {
-    final healthGuard = aiChat.indexOf(
-      'if (_isHealthRelated(normalizedMessage))',
-    );
+  test('AI failure fails closed without synthetic local response', () {
+    expect(aiChat, contains('Flow Ai service is unavailable'));
 
-    final failClosed = aiChat.indexOf(
-      'online AI service is unavailable',
-      healthGuard,
-    );
-
-    final localFallback = aiChat.indexOf(
-      'return _getEnhancedLocalResponse(',
-      healthGuard,
-    );
-
-    expect(healthGuard, greaterThanOrEqualTo(0));
-    expect(failClosed, greaterThan(healthGuard));
-    expect(localFallback, greaterThan(failClosed));
+    expect(aiChat, isNot(contains('return _getEnhancedLocalResponse(')));
   });
 
   test('legacy comprehensive health fallback marker is absent', () {

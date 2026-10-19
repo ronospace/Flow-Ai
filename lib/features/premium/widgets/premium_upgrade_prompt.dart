@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/subscription_provider.dart';
+import '../models/subscription_models.dart';
 import '../screens/premium_paywall_screen.dart';
 
 /// A reusable widget for prompting users to upgrade to premium
@@ -140,6 +141,28 @@ Future<bool?> showPremiumUpgradeDialog(
   );
 }
 
+bool _hasPremiumFeatureAccess(
+  SubscriptionProvider subscriptionProvider,
+  String? feature,
+) {
+  return switch (feature) {
+    null => subscriptionProvider.isPremium,
+    'data_export' => subscriptionProvider.canAccessFeature(
+      PremiumFeature.dataExport,
+    ),
+    'advanced_analytics' => subscriptionProvider.canAccessFeature(
+      PremiumFeature.advancedAnalytics,
+    ),
+    'unlimited_insights' => subscriptionProvider.canAccessFeature(
+      PremiumFeature.unlimitedInsights,
+    ),
+    'priority_support' => subscriptionProvider.canAccessFeature(
+      PremiumFeature.prioritySupport,
+    ),
+    _ => false,
+  };
+}
+
 /// Check if user has premium access, show upgrade prompt if not
 Future<bool> checkPremiumAccess(
   BuildContext context, {
@@ -152,8 +175,10 @@ Future<bool> checkPremiumAccess(
     listen: false,
   );
 
-  if (subscriptionProvider.isPremium) {
-    return true; // Has access
+  final hasAccess = _hasPremiumFeatureAccess(subscriptionProvider, feature);
+
+  if (hasAccess) {
+    return true;
   }
 
   // Show upgrade prompt
@@ -187,7 +212,7 @@ class PremiumFeatureGate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SubscriptionProvider>(
       builder: (context, subscriptionProvider, _) {
-        if (subscriptionProvider.isPremium) {
+        if (_hasPremiumFeatureAccess(subscriptionProvider, featureId)) {
           return child; // Show feature
         }
 

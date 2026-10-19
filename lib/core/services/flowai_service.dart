@@ -94,6 +94,7 @@ class FlowAIService {
   Future<FlowAIResponse> sendHealthChatMessage({
     required String message,
     required String userId,
+    String? conversationContext,
     Map<String, dynamic>? cycleData,
     List<String>? recentSymptoms,
     String? currentPhase,
@@ -105,10 +106,16 @@ class FlowAIService {
       currentPhase: currentPhase,
     );
 
+    final combinedContext = <String>[
+      if (conversationContext != null && conversationContext.trim().isNotEmpty)
+        conversationContext.trim(),
+      if (healthContext.trim().isNotEmpty) healthContext.trim(),
+    ].join('; ');
+
     return sendChatMessage(
       message: message,
       userId: userId,
-      conversationContext: healthContext,
+      conversationContext: combinedContext.isEmpty ? null : combinedContext,
       userMetadata: {
         'type': 'health_chat',
         'app': 'flowai',

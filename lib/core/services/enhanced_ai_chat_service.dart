@@ -1,10 +1,14 @@
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import '../../features/premium/models/subscription_models.dart';
+import '../../features/premium/services/subscription_service.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
 import 'ai_conversation_memory.dart';
 import '../identity/active_account_scope.dart';
+import '../database/database_service.dart';
+import 'cycle_calculation_engine.dart';
 import 'flowai_service.dart';
 import '../config/flowiq_config.dart';
 import '../../generated/app_localizations.dart';
@@ -37,6 +41,11 @@ class EnhancedAIChatService {
   // FlowAI Integration
   final FlowAIService _flowAIService = FlowAIService();
   bool _useFlowAI = false;
+
+  // Serializes the authoritative AI quota/execution/accounting window.
+  // Without this, parallel free requests could both observe the same
+  // remaining insight before either request records its usage.
+  Future<void> _aiExecutionTail = Future<void>.value();
 
   // FAQ Knowledge Base
   final Map<String, List<FAQItem>> _faqDatabase = {
@@ -284,6 +293,8 @@ class EnhancedAIChatService {
     final response = await _generateEnhancedAIResponse(
       message.text,
       contextPrompt: contextPrompt,
+      ownerId: ownerId,
+      generation: generation,
     );
 
     if (!await _isCurrentSession(ownerId, generation)) return;
@@ -370,16 +381,103 @@ class EnhancedAIChatService {
   Future<String> _generateEnhancedAIResponse(
     String userMessage, {
     String? contextPrompt,
+    required String ownerId,
+    required int generation,
+  }) {
+    final result = Completer<String>();
+
+    _aiExecutionTail = _aiExecutionTail.then((_) async {
+      try {
+        result.complete(
+          await _generateEnhancedAIResponseUnlocked(
+            userMessage,
+            contextPrompt: contextPrompt,
+            ownerId: ownerId,
+            generation: generation,
+          ),
+        );
+      } catch (error, stackTrace) {
+        result.completeError(error, stackTrace);
+      }
+    });
+
+    return result.future;
+  }
+
+  Future<String> _generateEnhancedAIResponseUnlocked(
+    String userMessage, {
+    String? contextPrompt,
+    required String ownerId,
+    required int generation,
   }) async {
-    // Try FlowAI first if available
+    final currentUser = _currentUser;
+    if (currentUser == null ||
+        currentUser.id != ownerId ||
+        !await _isCurrentSession(ownerId, generation)) {
+      return 'AI is temporarily unavailable. Please try again.';
+    }
+
+    final subscriptionService = SubscriptionService();
+    final subscription = subscriptionService.currentSubscription;
+
+    // AI execution must never inherit another account's entitlement and must
+    // fail closed while subscription ownership is unresolved.
+    if (subscription == null || subscription.userId != currentUser.id) {
+      return 'AI access is temporarily unavailable while your account access '
+          'is being verified. Please try again.';
+    }
+
+    final hasUnlimitedInsights = subscriptionService.canAccessFeature(
+      PremiumFeature.unlimitedInsights,
+    );
+
+    if (!hasUnlimitedInsights &&
+        subscriptionService.getRemainingFreeInsights() <= 0) {
+      return 'You have used all of your free AI insights. '
+          'Upgrade to Flow Ai Premium for unlimited AI insights.';
+    }
+
+    // Try the real FlowAI service. A failed/unavailable service must never
+    // silently fall back to synthetic or canned content presented as AI.
     if (_useFlowAI && _currentUser != null) {
       try {
         final flowAIResponse = await _getFlowAIResponse(
           userMessage,
           contextPrompt,
+          ownerId: ownerId,
+          generation: generation,
         );
         if (flowAIResponse != null && flowAIResponse.isNotEmpty) {
-          // Add medical citations to FlowAI health responses
+          if (!await _isCurrentSession(ownerId, generation)) {
+            return 'AI is temporarily unavailable. Please try again.';
+          }
+
+          final latestSubscription = subscriptionService.currentSubscription;
+          if (latestSubscription == null ||
+              latestSubscription.userId != ownerId) {
+            return 'AI access is temporarily unavailable while your account '
+                'access is being verified. Please try again.';
+          }
+
+          final hasUnlimitedInsightsAtDelivery = subscriptionService
+              .canAccessFeature(PremiumFeature.unlimitedInsights);
+
+          if (!hasUnlimitedInsightsAtDelivery) {
+            // Entitlement may have changed while the online request was
+            // running. Re-check the authoritative free quota before delivery.
+            if (subscriptionService.getRemainingFreeInsights() <= 0) {
+              return 'You have used all of your free AI insights. '
+                  'Upgrade to Flow Ai Premium for unlimited AI insights.';
+            }
+
+            await subscriptionService.incrementInsightsUsageForUser(ownerId);
+
+            if (!await _isCurrentSession(ownerId, generation)) {
+              return 'AI is temporarily unavailable. Please try again.';
+            }
+          }
+
+          // Add medical citations to real FlowAI health responses.
           return _addMedicalCitationToHealthResponse(
             flowAIResponse,
             userMessage.toLowerCase(),
@@ -388,109 +486,9 @@ class EnhancedAIChatService {
       } catch (e) {}
     }
 
-    // Do not synthesize personalized health guidance when the configured
-    // online AI service is unavailable. Generic local FAQ/app-help content
-    // may be used only for non-health questions.
-    final normalizedMessage = userMessage.toLowerCase();
-
-    if (_isHealthRelated(normalizedMessage)) {
-      return 'I can’t generate a health response right now because the '
-          'online AI service is unavailable. You can still review your '
-          'recorded data in Flow Ai, or try again when the service is '
-          'available.';
-    }
-
-    return _getEnhancedLocalResponse(userMessage, contextPrompt: contextPrompt);
-  }
-
-  /// Generate enhanced local AI response with comprehensive knowledge
-  Future<String> _getEnhancedLocalResponse(
-    String userMessage, {
-    String? contextPrompt,
-  }) async {
-    final lowerMessage = userMessage.toLowerCase();
-
-    // Analyze context and user patterns for more personalized responses
-    final conversationHistory = _conversationMemory?.getRelevantContext() ?? [];
-    final personalizedInsights =
-        _conversationMemory?.getPersonalizedInsights() ?? {};
-
-    // Check FAQ database first with enhanced matching
-    final faqResponse = _searchFAQDatabase(lowerMessage);
-    if (faqResponse != null) {
-      return _enhanceResponseWithContext(
-        faqResponse,
-        contextPrompt,
-        personalizedInsights,
-      );
-    }
-
-    // Enhanced topic detection with context awareness
-    String baseResponse;
-
-    // Health and cycle related responses (priority for this app)
-    if (_isHealthRelated(lowerMessage)) {
-      baseResponse = _getHealthResponse(lowerMessage);
-    }
-    // Technology questions with contextual depth
-    else if (_isTechnologyRelated(lowerMessage)) {
-      baseResponse = _getTechnologyResponse(lowerMessage);
-    }
-    // Science questions with educational value
-    else if (_isScienceRelated(lowerMessage)) {
-      baseResponse = _getScienceResponse(lowerMessage);
-    }
-    // Lifestyle questions with practical advice
-    else if (_isLifestyleRelated(lowerMessage)) {
-      baseResponse = _getLifestyleResponse(lowerMessage);
-    }
-    // Math and calculations with examples
-    else if (_isMathRelated(lowerMessage)) {
-      baseResponse = _getMathResponse(lowerMessage);
-    }
-    // Current events and general knowledge
-    else if (_isGeneralKnowledgeRelated(lowerMessage)) {
-      baseResponse = _getGeneralKnowledgeResponse(lowerMessage);
-    }
-    // Entertainment and fun facts
-    else if (_isEntertainmentRelated(lowerMessage)) {
-      baseResponse = _getEntertainmentResponse(lowerMessage);
-    }
-    // Greetings and personal questions with memory
-    else if (_isPersonalRelated(lowerMessage)) {
-      baseResponse = _getPersonalResponseWithMemory(
-        lowerMessage,
-        conversationHistory,
-      );
-    }
-    // App usage and features
-    else if (_isAppRelated(lowerMessage)) {
-      baseResponse = _getAppResponse(lowerMessage);
-    }
-    // Enhanced default response with intelligent analysis
-    else {
-      baseResponse = _getIntelligentDefaultResponse(
-        lowerMessage,
-        conversationHistory,
-      );
-    }
-
-    // Apply contextual enhancement to all responses
-    var enhancedResponse = _enhanceResponseWithContext(
-      baseResponse,
-      contextPrompt,
-      personalizedInsights,
-    );
-
-    // Add medical citations for health-related responses
-    if (_isHealthRelated(lowerMessage)) {
-      enhancedResponse = _addMedicalCitationToHealthResponse(
-        enhancedResponse,
-        lowerMessage,
-      );
-    }
-
-    return enhancedResponse;
+    return 'I can’t generate an AI response right now because the online '
+        'Flow Ai service is unavailable. Your saved data and FAQ content '
+        'remain available, and you can try the AI request again later.';
   }
 
   /// Add medical citation to health responses
@@ -750,68 +748,6 @@ class EnhancedAIChatService {
   }
 
   // Response generators for different topics
-  String _getHealthResponse(String message) {
-    final responses = [
-      "Here’s a helpful perspective: ${_getRandomHealthFact()} Would you like specific guidance on tracking this in the app?",
-      "I'm here to help with your reproductive health! 💖 ${_getRandomHealthTip()} What specific aspect would you like to explore?",
-      "Health is so important! 🌟 ${_getRandomHealthInsight()} Feel free to ask more detailed questions.",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getTechnologyResponse(String message) {
-    final responses = [
-      "Here’s a simple explanation: ${_getRandomTechFact()} I can explain more about how this works if you're interested.",
-      "Great tech question! 🚀 ${_getRandomTechInsight()} Would you like me to break this down further?",
-      "I love discussing technology! ⚡ ${_getRandomTechTip()} What specific aspect interests you most?",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getScienceResponse(String message) {
-    final responses = [
-      "Here’s a clear explanation: ${_getRandomScienceFact()} The natural world is full of incredible phenomena.",
-      "Excellent scientific question! 🧪 ${_getRandomScienceInsight()} Science helps us understand our world better.",
-      "I enjoy exploring scientific topics! 🌟 ${_getRandomScienceExplanation()} Would you like to dive deeper?",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getLifestyleResponse(String message) {
-    final responses = [
-      "Here’s a helpful insight: ${_getRandomLifestyleTip()} Small changes can make big differences.",
-      "Great wellness question! 💪 ${_getRandomWellnessFact()} Taking care of yourself is so important.",
-      "I love discussing healthy living! ✨ ${_getRandomLifestyleInsight()} What area would you like to focus on?",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getMathResponse(String message) {
-    final responses = [
-      "Math is everywhere! 📊 ${_getRandomMathFact()} Numbers and patterns help us understand the world.",
-      "Mathematical thinking is powerful! 🧮 ${_getRandomMathInsight()} I can help with calculations if needed.",
-      "I enjoy mathematical questions! ➕ ${_getRandomMathTip()} Math makes many things possible.",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getGeneralKnowledgeResponse(String message) {
-    final responses = [
-      "The world is full of interesting facts! 🌍 ${_getRandomWorldFact()} There's so much to learn about our planet.",
-      "Great question about the world! 📚 ${_getRandomKnowledgeFact()} Learning never stops being exciting.",
-      "I love sharing knowledge! 🎓 ${_getRandomEducationalFact()} What else would you like to explore?",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getEntertainmentResponse(String message) {
-    final responses = [
-      "Let's have some fun! 🎉 ${_getRandomFunFact()} Life should have moments of joy and wonder.",
-      "Entertainment and fun are important! 🎭 ${_getRandomEntertainmentFact()} What brings you joy?",
-      "I enjoy lighter topics too! 😊 ${_getRandomTrivia()} Sometimes we need a break from serious stuff.",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
 
   // ignore: unused_element
   String _getPersonalResponse(String message) {
@@ -826,321 +762,11 @@ class EnhancedAIChatService {
     }
   }
 
-  String _getAppResponse(String message) {
-    final responses = [
-      "I'd love to help you with the app! 📱 You can track your cycle, log symptoms, view insights, and much more. What specific feature would you like to learn about?",
-      "The app has so many helpful features! 🌟 From cycle predictions to symptom tracking to AI insights. Which area interests you most?",
-      "Great question about app usage! 💡 I can guide you through tracking, explain features, or help you get the most out of your health data. What do you need help with?",
-    ];
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
-  String _getIntelligentDefaultResponse(
-    String message, [
-    List<types.Message>? conversationHistory,
-  ]) {
-    // Attempt to provide an intelligent response even for unknown topics
-    if (message.length < 3) {
-      return "I'd love to help you! Could you tell me a bit more about what you're thinking about? 😊";
-    }
-
-    // Analyze the conversation history for more intelligent responses
-    String contextualNote = "";
-    if (conversationHistory != null && conversationHistory.isNotEmpty) {
-      contextualNote =
-          "\n\nI notice we've been chatting about various topics - I'm always happy to dive deeper into any subject that interests you! ";
-    }
-
-    final responses = [
-      "That's an interesting topic! 🤔 While I might not have specific expertise in that area, I'd be happy to discuss what I know or help you think through it. Can you share more details?$contextualNote",
-      "I appreciate you bringing this up! 💭 Though this might be outside my main areas of expertise, I'm always eager to learn and explore new topics with you. What specific aspect interests you most?$contextualNote",
-      "You've got me curious! 🔍 Even if I don't have detailed knowledge about this particular topic, I can try to help you think about it or suggest related areas I do know about. What's your main question?$contextualNote",
-      "Interesting question! 🌟 I might not be an expert on everything, but I enjoy exploring ideas together. Could you help me understand what specifically you'd like to know more about?$contextualNote",
-    ];
-
-    return responses[math.Random().nextInt(responses.length)];
-  }
-
   /// Enhanced personal response with memory
-  String _getPersonalResponseWithMemory(
-    String message,
-    List<types.Message> conversationHistory,
-  ) {
-    if (message.contains('who are you') || message.contains('about you')) {
-      return "I'm Zyra, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I remember our conversations to provide better, more personalized responses. What would you like to explore together?";
-    } else if (message.contains('hello') || message.contains('hi')) {
-      final greeting = conversationHistory.isEmpty
-          ? "Hello! 👋 I'm excited to meet you and chat today."
-          : "Hello again! 👋 Great to continue our conversation.";
-      return "$greeting I can help with cycle tracking, answer health questions, discuss science and technology, share interesting facts, or just have a friendly conversation. What's on your mind?";
-    } else if (message.contains('thank')) {
-      return "You're welcome. I'm here if you’d like to explore more.";
-    } else {
-      final personalNote = conversationHistory.isNotEmpty
-          ? "I remember our previous chats and I'm here to continue helping! "
-          : "";
-      return "${personalNote}I'm here and ready to help! 😊 As your AI companion, I can discuss health topics, answer questions about science and technology, share interesting facts, or help you navigate the app. What would you like to explore?";
-    }
-  }
 
   /// Enhance response with contextual information and personalized insights
-  String _enhanceResponseWithContext(
-    String baseResponse,
-    String? contextPrompt,
-    Map<String, dynamic> personalizedInsights,
-  ) {
-    var enhancedResponse = baseResponse;
-
-    // Add contextual information if available
-    if (contextPrompt != null && contextPrompt.isNotEmpty) {
-      enhancedResponse +=
-          "\n\nNote: This may relate to earlier topics in our conversation.";
-    }
-
-    // Add personalized insights if relevant
-    if (personalizedInsights.isNotEmpty &&
-        personalizedInsights.containsKey('interests')) {
-      final interests = personalizedInsights['interests'] as String? ?? '';
-      if (interests.isNotEmpty) {
-        enhancedResponse +=
-            "\n\nRelated topic: $interests, you might also enjoy exploring related topics!";
-      }
-    }
-
-    return enhancedResponse;
-  }
 
   // Random fact generators
-  String _getRandomHealthFact() {
-    final facts = [
-      "Did you know the average woman has about 400 menstrual cycles in her lifetime?",
-      "Your basal body temperature slightly increases after ovulation due to progesterone.",
-      "The menstrual cycle is controlled by a complex interaction of hormones in your body.",
-      "Exercise can help reduce PMS symptoms and menstrual pain for many people.",
-      "Tracking your cycle can help you understand your body's unique patterns and rhythms.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomHealthTip() {
-    final tips = [
-      "Staying hydrated can help reduce bloating during your cycle.",
-      "Regular sleep patterns can help regulate your menstrual cycle.",
-      "Magnesium supplements may help with menstrual cramps for some people.",
-      "Gentle exercise like walking or yoga can ease period discomfort.",
-      "Keeping a symptom diary helps identify personal patterns and triggers.",
-    ];
-    return tips[math.Random().nextInt(tips.length)];
-  }
-
-  String _getRandomHealthInsight() {
-    final insights = [
-      "Every person's cycle is unique - what's normal for you might be different from others.",
-      "Hormonal changes throughout your cycle can affect mood, energy, and even food cravings.",
-      "Your cycle can be influenced by stress, diet, exercise, and sleep patterns.",
-      "Understanding your fertility signs can be empowering whether you're trying to conceive or avoid pregnancy.",
-      "Many reproductive health concerns are common and treatable with proper medical guidance.",
-    ];
-    return insights[math.Random().nextInt(insights.length)];
-  }
-
-  String _getRandomTechFact() {
-    final facts = [
-      "The first computer bug was an actual bug - a moth found in a Harvard Mark II computer in 1947!",
-      "Your smartphone has more computing power than the computers that sent humans to the moon.",
-      "The internet processes over 5 billion searches on Google every single day.",
-      "Artificial Intelligence can now recognize images, understand speech, and even create art.",
-      "Bluetooth technology was named after a 10th-century Danish king, Harald Bluetooth.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomTechInsight() {
-    final insights = [
-      "Machine learning algorithms improve by analyzing patterns in large datasets.",
-      "Cloud computing lets you access your data from anywhere with an internet connection.",
-      "Encryption keeps your personal information safe when transmitted over the internet.",
-      "Apps like this one use AI to find patterns in your health data and provide insights.",
-      "The Internet of Things connects everyday objects to the internet for smarter functionality.",
-    ];
-    return insights[math.Random().nextInt(insights.length)];
-  }
-
-  String _getRandomTechTip() {
-    final tips = [
-      "Regular software updates help keep your devices secure and running smoothly.",
-      "Using strong, unique passwords for each account significantly improves your digital security.",
-      "Backing up your important data prevents loss if something happens to your device.",
-      "Learning keyboard shortcuts can make you much more efficient with computers.",
-      "Privacy settings in apps and social media give you control over your personal information.",
-    ];
-    return tips[math.Random().nextInt(tips.length)];
-  }
-
-  String _getRandomScienceFact() {
-    final facts = [
-      "Honey never spoils - archaeologists have found edible honey in ancient Egyptian tombs!",
-      "A single cloud can weigh more than a million pounds, but it floats because it's less dense than dry air.",
-      "Your body produces about 25 million new cells every second.",
-      "Octopuses have three hearts and blue blood due to copper-based hemocyanin instead of iron.",
-      "Light from the sun takes about 8 minutes and 20 seconds to reach Earth.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomScienceInsight() {
-    final insights = [
-      "Photosynthesis by plants and algae produces all the oxygen we breathe.",
-      "DNA is found in every cell with a nucleus and contains instructions for life.",
-      "Gravity is actually the weakest of the four fundamental forces in physics.",
-      "The human brain has about 86 billion neurons forming trillions of connections.",
-      "Evolution is driven by natural selection acting on genetic variations over time.",
-    ];
-    return insights[math.Random().nextInt(insights.length)];
-  }
-
-  String _getRandomScienceExplanation() {
-    final explanations = [
-      "The water cycle continuously moves water between oceans, atmosphere, and land.",
-      "Atoms are made of protons, neutrons, and electrons, and they combine to form molecules.",
-      "Vaccines work by training your immune system to recognize and fight specific diseases.",
-      "Climate change occurs when greenhouse gases trap more heat in Earth's atmosphere.",
-      "Antibiotics work against bacteria but not viruses, which is why they don't cure colds.",
-    ];
-    return explanations[math.Random().nextInt(explanations.length)];
-  }
-
-  String _getRandomLifestyleTip() {
-    final tips = [
-      "The 20-20-20 rule: Every 20 minutes, look at something 20 feet away for 20 seconds.",
-      "Drinking water first thing in the morning helps kickstart your metabolism.",
-      "Taking short breaks during work can actually improve productivity and focus.",
-      "Gratitude journaling for just 5 minutes a day can improve mental well-being.",
-      "Eating colorful foods ensures you get a variety of nutrients and antioxidants.",
-    ];
-    return tips[math.Random().nextInt(tips.length)];
-  }
-
-  String _getRandomWellnessFact() {
-    final facts = [
-      "Laughter really can be medicine - it boosts immune function and releases endorphins.",
-      "Walking for just 30 minutes a day can significantly improve cardiovascular health.",
-      "Deep breathing exercises can quickly activate your body's relaxation response.",
-      "Social connections are as important for health as exercise and good nutrition.",
-      "Getting sunlight in the morning helps regulate your natural sleep-wake cycle.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomLifestyleInsight() {
-    final insights = [
-      "Small consistent habits often lead to bigger changes than dramatic short-term efforts.",
-      "Your environment significantly influences your behavior and decisions.",
-      "Stress management is a skill that improves with practice and patience.",
-      "Quality sleep is when your body repairs itself and consolidates memories.",
-      "Mindful eating helps you tune into hunger and fullness cues.",
-    ];
-    return insights[math.Random().nextInt(insights.length)];
-  }
-
-  String _getRandomMathFact() {
-    final facts = [
-      "Zero was invented in India around the 5th century and revolutionized mathematics.",
-      "Pi (π) is an infinite, non-repeating decimal that appears throughout nature.",
-      "The Fibonacci sequence appears in flower petals, pinecones, and galaxy spirals.",
-      "Probability theory was developed to analyze games of chance and gambling.",
-      "Statistics help us understand patterns and make predictions from data.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomMathInsight() {
-    final insights = [
-      "Mathematics is the language of science and helps describe natural phenomena.",
-      "Geometry helps us understand shapes, spaces, and relationships in the world around us.",
-      "Algebra teaches us to work with unknown quantities and solve problems systematically.",
-      "Percentages are everywhere - from discounts to data analysis to health statistics.",
-      "Mathematical modeling helps predict everything from weather to population growth.",
-    ];
-    return insights[math.Random().nextInt(insights.length)];
-  }
-
-  String _getRandomMathTip() {
-    final tips = [
-      "Breaking complex problems into smaller steps makes them more manageable.",
-      "Estimating before calculating helps you check if your answer makes sense.",
-      "Visual representations like graphs can make numerical data easier to understand.",
-      "Practice with real-world applications makes math more meaningful and memorable.",
-      "Understanding concepts is often more valuable than memorizing formulas.",
-    ];
-    return tips[math.Random().nextInt(tips.length)];
-  }
-
-  String _getRandomWorldFact() {
-    final facts = [
-      "There are more possible games of chess than atoms in the observable universe.",
-      "The Great Wall of China isn't visible from space without aid, contrary to popular belief.",
-      "Antarctica is the largest desert in the world, despite being covered in ice.",
-      "More people live in California than in all of Canada.",
-      "The human heart beats about 100,000 times per day.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomKnowledgeFact() {
-    final facts = [
-      "Languages change over time - English today is very different from Old English.",
-      "Cultural traditions often have practical origins that helped communities survive.",
-      "Geography affects everything from climate to cuisine to cultural development.",
-      "Historical events create ripple effects that influence the present day.",
-      "Human migration patterns have shaped the diversity of our modern world.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomEducationalFact() {
-    final facts = [
-      "Reading increases empathy by helping you understand different perspectives.",
-      "Learning a new skill creates new neural pathways in your brain.",
-      "Teaching someone else is one of the best ways to solidify your own understanding.",
-      "Curiosity and asking questions are the foundation of all learning.",
-      "Mistakes are valuable learning opportunities that help build understanding.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomFunFact() {
-    final facts = [
-      "Bananas are berries, but strawberries aren't! Botanical classification can be surprising.",
-      "A group of flamingos is called a 'flamboyance' - how perfect is that?",
-      "Wombat poop is cube-shaped! It's one of nature's most unusual geometric achievements.",
-      "The word 'serendipity' was coined by a writer in 1754 to describe pleasant surprises.",
-      "Penguins can jump up to 6 feet out of water - they're surprisingly athletic!",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomEntertainmentFact() {
-    final facts = [
-      "Music can trigger the release of dopamine, the same chemical involved in other pleasures.",
-      "Reading fiction improves empathy and emotional intelligence.",
-      "Games can improve problem-solving skills and hand-eye coordination.",
-      "Humor and laughter have measurable positive effects on physical and mental health.",
-      "Art and creativity can be therapeutic and help process emotions.",
-    ];
-    return facts[math.Random().nextInt(facts.length)];
-  }
-
-  String _getRandomTrivia() {
-    final trivia = [
-      "The shortest war in history lasted only 38-45 minutes (Anglo-Zanzibar War, 1896).",
-      "A jiffy is an actual unit of time: 1/100th of a second.",
-      "The plastic tips on shoelaces are called aglets.",
-      "A group of crows is called a murder, while a group of owls is called a parliament.",
-      "The dot over a lowercase 'i' or 'j' is called a tittle.",
-    ];
-    return trivia[math.Random().nextInt(trivia.length)];
-  }
 
   // String similarity calculation
   double _calculateSimilarity(String str1, String str2) {
@@ -1250,31 +876,89 @@ class EnhancedAIChatService {
 
   Future<String?> _getFlowAIResponse(
     String userMessage,
-    String? contextPrompt,
-  ) async {
-    if (!_useFlowAI || _currentUser == null) return null;
+    String? contextPrompt, {
+    required String ownerId,
+    required int generation,
+  }) async {
+    if (!_useFlowAI ||
+        _currentUser?.id != ownerId ||
+        !await _isCurrentSession(ownerId, generation)) {
+      return null;
+    }
 
     try {
-      // Build health context for FlowAI (currently unused but available for future use)
-      _buildHealthContext(contextPrompt);
+      final database = DatabaseService.instance;
+
+      await ActiveAccountScope.instance.requireOwnership(ownerId);
+
+      final currentCycle = await database.getCurrentCycle();
+      if (!await _isCurrentSession(ownerId, generation)) return null;
+
+      final endDate = DateTime.now();
+      final startDate = endDate.subtract(const Duration(days: 30));
+      final recentTracking = await database.getDailyTrackingRange(
+        startDate,
+        endDate,
+      );
+      if (!await _isCurrentSession(ownerId, generation)) return null;
+
+      final predictions = await CycleCalculationEngine(
+        database,
+      ).calculatePredictions(referenceDate: endDate, monthsOfHistory: 12);
+      if (!await _isCurrentSession(ownerId, generation)) return null;
+
+      final recentSymptoms = <String>[];
+      for (final row in recentTracking.reversed) {
+        final symptoms = row['symptoms'];
+        if (symptoms is! List) continue;
+
+        for (final symptom in symptoms) {
+          final value = symptom.toString().trim();
+          if (value.isNotEmpty && !recentSymptoms.contains(value)) {
+            recentSymptoms.add(value);
+          }
+        }
+      }
+
+      Map<String, dynamic>? cycleData;
+      if (currentCycle != null) {
+        final currentCycleDay =
+            endDate.difference(currentCycle.startDate).inDays + 1;
+
+        cycleData = <String, dynamic>{
+          'startDate': currentCycle.startDate.toIso8601String(),
+          if (currentCycle.endDate != null)
+            'endDate': currentCycle.endDate!.toIso8601String(),
+          if (currentCycleDay > 0) 'currentCycleDay': currentCycleDay,
+        };
+      }
+
+      final currentPhase =
+          predictions != null && predictions.currentPhase.name != 'unknown'
+          ? predictions.currentPhase.name
+          : null;
+
+      final conversationContext = _buildHealthContext(contextPrompt);
+
+      // Private health context must never cross an account transition.
+      if (!await _isCurrentSession(ownerId, generation)) return null;
+      await ActiveAccountScope.instance.requireOwnership(ownerId);
 
       final response = await _flowAIService.sendHealthChatMessage(
         message: userMessage,
-        userId: _currentUser!.id,
-        cycleData: _getCycleContextData(),
-        recentSymptoms: _getRecentSymptoms(),
-        currentPhase: _getCurrentCyclePhase(),
+        userId: ownerId,
+        conversationContext: conversationContext,
+        cycleData: cycleData,
+        recentSymptoms: recentSymptoms.isEmpty ? null : recentSymptoms,
+        currentPhase: currentPhase,
       );
 
-      // Add medical citations to FlowAI health responses
-      final content = response.content;
-      return _addMedicalCitationToHealthResponse(
-        content,
-        userMessage.toLowerCase(),
-      );
+      if (!await _isCurrentSession(ownerId, generation)) return null;
+
+      return response.content;
     } on FlowAIException {
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
@@ -1297,10 +981,6 @@ class EnhancedAIChatService {
 
     return contextParts.isNotEmpty ? contextParts.join('; ') : null;
   }
-
-  Map<String, dynamic>? _getCycleContextData() => null;
-  List<String>? _getRecentSymptoms() => null;
-  String? _getCurrentCyclePhase() => null;
 
   /// Get current user for message composition
   types.User? get currentUser => _currentUser;
@@ -1327,7 +1007,7 @@ class EnhancedAIChatService {
   String get aiServiceStatus {
     if (!_isInitialized) return 'Not initialized';
     if (_useFlowAI && _flowAIService.isInitialized) return 'FlowAI enabled';
-    return 'Enhanced local responses';
+    return 'Online Flow Ai unavailable';
   }
 }
 

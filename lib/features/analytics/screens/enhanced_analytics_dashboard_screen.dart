@@ -12,6 +12,7 @@ import '../../../core/services/notification_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_header_components.dart';
 import '../../../generated/app_localizations.dart';
+import '../../premium/providers/subscription_provider.dart';
 import '../../premium/widgets/premium_upgrade_prompt.dart';
 
 class EnhancedAnalyticsDashboardScreen extends StatefulWidget {
@@ -32,8 +33,24 @@ class _EnhancedAnalyticsDashboardScreenState
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AnalyticsProvider>().loadAllAnalytics();
+      _loadAnalyticsWithPremiumAccess();
     });
+  }
+
+  Future<void> _loadAnalyticsWithPremiumAccess() async {
+    if (!mounted) return;
+
+    final allowed = await checkPremiumAccess(
+      context,
+      featureTitle: 'Advanced Analytics',
+      featureDescription:
+          'Advanced Analytics is available with Flow Ai Premium.',
+      feature: 'advanced_analytics',
+    );
+
+    if (!allowed || !mounted) return;
+
+    await context.read<AnalyticsProvider>().loadAllAnalytics();
   }
 
   @override
@@ -46,6 +63,12 @@ class _EnhancedAnalyticsDashboardScreenState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
+
+    final subscriptionProvider = context.watch<SubscriptionProvider>();
+
+    if (!subscriptionProvider.hasAdvancedAnalytics) {
+      return _buildPremiumBlockedScreen(theme);
+    }
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -82,6 +105,88 @@ class _EnhancedAnalyticsDashboardScreenState
                       ],
                     );
                   },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPremiumBlockedScreen(ThemeData theme) {
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+                child: Row(
+                  children: [
+                    AppBackButton(onPressed: () => Navigator.of(context).pop()),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppHeaderTextBlock(
+                        title: 'Advanced Analytics',
+                        subtitle: 'Flow Ai Premium',
+                        titleStyle: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        subtitleStyle: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.lock_outline,
+                          size: 44,
+                          color: AppTheme.primaryPurple,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Advanced Analytics requires Flow Ai Premium.',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        FilledButton(
+                          onPressed: () async {
+                            await showPremiumUpgradeDialog(
+                              context,
+                              featureTitle: 'Advanced Analytics',
+                              featureDescription:
+                                  'Advanced Analytics is available with '
+                                  'Flow Ai Premium.',
+                              feature: 'advanced_analytics',
+                            );
+                          },
+                          child: const Text('View Premium'),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

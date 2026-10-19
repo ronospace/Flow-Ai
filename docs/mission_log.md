@@ -11602,3 +11602,39 @@ Verification:
 - centralize eligibility/cooldown ownership;
 - deterministic tests;
 - Android + iPhone physical verification.
+
+## MON-PAYWALL-P0 — 100% ✅
+
+Closed: 2026-10-19
+
+Verified closure evidence:
+- Step 7/7 complete.
+- AI free-quota execution is serialized across the authoritative check → real FlowAI execution → accounting window.
+- Entitlement and active-account ownership are revalidated before AI delivery/accounting.
+- Unknown non-null Premium feature IDs fail closed.
+- PremiumFeatureGate uses capability-specific authority.
+- Entitlement downgrade transitions publish live state to SubscriptionProvider.
+- Real FlowAI health context uses account-scoped recorded data and preserves conversation context.
+- Synthetic local AI fallback execution path removed.
+- Proven dead synthetic helper island removed: 32 private methods, 0 external production references.
+- Candidate source parsed/formatted successfully before write.
+- Premium execution contract: 6/6 pass.
+- AI production truth contract: 5/5 pass.
+- Prediction truth contract: 3/3 pass.
+- Chat account isolation: 4/4 pass.
+- Monetization account isolation: 5/5 pass.
+- Monetization lifecycle: 5/5 pass.
+- Premium suite: 154/154 pass.
+- flutter analyze: 0 issues.
+- git diff --check: pass.
+- Git index: empty.
+
+Preserved caveats / later gates:
+- Physical iPhone App Store purchase-sheet interaction remains an Apple-IAP physical-device release gate and is not part of this closed Step 7 code-integrity slice.
+- Preserved unrelated worktree artifacts remain untouched:
+  - .firebase/hosting.YnVpbGQvd2Vi.cache
+  - 9d58dded687c
+  - Flow-Ai-2.2.4-1790713306-CMP-FINAL.aab
+
+Exact next gate:
+- Continue the established mission ledger priority order after MON-PAYWALL-P0 closure.
