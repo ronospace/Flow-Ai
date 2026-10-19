@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import 'premium_feature_preview_card.dart';
 import '../../../core/ui/app_upcoming_feature_status.dart';
+import '../../premium/models/premium_tile_policy.dart';
 
 class PremiumFeaturesPreview extends StatelessWidget {
   final bool isPremium;
@@ -208,7 +209,10 @@ class PremiumFeaturesPreview extends StatelessWidget {
                 description: 'See deeper patterns and predictions',
                 icon: Icons.analytics_rounded,
                 color: AppTheme.accentMint,
-                estimatedDate: 'NEW',
+                estimatedDate: 'PRO',
+                isPremiumLocked: PremiumTilePolicy.isPremiumLocked(
+                  'Advanced Analytics',
+                ),
                 onTap: onAdvancedAnalytics,
               ),
             ],

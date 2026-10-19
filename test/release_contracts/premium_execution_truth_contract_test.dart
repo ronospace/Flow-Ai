@@ -58,15 +58,21 @@ void main() {
     expect(premiumGate, contains('PremiumFeature.unlimitedInsights'));
   });
 
-  test('Advanced Analytics gates access before loading data', () {
-    final gate = analytics.indexOf("feature: 'advanced_analytics'");
+  test('Advanced Analytics gates capability before loading data', () {
+    final gate = analytics.indexOf(
+      'if (!subscriptionProvider.hasAdvancedAnalytics) return;',
+    );
     final load = analytics.indexOf(
       'context.read<AnalyticsProvider>().loadAllAnalytics()',
     );
 
     expect(gate, greaterThanOrEqualTo(0));
     expect(load, greaterThan(gate));
-    expect(analytics, contains('_loadAnalyticsWithPremiumAccess()'));
+    expect(
+      analytics,
+      contains('PremiumFeatureLockScreen('),
+      reason: 'Free users should see the full-screen Premium experience.',
+    );
   });
 
   test(

@@ -11,6 +11,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
   final Color color;
   final String estimatedDate;
   final AppFeatureAvailability availability;
+  final bool isPremiumLocked;
   final VoidCallback onTap;
 
   const PremiumFeaturePreviewCard({
@@ -21,6 +22,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
     required this.color,
     required this.estimatedDate,
     this.availability = AppFeatureAvailability.active,
+    this.isPremiumLocked = false,
     required this.onTap,
   });
 
@@ -63,10 +65,12 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                         ),
                         const Spacer(),
                         AppUpcomingFeatureStatus(
-                          releaseLabel: estimatedDate,
+                          releaseLabel: isPremiumLocked ? 'PRO' : estimatedDate,
                           availability: availability,
                           compact: true,
-                          color: AppTheme.warningOrange,
+                          color: isPremiumLocked
+                              ? AppTheme.primaryPurple
+                              : AppTheme.warningOrange,
                         ),
                       ],
                     ),
@@ -98,18 +102,31 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.schedule_rounded, color: color, size: 12),
+                        Icon(
+                          isPremiumLocked
+                              ? Icons.lock_rounded
+                              : Icons.schedule_rounded,
+                          color: isPremiumLocked
+                              ? AppTheme.primaryPurple
+                              : color,
+                          size: 12,
+                        ),
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            availability == AppFeatureAvailability.comingSoon
+                            isPremiumLocked
+                                ? 'Premium'
+                                : availability ==
+                                      AppFeatureAvailability.comingSoon
                                 ? 'Coming Soon'
                                 : 'Active',
                             maxLines: 1,
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: color,
+                              color: isPremiumLocked
+                                  ? AppTheme.primaryPurple
+                                  : color,
                               fontSize: 9,
                               fontWeight: FontWeight.w600,
                             ),
