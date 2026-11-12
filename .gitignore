@@ -126,3 +126,6 @@ gha-creds-*.json
 # FlowAI: track required iOS Rive linker configuration
 !ios/Flutter/
 !ios/Flutter/RiveNativeLink.xcconfig
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist

@@ -28,6 +28,7 @@ class _TrackingScreenState extends State<TrackingScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   late PageController _pageController;
+  final GlobalKey _flowAiInsightsKey = GlobalKey();
 
   // Tracking data
   DateTime _selectedDate = DateTime.now();
@@ -746,14 +747,52 @@ class _TrackingScreenState extends State<TrackingScreen>
 
               // Modern flow intensity selector
               FlowIntensityPicker(
-                maxGridHeight: gridBudget,
                 selectedIntensity: _flowIntensity,
+                maxGridHeight: Theme.of(context).platform == TargetPlatform.iOS
+                    ? legacyIosGridBudget
+                    : null,
+                selectedViewportHeight:
+                    Theme.of(context).platform == TargetPlatform.android &&
+                        _flowIntensity != FlowIntensity.none
+                    ? selectedFlowViewportBudget
+                    : null,
+                aiInsightsKey:
+                    Theme.of(context).platform == TargetPlatform.android
+                    ? _flowAiInsightsKey
+                    : null,
                 onIntensitySelected: (intensity) {
                   setState(() {
                     _flowIntensity = intensity;
                   });
                   _markUnsavedChanges();
                   HapticFeedback.selectionClick();
+
+                  if (Theme.of(context).platform == TargetPlatform.android &&
+                      intensity != FlowIntensity.none) {
+                    // Frame 1 lays out the AI section and measures it.
+                    // Frame 2 applies the derived whole-grid scale.
+                    // Reveal only after both layouts have settled.
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (!mounted) return;
+
+                        final insightContext =
+                            _flowAiInsightsKey.currentContext;
+                        if (insightContext == null) return;
+
+                        Scrollable.ensureVisible(
+                          insightContext,
+                          duration: AppTheme.motionBase,
+                          curve: AppTheme.motionCurve,
+                          alignment: 1.0,
+                          alignmentPolicy:
+                              ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+                        );
+                      });
+                    });
+                  }
                 },
               ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
             ],

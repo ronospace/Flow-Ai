@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:flow_ai/core/models/cycle_data.dart';
 import 'package:flow_ai/features/cycle/widgets/flow_intensity_picker.dart';
 import 'package:flow_ai/generated/app_localizations.dart';
 
 Widget harness({
   required FlowIntensity selected,
-  required ValueChanged<FlowIntensity> onChanged,
+  double? selectedViewportHeight,
 }) {
   return MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: 358,
-          height: 1000,
-          child: FlowIntensityPicker(
-            selectedIntensity: selected,
-            onIntensitySelected: onChanged,
+      body: SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            width: 380,
+            child: FlowIntensityPicker(
+              selectedIntensity: selected,
+              selectedViewportHeight: selectedViewportHeight,
+              onIntensitySelected: (_) {},
+            ),
           ),
         ),
       ),
@@ -26,102 +29,91 @@ Widget harness({
   );
 }
 
-Rect rectOf(WidgetTester tester, FlowIntensity intensity) {
-  final finder = find.byKey(ValueKey('flow-option-${intensity.name}'));
-
+Rect rectOf(WidgetTester tester, FlowIntensity state) {
+  final finder = find.byKey(ValueKey('flow-option-${state.name}'));
   expect(finder, findsOneWidget);
-
   return tester.getRect(finder);
 }
 
 void main() {
-  testWidgets('report exact Flow card geometry for every selected state', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(800, 1200);
-    tester.view.devicePixelRatio = 1;
+  testWidgets(
+    'selected Flow keeps width and compacts all six cells to equal row height',
+    (tester) async {
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1;
 
-    addTearDown(() {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
-    });
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
-    final states = <FlowIntensity>[
-      FlowIntensity.none,
-      FlowIntensity.spotting,
-      FlowIntensity.light,
-      FlowIntensity.medium,
-      FlowIntensity.heavy,
-      FlowIntensity.veryHeavy,
-    ];
+      const states = FlowIntensity.values;
 
-    final baselineRects = <FlowIntensity, Rect>{};
-
-    for (final selected in states) {
-      await tester.pumpWidget(harness(selected: selected, onChanged: (_) {}));
+      await tester.pumpWidget(harness(selected: FlowIntensity.none));
       await tester.pumpAndSettle();
 
-      final rects = <FlowIntensity, Rect>{
-        for (final intensity in states) intensity: rectOf(tester, intensity),
+      final natural = <FlowIntensity, Rect>{
+        for (final state in states) state: rectOf(tester, state),
       };
 
-      print('SELECTED=${selected.name}');
+      await tester.pumpWidget(
+        harness(selected: FlowIntensity.medium, selectedViewportHeight: 560),
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.pumpAndSettle();
 
-      for (final intensity in states) {
-        final r = rects[intensity]!;
+      final compact = <FlowIntensity, Rect>{
+        for (final state in states) state: rectOf(tester, state),
+      };
+
+      final selectedHeight = compact.values.first.height;
+
+      for (final state in states) {
+        final before = natural[state]!;
+        final after = compact[state]!;
+
         print(
-          '${intensity.name}: '
-          'left=${r.left.toStringAsFixed(3)} '
-          'top=${r.top.toStringAsFixed(3)} '
-          'width=${r.width.toStringAsFixed(3)} '
-          'height=${r.height.toStringAsFixed(3)}',
+          'WIDTH_STABLE_CELL '
+          'state=${state.name} '
+          'natural=${before.width.toStringAsFixed(3)}x'
+          '${before.height.toStringAsFixed(3)} '
+          'compact=${after.width.toStringAsFixed(3)}x'
+          '${after.height.toStringAsFixed(3)}',
+        );
+
+        expect(
+          (after.width - before.width).abs(),
+          lessThan(0.75),
+          reason: '${state.name}: selected width changed',
+        );
+
+        expect(
+          (after.height - selectedHeight).abs(),
+          lessThan(0.75),
+          reason: '${state.name}: compact heights differ',
+        );
+
+        expect(
+          after.height,
+          lessThan(before.height),
+          reason: '${state.name}: cell did not compact vertically',
         );
       }
 
-      if (selected == FlowIntensity.none) {
-        baselineRects.addAll(rects);
-      } else {
-        for (final intensity in states) {
-          final base = baselineRects[intensity]!;
-          final now = rects[intensity]!;
+      expect(
+        find.byKey(const ValueKey('flow-selected-grid-budget')),
+        findsOneWidget,
+      );
 
-          final dx = now.left - base.left;
-          final dy = now.top - base.top;
-          final dw = now.width - base.width;
-          final dh = now.height - base.height;
-
-          print(
-            'DELTA ${intensity.name}: '
-            'dx=${dx.toStringAsFixed(3)} '
-            'dy=${dy.toStringAsFixed(3)} '
-            'dw=${dw.toStringAsFixed(3)} '
-            'dh=${dh.toStringAsFixed(3)}',
-          );
-
-          expect(
-            dx.abs(),
-            lessThan(0.01),
-            reason: '${intensity.name} x-position changed with selection',
-          );
-          expect(
-            dy.abs(),
-            lessThan(0.01),
-            reason: '${intensity.name} y-position changed with selection',
-          );
-          expect(
-            dw.abs(),
-            lessThan(0.01),
-            reason: '${intensity.name} width changed with selection',
-          );
-          expect(
-            dh.abs(),
-            lessThan(0.01),
-            reason: '${intensity.name} height changed with selection',
-          );
-        }
+      for (final state in states) {
+        expect(
+          find.byKey(ValueKey('flow-compact-content-${state.name}')),
+          findsOneWidget,
+        );
       }
 
-      print('---');
-    }
-  });
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

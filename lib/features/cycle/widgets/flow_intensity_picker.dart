@@ -7,14 +7,17 @@ import '../../../generated/app_localizations.dart';
 class FlowIntensityPicker extends StatefulWidget {
   final FlowIntensity selectedIntensity;
   final Function(FlowIntensity) onIntensitySelected;
-
   final double? maxGridHeight;
+  final double? selectedViewportHeight;
+  final Key? aiInsightsKey;
+
   const FlowIntensityPicker({
     super.key,
     required this.selectedIntensity,
     required this.onIntensitySelected,
-
     this.maxGridHeight,
+    this.selectedViewportHeight,
+    this.aiInsightsKey,
   });
 
   @override
@@ -22,6 +25,89 @@ class FlowIntensityPicker extends StatefulWidget {
 }
 
 class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
+  static const double _flowContentInset = 12.0;
+
+  final GlobalKey _aiSectionKey = GlobalKey();
+  double? _selectedGridMaxHeight;
+  bool _selectedLayoutSyncScheduled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleSelectedLayoutSync();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlowIntensityPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.selectedIntensity == FlowIntensity.none) {
+      _selectedGridMaxHeight = null;
+      return;
+    }
+
+    if (oldWidget.selectedIntensity != widget.selectedIntensity ||
+        oldWidget.selectedViewportHeight != widget.selectedViewportHeight) {
+      _scheduleSelectedLayoutSync();
+    }
+  }
+
+  void _scheduleSelectedLayoutSync() {
+    if (_selectedLayoutSyncScheduled) return;
+
+    _selectedLayoutSyncScheduled = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _selectedLayoutSyncScheduled = false;
+      _syncSelectedGridHeight();
+    });
+  }
+
+  void _syncSelectedGridHeight() {
+    if (!mounted || widget.selectedIntensity == FlowIntensity.none) {
+      return;
+    }
+
+    final viewportBudget = widget.selectedViewportHeight;
+    final aiContext = _aiSectionKey.currentContext;
+
+    if (viewportBudget == null ||
+        !viewportBudget.isFinite ||
+        viewportBudget <= 0 ||
+        aiContext == null) {
+      return;
+    }
+
+    final aiRenderObject = aiContext.findRenderObject();
+    if (aiRenderObject is! RenderBox || !aiRenderObject.hasSize) {
+      return;
+    }
+
+    final aiSectionHeight = aiRenderObject.size.height;
+
+    // The AI section height includes its verified top/bottom spacing.
+    // Whatever remains is the exact maximum height for the whole six-cell
+    // grid. If there is no viable remainder, preserve natural scrolling.
+    final derivedGridHeight = viewportBudget - aiSectionHeight;
+
+    final nextHeight = derivedGridHeight.isFinite && derivedGridHeight > 0
+        ? derivedGridHeight
+        : null;
+
+    final currentHeight = _selectedGridMaxHeight;
+    final unchanged =
+        currentHeight == null && nextHeight == null ||
+        currentHeight != null &&
+            nextHeight != null &&
+            (currentHeight - nextHeight).abs() < 0.5;
+
+    if (unchanged) return;
+
+    setState(() {
+      _selectedGridMaxHeight = nextHeight;
+    });
+  }
+
   List<FlowIntensityOption> _getIntensityOptions(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return [
@@ -121,25 +207,49 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       orElse: () => intensityOptions.first,
     );
 
+    final useAndroidCompactFlow =
+        Theme.of(context).platform == TargetPlatform.android;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildResponsiveOptionGrid(
           intensityOptions,
-          maxHeight: widget.maxGridHeight,
+          maxHeight: useAndroidCompactFlow
+              ? (widget.selectedIntensity == FlowIntensity.none
+                    ? null
+                    : _selectedGridMaxHeight)
+              : widget.maxGridHeight,
+          useCompactRows: useAndroidCompactFlow,
         ),
 
         if (widget.selectedIntensity != FlowIntensity.none) ...[
-          Container(
-            margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: _buildAIInsightsPanel(selectedOption),
+          Padding(
+            key: _aiSectionKey,
+            padding: EdgeInsets.fromLTRB(
+              useAndroidCompactFlow ? _flowContentInset : 16,
+              12,
+              useAndroidCompactFlow ? _flowContentInset : 16,
+              8,
+            ),
+            child: useAndroidCompactFlow
+                ? _buildAIInsightsPanel(selectedOption)
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildAIInsightsPanel(selectedOption),
+                  ),
           ),
           const SizedBox(height: 12),
           Container(
             key: const ValueKey('flow-contextual-feedback'),
             width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            margin: EdgeInsets.fromLTRB(
+              useAndroidCompactFlow ? _flowContentInset : 16,
+              0,
+              useAndroidCompactFlow ? _flowContentInset : 16,
+              8,
+            ),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.accentMint.withValues(alpha: 0.1),
@@ -179,26 +289,41 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   Widget _buildResponsiveOptionGrid(
     List<FlowIntensityOption> options, {
     double? maxHeight,
+    bool useCompactRows = false,
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        const gridPadding = 12.0;
+        const gridPadding = _flowContentInset;
         const spacing = 12.0;
-
-        // At 360pt and 1.0 text scale:
-        // 360 - 32 parent padding - 24 grid padding - 12 spacing
-        // = 292 / 2 = exactly 146pt per card.
         const baseCardMinimumWidth = 146.0;
 
         final textScale = MediaQuery.textScalerOf(
           context,
         ).scale(1).clamp(1.0, 2.0);
+
         final availableWidth = constraints.maxWidth - (gridPadding * 2);
         final scaledMinimumWidth = baseCardMinimumWidth * textScale;
-
         final twoColumnRequiredWidth = (scaledMinimumWidth * 2) + spacing;
 
         final columnCount = availableWidth >= twoColumnRequiredWidth ? 2 : 1;
+
+        final rowCount = (options.length / columnCount).ceil();
+
+        final hasSelectedBudget =
+            maxHeight != null && maxHeight.isFinite && maxHeight > 0;
+
+        final fixedVerticalChrome =
+            (gridPadding * 2) + (spacing * (rowCount - 1));
+
+        final availableRowHeight = hasSelectedBudget
+            ? (maxHeight - fixedVerticalChrome) / rowCount
+            : null;
+
+        final compactRowsActive =
+            useCompactRows &&
+            availableRowHeight != null &&
+            availableRowHeight.isFinite &&
+            availableRowHeight > 0;
 
         final rows = <Widget>[];
 
@@ -240,24 +365,30 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                       _showMedicalInfo(option);
                       HapticFeedback.heavyImpact();
                     },
-                    child: _buildFlowIntensityCard(option, isSelected),
+                    child: _buildFlowIntensityCard(
+                      option,
+                      isSelected,
+                      compact: compactRowsActive,
+                    ),
                   ),
                 ),
               ),
             );
           }
 
+          final row = Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: cells,
+          );
+
           rows.add(
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: cells,
-              ),
-            ),
+            compactRowsActive
+                ? SizedBox(height: availableRowHeight, child: row)
+                : IntrinsicHeight(child: row),
           );
         }
 
-        final naturalGrid = Padding(
+        final grid = Padding(
           key: ValueKey('flow-grid-columns-$columnCount'),
           padding: const EdgeInsets.all(gridPadding),
           child: Column(
@@ -270,8 +401,17 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           ),
         );
 
+        if (compactRowsActive) {
+          return SizedBox(
+            key: const ValueKey('flow-selected-grid-budget'),
+            width: constraints.maxWidth,
+            height: maxHeight,
+            child: grid,
+          );
+        }
+
         if (maxHeight == null || !maxHeight.isFinite || maxHeight <= 0) {
-          return naturalGrid;
+          return grid;
         }
 
         return ConstrainedBox(
@@ -279,7 +419,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.topCenter,
-            child: SizedBox(width: constraints.maxWidth, child: naturalGrid),
+            child: SizedBox(width: constraints.maxWidth, child: grid),
           ),
         );
       },
@@ -393,8 +533,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
-      key: const ValueKey('flow-ai-insights'),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      key: widget.aiInsightsKey ?? const ValueKey('flow-ai-insights'),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -455,11 +594,90 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     );
   }
 
-  Widget _buildFlowIntensityCard(FlowIntensityOption option, bool isSelected) {
-    // ignore: unused_local_variable
+  Widget _buildFlowIntensityCard(
+    FlowIntensityOption option,
+    bool isSelected, {
+    required bool compact,
+  }) {
     final theme = Theme.of(context);
+
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            color: option.color.withValues(alpha: isSelected ? 0.2 : 0.1),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Center(
+            child: Text(option.emoji, style: const TextStyle(fontSize: 24)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          option.title,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: isSelected ? option.color : theme.colorScheme.onSurface,
+            fontSize: 14,
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 2),
+        SizedBox(
+          height: 24,
+          child: Center(
+            child: Text(
+              option.subtitle,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontSize: 10,
+                height: 1.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        if (option.intensity == FlowIntensity.heavy ||
+            option.intensity == FlowIntensity.veryHeavy) ...[
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: option.color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.health_and_safety, size: 10, color: option.color),
+                const SizedBox(width: 2),
+                Text(
+                  AppLocalizations.of(context).monitor,
+                  style: TextStyle(
+                    color: option.color,
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        const SizedBox(height: 8),
+      ],
+    );
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200), // Reduced animation time
+      duration: AppTheme.motionBase,
+      curve: AppTheme.motionCurve,
       decoration: BoxDecoration(
         gradient: isSelected
             ? LinearGradient(
@@ -501,105 +719,29 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 ),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon Container - Simplified
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: option.color.withValues(
-                      alpha: isSelected ? 0.2 : 0.1,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
+
+          if (compact)
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: FittedBox(
+                  key: ValueKey(
+                    'flow-compact-content-${option.intensity.name}',
                   ),
-                  child: Center(
-                    child: Text(
-                      option.emoji,
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                  ),
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                  child: content,
                 ),
+              ),
+            )
+          else
+            Padding(padding: const EdgeInsets.all(16), child: content),
 
-                const SizedBox(height: 8),
-
-                // Natural-height title.
-                Text(
-                  option.title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isSelected
-                        ? option.color
-                        : theme.colorScheme.onSurface,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 2),
-
-                // Natural-height subtitle.
-                Text(
-                  option.subtitle,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                    fontSize: 10,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                // Medical indicator for heavy flows
-                if (option.intensity == FlowIntensity.heavy ||
-                    option.intensity == FlowIntensity.veryHeavy) ...[
-                  const SizedBox(height: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: option.color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.health_and_safety,
-                          size: 10,
-                          color: option.color,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          AppLocalizations.of(context).monitor,
-                          style: TextStyle(
-                            color: option.color,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-
-                const SizedBox(height: 8),
-              ],
-            ),
-          ),
           if (isSelected)
             Positioned(
               left: 0,
               right: 0,
-              bottom: 8,
+              bottom: compact ? 5 : 8,
               child: Center(
                 child: Container(
                   width: 24,
